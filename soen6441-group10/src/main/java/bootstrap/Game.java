@@ -24,9 +24,8 @@ public class Game {
 		}
 
 		Deck personality = new PersonalityDeck();
-		for(int i=0; i<numberOfPlayers; ++i) {
-		//	this.players[i].setPersonality
-		}
+		//need to shuffle deck
+		personality.pop();
 		
 		
 	}

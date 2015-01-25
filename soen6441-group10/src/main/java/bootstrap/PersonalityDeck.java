@@ -1,5 +1,7 @@
 package bootstrap;
 
+import java.util.ArrayList;
+
 public class PersonalityDeck extends Deck{
 	
 	private final int size = 5;
@@ -13,11 +15,11 @@ public class PersonalityDeck extends Deck{
 	
 	
 	public PersonalityDeck() {
-		this.cards = new Card[this.size];
+		this.cards = new ArrayList<Card>();
 		for(int i=0; i<this.size; ++i) {
 			Card tmp = new PersonalityCard();
 			tmp.setTitle(this.names[i]);
-			this.cards[i] = tmp;
+			this.cards.add(tmp);
 		}
 	}
 
