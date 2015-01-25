@@ -1,7 +1,9 @@
 /**
- * 
+ * @File 
+ * Class respresenting bank of game
  */
 package bootstrap;
+
 
 class Bank {
 	private int silver;
@@ -9,6 +11,9 @@ class Bank {
 	private int silverValue = 1;
 	private int goldValue = 5;
 	
+	/*
+	 * Set up silver and gold value
+	 */
 	public Bank() {
 		this.silver = 35 * this.silverValue;
 		this.gold = 17 * this.goldValue;
@@ -19,6 +24,6 @@ class Bank {
 	 * @return: int value remaining in bank
 	 */
 	public int getBalance() {
-		return 0;
+		return silver + gold;
 	}
 }
