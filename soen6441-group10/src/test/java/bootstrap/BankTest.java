@@ -17,7 +17,7 @@ public class BankTest {
 	    @Before
 	    public void setUp() throws Exception {
 	        // Code executed before each test 
-	    	bank = new Bank();
+	    	this.bank = new Bank();
 	    }
 	 
 	    @Test
@@ -38,7 +38,7 @@ public class BankTest {
 	    @After
 	    public void tearDown() throws Exception {
 	        // Code executed after each test  
-	    	bank = null;
+	    	this.bank = null;
 	    }
 	 
 	    @AfterClass
