@@ -1,6 +1,7 @@
 package bootstrap;
 
 /**
+ * @author Amir Hakim Jan-25th-2015
  * This document is a part of the source code and related artifacts
  * got SOEN6441 group10
  * this class is the interface for all the card types that will be required in the game, 
