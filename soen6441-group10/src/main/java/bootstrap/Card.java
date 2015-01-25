@@ -10,8 +10,8 @@ package bootstrap;
 
 public interface Card {
 	// get the title of the card AKA name
-	public void getTitle();
+	public String getTitle();
 	// set the title of the card AKA name
-	public void setTitle();
+	public void setTitle(String title);
 
 }
