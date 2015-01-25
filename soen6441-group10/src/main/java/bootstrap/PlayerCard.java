@@ -17,7 +17,8 @@ public class PlayerCard implements Card {
 	/* (non-Javadoc)
 	 * @see bootstrap.Card#getTitle()
 	 */
-	public void getTitle() {
+	public String getTitle() {
+		return null;
 		// TODO Auto-generated method stub
 
 	}
@@ -28,6 +29,11 @@ public class PlayerCard implements Card {
 	public void setTitle() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setTitle(String title) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
