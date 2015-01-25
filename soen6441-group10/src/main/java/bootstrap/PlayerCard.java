@@ -38,7 +38,7 @@ public class PlayerCard implements Card {
 	
 	@Override
 	public Card clone() {
-		return this.clone();
+		return new PlayerCard();
 	}
 
 }
