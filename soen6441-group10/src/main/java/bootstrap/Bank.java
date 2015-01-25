@@ -6,24 +6,23 @@ package bootstrap;
 
 
 class Bank {
-	private int silver;
-	private int gold;
-	private int silverValue = 1;
-	private int goldValue = 5;
+	private int numSilver;
+	private int numGold;
+	final private int silverValue = 1;
+	final private int goldValue = 5;
 	
 	/*
-	 * Set up silver and gold value
+	 * Set up silver and gold numers
 	 */
 	public Bank() {
-		this.silver = 35 * this.silverValue;
-		this.gold = 17 * this.goldValue;
+		this.numSilver = 35;
+		this.numGold = 17;
 	}
-	
-	
+		
 	/*
 	 * @return: int value remaining in bank
 	 */
 	public int getBalance() {
-		return silver + gold;
+		return this.numSilver * this.silverValue + this.numGold * this.goldValue;
 	}
 }
