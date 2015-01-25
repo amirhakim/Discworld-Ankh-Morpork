@@ -13,6 +13,10 @@ public class PersonalityCard implements Card {
 		// TODO Auto-generated method stub
 		this.title = title;	
 	}
+	@Override
+	public Card clone() {
+		return new PersonalityCard();
+	}
 
 	public void test(){
 		System.out.println("Sup YALL");
