@@ -23,6 +23,8 @@ public class Game {
 			this.players = new Player[numberOfPlayers];
 		}
 
+		Deck Personality = new Deck(new PersonalityCard(), 100);
+		
 		
 	}
 
