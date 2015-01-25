@@ -6,8 +6,7 @@ public class PersonalityCard implements Card {
 	
 	public String getTitle() {
 		// TODO Auto-generated method stub
-		return this.title;
-		
+		return this.title;		
 	}
 	public void setTitle(String title) {
 		// TODO Auto-generated method stub
