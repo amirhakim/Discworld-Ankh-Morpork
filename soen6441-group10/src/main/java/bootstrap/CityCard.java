@@ -13,7 +13,7 @@ public class CityCard implements Card {
 	 * 
 	 */
 	
-	
+	private String title;
 	
 	public CityCard() {
 		// TODO Auto-generated constructor stub
@@ -24,7 +24,7 @@ public class CityCard implements Card {
 	 */
 	public String getTitle() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.title;
 	}
 
 	/* (non-Javadoc)
@@ -32,7 +32,7 @@ public class CityCard implements Card {
 	 */
 	public void setTitle(String title) {
 		// TODO Auto-generated method stub
-
+		this.title=title;
 	}
 
 	/* (non-Javadoc)
