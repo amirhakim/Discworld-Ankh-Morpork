@@ -23,7 +23,10 @@ public class Game {
 			this.players = new Player[numberOfPlayers];
 		}
 
-		Deck Personality = new Deck(new PersonalityCard(), 100);
+		Deck personality = new PersonalityDeck();
+		for(int i=0; i<numberOfPlayers; ++i) {
+		//	this.players[i].setPersonality
+		}
 		
 		
 	}

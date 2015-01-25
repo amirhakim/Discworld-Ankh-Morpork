@@ -14,6 +14,7 @@ public class Controller {
 		try {
 			Game game = new Game(numberOfPlayers);
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			// TODO add log message
 			return false;
 		}
