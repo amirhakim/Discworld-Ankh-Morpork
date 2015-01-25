@@ -9,7 +9,7 @@ public class BankTest {
 	
 		private Bank bank;
 	
-	   @BeforeClass
+	    @BeforeClass
 	    public static void setUpClass() throws Exception {
 	        // Code executed before the first test method    
 	    }
