@@ -23,7 +23,15 @@ public class Game {
 			this.players = new Player[numberOfPlayers];
 		}
 		
-		Deck d = new Deck(new PersonalityCard(), 100);
+		Card[] pc = new PersonalityCard[100];
+
+		for(int i=0; i<pc.length;++i){
+			pc[i] = new PersonalityCard();
+		}
+		System.out.println("1");
+		System.out.println(pc[1].getClass());
+		System.out.println("2");
+		Deck d = new Deck(pc);
 		d.test();
 		
 	}

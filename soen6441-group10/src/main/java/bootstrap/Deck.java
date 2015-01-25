@@ -1,19 +1,16 @@
 package bootstrap;
 
 public class Deck {
-	private Card[] cards;
-	//private Card card;
 	
-	public Deck(Card c, int size) {
-		this.cards = new Card[size];
-//		this.card = c;
+	private Card[] c;
+	
+	public Deck(Card[] c) {
+		this.c = c;
 	}
 	
 	public void test() {
-		
-		System.out.println("1");
-		System.out.println(this.cards[0].getTitle());
+		System.out.println("here");
+		System.out.println(this.c[0].getClass());
+		this.c[0].test();
 	}
-	
-	
 }

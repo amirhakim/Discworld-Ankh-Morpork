@@ -13,5 +13,7 @@ public interface Card {
 	public String getTitle();
 	// set the title of the card AKA name
 	public void setTitle(String title);
+	
+	public void test();
 
 }
