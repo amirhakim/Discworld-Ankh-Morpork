@@ -7,13 +7,16 @@ package bootstrap;
 
 public class Game {
 
-	final private Bank gameBank;
-	final Player[] players;
+	private Bank gameBank;
+	Player[] players;
 	
-	public Game(byte numberOfPlayers) {
-		this.gameBank = new Bank();
-		this.players = new Player[numberOfPlayers];
-		
+	public Game(int numberOfPlayers) throws Exception {
+		if(numberOfPlayers > 4 || numberOfPlayers < 1) {
+			throw new Exception();
+		} else {
+			this.gameBank = new Bank();
+			this.players = new Player[numberOfPlayers];
+		}
 	}
 
 }
