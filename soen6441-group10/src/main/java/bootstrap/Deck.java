@@ -1,19 +1,19 @@
 package bootstrap;
 
+import java.util.ArrayList;
+
+
 public class Deck {
-	private Card[] cards;
-	//private Card card;
+	protected ArrayList<Card> cards;
 	
-	public Deck(Card c, int size) {
-		this.cards = new Card[size];
-//		this.card = c;
+	public void pop(){
+
+		System.out.println(this.cards.get(0).getTitle());
+	//	Card popeed = this.cards[cards.length-1];
 	}
 	
-	public void test() {
-		
-		System.out.println("1");
-		System.out.println(this.cards[0].getTitle());
-	}
+	
+	
 	
 	
 }

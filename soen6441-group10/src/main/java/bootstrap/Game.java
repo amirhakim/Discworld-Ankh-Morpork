@@ -22,9 +22,11 @@ public class Game {
 			this.gameBank = new Bank();
 			this.players = new Player[numberOfPlayers];
 		}
+
+		Deck personality = new PersonalityDeck();
+		//need to shuffle deck
+		personality.pop();
 		
-		Deck d = new Deck(new PersonalityCard(), 100);
-		d.test();
 		
 	}
 

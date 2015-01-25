@@ -8,10 +8,14 @@ package bootstrap;
  * every card class MUST implement it
  */
 
-public interface Card {
+public interface Card extends Cloneable {
+
 	// get the title of the card AKA name
 	public String getTitle();
 	// set the title of the card AKA name
 	public void setTitle(String title);
+	
+	
+	public Card clone();
 
 }

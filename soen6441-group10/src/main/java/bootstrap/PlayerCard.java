@@ -35,5 +35,10 @@ public class PlayerCard implements Card {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public Card clone() {
+		return new PlayerCard();
+	}
 
 }
