@@ -7,15 +7,12 @@ package bootstrap;
  * @author Amir
  *
  */
-public class CityCard implements Card {
+public class RandomEventCard implements Card {
 
 	/**
 	 * 
 	 */
-	
-	private String title;
-	
-	public CityCard() {
+	public RandomEventCard() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -24,7 +21,7 @@ public class CityCard implements Card {
 	 */
 	public String getTitle() {
 		// TODO Auto-generated method stub
-		return this.title;
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -32,9 +29,15 @@ public class CityCard implements Card {
 	 */
 	public void setTitle(String title) {
 		// TODO Auto-generated method stub
-		this.title=title;
+
 	}
 
-	
+	/* (non-Javadoc)
+	 * @see bootstrap.Card#clone()
+	 */
+	public Card clone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
