@@ -32,6 +32,12 @@ public class RandomEventDeck extends Deck {
 			 						};
 	public RandomEventDeck() {
 		// TODO Auto-generated constructor stub
+		deckSize=size;
+		populateDeck();
+	}
+	@Override
+	public void populateDeck() {
+		// TODO Auto-generated constructor stub
 		this.cards = new ArrayList<Card>();
 		// Initizialize eachc card with a title
 		for(int i=0; i<this.size; ++i) {
@@ -41,6 +47,7 @@ public class RandomEventDeck extends Deck {
 		}
 		// Shuffle deck
 		super.shuffle();
+		
 	}
 
 }

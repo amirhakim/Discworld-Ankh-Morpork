@@ -33,7 +33,13 @@ public class CityDeck extends Deck {
 	
 	public CityDeck() {
 		// TODO Auto-generated constructor stub
-		
+		deckSize=size;
+		populateDeck();
+		}
+
+	@Override
+	public void populateDeck() {
+		// TODO Auto-generated method stub
 		this.cards = new ArrayList<Card>();
 		for(int i=0; i<this.size; ++i) {
 			Card tmp = new PersonalityCard();
@@ -41,5 +47,7 @@ public class CityDeck extends Deck {
 			this.cards.add(tmp);
 			}
 		super.shuffle();
-		}
+	}
+	
+	
 }

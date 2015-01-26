@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class Deck {
+public abstract class Deck {
 	protected ArrayList<Card> cards;
+	protected int deckSize;
 	
 	/*
 	 * Pop top item in deck
@@ -33,5 +34,6 @@ public class Deck {
 		return cards.size();
 	}
 	
+	public abstract void populateDeck();
 	
 }
