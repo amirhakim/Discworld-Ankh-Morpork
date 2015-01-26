@@ -7,6 +7,7 @@ package bootstrap;
 public class Player {
 	
 		private String name;
+		private Card personality;
 	
 	//Constructor
 	Player(){
@@ -26,11 +27,20 @@ public class Player {
 	}
 
 	private boolean isAlpha(String name) {
-	    return name.matches("[a-zA-Z]+");
+		//TODO this needs to allow numers
+		return name.matches("^[a-zA-Z0-9_]*$");
 	}
 	
 	//Returns name value
 	String getName(){
 		return this.name;
+	}
+	
+	void setPersonality(Card personality){
+		this.personality = personality;
+	}
+	
+	Card getPersonality() {
+		return this.personality;
 	}
 }

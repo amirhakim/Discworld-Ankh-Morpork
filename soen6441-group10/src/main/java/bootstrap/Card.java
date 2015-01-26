@@ -14,8 +14,5 @@ public interface Card extends Cloneable {
 	public String getTitle();
 	// set the title of the card AKA name
 	public void setTitle(String title);
-	
-	
-	public Card clone();
 
 }
