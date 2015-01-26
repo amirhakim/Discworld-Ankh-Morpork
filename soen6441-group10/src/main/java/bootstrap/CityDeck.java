@@ -40,5 +40,6 @@ public class CityDeck extends Deck {
 			tmp.setTitle(this.names[i]);
 			this.cards.add(tmp);
 			}
+		super.shuffle();
 		}
 }
