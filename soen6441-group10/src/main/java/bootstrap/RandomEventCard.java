@@ -34,12 +34,4 @@ public class RandomEventCard implements Card {
 		this.title=title;
 	}
 
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#clone()
-	 */
-	public Card clone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
