@@ -35,12 +35,6 @@ public class CityCard implements Card {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#clone()
-	 */
-	public Card clone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

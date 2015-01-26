@@ -1,25 +1,20 @@
+/**
+ * Card continaining information about all the personalities in the game
+ */
+
 package bootstrap;
 
 public class PersonalityCard implements Card {
 	
+	// Build one only has a title to track
 	private String title;
 	
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		System.out.println("hello");
 		return this.title;		
 	}
 	public void setTitle(String title) {
-		// TODO Auto-generated method stub
 		this.title = title;	
 	}
-	@Override
-	public Card clone() {
-		return new PersonalityCard();
-	}
-
-	public void test(){
-		System.out.println("Sup YALL");
-	}
 	
+
 }
