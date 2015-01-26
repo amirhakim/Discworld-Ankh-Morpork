@@ -22,7 +22,7 @@ public class FileObject<T> {
 
 	protected FileObject(T obj_, String _fileName) {
 		pojo = obj_;
-		filePath = Paths.get(_fileName).resolve(FILE_ROOT);
+		filePath = Paths.get(FILE_ROOT).resolve(_fileName);
 	}
 	
 	public static String getFileRoot() {

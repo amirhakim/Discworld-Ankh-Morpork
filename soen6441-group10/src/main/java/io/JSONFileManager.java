@@ -31,7 +31,7 @@ public class JSONFileManager<T> implements FileManager<T> {
 	 */
 	@Override
 	public Optional<FileObject<T>> open(String fileName) {
-		try (FileReader jsonFile = new FileReader(fileName)) {
+		try (FileReader jsonFile = new FileReader(FileObject.getFileRoot() + "/" + fileName)) {
 			T obj = gson.fromJson(jsonFile, typeParameterClass);
 			return Optional.of(new FileObject<T>(obj, fileName));
 		} catch (IOException e) {
@@ -68,9 +68,10 @@ public class JSONFileManager<T> implements FileManager<T> {
 	 */
 	@Override
 	public boolean saveAs(FileObject<T> obj, String fileName) {
-		String objJson = gson.toJson(obj);
+		String objJson = gson.toJson(obj.getPOJO());
 		try {
-			Files.write(Paths.get(FileObject.getFileRoot()), objJson.getBytes());
+			Files.write(Paths.get(FileObject.getFileRoot() + "/" + fileName),
+					objJson.getBytes());
 		} catch (IOException e) {
 			// TODO Log exception
 			e.printStackTrace();

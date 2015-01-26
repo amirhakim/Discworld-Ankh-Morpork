@@ -2,18 +2,27 @@ package io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class FileManagerTest {
 
-	private static final String TEST_FILE_PATH = "src/resources/test_game.json";
+	private static final String TEST_FILE_NAME = "test_game.json";
+	private static final String TEST_FILE2_NAME = "test_game2.json";
+
 	private MockGame testGame;
 	private List<MockPlayer> players = new ArrayList<>();
 	private JSONFileManager<MockGame> gameFileManager;
@@ -44,10 +53,9 @@ public class FileManagerTest {
 	
 	@Test
 	public void testJsonOpen() {
-		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_PATH);
+		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_NAME);
 		if (f.isPresent()) {
 			MockGame game = f.get().getPOJO();
-			// TODO Add more conditions later
 			assertEquals(testGame.getName(), game.getName());
 
 			List<MockPlayer> players = game.getPlayers();
@@ -60,7 +68,57 @@ public class FileManagerTest {
 			assertNotNull(handOne);
 			assertEquals(Color.RED, handOne.get(0).getColor());
 		} else {
-			fail("The test game JSON file was not found.");
+			fail("The test JSON file was not found.");
+		}
+	}
+	
+	@Test
+	public void testSave() {
+		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_NAME);
+		if (f.isPresent()) {
+			// Alter the game and save it
+			MockGame game = f.get().getPOJO();
+			MockPlayer player1 = game.getPlayers().get(0);
+			player1.getHand().get(0).setColor(Color.GREEN);
+			gameFileManager.save(f.get());
+			
+			// Re-load it and verify it contains the new state
+			f = gameFileManager.open(TEST_FILE_NAME);
+			game = f.get().getPOJO();
+			player1 = game.getPlayers().get(0);
+			MockCard greenCardOne = player1.getHand().get(0);
+			assertEquals(Color.GREEN, greenCardOne.getColor());
+			
+			// Revert the state back to normal and save
+			greenCardOne.setColor(Color.RED);
+			gameFileManager.save(f.get());
+		} else {
+			fail("The test JSON file was not found.");
+		} 
+	}
+	
+	@Test
+	public void testSaveAs() {
+		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_NAME);
+		if (f.isPresent()) {
+			gameFileManager.saveAs(f.get(), TEST_FILE2_NAME);
+			assertTrue(Files.exists(Paths.get("src/resources/" + TEST_FILE2_NAME),
+					LinkOption.NOFOLLOW_LINKS));
+		} else {
+			fail("The test JSON file was not found.");
+		} 
+	}
+	
+	@After
+	public void tearDown() {
+		// Clean up the extra file from saveAs test
+		Path testFile2 = Paths.get("src/resources/" + TEST_FILE2_NAME);
+		if (Files.exists(testFile2, LinkOption.NOFOLLOW_LINKS)) {
+			try {
+				Files.delete(testFile2);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
