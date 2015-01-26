@@ -12,6 +12,8 @@ public class RandomEventCard implements Card {
 	/**
 	 * 
 	 */
+	private String title;
+	
 	public RandomEventCard() {
 		// TODO Auto-generated constructor stub
 	}
@@ -21,7 +23,7 @@ public class RandomEventCard implements Card {
 	 */
 	public String getTitle() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.title;
 	}
 
 	/* (non-Javadoc)
@@ -29,7 +31,7 @@ public class RandomEventCard implements Card {
 	 */
 	public void setTitle(String title) {
 		// TODO Auto-generated method stub
-
+		this.title=title;
 	}
 
 	/* (non-Javadoc)
