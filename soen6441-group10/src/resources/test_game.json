@@ -1,0 +1,17 @@
+{
+  name: 'Foo',
+  players: [
+    { 
+      name: 'Player 1',
+      hand: [
+        {
+          color: 'RED',
+          name: 'One'
+        }
+      ]
+    },
+    {
+      name: 'Player 2'
+    }
+  ]
+}
