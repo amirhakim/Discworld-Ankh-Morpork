@@ -28,6 +28,10 @@ public class Controller {
 		game.turn();
 	}
 	
+	/**
+	 * 
+	 * @return Player class of next turn
+	 */
 	public Player getCurrentTurn() {
 		return this.game.getCurrentTurn();
 	}

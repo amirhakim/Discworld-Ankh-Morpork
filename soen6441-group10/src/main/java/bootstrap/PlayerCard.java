@@ -12,13 +12,17 @@ package bootstrap;
  */
 public class PlayerCard implements Card {
 	
+	private int color; //brown 0, green 1
+	private String title;
+	
+	
 	
 
 	/* (non-Javadoc)
 	 * @see bootstrap.Card#getTitle()
 	 */
 	public String getTitle() {
-		return null;
+		return this.title;
 		// TODO Auto-generated method stub
 
 	}
@@ -26,14 +30,18 @@ public class PlayerCard implements Card {
 	/* (non-Javadoc)
 	 * @see bootstrap.Card#setTitle()
 	 */
-	public void setTitle() {
+	public void setTitle(String title) {
+		this.title = title;
 		// TODO Auto-generated method stub
 
 	}
 
-	public void setTitle(String title) {
-		// TODO Auto-generated method stub
-		
+	public void setColor(int color) {
+		this.color = color;
+	}
+	
+	public int getColor() {
+		return this.color;
 	}
 	
 	@Override

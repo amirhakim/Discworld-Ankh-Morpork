@@ -11,6 +11,7 @@ public class Game {
 	private Bank gameBank;
 	private Player[] players;
 	private Deck personality;
+	private Deck player;
 	private int status;
 	private int currentTurn;
 	
@@ -48,6 +49,7 @@ public class Game {
 		
 		// Initialize personality deck.
 		personality = new PersonalityDeck();
+		player = new PlayerDeck();
 		
 		// Set game status as ready to start.
 		this.status = 1;
@@ -92,6 +94,10 @@ public class Game {
 		return this.status;
 	}
 	
+	/**
+	 * 
+	 * @return Player class of next turn
+	 */
 	public Player getCurrentTurn() {
 		return this.players[this.currentTurn];
 	}
