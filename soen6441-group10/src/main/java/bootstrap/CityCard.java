@@ -85,7 +85,12 @@ public class CityCard implements Card {
 		}
 	}
 	
+	public Map<Player, Integer> getMinions() {
+		return this.minions;
+	}
+	
 	public void addMinion(Player p) {
+		p.decreaseMinion();
 		if(this.minions.get(p) == null) {
 			this.minions.put(p,1);
 		} else {
@@ -100,6 +105,7 @@ public class CityCard implements Card {
 		} else {
 			int minions = this.minions.get(p);
 			this.minions.put(p, minions-1);
+			p.increaseMinion();
 		}
 	}
 	

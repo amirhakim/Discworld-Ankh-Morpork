@@ -126,4 +126,8 @@ public class Game {
 	int getState() {
 		return this.status;
 	}
+	
+	CityDeck getCities() {
+		return this.cities;
+	}
 }

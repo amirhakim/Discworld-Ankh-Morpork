@@ -4,6 +4,8 @@
  */
 package bootstrap;
 
+import java.util.List;
+
 public class Controller {
 
 	private Game game = new Game();
@@ -53,4 +55,8 @@ public class Controller {
 		
 	}
 
+	List<CityCard> getCities() {
+		return game.getCities().getCards();
+	}
+	
 }

@@ -30,6 +30,7 @@ public class CityDeck extends Deck {
 	
 	private List<CityCard> cards;
 	
+	
 	public CityDeck() {
 		// TODO Auto-generated constructor stub
 		deckSize=size;
@@ -43,6 +44,10 @@ public class CityDeck extends Deck {
 			}
 		}
 		return null;
+	}
+	
+	public List<CityCard> getCards() {
+		return this.cards;
 	}
 
 	@Override

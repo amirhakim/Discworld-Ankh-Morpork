@@ -1,6 +1,7 @@
 package bootstrap;
 
 import java.io.*;
+import java.util.Map;
 import java.util.Scanner;
 
 public class textUserInterface {
@@ -86,6 +87,33 @@ public class textUserInterface {
 		// If game has not been initiated catch error.
 		if(controller.gameExists()) {
 			
+			for(CityCard c: controller.getCities()) {
+				System.out.println(c.getTitle());
+				Player p = c.getBuilding();
+				if(p == null) {
+					System.out.println("No Buildings");
+				} else {
+					System.out.print("Building by: ");
+					System.out.println(p.getName());
+				}
+				
+				Map<Player, Integer> minions = c.getMinions();
+				for (Map.Entry<Player, Integer> entry : minions.entrySet()) {
+				    Player key = entry.getKey();
+				    Integer value = entry.getValue();
+				    System.out.println(key.getName() + " has " + String.valueOf(value) + " minions on " + c.getTitle());
+				}
+				
+				System.out.println("Trolls: " + String.valueOf(c.getTrolls()));
+				System.out.println("Demons: " + String.valueOf(c.getDemons()));
+				
+				System.out.print("Has Trouble? ");
+				System.out.println(c.hasTroubleMaker());
+				
+				System.out.println();
+				
+			}
+				
 			Player[] players = controller.getPlayers();
 			// Print players details
 			for(int i=0; i<players.length; ++i) {
@@ -93,7 +121,7 @@ public class textUserInterface {
 				System.out.print(" has personality ");
 				System.out.println(players[i].getPersonality().getTitle());
 			}
-			
+				
 			Bank bank = controller.getBank();
 			System.out.println("Bank has balance of " + Integer.toString(bank.getBalance()));
 			System.out.print("Current turn is ");
