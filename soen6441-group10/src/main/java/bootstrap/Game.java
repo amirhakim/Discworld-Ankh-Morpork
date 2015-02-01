@@ -63,7 +63,17 @@ public class Game {
 		for(int i=0; i<this.players.length; ++i) {
 			Card popped = this.personality.pop();
 			this.players[i].setPersonality(popped);
+			CityCard Shades= (this.cities.getCard("The Shades"));
+			Shades.addMinion(this.players[i]);
+			Shades.addTrouble();
+			CityCard theScoures= (this.cities.getCard("The Scoures"));
+			theScoures.addMinion(this.players[i]);
+			theScoures.addTrouble();
+			CityCard dollySisters= (this.cities.getCard("Dolly Sisters"));
+			dollySisters.addMinion(this.players[i]);
+			dollySisters.addTrouble();
 		}
+		
 		this.currentTurn = 0;
 		this.status = 2;
 	}
