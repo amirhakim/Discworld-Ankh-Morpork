@@ -12,6 +12,7 @@ public class Game {
 	private Player[] players;
 	private Deck personality;
 	private Deck player;
+	private CityDeck cities;
 	private int status;
 	private int currentTurn;
 	
@@ -46,9 +47,14 @@ public class Game {
 		// Initialize personality deck.
 		this.personality = new PersonalityDeck();
 		this.player = new PlayerDeck();
+		this.cities = new CityDeck();
 		
+		CityCard test = this.cities.getCard("Ils of Gods");
+		test.test();
 		// Set game status as ready to start.
 		this.status = 1;
+		
+		
 	}
 	
 	/*
