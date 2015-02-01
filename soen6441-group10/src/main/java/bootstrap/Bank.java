@@ -1,9 +1,13 @@
-/**
- * @File 
- * Class respresenting bank of game
- */
+
+
 package bootstrap;
 
+/**
+ * <b> This class represents the bank of game <b> 
+ * It shows how much money is available in the bank by the method getBalance()
+ * @author Team 10 - SOEN6441
+ * @version 1.0
+ */
 
 class Bank {
 	private int numSilver;
@@ -12,7 +16,7 @@ class Bank {
 	final private int goldValue = 5;
 	
 	/*
-	 * Set up silver and gold numers
+	 * Set up silver and gold numbers
 	 */
 	public Bank() {
 		this.numSilver = 35;
