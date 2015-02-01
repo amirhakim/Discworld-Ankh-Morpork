@@ -54,27 +54,31 @@ public class GameTest {
 	     * Test that names and player size don't match
 	     */
 	    public void testDiffSizes() {
-	    	
+	    	try {
+	    		this.game.setUp(2, this.names);
+	    		fail("Accepts different name size of number of players");
+	    	} catch (InvalidGameStateException e){
+	    		
+	    	}
 	    }
 	    
 	    @Test
-	    /*
+	    /**
 	     * Test that creating too few players doesnt work
 	     */
 	    public void testMinNumberOfPlayers(){
 	    	this.game = new Game();
 	    	try{
-
-	    		String[] names = {"test1", "test2", "test3"};
-	    		this.game.setUp(1,names);
+	    		String[] names2 = {"test1"};
+	    		this.game.setUp(1,names2);
 	    		fail("Not catching too many players");
-	    	} catch (Exception e) {
+	    	} catch (InvalidGameStateException e) {
 	    	}
 	    }
 	    
 	    
 	    @Test
-	    /*
+	    /**
 	     * Test two players do not have the same card
 	     */
 	    public void testPersonalityCard() {
@@ -82,8 +86,7 @@ public class GameTest {
 	    	try {
 	    		// Create game
 	    		int numberOfPlayers = 3;
-	    		String[] names = {"test1", "test2", "test3"};
-	    		this.game.setUp(numberOfPlayers, names);
+	    		this.game.setUp(numberOfPlayers, this.names);
 	    		this.game.init();
 	    		Player[] players = this.game.getPlayers();
 	    		ArrayList<String> cardTitles = new ArrayList<String>();
@@ -96,16 +99,15 @@ public class GameTest {
 	    			// Add it to the running list
 	    			cardTitles.add(currentTitle);
 	    		}
-
 	    		
-	    	} catch(Exception e){
+	    	} catch(InvalidGameStateException e){
 	    		fail("exception");
 	    	}
 	    	
 	    }
 	    
 	    @Test
-	    /*
+	    /**
 	     * Check game status is appropriate
 	     */
 	    public void testGameStatus(){
@@ -113,11 +115,11 @@ public class GameTest {
 	    	assertTrue(game.getState() == 0);
 	    	try {
 	    		String[] names = {"test1", "test2", "test3"};
-	    		this.game.setUp(3,names);
+	    		this.game.setUp(3,this.names);
 	    		assertTrue(game.getState() == 1);
 		    	this.game.init();
 		    	assertTrue(game.getState() == 2);
-		    } catch(Exception e){
+		    } catch(InvalidGameStateException e){
 		    	fail("Could not set yo gane");
 	    	}
 	    }
@@ -127,10 +129,7 @@ public class GameTest {
 	    public void tearDown() throws Exception {
 	        // Code executed after each test  
 	    	this.game = null;
+	    	this.names = null;
 	    }
 	 
-	    @AfterClass
-	    public static void tearDownClass() throws Exception {
-	        // Code executed after the last test method 
-	    }
 }
