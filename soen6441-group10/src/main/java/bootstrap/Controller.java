@@ -59,4 +59,7 @@ public class Controller {
 		return game.getCities().getCards();
 	}
 	
+	public void simulate() {
+		this.game.simulate();
+	}
 }

@@ -5,6 +5,7 @@
 package bootstrap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 	
@@ -157,6 +158,10 @@ public class Player {
 			}
 		}
 		return false;			
+	}
+	
+	public List<PlayerCard> getPlayerCards() {
+		return this.player_cards;
 	}
 	
 	//Set Color for Player's pieces

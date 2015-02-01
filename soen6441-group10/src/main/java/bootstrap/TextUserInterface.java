@@ -62,6 +62,10 @@ public class TextUserInterface {
         
 		if (controller.newGame(numberOfPlayers, playerNames)) {
 			System.out.println("Game Started");
+			
+			
+			controller.simulate();
+			
 			while(true) {
 				System.out.println("t for next turn, e to end, s to save, l to load, s to display Game's Status");
 				String action = scanner.nextLine();
@@ -124,6 +128,10 @@ public class TextUserInterface {
 				System.out.println("And has " + String.valueOf(players[i].getMinions()) + " minions left");
 				System.out.println("And has " + String.valueOf(players[i].getBuildings()) + " buildings left");
 				System.out.println("And has " + String.valueOf(players[i].getAmount()) + " money left");
+
+				for(PlayerCard c: players[i].getPlayerCards()) {
+					System.out.println("PLayer card: " + c.getTitle());
+				}
 			}
 				
 			Bank bank = controller.getBank();

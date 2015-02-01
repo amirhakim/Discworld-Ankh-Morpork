@@ -61,6 +61,8 @@ public class Game {
 	public void init() {
 		// Give each player their personality.
 		for(int i=0; i<this.players.length; ++i) {
+			this.players[i].increaseMoney(10);
+			this.gameBank.decreaseBalance(10);
 			Card popped = this.personality.pop();
 			this.players[i].setPersonality(popped);
 			CityCard Shades= (this.cities.getCard("The Shades"));
@@ -129,5 +131,20 @@ public class Game {
 	
 	CityDeck getCities() {
 		return this.cities;
+	}
+	
+	void simulate() {
+		 this.cities.getCard("Small Gods").addTrouble();
+		 this.cities.getCard("Nap Hill").incTrolls();
+		 
+		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
+		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
+		 
+		 this.players[0].addPlayerCard((PlayerCard) this.player.pop());
+		 this.players[0].addPlayerCard((PlayerCard) this.player.pop());
+		 
+		 this.players[1].addPlayerCard((PlayerCard) this.player.pop());
+		 
+		 
 	}
 }
