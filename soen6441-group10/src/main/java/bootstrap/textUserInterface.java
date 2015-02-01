@@ -62,12 +62,14 @@ public class textUserInterface {
 		if (controller.newGame(numberOfPlayers, playerNames)) {
 			System.out.println("Game Started");
 			while(true) {
-				System.out.println("t for next turn, e to end, s to save, l to load");
+				System.out.println("t for next turn, e to end, s to save, l to load, s to display Game's Status");
 				String action = scanner.nextLine();
 				if(action.equals("e")) {
 					return;
 				} else if(action.equals("t")) {
 					controller.nextTurn();
+				} else if(action.equalsIgnoreCase("s")){
+					textUserInterface.status();
 				}
 			
 			}
