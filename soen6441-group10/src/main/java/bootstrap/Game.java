@@ -5,12 +5,14 @@
 
 package bootstrap;
 
+import card.PersonalityCard;
+
 
 public class Game {
 
 	private Bank gameBank;
 	private Player[] players;
-	private Deck personality;
+	private Deck<PersonalityCardWrapper> personality;
 	private int status;
 	
 	/*
@@ -31,7 +33,7 @@ public class Game {
 		if(numberOfPlayers > 4 || numberOfPlayers < 2) {
 			throw new Exception();
 		} else {
-			this.gameBank = new Bank();
+			this.gameBank = Bank.getBank();
 			this.players = new Player[numberOfPlayers];
 			// Set human player at 0 index
 			this.players[0] = new Player();
@@ -46,8 +48,8 @@ public class Game {
 		}
 		
 		// Initialize personality deck.
-		personality = new PersonalityDeck();
-		
+		personality = Deck.getDeck(PersonalityCard.values(), p -> new PersonalityCardWrapper(p));
+				
 		// Set game status as ready to start.
 		this.status = 1;
 		
@@ -59,7 +61,7 @@ public class Game {
 	public void init() {
 		// Give each player their personality.
 		for(int i=0; i<this.players.length; ++i) {
-			Card popped = this.personality.pop();
+			PersonalityCardWrapper popped = this.personality.pop();
 			this.players[i].setPersonality(popped);
 		}
 		this.status = 2;
@@ -82,7 +84,7 @@ public class Game {
 	/*
 	 * @return: PersnalityDeck
 	 */
-	public Deck getPersonalityDeck() {
-		return this.personality;
+	public Deck<PersonalityCardWrapper> getPersonalityDeck() {
+		return personality;
 	}
 }

@@ -18,6 +18,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import bootstrap.Deck;
+import bootstrap.PersonalityCardWrapper;
+
 public class FileManagerTest {
 
 	private static final String TEST_FILE_NAME = "test_game.json";
@@ -26,6 +29,7 @@ public class FileManagerTest {
 	private MockGame testGame;
 	private List<MockPlayer> players = new ArrayList<>();
 	private JSONFileManager<MockGame> gameFileManager;
+	private JSONFileManager<Deck<PersonalityCardWrapper>> deckManager;
 	
 	@Before
 	public void setUp() {
@@ -107,6 +111,11 @@ public class FileManagerTest {
 		} else {
 			fail("The test JSON file was not found.");
 		} 
+	}
+	
+	@Test
+	public void testSavingDeck() {
+		// TODO: Implement
 	}
 	
 	@After

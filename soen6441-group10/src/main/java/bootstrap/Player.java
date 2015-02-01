@@ -7,7 +7,7 @@ package bootstrap;
 public class Player {
 	
 		private String name;
-		private Card personality;
+		private PersonalityCardWrapper personality;
 	
 	//Constructor
 	Player(){
@@ -36,11 +36,11 @@ public class Player {
 		return this.name;
 	}
 	
-	void setPersonality(Card personality){
+	void setPersonality(PersonalityCardWrapper personality){
 		this.personality = personality;
 	}
 	
-	Card getPersonality() {
+	PersonalityCardWrapper getPersonality() {
 		return this.personality;
 	}
 }

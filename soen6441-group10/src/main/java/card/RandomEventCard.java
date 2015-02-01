@@ -1,0 +1,18 @@
+package card;
+
+public enum RandomEventCard implements AnkhMorporkCard {
+
+	THE_DRAGON,
+	FLOOD,
+	FIRE,
+	FOG,
+	RIOTS,
+	EXPLOSION,
+	MYSTERIOUS_MURDERS,
+	DEMONS_FROM_THE_DUNGEON_DIMENSIONS,
+	SUBSIDENCE,
+	BLOODY_STUPID_JOHNSON,
+	TROLLS,
+	EARTHQUAKE
+
+}

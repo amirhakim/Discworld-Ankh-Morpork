@@ -1,28 +1,32 @@
-/**
- * @File 
- * Class respresenting bank of game
- */
 package bootstrap;
 
+public class Bank {
 
-class Bank {
 	private int numSilver;
 	private int numGold;
-	final private int silverValue = 1;
-	final private int goldValue = 5;
+
+	private static final int SILVER_VALUE = 1;
+	private static final int GOLD_VALUE = 5;
+	private static final int INIT_SILVER_AMOUNT = 35;
+	private static final int INIT_GOLD_AMOUNT = 17;
 	
-	/*
-	 * Set up silver and gold numers
-	 */
-	public Bank() {
-		this.numSilver = 35;
-		this.numGold = 17;
+	private static Bank instance;
+	
+	private Bank() {
+		numSilver = INIT_SILVER_AMOUNT;
+		numGold = INIT_GOLD_AMOUNT;
+	}
+	
+	public static Bank getBank() {
+		if (instance == null) {
+			instance = new Bank();
+		}
+		
+		return instance;
 	}
 		
-	/*
-	 * @return: int value remaining in bank
-	 */
 	public int getBalance() {
-		return this.numSilver * this.silverValue + this.numGold * this.goldValue;
+		return this.numSilver * SILVER_VALUE + this.numGold * GOLD_VALUE;
 	}
+
 }

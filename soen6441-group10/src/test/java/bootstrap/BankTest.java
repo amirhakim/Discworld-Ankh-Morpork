@@ -1,9 +1,13 @@
 package bootstrap;
 
-import static org.junit.Assert.*;
-import static org.junit.Before.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class BankTest {
 	
@@ -17,7 +21,7 @@ public class BankTest {
 	    @Before
 	    public void setUp() throws Exception {
 	        // Code executed before each test 
-	    	this.bank = new Bank();
+	    	this.bank = Bank.getBank();
 	    }
 	 
 	    @Test

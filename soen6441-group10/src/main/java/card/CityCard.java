@@ -1,0 +1,18 @@
+package card;
+
+public enum CityCard implements AnkhMorporkCard {
+
+	THE_SHADES,
+	DOLLY_SISTERS,
+	THE_HIPPO,
+	DRAGONS_LANDING,
+	ILS_OF_GODS,
+	THE_SCOURES,
+	SMALL_GODS,
+	DIMWELL,
+	NAP_HILL,
+	SEVEN_SLEEPERS,
+	UNREAL_ESTATE,
+	LONGWALL;
+	
+}

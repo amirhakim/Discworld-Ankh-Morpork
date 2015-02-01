@@ -1,9 +1,8 @@
 package bootstrap;
 
-import java.io.*;
 import java.util.Scanner;
 
-public class textUserInterface {
+public class AnkhMorporkCLI {
 
 	static Controller controller = new Controller();
 	static Scanner scanner;
@@ -22,12 +21,12 @@ public class textUserInterface {
 
         	action = scanner.nextLine();
         	if(action.equals("n")) { 	
-        		textUserInterface.newGame();
+        		AnkhMorporkCLI.newGame();
         	} else if(action.equals("l")) {
         		System.out.println("WE HAVENT DONE THIS YET!!!");
         	
         	} else if(action.equals("s")) {
-        		textUserInterface.status();
+        		AnkhMorporkCLI.status();
         	
         	} else if(action.equals("q")){
         		return;
@@ -73,7 +72,7 @@ public class textUserInterface {
 			for(int i=0; i<players.length; ++i) {
 				System.out.print(players[i].getName());
 				System.out.print(" has personality ");
-				System.out.println(players[i].getPersonality().getTitle());
+				System.out.println(players[i].getPersonality().getCard());
 			}
 		} catch (Exception e){
 			// Game status indicates game has not started.
