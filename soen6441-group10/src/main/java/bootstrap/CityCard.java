@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Amir
- *
+ * <b> This class represents the city cards of the game <b> 
+ * @author Team 10 - SOEN6441
+ * @version 1.0
  */
 public class CityCard implements Card {
 
