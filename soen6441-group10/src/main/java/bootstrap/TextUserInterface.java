@@ -4,12 +4,12 @@ import java.io.*;
 import java.util.Map;
 import java.util.Scanner;
 
-public class textUserInterface {
+public class TextUserInterface {
 
-	static Controller controller = new Controller();
-	static Scanner scanner;
+	 Controller controller = new Controller();
+	 Scanner scanner;
 	
-	public static void main(String[] args) {
+	public void StartGame() {
 		System.out.println("~~~~~~~~~~~~~~~~~~~~");
     	System.out.println("Welcome to our game!");
 		System.out.println("~~~~~~~~~~~~~~~~~~~~");
@@ -23,12 +23,12 @@ public class textUserInterface {
 
         	action = scanner.nextLine();
         	if(action.equals("n")) { 	
-        		textUserInterface.newGame();
+        		this.newGame();
         	} else if(action.equals("l")) {
         		System.out.println("WE HAVENT DONE THIS YET!!!");
         	
         	} else if(action.equals("s")) {
-        		textUserInterface.status();
+        		this.status();
         	
         	} else if(action.equals("q")){
         		System.out.println("Goodbye");
@@ -42,7 +42,7 @@ public class textUserInterface {
 	/*
 	 * Start a new game.
 	 */
-	public static void newGame() {
+	public  void newGame() {
 		// Get players name.
 		// Get number of players.
         int numberOfPlayers;
@@ -63,12 +63,14 @@ public class textUserInterface {
 		if (controller.newGame(numberOfPlayers, playerNames)) {
 			System.out.println("Game Started");
 			while(true) {
-				System.out.println("t for next turn, e to end, s to save, l to load");
+				System.out.println("t for next turn, e to end, s to save, l to load, s to display Game's Status");
 				String action = scanner.nextLine();
 				if(action.equals("e")) {
 					return;
 				} else if(action.equals("t")) {
 					controller.nextTurn();
+				} else if(action.equalsIgnoreCase("s")){
+					this.status();
 				}
 			
 			}
@@ -83,7 +85,7 @@ public class textUserInterface {
 	/*
 	 * Display the status of the board and the game
 	 */
-	public static void status() {
+	public  void status() {
 		// If game has not been initiated catch error.
 		if(controller.gameExists()) {
 			
