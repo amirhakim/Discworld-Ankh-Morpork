@@ -67,8 +67,14 @@ public class Player {
 	
 	//Decrease player's money
 	boolean decreaseMoney(int amount){
-		this.money=this.money-amount;
-		return false;
+		if (this.money-amount<0){
+			return false;
+		}
+		else{
+			this.money=this.money-amount;
+			return true;
+		}
+		
 	}
 	
 	// Returns the total amount of money player currently has
@@ -90,8 +96,13 @@ public class Player {
 	
 	//Increase the number of minions by one
 	boolean increaseMinion(){
-		this.minions=this.minions+1;
-		return true;
+		if(this.minions<12){
+			this.minions=this.minions+1;
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	
@@ -102,14 +113,24 @@ public class Player {
 	
 	//Decrease the number of buildings by one
 	boolean decreaseBuilding(){
-		this.buildings=this.buildings-1;
-		return true;
+		if((this.buildings-1)>0){		
+			this.buildings=this.buildings-1;
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	//Increase the number of buildings by one
 	boolean increaseBuildings(){
-		this.buildings=this.buildings+1;
-		return true;
+		if((this.buildings+1)<6){
+			this.buildings=this.buildings+1;
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	//Set Player's cards one by one
