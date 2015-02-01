@@ -139,13 +139,7 @@ public class TextUserInterface {
 					System.out.println("PLayer card: " + c.getTitle());
 				}
 
-				for(PlayerCard c: players[i].getPlayerCards()) {
-					System.out.println("PLayer card: " + c.getTitle());
-				}
 
-				for(PlayerCard c: players[i].getPlayerCards()) {
-					System.out.println("PLayer card: " + c.getTitle());
-				}
 			}
 		    System.out.println(System.getProperty("line.separator"));	
 			Bank bank = controller.getBank();
