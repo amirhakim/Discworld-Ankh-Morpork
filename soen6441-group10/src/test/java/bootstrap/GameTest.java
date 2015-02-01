@@ -10,56 +10,53 @@ import org.junit.*;
 public class GameTest {
 	
 		private Game game;
+		private String[] names = {"test1", "test2", "test3"};
 	
-	   @BeforeClass
-	    public static void setUpClass() throws Exception {
-	        // Code executed before the first test method    
-	    }
 	 
 	    @Before
 	    public void setUp() throws Exception {
+    		this.game = new Game();
+    		this.game.setUp(3, names);
 	        // Code executed before each test 
 	    }
 	 
 	    @Test
-	    /*
-	     * Test game creation
+	    /**
+	     * Test players names match
 	     */
 	    public void testPlayerName() {
 	    	try {
-	    		this.game = new Game();
-	    		String playerName = "Test";
-	    		this.game.setUp(3, playerName);
-	    		
-	    		// Set up game and loop through players to make sure this player exists
+	    		// Loop through players to make sure this player exists.
 	    		Player[] players = this.game.getPlayers();
-	    		boolean found = false;
-	    		for(int i=0; i<players.length;++i){
-	    			if(players[i].getName().equals(playerName)) {
-	    				found = true;
-	    			}
+	    		for(int i=0; i<players.length;++i) {
+	    			assertTrue(players[i].getName().equals(this.names[i]));
 	    		}
-	    		assertTrue("Could not find named player in players array", found);
-	    		
 	    	} catch (Exception e) {
 	    		fail("Failed " + e.getMessage());
 	    	}
-	    	
 	    }
 	    
 	    @Test
-	    /*
-	     * Test that creating too many players doesnt work
+	    /**
+	     * Test that creating too many players doesn't work
 	     */
 	    public void testMaxNumberOfPlayers(){
-	    	this.game = new Game();
 	    	try{
-	    		this.game.setUp(5,"test");
+	    		String[] names2 = {"test1", "test2", "test3", "test4", "test5"};
+	    		this.game.setUp(5,names2);
 	    		fail("Not catching too many players");
 	    	} catch (Exception e) {
 	    	}
 	    }
 	 
+	    @Test
+	    /**
+	     * Test that names and player size don't match
+	     */
+	    public void testDiffSizes() {
+	    	
+	    }
+	    
 	    @Test
 	    /*
 	     * Test that creating too few players doesnt work
@@ -67,7 +64,9 @@ public class GameTest {
 	    public void testMinNumberOfPlayers(){
 	    	this.game = new Game();
 	    	try{
-	    		this.game.setUp(1,"test");
+
+	    		String[] names = {"test1", "test2", "test3"};
+	    		this.game.setUp(1,names);
 	    		fail("Not catching too many players");
 	    	} catch (Exception e) {
 	    	}
@@ -83,7 +82,8 @@ public class GameTest {
 	    	try {
 	    		// Create game
 	    		int numberOfPlayers = 3;
-	    		this.game.setUp(numberOfPlayers, "Test");
+	    		String[] names = {"test1", "test2", "test3"};
+	    		this.game.setUp(numberOfPlayers, names);
 	    		this.game.init();
 	    		Player[] players = this.game.getPlayers();
 	    		ArrayList<String> cardTitles = new ArrayList<String>();
@@ -110,12 +110,13 @@ public class GameTest {
 	     */
 	    public void testGameStatus(){
 	    	this.game = new Game();
-	    	assertTrue(game.getStatus() == 0);
+	    	assertTrue(game.getState() == 0);
 	    	try {
-	    		this.game.setUp(3,"test");
-	    		assertTrue(game.getStatus() == 1);
+	    		String[] names = {"test1", "test2", "test3"};
+	    		this.game.setUp(3,names);
+	    		assertTrue(game.getState() == 1);
 		    	this.game.init();
-		    	assertTrue(game.getStatus() == 2);
+		    	assertTrue(game.getState() == 2);
 		    } catch(Exception e){
 		    	fail("Could not set yo gane");
 	    	}
