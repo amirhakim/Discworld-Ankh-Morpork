@@ -72,7 +72,6 @@ public class TextUserInterface {
 				} else if(action.equalsIgnoreCase("s")){
 					this.status();
 				}
-			
 			}
 			
 		} else {
@@ -122,6 +121,9 @@ public class TextUserInterface {
 				System.out.print(players[i].getName());
 				System.out.print(" has personality ");
 				System.out.println(players[i].getPersonality().getTitle());
+				System.out.println("And has " + String.valueOf(players[i].getMinions()) + " minions left");
+				System.out.println("And has " + String.valueOf(players[i].getBuildings()) + " buildings left");
+				System.out.println("And has " + String.valueOf(players[i].getAmount()) + " money left");
 			}
 				
 			Bank bank = controller.getBank();

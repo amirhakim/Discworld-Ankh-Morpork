@@ -164,4 +164,9 @@ public class Player {
 	int getColor(){
 		return this.color;
 	}
+	
+	
+	
+	
+	
 }
