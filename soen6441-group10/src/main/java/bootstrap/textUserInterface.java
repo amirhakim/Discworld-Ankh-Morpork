@@ -45,22 +45,25 @@ public class textUserInterface {
 		// Get players name.
 		// Get number of players.
         int numberOfPlayers;
-        String playerName;
-        
-        System.out.println("Enter player ones name");
-        playerName = scanner.nextLine();
         
         System.out.println("Enter number of players");
         numberOfPlayers = scanner.nextInt(); 
-		
+        scanner.nextLine();
+        String[] playerNames = new String[numberOfPlayers];
         
-		if (controller.newGame(numberOfPlayers, playerName)) {
+        
+        for(int i=0;i<numberOfPlayers;++i){
+            System.out.println("Enter player " + String.valueOf(i) + " name");
+            playerNames[i] = scanner.nextLine();	
+        }        
+     
+    	
+        
+		if (controller.newGame(numberOfPlayers, playerNames)) {
 			System.out.println("Game Started");
-			
 			while(true) {
 				System.out.println("t for next turn, e to end, s to save, l to load");
 				String action = scanner.nextLine();
-				System.out.println(action);
 				if(action.equals("e")) {
 					return;
 				} else if(action.equals("t")) {

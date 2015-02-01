@@ -27,7 +27,7 @@ public class Game {
 	 * Set up game
 	 * @Exception: if invalid number of players
 	 */
-	public void setUp(int numberOfPlayers, String playerName) throws Exception {
+	public void setUp(int numberOfPlayers, String[] playerNames) throws Exception {
 		// Create players.
 		// Make sure players are between 2 and 4.
 		if(numberOfPlayers > 4 || numberOfPlayers < 2) {
@@ -35,14 +35,10 @@ public class Game {
 		} else {
 			this.gameBank = new Bank();
 			this.players = new Player[numberOfPlayers];
-			// Set human player at 0 index
-			this.players[0] = new Player();
-			this.players[0].setName(playerName);
 			
-			// Set all other players as AI
-			for(int i=1;i<this.players.length;++i){
+			for(int i=0;i<this.players.length;++i){
 				Player p = new Player();
-				p.setName("Player_" + i);
+				p.setName(playerNames[i]);
 				this.players[i] = p;
 			}
 		}

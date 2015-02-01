@@ -12,9 +12,9 @@ public class Controller {
 	 * Start a new game
 	 * @param: numberOfPlayers required for game, humane players name
 	 */
-	public boolean newGame(int numberOfPlayers, String playerName) {
+	public boolean newGame(int numberOfPlayers, String[] playerNames) {
 		try {
-			this.game.setUp(numberOfPlayers, playerName);
+			this.game.setUp(numberOfPlayers, playerNames);
 			this.game.init();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
