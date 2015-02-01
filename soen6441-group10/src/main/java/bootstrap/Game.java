@@ -49,8 +49,6 @@ public class Game {
 		this.player = new PlayerDeck();
 		this.cities = new CityDeck();
 		
-		CityCard test = this.cities.getCard("Ils of Gods");
-		test.test();
 		// Set game status as ready to start.
 		this.status = 1;
 		

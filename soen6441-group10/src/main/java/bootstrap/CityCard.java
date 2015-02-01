@@ -136,11 +136,7 @@ public class CityCard implements Card {
 		}
 	}
 	
-	public void test() {
-		for(CityCard c: this.neighbours){
-			System.out.println(c.getTitle());
-		}
-	}
+	
 	
 	public void setBuildingCost(int cost){
 		this.buildingCost = cost;
