@@ -114,7 +114,6 @@ public class GameTest {
 	    	this.game = new Game();
 	    	assertTrue(game.getState() == 0);
 	    	try {
-	    		String[] names = {"test1", "test2", "test3"};
 	    		this.game.setUp(3,this.names);
 	    		assertTrue(game.getState() == 1);
 		    	this.game.init();
@@ -124,13 +123,24 @@ public class GameTest {
 	    	}
 	    }
 	    
-	    @test
+	    @Test
 	    /**
 	     * Test that players have right amount of minions after game starts
 	     */
 	    public void testPLayerMinions() {
-	    	this.game = new Game();
-	    	//this.game.SetUp
+	    	try{
+	    		this.game = new Game();
+	    		this.game.setUp(3,this.names);
+	    		this.game.init();
+	    		Player[] players = this.game.getPlayers();
+	    		for(int i=0; i<players.length; ++i) {
+	    			// Make sure each player has 12 - 3 (12 is initial, 3 are parsed out).
+	    			assertTrue(players[i].getMinions() == (12-3));
+	    		}
+	    		
+		    } catch(InvalidGameStateException e){
+		    	fail("Could not set yo gane");
+	    	}
 	    }
 	    
 	    
