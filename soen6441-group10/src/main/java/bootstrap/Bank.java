@@ -27,7 +27,7 @@ class Bank {
 	}
 		
 	/*
-	 * @return: It defines value remaining in bank.
+	 * @return: It Shows value remaining in bank.
 	 */
 	public int getBalance() {
 		return this.amount;
