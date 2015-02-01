@@ -56,6 +56,16 @@ public class CityCard implements Card {
 		if(recipricate) neighbourCard.addNeighbour(this,false);
 	}
 	
+	public boolean isNeighbour(CityCard card2){
+		System.out.println(this.neighbours);
+		if(this.neighbours.contains(card2)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	public boolean hasTroubleMaker() {
 		return troubleMaker;
 	}
