@@ -90,8 +90,13 @@ public class Player {
 	
 	//Decrease the number of minions by one
 	boolean decreaseMinion(){
-		this.minions=this.minions-1;
-		return true;
+		if((this.minions-1)>=0){
+			this.minions=this.minions-1;
+			return true;	
+		}
+		else{
+			return false;
+		}
 	}
 	
 	//Increase the number of minions by one
