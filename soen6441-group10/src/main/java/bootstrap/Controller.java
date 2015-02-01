@@ -16,7 +16,7 @@ public class Controller {
 		try {
 			this.game.setUp(numberOfPlayers, playerNames);
 			this.game.init();
-		} catch (Exception e) {
+		} catch (InvalidGameStateException e) {
 			System.out.println(e.getMessage());
 			// TODO add log message
 			return false;
@@ -42,6 +42,15 @@ public class Controller {
 	
 	Bank getBank() {
 		return game.getBank();
+	}
+	
+	boolean gameExists() {
+		if(game.getState() < 2){
+			return false;
+		} else {
+			return true;
+		}
+		
 	}
 
 }

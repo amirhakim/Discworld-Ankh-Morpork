@@ -84,7 +84,8 @@ public class textUserInterface {
 	 */
 	public static void status() {
 		// If game has not been initiated catch error.
-		try {
+		if(controller.gameExists()) {
+			
 			Player[] players = controller.getPlayers();
 			// Print players details
 			for(int i=0; i<players.length; ++i) {
@@ -98,9 +99,8 @@ public class textUserInterface {
 			System.out.print("Current turn is ");
 			System.out.println(controller.getCurrentTurn().getName());
 			
-		} catch (Exception e){
-			// Game status indicates game has not started.
-			System.out.println("No Game is underway");
+		} else {
+			System.out.println("No game started");
 		}
 	}
 	

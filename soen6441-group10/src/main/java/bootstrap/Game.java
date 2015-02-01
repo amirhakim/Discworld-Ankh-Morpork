@@ -27,11 +27,11 @@ public class Game {
 	 * Set up game
 	 * @Exception: if invalid number of players
 	 */
-	public void setUp(int numberOfPlayers, String[] playerNames) throws Exception {
+	public void setUp(int numberOfPlayers, String[] playerNames) throws InvalidGameStateException {
 		// Create players.
 		// Make sure players are between 2 and 4.
 		if(numberOfPlayers > 4 || numberOfPlayers < 2) {
-			throw new Exception();
+			throw new InvalidGameStateException("Incorrect player number");
 		} else {
 			this.gameBank = new Bank();
 			this.players = new Player[numberOfPlayers];
@@ -44,8 +44,8 @@ public class Game {
 		}
 		
 		// Initialize personality deck.
-		personality = new PersonalityDeck();
-		player = new PlayerDeck();
+		this.personality = new PersonalityDeck();
+		this.player = new PlayerDeck();
 		
 		// Set game status as ready to start.
 		this.status = 1;
@@ -107,5 +107,9 @@ public class Game {
 	
 	public Bank getBank() {
 		return this.gameBank;
+	}
+
+	int getState() {
+		return this.status;
 	}
 }
