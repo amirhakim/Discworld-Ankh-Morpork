@@ -1,7 +1,7 @@
 package bootstrap;
 
 
-public class AnkhMorporkStarter {
+public class mainAnkhMorporkStarter {
 
 	public static void main(String[] args) {
 		System.out.println("Hello world!");
