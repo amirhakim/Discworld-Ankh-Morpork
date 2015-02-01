@@ -9,10 +9,10 @@ package bootstrap;
 
 public interface Card extends Cloneable {
 
-	/** gets the title of the card AKA name
+	/** gets the title of the card names.
 		 */
 	public String getTitle();
-	/** sets the title of the card AKA name
+	/** sets the title of the card names.
 	 */
 	public void setTitle(String title);
 
