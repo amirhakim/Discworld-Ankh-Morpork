@@ -124,6 +124,15 @@ public class GameTest {
 	    	}
 	    }
 	    
+	    @test
+	    /**
+	     * Test that players have right amount of minions after game starts
+	     */
+	    public void testPLayerMinions() {
+	    	this.game = new Game();
+	    	//this.game.SetUp
+	    }
+	    
 	    
 	    @After
 	    public void tearDown() throws Exception {
