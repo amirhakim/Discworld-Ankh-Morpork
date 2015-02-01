@@ -51,9 +51,7 @@ public class PlayerDeck extends Deck{
 		
 		this.cards.addAll(subDeck);
 		
-		for(Card c: this.cards) {
-			System.out.println(c.getTitle());
-		}
+		
 	}
 
 }
