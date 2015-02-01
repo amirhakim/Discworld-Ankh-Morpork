@@ -27,7 +27,7 @@ public class Player {
 	}
 
 	private boolean isAlpha(String name) {
-		//TODO this needs to allow numers
+		//TODO this needs to allow numbers
 		return name.matches("^[a-zA-Z0-9_]*$");
 	}
 	
@@ -42,5 +42,9 @@ public class Player {
 	
 	Card getPersonality() {
 		return this.personality;
+	}
+	
+	void turn() {
+		System.out.println(this.getName() + " turn");
 	}
 }

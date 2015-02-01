@@ -12,12 +12,13 @@ public class Game {
 	private Player[] players;
 	private Deck personality;
 	private int status;
+	private int currentTurn;
 	
 	/*
 	 * Default class constructor.
 	 */
 	public Game() {
-		// Set game status as un initiated
+		// Set game status as uninitiated
 		this.status = 0;
 	}
 	
@@ -50,7 +51,6 @@ public class Game {
 		
 		// Set game status as ready to start.
 		this.status = 1;
-		
 	}
 	
 	/*
@@ -62,7 +62,20 @@ public class Game {
 			Card popped = this.personality.pop();
 			this.players[i].setPersonality(popped);
 		}
+		this.currentTurn = 0;
 		this.status = 2;
+	}
+	
+	
+	
+	public void turn() {
+		int current = this.currentTurn;
+		this.players[current].turn();
+		if((current + 1) == this.players.length) {
+			this.currentTurn = 0;
+		} else {
+			this.currentTurn = current + 1;	
+		}
 	}
 	
 	/*
@@ -79,10 +92,18 @@ public class Game {
 		return this.status;
 	}
 	
+	public Player getCurrentTurn() {
+		return this.players[this.currentTurn];
+	}
+	
 	/*
 	 * @return: PersnalityDeck
 	 */
 	public Deck getPersonalityDeck() {
 		return this.personality;
+	}
+	
+	public Bank getBank() {
+		return this.gameBank;
 	}
 }

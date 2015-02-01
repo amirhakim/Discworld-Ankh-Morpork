@@ -30,6 +30,7 @@ public class textUserInterface {
         		textUserInterface.status();
         	
         	} else if(action.equals("q")){
+        		System.out.println("Goodbye");
         		return;
         	}
         }
@@ -55,6 +56,19 @@ public class textUserInterface {
         
 		if (controller.newGame(numberOfPlayers, playerName)) {
 			System.out.println("Game Started");
+			
+			while(true) {
+				System.out.println("t for next turn, e to end, s to save, l to load");
+				String action = scanner.nextLine();
+				System.out.println(action);
+				if(action.equals("e")) {
+					return;
+				} else if(action.equals("t")) {
+					controller.nextTurn();
+				}
+			
+			}
+			
 		} else {
 			// Too many or too few players in game.
 			System.out.println("Sorry only 2 to 4 players can play this game!");
@@ -68,13 +82,19 @@ public class textUserInterface {
 	public static void status() {
 		// If game has not been initiated catch error.
 		try {
-			Player[] players = controller.getStatus();
+			Player[] players = controller.getPlayers();
 			// Print players details
 			for(int i=0; i<players.length; ++i) {
 				System.out.print(players[i].getName());
 				System.out.print(" has personality ");
 				System.out.println(players[i].getPersonality().getTitle());
 			}
+			
+			Bank bank = controller.getBank();
+			System.out.println("Bank has balance of " + Integer.toString(bank.getBalance()));
+			System.out.print("Current turn is ");
+			System.out.println(controller.getCurrentTurn().getName());
+			
 		} catch (Exception e){
 			// Game status indicates game has not started.
 			System.out.println("No Game is underway");

@@ -24,15 +24,20 @@ public class Controller {
 		return true;
 	}
 	
-	/*
-	 * Returns status of players
-	 * TODO add more items to return
-	 */
-	public Player[] getStatus() throws Exception{
-		if(this.game.getStatus() < 2) {
-			throw new Exception();
-		}
+	public void nextTurn() {
+		game.turn();
+	}
+	
+	public Player getCurrentTurn() {
+		return this.game.getCurrentTurn();
+	}
+	
+	Player[] getPlayers() {
 		return game.getPlayers();
+	}
+	
+	Bank getBank() {
+		return game.getBank();
 	}
 
 }
