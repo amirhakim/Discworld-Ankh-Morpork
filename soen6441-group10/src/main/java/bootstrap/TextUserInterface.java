@@ -181,6 +181,7 @@ public class TextUserInterface {
 				System.out.print(players[i].getName());
 				System.out.print(" has personality ");
 				System.out.println(players[i].getPersonality().getTitle());
+				System.out.println(players[i].getName() + " is color " + players[i].getColor());
 				System.out.println(" And has "
 						+ String.valueOf(players[i].getMinions())
 						+ " minions left");
@@ -190,10 +191,10 @@ public class TextUserInterface {
 				System.out.println(" And has "
 						+ String.valueOf(players[i].getAmount())
 						+ " money left");
-				System.out.println(System.getProperty("line.separator"));
-
+				//System.out.println(System.getProperty("line.separator"));
+				System.out.print(" And has Player cards: ");
 				for (PlayerCard c : players[i].getPlayerCards()) {
-					System.out.println("PLayer card: " + c.getTitle());
+					System.out.print(c.getTitle() + ", ");
 				}
 
 			}

@@ -11,10 +11,11 @@ package bootstrap;
 
 class Bank {
 
-	private int numSilver;
-	private int numGold;
-	final private int silverValue = 1;
-	final private int goldValue = 5;
+	/* Add these items in later builds */
+//	private int numSilver;
+//	private int numGold;
+//	final private int silverValue = 1;
+//	final private int goldValue = 5;
 	
 	private int amount;
 	
@@ -22,9 +23,9 @@ class Bank {
 	 *It sets up silver and gold numbers. 
 	 */
 	public Bank() {
-		this.numSilver = 35;
-		this.numGold = 17;
-		this.amount = 260;
+	//	this.numSilver = 35;
+	//	this.numGold = 17;
+		this.amount = 120;
 	}
 		
 	/**

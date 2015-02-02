@@ -162,8 +162,9 @@ public class Player {
 	}
 
 	// Get Player's color
-	int getColor() {
-		return this.color;
+	String getColor() {
+		String[] colors = {"Red", "Yellow", "Green", "Blue"};
+		return colors[this.color];
 	}
 
 }
