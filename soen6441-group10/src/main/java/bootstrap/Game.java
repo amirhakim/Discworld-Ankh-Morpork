@@ -5,13 +5,15 @@
 
 package bootstrap;
 
+import java.util.Optional;
+
 
 public class Game {
 
 	private Bank gameBank;
 	private Player[] players;
-	private Deck personality;
-	private Deck player;
+	private PersonalityDeck personality;
+	private PlayerDeck player;
 	private CityDeck cities;
 	private int status;
 	private int currentTurn;
@@ -63,8 +65,9 @@ public class Game {
 		for(int i=0; i<this.players.length; ++i) {
 			this.players[i].increaseMoney(10);
 			this.gameBank.decreaseBalance(10);
-			Card popped = this.personality.pop();
-			this.players[i].setPersonality(popped);
+			Optional<PersonalityCard> popped = this.personality.drawCard();
+			// TODO We have to have a check for an empty deck somewhere here
+			this.players[i].setPersonality(popped.get());
 			CityCard Shades= (this.cities.getCard("The Shades"));
 			Shades.addMinion(this.players[i]);
 			Shades.addTrouble();
@@ -117,7 +120,7 @@ public class Game {
 	/*
 	 * @return: PersnalityDeck
 	 */
-	public Deck getPersonalityDeck() {
+	public PersonalityDeck getPersonalityDeck() {
 		return this.personality;
 	}
 	
@@ -140,11 +143,10 @@ public class Game {
 		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
 		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
 		 
-		 this.players[0].addPlayerCard((PlayerCard) this.player.pop());
-		 this.players[0].addPlayerCard((PlayerCard) this.player.pop());
+		 this.players[0].addPlayerCard(this.player.drawCard().get());
+		 this.players[0].addPlayerCard(this.player.drawCard().get());
 		 
-		 this.players[1].addPlayerCard((PlayerCard) this.player.pop());
-		 
-		 
+		 this.players[1].addPlayerCard(this.player.drawCard().get());
 	}
+
 }

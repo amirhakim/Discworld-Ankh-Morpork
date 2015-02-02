@@ -10,6 +10,7 @@ package bootstrap;
  */
 
 class Bank {
+
 	private int numSilver;
 	private int numGold;
 	final private int silverValue = 1;
@@ -26,12 +27,11 @@ class Bank {
 		this.amount = 260;
 	}
 		
-	/*
+	/**
 	 * @return: int value remaining in bank
 	 */
 	public int getBalance() {
 		return this.amount;
-		//return this.numSilver * this.silverValue + this.numGold * this.goldValue;
 	}
 	
 	public void decreaseBalance(int amount) {

@@ -8,7 +8,11 @@ import java.util.List;
 
 public class Controller {
 
-	private Game game = new Game();
+	private Game game;
+	
+	public Controller(){
+		game = new Game();
+	}
 	
 	/*
 	 * Start a new game
@@ -61,5 +65,9 @@ public class Controller {
 	
 	public void simulate() {
 		this.game.simulate();
+	}
+	
+	public Game getGame() {
+		return game;
 	}
 }

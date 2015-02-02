@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * A utility class for loading and saving an object's state from and to 
@@ -16,11 +17,16 @@ import com.google.gson.Gson;
  */
 public class JSONFileManager<T> implements FileManager<T> {
 	
-	private static final Gson gson = new Gson();
+	private final Gson gson;
 	private final Class<T> typeParameterClass;
 	
 	public JSONFileManager(Class<T> typeParameterClass_) {
 		typeParameterClass = typeParameterClass_;
+		gson = registerHandlers(new GsonBuilder());
+	}
+	
+	private Gson registerHandlers(GsonBuilder builder) {
+		return builder.create();
 	}
 	
 	/**

@@ -1,11 +1,15 @@
 package bootstrap;
 
-import static org.junit.Assert.*;
-import static org.junit.Before.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class GameTest {
 	
@@ -28,7 +32,7 @@ public class GameTest {
 	    public void testPlayerName() {
 	    	try {
 	    		this.game = new Game();
-	    		String playerName = "Test";
+	    		String[] playerName = new String[]{ "Test" };
 	    		this.game.setUp(3, playerName);
 	    		
 	    		// Set up game and loop through players to make sure this player exists
@@ -54,7 +58,7 @@ public class GameTest {
 	    public void testMaxNumberOfPlayers(){
 	    	this.game = new Game();
 	    	try{
-	    		this.game.setUp(5,"test");
+	    		this.game.setUp(5, new String[]{ "test" });
 	    		fail("Not catching too many players");
 	    	} catch (Exception e) {
 	    	}
@@ -67,7 +71,7 @@ public class GameTest {
 	    public void testMinNumberOfPlayers(){
 	    	this.game = new Game();
 	    	try{
-	    		this.game.setUp(1,"test");
+	    		this.game.setUp(1, new String[]{ "test" });
 	    		fail("Not catching too many players");
 	    	} catch (Exception e) {
 	    	}
@@ -83,7 +87,7 @@ public class GameTest {
 	    	try {
 	    		// Create game
 	    		int numberOfPlayers = 3;
-	    		this.game.setUp(numberOfPlayers, "Test");
+	    		this.game.setUp(numberOfPlayers, new String[]{ "Test" });
 	    		this.game.init();
 	    		Player[] players = this.game.getPlayers();
 	    		ArrayList<String> cardTitles = new ArrayList<String>();
@@ -112,7 +116,7 @@ public class GameTest {
 	    	this.game = new Game();
 	    	assertTrue(game.getStatus() == 0);
 	    	try {
-	    		this.game.setUp(3,"test");
+	    		this.game.setUp(3, new String[]{ "test" });
 	    		assertTrue(game.getStatus() == 1);
 		    	this.game.init();
 		    	assertTrue(game.getStatus() == 2);

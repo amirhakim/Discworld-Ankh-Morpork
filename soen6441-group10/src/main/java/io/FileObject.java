@@ -20,7 +20,7 @@ public class FileObject<T> {
 	private final T pojo;
 	private final Path filePath;
 
-	protected FileObject(T obj_, String _fileName) {
+	public FileObject(T obj_, String _fileName) {
 		pojo = obj_;
 		filePath = Paths.get(FILE_ROOT).resolve(_fileName);
 	}

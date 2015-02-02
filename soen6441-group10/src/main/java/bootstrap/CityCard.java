@@ -15,7 +15,7 @@ import java.util.Map;
 public class CityCard implements Card {
 
 	private String title;
-	private List<CityCard> neighbours;
+	private transient List<CityCard> neighbours;
 	private Map<Player, Integer> minions;
 	private boolean troubleMaker;
 	private Player buildingOwner;
@@ -23,10 +23,7 @@ public class CityCard implements Card {
 	private int trolls;
 	private int buildingCost;
 	
-	
-	
 	public CityCard() {
-		// TODO Auto-generated constructor stub
 		this.neighbours = new ArrayList<CityCard>();
 		this.minions = new HashMap<Player, Integer>();
 		this.troubleMaker = false;
@@ -34,10 +31,17 @@ public class CityCard implements Card {
 		this.demons = 0;
 		this.trolls = 0;
 	}
+	
+	public CityCard(String title_, int buildingCost_) {
+		this();
+		title = title_;
+		buildingCost = buildingCost_;
+	}
 
 	/* (non-Javadoc)
 	 * @see bootstrap.Card#getTitle()
 	 */
+	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return this.title;
@@ -46,14 +50,16 @@ public class CityCard implements Card {
 	/* (non-Javadoc)
 	 * @see bootstrap.Card#setTitle(java.lang.String)
 	 */
+	@Override
 	public void setTitle(String title) {
 		// TODO Auto-generated method stub
 		this.title=title;
 	}
 	
-	public void addNeighbour(CityCard neighbourCard, boolean recipricate) {
+	public CityCard addNeighbour(CityCard neighbourCard, boolean recipricate) {
 		this.neighbours.add(neighbourCard);
 		if(recipricate) neighbourCard.addNeighbour(this,false);
+		return this;
 	}
 	
 	public boolean hasTroubleMaker() {

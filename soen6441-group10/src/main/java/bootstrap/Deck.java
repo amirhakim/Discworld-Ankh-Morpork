@@ -1,41 +1,34 @@
-/**
- * @File
- * Deck class continaing methods to all decks of cards in game
- */
-
 package bootstrap;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.Stack;
 
+public abstract class Deck<C extends Card> {
 
-public abstract class Deck {
-	protected ArrayList<Card> cards;
-	protected int deckSize;
+	protected Stack<C> cards;
 	
-	/*
-	 * Pop top item in deck
+	/**
+	 * Draw a card if the deck has any cards at all.
 	 */
-	public Card pop() {
-		return this.cards.remove(this.cards.size() - 1);
+	public Optional<C> drawCard() {
+		return !cards.isEmpty() ? Optional.of(cards.pop()) : Optional.empty();
 	}
 	
-	/*
-	 * Randomize decks order
+	/**
+	 * Shuffle the deck.
 	 */
 	public void shuffle() {
-		Collections.shuffle(this.cards);
+		Collections.shuffle(cards);
 	}
 	
-	/*
-	 * Get size of deck
+	/**
+	 * Get the number of cards in the deck.
 	 */
 	public int size() {
 		return cards.size();
 	}
 	
-	
 	public abstract void populateDeck();
-	
 	
 }
