@@ -47,45 +47,6 @@ public class TextUserInterface {
 
 	}
 
-	private void saveGame() {
-		System.out.println("Provide a filename where your current game state will be "
-				+ "saved (e.g. game1.json) or blank for the game to be saved to the"
-				+ " same file (if your game has not been saved previously and you "
-				+ "enter a blank fileName, you will be prompted again):");
-
-		// To save to the same file we have to have a game file already open
-		String fileName = scanner.next();
-		while (currentGameFileObj == null && "".equals(fileName)) {
-			fileName = scanner.next();
-		}
-		
-		// Save to the same fileName
-		if ("".equals(fileName)) {
-			fm.save(currentGameFileObj);
-		}
-		
-		// Save as, whether we have a saved game before or not
-		currentGameFileObj = new FileObject<Game>(controller.getGame(), fileName);
-		fm.saveAs(currentGameFileObj, fileName);
-
-	}
-
-	private FileObject<Game> loadGame() {
-		System.out
-				.println("\nWhich game to load? Game files are stored under "
-						+ "src/resources - give only the filename (e.g. game1.json). Give "
-						+ "a blank filename to go back to the main menu.");
-		String fileName = scanner.next();
-		Optional<FileObject<Game>> f = fm.open(fileName);
-
-		while (!("".equals(fileName)) && !f.isPresent()) {
-			System.out.println(fileName + " doesn't exist! Try another one: ");
-			fileName = scanner.next();
-		}
-
-		return f.get();
-	}
-
 	/*
 	 * Start a new game.
 	 */
@@ -134,37 +95,80 @@ public class TextUserInterface {
 
 	}
 
+	private void saveGame() {
+		System.out
+				.println("Provide a filename where your current game state will be "
+						+ "saved (e.g. game1.json) or blank for the game to be saved to the"
+						+ " same file (if your game has not been saved previously and you "
+						+ "enter a blank fileName, you will be prompted again):");
+
+		// To save to the same file we have to have a game file already open
+		String fileName = scanner.next();
+		while (currentGameFileObj == null && "".equals(fileName)) {
+			fileName = scanner.next();
+		}
+
+		// Save to the same fileName
+		if ("".equals(fileName)) {
+			fm.save(currentGameFileObj);
+		}
+
+		// Save as, whether we have a saved game before or not
+		currentGameFileObj = new FileObject<Game>(controller.getGame(),
+				fileName);
+		fm.saveAs(currentGameFileObj, fileName);
+
+	}
+
+	private FileObject<Game> loadGame() {
+		System.out
+				.println("\nWhich game to load? Game files are stored under "
+						+ "src/resources - give only the filename (e.g. game1.json). Give "
+						+ "a blank filename to go back to the main menu.");
+		String fileName = scanner.next();
+		Optional<FileObject<Game>> f = fm.open(fileName);
+
+		while (!("".equals(fileName)) && !f.isPresent()) {
+			System.out.println(fileName + " doesn't exist! Try another one: ");
+			fileName = scanner.next();
+		}
+
+		return f.get();
+	}
+
 	/*
 	 * Display the status of the board and the game
 	 */
 	public void status() {
 		// If game has not been initiated catch error.
+		System.out.println(String.format("%-20s%10s%30s%30s%30s%10s", "Area",
+				"Buildings", "Minions", "Trolls", "Demons", "Trouble"));
 		if (controller.gameExists()) {
 
 			for (CityCard c : controller.getCities()) {
-				System.out.println(c.getTitle());
+				System.out.print(String.format("%-20s", c.getTitle()));
 				Player p = c.getBuilding();
 				if (p == null) {
-					System.out.println("No Buildings");
+					System.out.print(String.format("%10s", "NON"));
 				} else {
-					System.out.print("Building by: ");
-					System.out.println(p.getName());
+					// System.out.print(" Building by: ");
+					System.out.print(String.format("%10s", p.getName()));
 				}
-
 				Map<Player, Integer> minions = c.getMinions();
+				String minionsAll = "";
 				for (Map.Entry<Player, Integer> entry : minions.entrySet()) {
 					Player key = entry.getKey();
 					Integer value = entry.getValue();
-					System.out.println(key.getName() + " has "
-							+ String.valueOf(value) + " minions on "
-							+ c.getTitle());
+					minionsAll += String.format("%5s%1s%1s%1s", key.getName(),
+							"(", String.valueOf(value), ")");
 				}
+				System.out.format("%30s", minionsAll);
 
-				System.out.println("Trolls: " + String.valueOf(c.getTrolls()));
-				System.out.println("Demons: " + String.valueOf(c.getDemons()));
+				System.out.format("%30s", String.valueOf(c.getTrolls()));
+				System.out.format("%30s", String.valueOf(c.getDemons()));
 
-				System.out.print("Has Trouble? ");
-				System.out.println(c.hasTroubleMaker());
+				// System.out.print(" Has Trouble? ");
+				System.out.format("%10s", c.hasTroubleMaker());
 
 				System.out.println();
 
@@ -173,32 +177,39 @@ public class TextUserInterface {
 			Player[] players = controller.getPlayers();
 			// Print players details
 			for (int i = 0; i < players.length; ++i) {
+				System.out.println(System.getProperty("line.separator"));
 				System.out.print(players[i].getName());
 				System.out.print(" has personality ");
 				System.out.println(players[i].getPersonality().getTitle());
-				System.out.println("And has "
+				System.out.println(" And has "
 						+ String.valueOf(players[i].getMinions())
 						+ " minions left");
-				System.out.println("And has "
+				System.out.println(" And has "
 						+ String.valueOf(players[i].getBuildings())
 						+ " buildings left");
-				System.out.println("And has "
+				System.out.println(" And has "
 						+ String.valueOf(players[i].getAmount())
 						+ " money left");
+				System.out.println(System.getProperty("line.separator"));
 
 				for (PlayerCard c : players[i].getPlayerCards()) {
 					System.out.println("PLayer card: " + c.getTitle());
 				}
-			}
 
+			}
+			System.out.println(System.getProperty("line.separator"));
 			Bank bank = controller.getBank();
-			System.out.println("Bank has balance of "
+			System.out.println(" Bank has balance of "
 					+ Integer.toString(bank.getBalance()));
-			System.out.print("Current turn is ");
+			System.out.print(" Current turn is ");
 			System.out.println(controller.getCurrentTurn().getName());
+			System.out.println(System.getProperty("line.separator"));
 
 		} else {
-			System.out.println("No game started");
+			System.out.println(System.getProperty("line.separator"));
+			System.out.println(" No game started");
+			System.out.println(System.getProperty("line.separator"));
+
 		}
 	}
 

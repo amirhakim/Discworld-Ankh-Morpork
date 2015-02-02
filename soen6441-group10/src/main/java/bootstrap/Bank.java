@@ -19,7 +19,7 @@ class Bank {
 	private int amount;
 	
 	/*
-	 * Set up silver and gold numbers
+	 *It sets up silver and gold numbers. 
 	 */
 	public Bank() {
 		this.numSilver = 35;
@@ -28,7 +28,7 @@ class Bank {
 	}
 		
 	/**
-	 * @return: int value remaining in bank
+	 * @return The total amount remaining in the bank.
 	 */
 	public int getBalance() {
 		return this.amount;
@@ -39,7 +39,7 @@ class Bank {
 	}
 	
 	public void increaseBalance(int amount) {
-		this.amount = this.amount + amount;
+		this.amount = this.amount - amount;
 	}
 	
 }
