@@ -1,17 +1,21 @@
-/**
- * @File
- * Player class representing human player of game
- */
 package bootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Color;
+
+/**
+ * This class represents the players participating in the game, including the
+ * pieces they hold as well as their hands.
+ * 
+ * It is important to note that a player's color uniquely identifies the player.
+ */
 public class Player {
 
 	private String name;
 	private PersonalityCard personality;
-	private int color;
+	private Color color;
 	private int money;
 	private int minions;
 	private int buildings;
@@ -25,7 +29,7 @@ public class Player {
 
 	// Sets player's name for the current object.
 	// Returns true for a valid name otherwise returns false.
-	boolean setName(String name) {
+	public boolean setName(String name) {
 		// Checks for a valid name. Valid name contains only letter.
 		if (isAlpha(name)) {
 			this.name = name;
@@ -36,12 +40,10 @@ public class Player {
 	}
 
 	private boolean isAlpha(String name) {
-		// TODO this needs to allow numbers
 		return name.matches("^[a-zA-Z0-9_]*$");
 	}
 
-	// Returns name value
-	String getName() {
+	public String getName() {
 		return this.name;
 	}
 
@@ -156,14 +158,45 @@ public class Player {
 	}
 
 	// Set Color for Player's pieces
-	boolean setColor(int color) {
-		this.color = color;
-		return true;
+	public void setColor(Color color_) {
+		color = color_;
 	}
 
 	// Get Player's color
-	int getColor() {
+	public Color getColor() {
 		return this.color;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Player)) {
+			return false;
+		}
+		Player other = (Player) obj;
+		if (color != other.color) {
+			return false;
+		}
+		return true;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Player[ name=" + name + ", color=" + color + "]";
 	}
 
 }

@@ -13,7 +13,7 @@ public class PersonalityDeck extends Deck<PersonalityCard> {
 
 	// Array of all card posibilities
 	private final String[] names = { "Lord Selachii", "Chrysoprase",
-			"Loard Vetinaari", "Dragon King of Arms", "Commander Vimes" };
+			"Lord Vetinaari", "Dragon King of Arms", "Commander Vimes" };
 
 	public PersonalityDeck() {
 		populateDeck();

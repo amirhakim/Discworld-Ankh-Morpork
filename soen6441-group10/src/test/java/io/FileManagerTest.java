@@ -187,13 +187,13 @@ public class FileManagerTest {
 	public void testSerializeGame() throws InvalidGameStateException {
 		Game game = new Game();
 		game.setUp(2, new String[]{ "George", "Dimitri" });
+		game.init();
 		FileObject<Game> gameFO = new FileObject<>(game, 
 				TEST_GAME_FILE_NAME);
 		gameFileManager.save(gameFO);
 		assertTrue(Files.exists(Paths.get("src/resources/" + TEST_GAME_FILE_NAME),
 				LinkOption.NOFOLLOW_LINKS));
 	}
-	
 	@Test
 	public void testDeserializeGame() {
 		Optional<FileObject<Game>> gDeckHolder = 

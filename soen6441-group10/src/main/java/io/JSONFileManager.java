@@ -26,7 +26,7 @@ public class JSONFileManager<T> implements FileManager<T> {
 	}
 	
 	private Gson registerHandlers(GsonBuilder builder) {
-		return builder.create();
+		return builder.setPrettyPrinting().create();
 	}
 	
 	/**

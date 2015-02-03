@@ -9,6 +9,8 @@ package bootstrap;
 
 import java.util.Optional;
 
+import util.Color;
+
 public class Game {
 
 	// Game Components.
@@ -55,7 +57,7 @@ public class Game {
 			for (int i = 0; i < this.players.length; ++i) {
 				Player p = new Player();
 				p.setName(playerNames[i]);
-				p.setColor(i);
+				p.setColor(Color.forCode(i));
 				this.players[i] = p;
 			}
 		}
@@ -165,6 +167,23 @@ public class Game {
 	 */
 	CityDeck getCities() {
 		return this.cities;
+	}
+	
+	/**
+	 * Gets the Player of the given color.
+	 * @param c - the expected Player color
+	 * @return
+	 */
+	public Player getPlayerOfColor(Color c) {
+		// TODO Change the players from an array to a list and then change this
+		//		to an HOO call
+		for (Player p : players) {
+			if (p.getColor() == c) {
+				return p;
+			}
+		}
+		
+		return null;
 	}
 
 	/**

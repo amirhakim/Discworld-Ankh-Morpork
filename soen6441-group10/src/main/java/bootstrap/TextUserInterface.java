@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
+import util.Color;
+
 public class TextUserInterface {
 
 	Controller controller = new Controller();
@@ -105,6 +107,7 @@ public class TextUserInterface {
 		// To save to the same file we have to have a game file already open
 		String fileName = scanner.next();
 		while (currentGameFileObj == null && "".equals(fileName)) {
+			System.out.println("You are playing a previously unsaved game - specify a filename:");
 			fileName = scanner.next();
 		}
 
@@ -154,12 +157,13 @@ public class TextUserInterface {
 					// System.out.print(" Building by: ");
 					System.out.print(String.format("%10s", p.getName()));
 				}
-				Map<Player, Integer> minions = c.getMinions();
+				Map<Color, Integer> minions = c.getMinions();
 				String minionsAll = "";
-				for (Map.Entry<Player, Integer> entry : minions.entrySet()) {
-					Player key = entry.getKey();
+				for (Map.Entry<Color, Integer> entry : minions.entrySet()) {
+					Color color = entry.getKey();
 					Integer value = entry.getValue();
-					minionsAll += String.format("%5s%1s%1s%1s", key.getName(),
+					// TODO Change this once we put the players into a map
+					minionsAll += String.format("%5s%1s%1s%1s", controller.getGame().getPlayerOfColor(color),
 							"(", String.valueOf(value), ")");
 				}
 				System.out.format("%30s", minionsAll);
