@@ -10,7 +10,7 @@ package gameplay;
 import java.util.Optional;
 
 import util.Color;
-import card.CityCard;
+import card.Area;
 import card.CityDeck;
 import card.PersonalityCard;
 import card.PersonalityDeck;
@@ -86,9 +86,9 @@ public class Game {
 		// Give each player their money, personality and initial minions.
 		
 		// Cards that have an initial state.
-		CityCard Shades = (this.cities.getCard("The Shades"));
-		CityCard theScoures = (this.cities.getCard("The Scoures"));
-		CityCard dollySisters = (this.cities.getCard("Dolly Sisters"));
+		Area Shades = (this.cities.getCard("The Shades"));
+		Area theScoures = (this.cities.getCard("The Scoures"));
+		Area dollySisters = (this.cities.getCard("Dolly Sisters"));
 		
 		for(int i=0; i<this.players.length; ++i) {
 			// Deal out 10 dollars.

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package card;
 
 import gameplay.Player;
@@ -13,15 +10,13 @@ import java.util.Map;
 import util.Color;
 
 /**
- * <b> This class represents the city cards of the game <b>
- * 
- * @author Team 10 - SOEN6441
- * @version 1.0
+ * This class represents the areas of the board - it is a placeholder for
+ * items to be placed.
  */
-public class CityCard implements Card {
+public class Area implements Card {
 
 	private String title;
-	private transient List<CityCard> neighbours;
+	private transient List<Area> neighbours;
 	private Map<Color, Integer> minions;
 	private boolean troubleMaker;
 	private Player buildingOwner;
@@ -29,8 +24,8 @@ public class CityCard implements Card {
 	private int trolls;
 	private int buildingCost;
 
-	public CityCard() {
-		this.neighbours = new ArrayList<CityCard>();
+	public Area() {
+		this.neighbours = new ArrayList<Area>();
 		this.minions = new HashMap<Color, Integer>();
 		this.troubleMaker = false;
 		this.buildingOwner = null;
@@ -38,7 +33,7 @@ public class CityCard implements Card {
 		this.trolls = 0;
 	}
 
-	public CityCard(String title_, int buildingCost_) {
+	public Area(String title_, int buildingCost_) {
 		this();
 		title = title_;
 		buildingCost = buildingCost_;
@@ -54,14 +49,14 @@ public class CityCard implements Card {
 		this.title = title;
 	}
 
-	public CityCard addNeighbour(CityCard neighbourCard, boolean recipricate) {
+	public Area addNeighbour(Area neighbourCard, boolean recipricate) {
 		this.neighbours.add(neighbourCard);
 		if (recipricate)
 			neighbourCard.addNeighbour(this, false);
 		return this;
 	}
 
-	public boolean isNeighbour(CityCard card2){
+	public boolean isNeighbour(Area card2){
 		return this.neighbours.contains(card2);
 	}
 

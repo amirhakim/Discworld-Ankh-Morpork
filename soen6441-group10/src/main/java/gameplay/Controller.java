@@ -6,7 +6,7 @@ package gameplay;
 
 import java.util.List;
 
-import card.CityCard;
+import card.Area;
 import error.InvalidGameStateException;
 
 public class Controller {
@@ -62,7 +62,7 @@ public class Controller {
 		
 	}
 
-	public List<CityCard> getCities() {
+	public List<Area> getCities() {
 		return game.getCities().getCards();
 	}
 	

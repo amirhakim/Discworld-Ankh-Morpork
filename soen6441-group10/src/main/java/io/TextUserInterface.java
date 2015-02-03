@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
-import card.CityCard;
+import card.Area;
 import card.PlayerCard;
 import util.Color;
 
@@ -20,7 +20,7 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
-	public void StartGame() {
+	public void startGame() {
 		System.out.println("~~~~~~~~~~~~~~~~~~~~");
 		System.out.println("Welcome to our game!");
 		System.out.println("~~~~~~~~~~~~~~~~~~~~");
@@ -151,7 +151,7 @@ public class TextUserInterface {
 				"Buildings", "Minions", "Trolls", "Demons", "Trouble"));
 		if (controller.gameExists()) {
 
-			for (CityCard c : controller.getCities()) {
+			for (Area c : controller.getCities()) {
 				System.out.print(String.format("%-20s", c.getTitle()));
 				Player p = c.getBuilding();
 				if (p == null) {

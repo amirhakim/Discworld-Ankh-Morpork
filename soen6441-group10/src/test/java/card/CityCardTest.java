@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-import card.CityCard;
+import card.Area;
 
 public class CityCardTest {
 	
-		private CityCard card;
+		private Area card;
 	
 	    @BeforeClass
 	    public static void setUpClass() throws Exception {
@@ -18,7 +18,7 @@ public class CityCardTest {
 	    @Before
 	    public void setUp() throws Exception {
 	        // Code executed before each test 
-	    	this.card = new CityCard();
+	    	this.card = new Area();
 	    }
 	 
 	    @Test
@@ -39,8 +39,8 @@ public class CityCardTest {
 	     * Test Card Neighbor
 	     */
 	    public void addNeighborTest(){
-	    	CityCard card1=new CityCard();
-	    	CityCard card2=new CityCard();
+	    	Area card1=new Area();
+	    	Area card2=new Area();
 	    	
 	    	card1.setTitle("The Shades");
 	    	card2.setTitle("Dolly Sisters");
@@ -48,12 +48,12 @@ public class CityCardTest {
 	    	card1.addNeighbour(card2 , true);
 	    	assertTrue("DollySisters is not added as a neighbor of Shades", card2.isNeighbour(card1));
 	    
-	    	CityCard card3=new CityCard();
+	    	Area card3=new Area();
 	    	card3.setTitle("Nap Hill");
 	    	card1.addNeighbour(card3, false);
 	    	assertFalse("Nap Hill is a neighbor of Shades but not vice versa", card3.isNeighbour(card1));
 	    	
-	    	CityCard card4=new CityCard();
+	    	Area card4=new Area();
 	    	card3.setTitle("Dimwell");
 	    	assertFalse("Dimwell is shades neighbor",card3.isNeighbour(card1));
 	    }

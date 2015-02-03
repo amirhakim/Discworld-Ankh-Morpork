@@ -3,6 +3,8 @@
  */
 package card;
 
+import util.Color;
+
 /**
  * @author Amir Hakim Jan-25th-2015
  * This document is a part of the source code and related artifacts
@@ -12,36 +14,32 @@ package card;
  */
 public class PlayerCard implements Card {
 	
-	private int color; //brown 0, green 1
+	private Color color;
 	private String title;
 	
+	public PlayerCard(){}
 	
+	public PlayerCard(String title_, Color color_){
+		title = title_;
+		color = color_;
+	}
 	
-
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#getTitle()
-	 */
+	@Override
 	public String getTitle() {
 		return this.title;
-		// TODO Auto-generated method stub
-
 	}
 
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#setTitle()
-	 */
+	@Override
 	public void setTitle(String title) {
 		this.title = title;
-		// TODO Auto-generated method stub
-
 	}
 
-	public void setColor(int color) {
-		this.color = color;
+	public void setColor(Color color_) {
+		color = color_;
 	}
 	
-	public int getColor() {
-		return this.color;
+	public Color getColor() {
+		return color;
 	}
 	
 	@Override

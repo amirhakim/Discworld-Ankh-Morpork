@@ -19,14 +19,14 @@ public class CityDeck {
 			"Small Gods", "Dimwell", "Nap Hill", "Seven Sleepers",
 			"Unreal Estate", "Longwall" };
 
-	private List<CityCard> cards;
+	private List<Area> cards;
 
 	public CityDeck() {
 		populateDeck();
 	}
 
-	public CityCard getCard(String title) {
-		for (CityCard c : this.cards) {
+	public Area getCard(String title) {
+		for (Area c : this.cards) {
 			if (c.getTitle().equals(title)) {
 				return c;
 			}
@@ -34,42 +34,42 @@ public class CityDeck {
 		return null;
 	}
 
-	public List<CityCard> getCards() {
+	public List<Area> getCards() {
 		return this.cards;
 	}
 
 	public void populateDeck() {
 		// TODO Auto-generated method stub
-		this.cards = new ArrayList<CityCard>();
+		this.cards = new ArrayList<Area>();
 		for (int i = 0; i < this.size; ++i) {
-			CityCard tmp = new CityCard();
+			Area tmp = new Area();
 			tmp.setTitle(this.names[i]);
 			this.cards.add(tmp);
 		}
 
-		CityCard TheShades = this.getCard("The Shades");
+		Area TheShades = this.getCard("The Shades");
 		TheShades.setBuildingCost(6);
-		CityCard DollySisters = this.getCard("Dolly Sisters");
+		Area DollySisters = this.getCard("Dolly Sisters");
 		DollySisters.setBuildingCost(6);
-		CityCard TheHippo = this.getCard("The Hippo");
+		Area TheHippo = this.getCard("The Hippo");
 		TheHippo.setBuildingCost(12);
-		CityCard DragonsLanding = this.getCard("Dragon's Landing");
+		Area DragonsLanding = this.getCard("Dragon's Landing");
 		DragonsLanding.setBuildingCost(12);
-		CityCard IlsofGods = this.getCard("Ils of Gods");
+		Area IlsofGods = this.getCard("Ils of Gods");
 		IlsofGods.setBuildingCost(12);
-		CityCard TheScoures = this.getCard("The Scoures");
+		Area TheScoures = this.getCard("The Scoures");
 		TheScoures.setBuildingCost(6);
-		CityCard SmallGods = this.getCard("Small Gods");
+		Area SmallGods = this.getCard("Small Gods");
 		SmallGods.setBuildingCost(18);
-		CityCard Dimwell = this.getCard("Dimwell");
+		Area Dimwell = this.getCard("Dimwell");
 		Dimwell.setBuildingCost(6);
-		CityCard NapHill = this.getCard("Nap Hill");
+		Area NapHill = this.getCard("Nap Hill");
 		NapHill.setBuildingCost(12);
-		CityCard SevenSleepers = this.getCard("Seven Sleepers");
+		Area SevenSleepers = this.getCard("Seven Sleepers");
 		SevenSleepers.setBuildingCost(18);
-		CityCard UnrealEstate = this.getCard("Unreal Estate");
+		Area UnrealEstate = this.getCard("Unreal Estate");
 		UnrealEstate.setBuildingCost(18);
-		CityCard Longwall = this.getCard("Longwall");
+		Area Longwall = this.getCard("Longwall");
 		Longwall.setBuildingCost(12);
 
 		TheShades.addNeighbour(Dimwell, true);
