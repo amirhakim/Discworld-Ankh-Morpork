@@ -1,4 +1,4 @@
-package bootstrap;
+package error;
 
 public class InvalidGameStateException extends Exception {
 	  public InvalidGameStateException() { super(); }

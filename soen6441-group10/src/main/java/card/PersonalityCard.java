@@ -2,7 +2,7 @@
  * As the name suggests, this class represents game 
  * personalities (Lord Vetinaari etc.).
  */
-package bootstrap;
+package card;
 
 public class PersonalityCard implements Card {
 

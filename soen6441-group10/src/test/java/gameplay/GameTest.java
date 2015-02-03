@@ -1,4 +1,4 @@
-package bootstrap;
+package gameplay;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import error.InvalidGameStateException;
+import gameplay.Game;
+import gameplay.Player;
 
 public class GameTest {
 

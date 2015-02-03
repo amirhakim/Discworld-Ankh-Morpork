@@ -1,13 +1,16 @@
-package bootstrap;
+package io;
 
-import io.FileManager;
-import io.FileObject;
-import io.JSONFileManager;
+import gameplay.Bank;
+import gameplay.Controller;
+import gameplay.Game;
+import gameplay.Player;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
+import card.CityCard;
+import card.PlayerCard;
 import util.Color;
 
 public class TextUserInterface {

@@ -1,4 +1,4 @@
-package bootstrap;
+package card;
 
 /**
  * <b> This interface represents the contract for all the card types that will be required in the game <b> 

@@ -18,11 +18,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import bootstrap.CityDeck;
-import bootstrap.Game;
-import bootstrap.InvalidGameStateException;
-import bootstrap.PersonalityDeck;
-import bootstrap.PlayerDeck;
+import card.CityDeck;
+import card.PersonalityDeck;
+import card.PlayerDeck;
+import error.InvalidGameStateException;
+import gameplay.Game;
 
 public class FileManagerTest {
 

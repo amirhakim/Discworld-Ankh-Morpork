@@ -1,6 +1,7 @@
-package bootstrap;
+package gameplay;
 
 import static org.junit.Assert.*;
+import gameplay.Player;
 
 import org.junit.After;
 import org.junit.BeforeClass;

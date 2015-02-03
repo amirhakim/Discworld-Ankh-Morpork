@@ -1,4 +1,4 @@
-package bootstrap;
+package card;
 
 import static org.junit.Assert.assertFalse;
 
@@ -7,6 +7,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import card.Deck;
+import card.PersonalityCard;
+import card.PersonalityDeck;
 
 public class DeckTest {
 

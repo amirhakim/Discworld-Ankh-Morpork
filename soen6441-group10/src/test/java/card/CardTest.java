@@ -1,8 +1,10 @@
-package bootstrap;
+package card;
 
 import static org.junit.Assert.*;
 
 import org.junit.*;
+
+import card.PersonalityCard;
 
 public class CardTest {
 	

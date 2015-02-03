@@ -2,9 +2,12 @@
  * @File
  * Controller used to interpret UI actions
  */
-package bootstrap;
+package gameplay;
 
 import java.util.List;
+
+import card.CityCard;
+import error.InvalidGameStateException;
 
 public class Controller {
 
@@ -42,15 +45,15 @@ public class Controller {
 		return this.game.getCurrentTurn();
 	}
 	
-	Player[] getPlayers() {
+	public Player[] getPlayers() {
 		return game.getPlayers();
 	}
 	
-	Bank getBank() {
+	public Bank getBank() {
 		return game.getBank();
 	}
 	
-	boolean gameExists() {
+	public boolean gameExists() {
 		if(game.getState() < 2){
 			return false;
 		} else {
@@ -59,7 +62,7 @@ public class Controller {
 		
 	}
 
-	List<CityCard> getCities() {
+	public List<CityCard> getCities() {
 		return game.getCities().getCards();
 	}
 	

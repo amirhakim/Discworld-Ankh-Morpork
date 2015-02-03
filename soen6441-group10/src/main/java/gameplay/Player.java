@@ -1,9 +1,11 @@
-package bootstrap;
+package gameplay;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import util.Color;
+import card.PersonalityCard;
+import card.PlayerCard;
 
 /**
  * This class represents the players participating in the game, including the
@@ -47,26 +49,26 @@ public class Player {
 		return this.name;
 	}
 
-	void setPersonality(PersonalityCard personality) {
+	public void setPersonality(PersonalityCard personality) {
 		this.personality = personality;
 	}
 
-	PersonalityCard getPersonality() {
+	public PersonalityCard getPersonality() {
 		return this.personality;
 	}
 
-	void turn() {
+	public void turn() {
 		System.out.println(this.getName() + " turn");
 	}
 
 	// Increase player's money
-	boolean increaseMoney(int amount) {
+	public boolean increaseMoney(int amount) {
 		this.money = this.money + amount;
 		return true;
 	}
 
 	// Decrease player's money
-	boolean decreaseMoney(int amount) {
+	public boolean decreaseMoney(int amount) {
 		if (this.money - amount < 0) {
 			return false;
 		} else {
@@ -77,17 +79,17 @@ public class Player {
 	}
 
 	// Returns the total amount of money player currently has
-	int getAmount() {
+	public int getAmount() {
 		return this.money;
 	}
 
 	// Returns the total number of minions the player currently has
-	int getMinions() {
+	public int getMinions() {
 		return this.minions;
 	}
 
 	// Decrease the number of minions by one
-	boolean decreaseMinion() {
+	public boolean decreaseMinion() {
 		if ((this.minions - 1) >= 0) {
 			this.minions = this.minions - 1;
 			return true;
@@ -97,7 +99,7 @@ public class Player {
 	}
 
 	// Increase the number of minions by one
-	boolean increaseMinion() {
+	public boolean increaseMinion() {
 		if (this.minions < 12) {
 			this.minions = this.minions + 1;
 			return true;
@@ -107,12 +109,12 @@ public class Player {
 	}
 
 	// Returns the total number of buildings the player currently has
-	int getBuildings() {
+	public int getBuildings() {
 		return this.buildings;
 	}
 
 	// Decrease the number of buildings by one
-	boolean decreaseBuilding() {
+	public boolean decreaseBuilding() {
 		if ((this.buildings - 1) > 0) {
 			this.buildings = this.buildings - 1;
 			return true;
@@ -122,7 +124,7 @@ public class Player {
 	}
 
 	// Increase the number of buildings by one
-	boolean increaseBuildings() {
+	public boolean increaseBuildings() {
 		if ((this.buildings + 1) < 6) {
 			this.buildings = this.buildings + 1;
 			return true;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package bootstrap;
+package card;
 
 /**
  * @author Amir Hakim Jan-25th-2015

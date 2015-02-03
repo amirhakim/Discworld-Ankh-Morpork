@@ -5,11 +5,18 @@
  * 
  */
 
-package bootstrap;
+package gameplay;
 
 import java.util.Optional;
 
 import util.Color;
+import card.CityCard;
+import card.CityDeck;
+import card.PersonalityCard;
+import card.PersonalityDeck;
+import card.PlayerDeck;
+import card.RandomEventDeck;
+import error.InvalidGameStateException;
 
 public class Game {
 
@@ -157,7 +164,7 @@ public class Game {
 	 * 
 	 * @return current game status
 	 */
-	int getState() {
+	public int getState() {
 		return this.status;
 	}
 
@@ -165,7 +172,7 @@ public class Game {
 	 * 
 	 * @return deck of city cards
 	 */
-	CityDeck getCities() {
+	public CityDeck getCities() {
 		return this.cities;
 	}
 	

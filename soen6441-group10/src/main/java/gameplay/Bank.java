@@ -1,6 +1,4 @@
-
-
-package bootstrap;
+package gameplay;
 
 /**
  * <b> This class represents the bank of game <b> 
@@ -8,8 +6,7 @@ package bootstrap;
  * @author Team 10 - SOEN6441
  * @version 1.0
  */
-
-class Bank {
+public class Bank {
 
 	/* Add these items in later builds */
 //	private int numSilver;

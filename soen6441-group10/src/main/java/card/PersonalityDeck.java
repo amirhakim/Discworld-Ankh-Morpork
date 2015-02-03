@@ -3,7 +3,7 @@
  * Class continaing all personality cards
  */
 
-package bootstrap;
+package card;
 
 import java.util.Stack;
 

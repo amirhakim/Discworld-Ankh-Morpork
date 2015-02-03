@@ -1,7 +1,9 @@
 /**
  * 
  */
-package bootstrap;
+package card;
+
+import gameplay.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
