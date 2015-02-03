@@ -1,7 +1,6 @@
 package bootstrap;
 
 import static org.junit.Assert.*;
-import static org.junit.Before.*;
 
 import org.junit.*;
 

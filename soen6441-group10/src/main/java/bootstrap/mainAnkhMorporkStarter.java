@@ -7,5 +7,4 @@ public class mainAnkhMorporkStarter {
 		TextUserInterface newGame= new TextUserInterface();
 		newGame.StartGame();
 	}
-
 }

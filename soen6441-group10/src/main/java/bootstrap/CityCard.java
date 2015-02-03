@@ -59,13 +59,8 @@ public class CityCard implements Card {
 		return this;
 	}
 
-	public boolean isNeighbour(CityCard card2) {
-		System.out.println(this.neighbours);
-		if (this.neighbours.contains(card2)) {
-			return true;
-		} else {
-			return false;
-		}
+	public boolean isNeighbour(CityCard card2){
+		return this.neighbours.contains(card2);
 	}
 
 	public boolean hasTroubleMaker() {
@@ -83,6 +78,7 @@ public class CityCard implements Card {
 	public boolean setBuilding(Player p) {
 		if (this.buildingOwner == null) {
 			this.buildingOwner = p;
+			p.decreaseBuilding();
 			return true;
 		} else {
 			return false;

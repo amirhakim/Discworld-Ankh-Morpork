@@ -33,4 +33,6 @@ public class PersonalityDeck extends Deck<PersonalityCard> {
 		super.shuffle();
 	}
 
+	
+	
 }

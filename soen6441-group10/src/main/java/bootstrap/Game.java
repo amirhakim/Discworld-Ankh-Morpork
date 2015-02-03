@@ -197,6 +197,8 @@ public class Game {
 		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
 		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
 		 
+		 this.cities.getCard("Nap Hill").setBuilding(this.players[1]);
+		 
 		 this.players[0].addPlayerCard(this.player.drawCard().get());
 		 this.players[0].addPlayerCard(this.player.drawCard().get());
 		 
