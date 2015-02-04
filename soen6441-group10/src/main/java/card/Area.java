@@ -10,8 +10,9 @@ import java.util.Map;
 import util.Color;
 
 /**
- * <b> This class implements the city cards of the game with their related rules of movement and all information relevant
- *   to that area on the board.</b>
+ * <b>This class implements area on the board, including neighbours, building costs, number of minions on the spot, 
+ * if there is a building, etc  with their related rules and all information relevant to that area on the board.
+ * </b>
  */
 public class Area implements Card {
 
@@ -23,7 +24,9 @@ public class Area implements Card {
 	private int demons;
 	private int trolls;
 	private int buildingCost;
-
+	/**
+	 * This constructor is invoked to create objects from the class Area.
+	 */
 	public Area() {
 		neighbours = new ArrayList<Area>();
 		minions = new HashMap<Color, Integer>();
