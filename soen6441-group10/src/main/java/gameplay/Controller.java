@@ -17,19 +17,24 @@ public class Controller {
 		game = new Game();
 	}
 	
-	/*
-	 * Start a new game
+	public Controller(Game game_) {
+		game = game_;
+	}
+	
+	/**
+	 * Start a new game - initialize all the required data structures etc.
 	 * @param: numberOfPlayers required for game, humane players name
+	 * @return true if the game was successfully initialized, false otherwise.
 	 */
 	public boolean newGame(int numberOfPlayers, String[] playerNames) {
 		try {
-			this.game.setUp(numberOfPlayers, playerNames);
-			this.game.init();
+			game.setUp(numberOfPlayers, playerNames);
+			game.init();
 		} catch (InvalidGameStateException e) {
 			System.out.println(e.getMessage());
-			// TODO add log message
 			return false;
 		}
+
 		return true;
 	}
 	
@@ -38,11 +43,10 @@ public class Controller {
 	}
 	
 	/**
-	 * 
-	 * @return Player class of next turn
+	 * @return The player whose turn is next.
 	 */
 	public Player getCurrentTurn() {
-		return this.game.getCurrentTurn();
+		return game.getCurrentTurn();
 	}
 	
 	public Player[] getPlayers() {
@@ -54,12 +58,7 @@ public class Controller {
 	}
 	
 	public boolean gameExists() {
-		if(game.getState() < 2){
-			return false;
-		} else {
-			return true;
-		}
-		
+		return game.getStatus() == GameStatus.PLAYING;
 	}
 
 	public List<Area> getCities() {
@@ -67,10 +66,11 @@ public class Controller {
 	}
 	
 	public void simulate() {
-		this.game.simulate();
+		game.simulate();
 	}
 	
 	public Game getGame() {
 		return game;
 	}
+
 }

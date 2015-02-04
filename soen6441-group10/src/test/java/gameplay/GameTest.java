@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import error.InvalidGameStateException;
-import gameplay.Game;
-import gameplay.Player;
 
 public class GameTest {
 
@@ -120,12 +118,12 @@ public class GameTest {
 	 */
 	public void testGameStatus() {
 		this.game = new Game();
-		assertTrue(game.getState() == 0);
+		assertTrue(game.getStatus() == GameStatus.UNINITIATED);
 		try {
 			this.game.setUp(3, this.names);
-			assertTrue(game.getState() == 1);
+			assertTrue(game.getStatus() == GameStatus.READY);
 			this.game.init();
-			assertTrue(game.getState() == 2);
+			assertTrue(game.getStatus() == GameStatus.PLAYING);
 		} catch (InvalidGameStateException e) {
 			fail("Could not set yo gane");
 		}

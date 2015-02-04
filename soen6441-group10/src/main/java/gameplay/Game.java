@@ -1,10 +1,3 @@
-/**
- * Class represents the bulk of the games actions
- * 
- * Class sets up the game, and gets all needed components for the controller.
- * 
- */
-
 package gameplay;
 
 import java.util.Optional;
@@ -18,30 +11,33 @@ import card.PlayerDeck;
 import card.RandomEventDeck;
 import error.InvalidGameStateException;
 
+/**
+ * This class represents the bulk of the actions available in the game. It sets
+ * up the game, and provides a layer of access to the game components for the
+ * controller.
+ */
 public class Game {
 
 	// Game Components.
 	private Bank gameBank;
 	private Player[] players;
-	private PersonalityDeck personality;
-	private PlayerDeck player;
-	private CityDeck cities;
+	private PersonalityDeck personalityDeck;
+	private PlayerDeck playerDeck;
+	private CityDeck areas;
+	
 	private RandomEventDeck events;
+
 	// Identifies general game status, if it is initiated or not
-	private int status;
+	private GameStatus status;
 	// Identifies whose turn it is, uses index in the player array.
 	private int currentTurn;
 
-	/**
-	 * Set status to 0. No game has started.
-	 */
 	public Game() {
-		// Set game status as uninitiated
-		this.status = 0;
+		status = GameStatus.UNINITIATED;
 	}
 
 	/**
-	 * Set up game. Game has not started, but the deck are set up.
+	 * Set up game. Game has not started, but the deck is set up.
 	 * 
 	 * @param: numberOfPlayers how many people will be playing game
 	 * @param: playerNames array of what everybodys name is
@@ -58,25 +54,23 @@ public class Game {
 		if (numberOfPlayers > 4 || numberOfPlayers < 2) {
 			throw new InvalidGameStateException("Incorrect player number");
 		} else {
-			this.gameBank = new Bank();
-			this.players = new Player[numberOfPlayers];
+			gameBank = new Bank();
+			players = new Player[numberOfPlayers];
 
-			for (int i = 0; i < this.players.length; ++i) {
+			for (int i = 0; i < players.length; ++i) {
 				Player p = new Player();
 				p.setName(playerNames[i]);
 				p.setColor(Color.forCode(i));
-				this.players[i] = p;
+				players[i] = p;
 			}
 		}
 
-		// Initialize deck of cards.
-		this.personality = new PersonalityDeck();
-		this.player = new PlayerDeck();
-		this.cities = new CityDeck();
-		this.events = new RandomEventDeck();
+		personalityDeck = new PersonalityDeck();
+		playerDeck = new PlayerDeck();
+		areas = new CityDeck();
+		events = new RandomEventDeck();
 
-		// Set game status as ready to start.
-		this.status = 1;
+		status = GameStatus.READY;
 	}
 
 	/**
@@ -84,50 +78,49 @@ public class Game {
 	 */
 	public void init() {
 		// Give each player their money, personality and initial minions.
-		
 		// Cards that have an initial state.
-		Area Shades = (this.cities.getCard("The Shades"));
-		Area theScoures = (this.cities.getCard("The Scoures"));
-		Area dollySisters = (this.cities.getCard("Dolly Sisters"));
-		
-		for(int i=0; i<this.players.length; ++i) {
-			// Deal out 10 dollars.
-			this.players[i].increaseMoney(10);
-			this.gameBank.decreaseBalance(10);
+		Area Shades = (areas.getCard("The Shades"));
+		Area theScoures = (areas.getCard("The Scoures"));
+		Area dollySisters = (areas.getCard("Dolly Sisters"));
 
-			Optional<PersonalityCard> popped = this.personality.drawCard();
+		for (int i = 0; i < players.length; ++i) {
+			// Deal out 10 dollars.
+			players[i].increaseMoney(10);
+			gameBank.decreaseBalance(10);
+
+			Optional<PersonalityCard> popped = personalityDeck.drawCard();
 			// TODO We have to have a check for an empty deck somewhere here
-			this.players[i].setPersonality(popped.get());
-			
+			players[i].setPersonality(popped.get());
+
 			// Add minions to shades, sources and dolly sister regions.
-			Shades.addMinion(this.players[i]);
-			theScoures.addMinion(this.players[i]);
-			dollySisters.addMinion(this.players[i]);
-			
+			Shades.addMinion(players[i]);
+			theScoures.addMinion(players[i]);
+			dollySisters.addMinion(players[i]);
+
 		}
-		
+
 		// Starter regions also have trouble.
 		Shades.addTrouble();
 		theScoures.addTrouble();
 		dollySisters.addTrouble();
-		
+
 		// Set turn to first in game.
-		this.currentTurn = 0;
-		
+		currentTurn = 0;
+
 		// Set game status as playing.
-		this.status = 2;
+		status = GameStatus.PLAYING;
 	}
 
 	/**
 	 * Move the game forward by one turn.
 	 */
 	public void turn() {
-		int current = this.currentTurn;
-		this.players[current].turn();
-		if ((current + 1) == this.players.length) {
-			this.currentTurn = 0;
+		int current = currentTurn;
+		players[current].turn();
+		if ((current + 1) == players.length) {
+			currentTurn = 0;
 		} else {
-			this.currentTurn = current + 1;
+			currentTurn = current + 1;
 		}
 	}
 
@@ -135,7 +128,7 @@ public class Game {
 	 * @return: Player[] Array of players in game
 	 */
 	public Player[] getPlayers() {
-		return this.players;
+		return players;
 	}
 
 	/**
@@ -143,29 +136,29 @@ public class Game {
 	 * @return Player class of next turn
 	 */
 	public Player getCurrentTurn() {
-		return this.players[this.currentTurn];
+		return players[currentTurn];
 	}
 
 	/**
 	 * @return: Deck of all personalities
 	 */
 	public PersonalityDeck getPersonalityDeck() {
-		return this.personality;
+		return personalityDeck;
 	}
 
 	/**
 	 * @return Bank class used in the game.
 	 */
 	public Bank getBank() {
-		return this.gameBank;
+		return gameBank;
 	}
 
 	/**
 	 * 
 	 * @return current game status
 	 */
-	public int getState() {
-		return this.status;
+	public GameStatus getStatus() {
+		return status;
 	}
 
 	/**
@@ -173,23 +166,25 @@ public class Game {
 	 * @return deck of city cards
 	 */
 	public CityDeck getCities() {
-		return this.cities;
+		return areas;
 	}
-	
+
 	/**
 	 * Gets the Player of the given color.
-	 * @param c - the expected Player color
+	 * 
+	 * @param c
+	 *            - the expected Player color
 	 * @return
 	 */
 	public Player getPlayerOfColor(Color c) {
 		// TODO Change the players from an array to a list and then change this
-		//		to an HOO call
+		// to an HOO call
 		for (Player p : players) {
 			if (p.getColor() == c) {
 				return p;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -198,17 +193,17 @@ public class Game {
 	 * potential game maneuvers.
 	 */
 	void simulate() {
-		 this.cities.getCard("Small Gods").addTrouble();
-		 this.cities.getCard("Nap Hill").incTrolls();
-		 
-		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
-		 this.cities.getCard("The Hippo").addMinion(this.players[1]);
-		 
-		 this.cities.getCard("Nap Hill").setBuilding(this.players[1]);
-		 
-		 this.players[0].addPlayerCard(this.player.drawCard().get());
-		 this.players[0].addPlayerCard(this.player.drawCard().get());
-		 
-		 this.players[1].addPlayerCard(this.player.drawCard().get());
+		areas.getCard("Small Gods").addTrouble();
+		areas.getCard("Nap Hill").incTrolls();
+
+		areas.getCard("The Hippo").addMinion(players[1]);
+		areas.getCard("The Hippo").addMinion(players[1]);
+
+		areas.getCard("Nap Hill").setBuilding(players[1]);
+
+		players[0].addPlayerCard(playerDeck.drawCard().get());
+		players[0].addPlayerCard(playerDeck.drawCard().get());
+
+		players[1].addPlayerCard(playerDeck.drawCard().get());
 	}
 }

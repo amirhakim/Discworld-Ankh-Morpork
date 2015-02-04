@@ -25,12 +25,12 @@ public class Area implements Card {
 	private int buildingCost;
 
 	public Area() {
-		this.neighbours = new ArrayList<Area>();
-		this.minions = new HashMap<Color, Integer>();
-		this.troubleMaker = false;
-		this.buildingOwner = null;
-		this.demons = 0;
-		this.trolls = 0;
+		neighbours = new ArrayList<Area>();
+		minions = new HashMap<Color, Integer>();
+		troubleMaker = false;
+		buildingOwner = null;
+		demons = 0;
+		trolls = 0;
 	}
 
 	public Area(String title_, int buildingCost_) {
@@ -41,40 +41,45 @@ public class Area implements Card {
 
 	@Override
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
 
 	@Override
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTitle(String title_) {
+		title = title_;
 	}
 
 	public Area addNeighbour(Area neighbourCard, boolean recipricate) {
-		this.neighbours.add(neighbourCard);
+		neighbours.add(neighbourCard);
 		if (recipricate)
 			neighbourCard.addNeighbour(this, false);
 		return this;
 	}
 
 	public boolean isNeighbour(Area card2){
-		return this.neighbours.contains(card2);
+		return neighbours.contains(card2);
 	}
 
 	public boolean hasTroubleMaker() {
 		return troubleMaker;
 	}
 
-	public Player getBuilding() {
-		if (this.buildingOwner == null) {
-			return null;
-		} else {
-			return this.buildingOwner;
-		}
+	// WTF?!
+//	public Player getBuilding() {
+//		if (buildingOwner == null) {
+//			return null;
+//		} else {
+//			return buildingOwner;
+//		}
+//	}
+
+	public Player getBuildingOwner() {
+		return buildingOwner;
 	}
 
 	public boolean setBuilding(Player p) {
-		if (this.buildingOwner == null) {
-			this.buildingOwner = p;
+		if (buildingOwner == null) {
+			buildingOwner = p;
 			p.decreaseBuilding();
 			return true;
 		} else {
@@ -83,10 +88,10 @@ public class Area implements Card {
 	}
 
 	public int numberOfMinions(Player p) {
-		if (this.minions.get(p) == null) {
+		if (minions.get(p) == null) {
 			return 0;
 		} else {
-			return this.minions.get(p);
+			return minions.get(p);
 		}
 	}
 
@@ -97,63 +102,63 @@ public class Area implements Card {
 	public void addMinion(Player p) {
 		Color playerColor = p.getColor();
 		p.decreaseMinion();
-		if (this.minions.get(playerColor) == null) {
-			this.minions.put(playerColor, 1);
+		if (minions.get(playerColor) == null) {
+			minions.put(playerColor, 1);
 		} else {
-			int minions = this.minions.get(playerColor);
-			this.minions.put(playerColor, minions + 1);
+			int numberOfMinions = minions.get(playerColor);
+			minions.put(playerColor, numberOfMinions + 1);
 		}
 	}
 
 	public void removeMinion(Player p) {
-		if (this.minions.get(p.getColor()) == null) {
+		if (minions.get(p.getColor()) == null) {
 			return;
 		} else {
-			int minions = this.minions.get(p);
-			this.minions.put(p.getColor(), minions - 1);
+			int numberOfMinions = minions.get(p);
+			minions.put(p.getColor(), numberOfMinions - 1);
 			p.increaseMinion();
 		}
 	}
 
 	public int getDemons() {
-		return this.demons;
+		return demons;
 	}
 
 	public int getTrolls() {
-		return this.trolls;
+		return trolls;
 	}
 
 	public void incTrolls() {
-		this.trolls++;
+		trolls++;
 	}
 
 	public void decTrolls() {
-		this.trolls--;
+		trolls--;
 	}
 
 	public void incDemons() {
-		this.demons++;
+		demons++;
 	}
 
 	public void decDemons() {
-		this.demons--;
+		demons--;
 	}
 
 	public boolean addTrouble() {
-		if (this.troubleMaker == true) {
+		if (troubleMaker == true) {
 			return false;
 		} else {
-			this.troubleMaker = true;
+			troubleMaker = true;
 			return true;
 		}
 	}
 
 	public void setBuildingCost(int cost) {
-		this.buildingCost = cost;
+		buildingCost = cost;
 	}
 
 	public int getBuildingCost() {
-		return this.buildingCost;
+		return buildingCost;
 	}
 
 }
