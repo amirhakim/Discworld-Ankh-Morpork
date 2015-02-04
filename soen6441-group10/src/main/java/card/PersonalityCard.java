@@ -4,6 +4,7 @@ package card;
 /**
  * <b> This class implements the Personality cards of the game with their related rules<b>
  * 
+ * 
  * @author Team 10 - SOEN6441
  * @version 1.0
  */
