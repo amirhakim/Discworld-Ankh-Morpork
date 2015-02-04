@@ -9,6 +9,7 @@ import card.PersonalityCard;
 public class CardTest {
 	
 		private PersonalityCard personality;
+		private PersonalityCard notPersonality;
 	
 	    @BeforeClass
 	    public static void setUpClass() throws Exception {
@@ -27,11 +28,14 @@ public class CardTest {
 	     */
 	    public void testTitleSetting() {
 	    	assertNull(this.personality.getTitle());
-	    	
+	    	assertEquals(this.personality.hashCode(),31);
 	    	String name = "test";
 	    	this.personality.setTitle(name);
 	    	assertEquals(this.personality.getTitle(), name);
 	    	assertNotEquals(this.personality.getTitle(), "sdfsdf");
+	    	assertNotEquals(this.personality.hashCode(),31);
+	    	assertFalse(this.personality.equals(notPersonality));
+	    	assertTrue(this.personality.equals(personality));
 	    }
 	 
 	 
