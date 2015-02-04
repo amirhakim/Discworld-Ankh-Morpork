@@ -1,6 +1,8 @@
 
 package card;
 
+import util.Color;
+
 /**
  * <b> This class implements the player cards of the game.<b>
  * 
@@ -12,6 +14,18 @@ public class PlayerCard implements Card {
 	private int color; //brown 0, green 1
 	private String title;
 	
+	public PlayerCard(String string, Color clr) {
+		// TODO Auto-generated constructor stub
+		this.color= clr.getColorCode() ;
+		this.title= string;
+	}
+
+	public PlayerCard() {
+		// TODO Auto-generated constructor stub
+		this.color=-1;
+		this.title=null;
+	}
+
 	/**
 	 * This method implements getTitle method of interface Card. 
 	 * It gets title of player card.
