@@ -5,45 +5,34 @@
 
 package card;
 
-import java.util.Collections;
 import java.util.Stack;
+
+import util.Color;
 
 public class PlayerDeck extends Deck<PlayerCard> {
 
-	final int numGreenCards = 48;
-	final int numBrownCards = 53;
-	final int brown = 0;
-	final int green = 1;
+	private final int GREEN_CARD_AMOUNT = 48;
+	private final int BROWN_CARD_AMOUNT = 53;
 
 	public PlayerDeck() {
-		this.populateDeck();
+		super.cards = new Stack<PlayerCard>();
+		populateDeck();
 	}
 
 	@Override
 	public void populateDeck() {
 
-		this.cards = new Stack<PlayerCard>();
+		for (int i = 0; i < BROWN_CARD_AMOUNT; ++i) {
+			super.cards.add(new PlayerCard("Brown card number " + Integer.toString(i),
+					Color.BROWN));
+		}
 
-		for (int i = 0; i < this.numBrownCards; ++i) {
-			PlayerCard tmp = new PlayerCard();
-			tmp.setTitle("Brown card number " + Integer.toString(i));
-			tmp.setColor(0);
-			this.cards.add(tmp);
+		for (int i = 0; i < GREEN_CARD_AMOUNT; ++i) {
+			super.cards.add(new PlayerCard("Green card number " + Integer.toString(i),
+					Color.GREEN));
 		}
 
 		super.shuffle();
-
-		Stack<PlayerCard> subDeck = new Stack<PlayerCard>();
-		for (int i = 0; i < this.numGreenCards; ++i) {
-			PlayerCard tmp = new PlayerCard();
-			tmp.setTitle("Green card number " + String.valueOf(i));
-			tmp.setColor(1);
-			subDeck.add(tmp);
-		}
-
-		Collections.shuffle(subDeck);
-
-		this.cards.addAll(subDeck);
 	}
 
 }

@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
-import card.CityCard;
-import card.PlayerCard;
 import util.Color;
+import card.Area;
+import card.PlayerCard;
 
 public class TextUserInterface {
 
@@ -20,175 +20,222 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
-	public void StartGame() {
-		System.out.println("~~~~~~~~~~~~~~~~~~~~");
-		System.out.println("Welcome to our game!");
-		System.out.println("~~~~~~~~~~~~~~~~~~~~");
+	public void runMainMenu() {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("Welcome to Ankh-Morpork!");
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
 
 		scanner = new Scanner(System.in);
-		String action;
+		String action = "";
 
-		// Loop until quit is pushed.
-		while (true) {
+		// Main menu loop
+		while (!action.equals(UserOption.QUIT.getOptionString())) {
 			System.out
-					.println("Enter n for new game, l for load, o for the game's "
-							+ "overview, s to save, q to quit");
-
+					.println("\n Choose one of the following:\n"
+							+ "1) n to start a new game\n"
+							+ "2) l to load a previously saved game\n"
+							+ "3) o for an overview of the current game's status\n"
+							+ "4) s to save the current game\n"
+							+ "5) q to quit the game\n");
+			System.out.print("> ");
 			action = scanner.nextLine();
-			if (action.equals("n")) {
-				this.newGame();
-			} else if (action.equals("l")) {
+
+			if (action.equals(UserOption.NEW_GAME.getOptionString())) {
+				runGame();
+			} else if (action.equals(UserOption.LOAD.getOptionString())) {
 				// Hold on to that reference to save later
-				currentGameFileObj = loadGame();
-			} else if (action.equals("o")) {
-				this.status();
-			} else if (action.equals("q")) {
-				System.out.println("Goodbye");
-				return;
-			} else if (action.equals("s")) {
+				Optional<FileObject<Game>> gameWrap = loadGame();
+				if (gameWrap.isPresent()) {
+					currentGameFileObj = gameWrap.get();
+					controller = new Controller(currentGameFileObj.getPOJO());
+				}
+			} else if (action.equals(UserOption.GAME_STATUS.getOptionString())) {
+				printGameStatus();
+			} else if (action.equals(UserOption.SAVE.getOptionString())) {
 				saveGame();
 			}
-		}
 
+		}
+		
+		System.out.println("See ya!");
 	}
 
 	/*
 	 * Start a new game.
 	 */
-	public void newGame() {
-		// Get players name.
-		// Get number of players.
+	private void runGame() {
+
+		// Get the number of players and their names.
 		int numberOfPlayers;
 
-		System.out.println("Enter number of players");
+		System.out.print("Enter the number of players: ");
 		numberOfPlayers = scanner.nextInt();
 		scanner.nextLine();
 		String[] playerNames = new String[numberOfPlayers];
 
 		for (int i = 0; i < numberOfPlayers; ++i) {
-			System.out.println("Enter player " + String.valueOf(i) + " name");
+			System.out.print("Enter the name of player #" + String.valueOf(i) + ":" );
 			playerNames[i] = scanner.nextLine();
 		}
 
 		if (controller.newGame(numberOfPlayers, playerNames)) {
-			System.out.println("Game Started");
+			System.out.println("Game Started!");
 
 			controller.simulate();
 
-			while (true) {
+			String action = "";
+			while (!action.equals(UserOption.QUIT.getOptionString())) {
 				System.out
-						.println("t for next turn, e to end, o for overview of the game's status,"
-								+ " l to load, s to save the current game");
-				String action = scanner.nextLine();
-				if (action.equals("e")) {
+						.println("\nChoose one of the following:\n"
+								+ "1) t to move to the next turn\n"
+								+ "2) l to load a previously saved game\n"
+								+ "3) o for the game's overview\n"
+								+ "4) s to save the current game\n"
+								+ "5) e to exit and go back to the main menu");
+				System.out.print("> ");
+				action = scanner.nextLine();
+
+				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
-				} else if (action.equals("t")) {
+				} else if (action
+						.equals(UserOption.NEXT_TURN.getOptionString())) {
 					controller.nextTurn();
-				} else if (action.equalsIgnoreCase("o")) {
-					this.status();
-				} else if (action.equals("l")) {
-					controller.getGame();
-				} else if (action.equals("s")) {
+				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS
+						.getOptionString())) {
+					printGameStatus();
+				} else if (action.equals(UserOption.LOAD.getOptionString())) {
+					// Hold on to that reference to save later
+					Optional<FileObject<Game>> gameWrap = loadGame();
+					if (gameWrap.isPresent()) {
+						currentGameFileObj = gameWrap.get();
+						controller = new Controller(
+								currentGameFileObj.getPOJO());
+					}
+				} else if (action.equals(UserOption.SAVE.getOptionString())) {
 					saveGame();
-				}
+				} 
 			}
 
 		} else {
 			// Too many or too few players in game.
-			System.out.println("Sorry only 2 to 4 players can play this game!");
+			System.out.println("Sorry, only 2 to 4 players can play this game!");
 		}
 
 	}
 
 	private void saveGame() {
+		System.out.println("Provide one of the following:");
 		System.out
-				.println("Provide a filename where your current game state will be "
-						+ "saved (e.g. game1.json) or blank for the game to be saved to the"
-						+ " same file (if your game has not been saved previously and you "
-						+ "enter a blank fileName, you will be prompted again):");
+				.println("1) A filename where your current game state will be "
+						+ "saved (e.g. game1.json)");
+		System.out
+				.println("2) 's' to save to the same file (must be playing a previously saved game");
+		System.out.println("3) Blank to go back to the main menu");
+
+		String fileName = scanner.nextLine();
+		if (UserOption.BACK.getOptionString().equals(fileName)) {
+			return;
+		}
 
 		// To save to the same file we have to have a game file already open
-		String fileName = scanner.next();
-		while (currentGameFileObj == null && "".equals(fileName)) {
-			System.out.println("You are playing a previously unsaved game - specify a filename:");
-			fileName = scanner.next();
+		if (currentGameFileObj == null) {
+			while (UserOption.SAVE.getOptionString().equals(fileName)) {
+				System.out
+						.println("You are playing a previously unsaved game - "
+								+ "specify a filename where your game will be saved:");
+				fileName = scanner.nextLine();
+				if (UserOption.BACK.getOptionString().equals(fileName)) {
+					return;
+				}
+			}
 		}
 
 		// Save to the same fileName
-		if ("".equals(fileName)) {
+		if (UserOption.SAVE.getOptionString().equals(fileName)) {
 			fm.save(currentGameFileObj);
+			return;
 		}
 
-		// Save as, whether we have a saved game before or not
+		// Save as (with a new filename)
 		currentGameFileObj = new FileObject<Game>(controller.getGame(),
 				fileName);
 		fm.saveAs(currentGameFileObj, fileName);
-
 	}
 
-	private FileObject<Game> loadGame() {
+	private Optional<FileObject<Game>> loadGame() {
 		System.out
 				.println("\nWhich game to load? Game files are stored under "
 						+ "src/resources - give only the filename (e.g. game1.json). Give "
 						+ "a blank filename to go back to the main menu.");
-		String fileName = scanner.next();
-		Optional<FileObject<Game>> f = fm.open(fileName);
-
-		while (!("".equals(fileName)) && !f.isPresent()) {
-			System.out.println(fileName + " doesn't exist! Try another one: ");
-			fileName = scanner.next();
+		String fileName = scanner.nextLine();
+		if (UserOption.BACK.getOptionString().equals(fileName)) {
+			return Optional.empty();
 		}
 
-		return f.get();
+		Optional<FileObject<Game>> f = fm.open(fileName);
+		while (!f.isPresent()) {
+			System.out.println(fileName
+					+ " doesn't exist! Try another one (or enter "
+					+ "blank to go back to the main menu): ");
+			fileName = scanner.nextLine();
+			if (UserOption.BACK.getOptionString().equals(fileName)) {
+				return Optional.empty();
+			}
+			f = fm.open(fileName);
+		}
+
+		return f;
 	}
 
 	/*
 	 * Display the status of the board and the game
 	 */
-	public void status() {
-		// If game has not been initiated catch error.
-		System.out.println(String.format("%-20s%10s%30s%30s%30s%10s", "Area",
-				"Buildings", "Minions", "Trolls", "Demons", "Trouble"));
-		if (controller.gameExists()) {
+	private void printGameStatus() {
 
-			for (CityCard c : controller.getCities()) {
+		if (controller.gameExists()) {
+			System.out.println(String.format("%-20s%10s%30s%30s%30s%10s", "Area",
+					"Buildings", "Minions", "Trolls", "Demons", "Trouble"));
+
+			for (Area c : controller.getCities()) {
 				System.out.print(String.format("%-20s", c.getTitle()));
-				Player p = c.getBuilding();
+
+				Player p = c.getBuildingOwner();
 				if (p == null) {
 					System.out.print(String.format("%10s", "NON"));
 				} else {
-					// System.out.print(" Building by: ");
 					System.out.print(String.format("%10s", p.getName()));
 				}
+
 				Map<Color, Integer> minions = c.getMinions();
-				String minionsAll = "";
+				String minionsAll = UserOption.BACK.getOptionString();
+
 				for (Map.Entry<Color, Integer> entry : minions.entrySet()) {
 					Color color = entry.getKey();
 					Integer value = entry.getValue();
 					// TODO Change this once we put the players into a map
-					minionsAll += String.format("%5s%1s%1s%1s", controller.getGame().getPlayerOfColor(color).getName(),
-							"(", String.valueOf(value), ")");
+					minionsAll += String.format("%5s%1s%1s%1s", controller
+							.getGame().getPlayerOfColor(color).getName(), "(",
+							String.valueOf(value), ")");
 				}
 				System.out.format("%30s", minionsAll);
 
 				System.out.format("%30s", String.valueOf(c.getTrolls()));
 				System.out.format("%30s", String.valueOf(c.getDemons()));
 
-				// System.out.print(" Has Trouble? ");
 				System.out.format("%10s", c.hasTroubleMaker());
 
 				System.out.println();
-
 			}
 
+			// Print player details
 			Player[] players = controller.getPlayers();
-			// Print players details
 			for (int i = 0; i < players.length; ++i) {
 				System.out.println(System.getProperty("line.separator"));
 				System.out.print(players[i].getName());
 				System.out.print(" has personality ");
 				System.out.println(players[i].getPersonality().getTitle());
-				System.out.println(players[i].getName() + " is color " + players[i].getColor());
+				System.out.println(players[i].getName() + " is color "
+						+ players[i].getColor());
 				System.out.println(" And has "
 						+ String.valueOf(players[i].getMinions())
 						+ " minions left");
@@ -198,13 +245,13 @@ public class TextUserInterface {
 				System.out.println(" And has "
 						+ String.valueOf(players[i].getAmount())
 						+ " money left");
-				//System.out.println(System.getProperty("line.separator"));
 				System.out.print(" And has Player cards: ");
+
 				for (PlayerCard c : players[i].getPlayerCards()) {
 					System.out.print(c.getTitle() + ", ");
 				}
-
 			}
+
 			System.out.println(System.getProperty("line.separator"));
 			Bank bank = controller.getBank();
 			System.out.println(" Bank has balance of "
@@ -215,10 +262,10 @@ public class TextUserInterface {
 
 		} else {
 			System.out.println(System.getProperty("line.separator"));
-			System.out.println(" No game started");
+			System.out.println(" No game started yet!");
 			System.out.println(System.getProperty("line.separator"));
-
 		}
+
 	}
 
 }

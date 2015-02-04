@@ -1,48 +1,49 @@
-/**
- * 
- */
+
 package card;
 
 /**
- * @author Amir Hakim Jan-25th-2015
- * This document is a part of the source code and related artifacts
- * got SOEN6441 group10
- * this class is the interface for all the card types that will be required in the game, 
- * every card class MUST implement it
+ * <b> This class implements the player cards of the game.<b>
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 1.0
  */
 public class PlayerCard implements Card {
 	
 	private int color; //brown 0, green 1
 	private String title;
 	
-	
-	
-
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#getTitle()
-	 */
-	public String getTitle() {
+	/**
+	 * This method implements getTitle method of interface Card. 
+	 * It gets title of player card.
+	 */	
+		public String getTitle() {
 		return this.title;
-		// TODO Auto-generated method stub
-
 	}
 
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#setTitle()
+	/**
+	 * This method implements setTitle method of interface Card. 
+	 * It sets title of player card.
 	 */
 	public void setTitle(String title) {
 		this.title = title;
-		// TODO Auto-generated method stub
-
 	}
 
+	/**
+	 * This method sets the colors of player cards: 0 for brown & 1 for green.
+	 * @param color the color of the player card
+	 */
 	public void setColor(int color) {
 		this.color = color;
 	}
 	
+	/**
+	 * This method gets the colors of player cards: 0 for brown & 1 for green.
+	 * @return the color of the player card
+	 */
 	public int getColor() {
 		return this.color;
 	}
+	
 	
 	@Override
 	public Card clone() {
@@ -50,3 +51,4 @@ public class PlayerCard implements Card {
 	}
 
 }
+

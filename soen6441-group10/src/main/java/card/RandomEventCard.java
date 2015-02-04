@@ -1,37 +1,37 @@
-/**
- * 
- */
+
 package card;
 
 /**
- * @author Amir
- *
+ * <b> This class implements the Random Event cards of the game with their related rules<b>
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 1.0
  */
 public class RandomEventCard implements Card {
 
-	/**
-	 * 
-	 */
-	private String title;
 	
+	private String title;
+	/**
+	 * This constructor is invoked to create objects from the class RandomEventCard.
+	 */
 	public RandomEventCard() {
-		// TODO Auto-generated constructor stub
 	}
 
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#getTitle()
+	/**
+	 * This method implements getTitle method of interface Card. 
+	 * It gets title of Random Event card.
 	 */
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return this.title;
+			return this.title;
 	}
 
-	/* (non-Javadoc)
-	 * @see bootstrap.Card#setTitle(java.lang.String)
+	/**
+	 * This method implements setTitle method of interface Card. 
+	 * It sets title of Random Event card.
 	 */
 	public void setTitle(String title) {
-		// TODO Auto-generated method stub
 		this.title=title;
 	}
 
 }
+
