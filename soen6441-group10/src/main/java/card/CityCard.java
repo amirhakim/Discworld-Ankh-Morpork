@@ -178,31 +178,55 @@ public class CityCard implements Card {
 			p.increaseMinion();
 		}
 	}
-
+	
+	/**
+	 * This method gets the number of demons. 
+	 * @return number of demons on the spot
+	 */
 	public int getDemons() {
 		return this.demons;
 	}
-
+	
+	/**
+	 * This method gets the number of trolls.
+	 * @return number of trolls on the spot
+	 */
 	public int getTrolls() {
 		return this.trolls;
 	}
 
+	/**
+	 * This method increments the number of trolls on the spot. 
+	 */
 	public void incTrolls() {
 		this.trolls++;
 	}
 
+	/**
+	 * This method decrements the number of trolls on the spot. 
+	 */
 	public void decTrolls() {
 		this.trolls--;
 	}
 
+	/**
+	 * This method increments the number of demons on the spot. 
+	 */
 	public void incDemons() {
 		this.demons++;
 	}
 
+	/**
+	 * This method increments the number of demons on the spot. 
+	 */
 	public void decDemons() {
 		this.demons--;
 	}
 
+	/**
+	 * This method adds trouble markers to the city area in case there has not been any before.
+	 * @return true if it adds a trouble marker successfully
+	 */
 	public boolean addTrouble() {
 		if (this.troubleMaker == true) {
 			return false;
@@ -212,10 +236,18 @@ public class CityCard implements Card {
 		}
 	}
 
+	/**
+	 * This method sets the cost of building in the city area.
+	 * @param the cost of building on the spot
+	 */
 	public void setBuildingCost(int cost) {
 		this.buildingCost = cost;
 	}
 
+	/**
+	 * This method gets the cost of building in the city area.
+	 * @return the cost of building on the spot
+	 */
 	public int getBuildingCost() {
 		return this.buildingCost;
 	}
