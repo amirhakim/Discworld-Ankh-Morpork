@@ -10,7 +10,7 @@ import java.util.Map;
 import util.Color;
 
 /**
- * <b>This class implements area on the board, including neighbours, building costs, number of minions on the spot, 
+ * <b>This class implements areas on the board, including neighbours, building costs, number of minions on the spot, 
  * if there is a building, etc  with their related rules and all information relevant to that area on the board.
  * </b>
  */
@@ -35,7 +35,9 @@ public class Area implements Card {
 		demons = 0;
 		trolls = 0;
 	}
-
+	/**
+	 * This constructor is invoked to create objects from the class Area.
+	 */
 	public Area(String title_, int buildingCost_) {
 		this();
 		title = title_;
@@ -100,7 +102,7 @@ public class Area implements Card {
 //	}
 
 	/**
-	 * This method specifies the building of the player as building owner.
+	 * Get the building of the player as building owner.
 	 * @return true if the building belongs to the player
 	 */
 	public Player getBuildingOwner() {
@@ -135,7 +137,7 @@ public class Area implements Card {
 	}
 
 	/**
-	 * This method maps the minions of each player with a color.
+	 * Get the minions of each player mapped with a color.
 	 * @return minions mapped to a color
 	 */
 	public Map<Color, Integer> getMinions() {
@@ -174,7 +176,7 @@ public class Area implements Card {
 	}
 
 	/**
-	 * This method gets the number of demons. 
+	 * Get the number of demons. 
 	 * @return number of demons on the spot
 	 */
 	public int getDemons() {
@@ -182,7 +184,7 @@ public class Area implements Card {
 	}
 
 	/**
-	 * This method gets the number of trolls.
+	 * Get the number of trolls.
 	 * @return number of trolls on the spot
 	 */
 	public int getTrolls() {

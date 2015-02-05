@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Amir
- *
+ * This class implements the areas and the deck of city area cards of the game. 
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 1.0
  */
 public class CityDeck {
 
@@ -21,10 +23,16 @@ public class CityDeck {
 
 	private List<Area> cards;
 
+	
 	public CityDeck() {
 		populateDeck();
 	}
 
+	/**
+	 * This method gets the city card related to the area
+	 * @param title
+	 * @return
+	 */
 	public Area getCard(String title) {
 		for (Area c : this.cards) {
 			if (c.getTitle().equals(title)) {
@@ -34,12 +42,19 @@ public class CityDeck {
 		return null;
 	}
 
+	/**
+	 * Get city area cards
+	 * @return city area cards
+	 */
 	public List<Area> getCards() {
 		return this.cards;
 	}
 
+	/**
+	 * This method puts all city area cards in the deck.
+	 */
 	public void populateDeck() {
-		// TODO Auto-generated method stub
+		
 		this.cards = new ArrayList<Area>();
 		for (int i = 0; i < this.size; ++i) {
 			Area tmp = new Area();

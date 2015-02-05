@@ -19,7 +19,7 @@ public class RandomEventCard implements Card {
 
 	/**
 	 * This method implements getTitle method of interface Card. 
-	 * It gets title of Random Event card.
+	 * Get title of Random Event card.
 	 */
 	public String getTitle() {
 			return this.title;
@@ -27,7 +27,7 @@ public class RandomEventCard implements Card {
 
 	/**
 	 * This method implements setTitle method of interface Card. 
-	 * It sets title of Random Event card.
+	 * Set title of Random Event card.
 	 */
 	public void setTitle(String title) {
 		this.title=title;
