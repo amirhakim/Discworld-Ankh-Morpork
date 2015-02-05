@@ -10,10 +10,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * A utility class for loading and saving an object's state from and to 
- * files in JSON format.
+ * <b> This is a utility class for loading and saving an object's state from and to 
+ * files in JSON format. <b> 
  * 
- * @author gkentr
+ * @param <T>
+ * @author Team 10 - SOEN6441
+ * @version 1.0
  */
 public class JSONFileManager<T> implements FileManager<T> {
 	

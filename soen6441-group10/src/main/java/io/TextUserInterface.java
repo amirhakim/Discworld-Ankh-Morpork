@@ -13,6 +13,12 @@ import util.Color;
 import card.Area;
 import card.PlayerCard;
 
+/**
+ * <b> This class makes a command line interface to communicate with the players. <b> 
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 1.0
+ */
 public class TextUserInterface {
 
 	Controller controller = new Controller();
@@ -20,6 +26,15 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
+	/**
+	 * This method implements an interactive interface to:</br>
+	 * Choose one of the following:</br>
+	 * 	1) n to start a new game </br>
+	 *  2) l to load a previously saved game</br>
+	 *  3) o for an overview of the current game's status</br>
+	 *  4) s to save the current game</br>
+	 *  5) q to quit the game</br>
+	 */
 	public void runMainMenu() {
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println("Welcome to Ankh-Morpork!");
@@ -60,8 +75,9 @@ public class TextUserInterface {
 		System.out.println("See ya!");
 	}
 
-	/*
-	 * Start a new game.
+	
+	/**
+	 * This method starts a new game by getting the number of players and their names.
 	 */
 	private void runGame() {
 
@@ -123,6 +139,9 @@ public class TextUserInterface {
 
 	}
 
+	/**
+	 * This method saves the game providing that the user enters a new file name or load the previous game.
+	 */
 	private void saveGame() {
 		System.out.println("Provide one of the following:");
 		System.out
@@ -162,6 +181,10 @@ public class TextUserInterface {
 		fm.saveAs(currentGameFileObj, fileName);
 	}
 
+	/**
+	 * This method loads a game.
+	 * @return game as object
+	 */
 	private Optional<FileObject<Game>> loadGame() {
 		System.out
 				.println("\nWhich game to load? Game files are stored under "
@@ -187,8 +210,8 @@ public class TextUserInterface {
 		return f;
 	}
 
-	/*
-	 * Display the status of the board and the game
+	/**
+	 * This method displays the status of the board and the game.
 	 */
 	private void printGameStatus() {
 
