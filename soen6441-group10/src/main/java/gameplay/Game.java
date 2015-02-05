@@ -128,7 +128,7 @@ public class Game {
 	}
 
 	/**
-	 * This method gets array of players in game.
+	 * Get array of players in game.
 	 * @return the players in game
 	 */
 	public Player[] getPlayers() {
@@ -136,7 +136,7 @@ public class Game {
 	}
 
 	/**
-	 * This method gets The player whose turn is next.
+	 * Get The player whose turn is next.
 	 * @return The player whose turn is next.
 	 */
 	public Player getCurrentTurn() {
@@ -144,7 +144,7 @@ public class Game {
 	}
 
 	/**
-	 * This method gets the deck of personality cards.
+	 * Get the deck of personality cards.
 	 * @return: deck of all personality cards
 	 */
 	public PersonalityDeck getPersonalityDeck() {
@@ -152,7 +152,7 @@ public class Game {
 	}
 
 	/**
-	 * This method gets bank class used in the game.
+	 * Get bank class used in the game.
 	 * @return the bank used in the game
 	 */
 	public Bank getBank() {
@@ -160,7 +160,7 @@ public class Game {
 	}
 
 	/**
-	 * This method gets current status of the game.
+	 * Get current status of the game.
 	 * @return current status of the game
 	 */
 	public GameStatus getStatus() {
@@ -168,7 +168,7 @@ public class Game {
 	}
 
 	/**
-	 * This method gets the deck of city cards.
+	 * Get the deck of city cards.
 	 * @return deck of city cards
 	 */
 	public CityDeck getCities() {

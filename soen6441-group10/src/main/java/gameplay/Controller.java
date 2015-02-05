@@ -93,6 +93,10 @@ public class Controller {
 		game.simulate();
 	}
 	
+	/**
+	 * Get current game
+	 * @return the game
+	 */
 	public Game getGame() {
 		return game;
 	}
