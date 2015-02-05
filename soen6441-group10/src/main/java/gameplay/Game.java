@@ -15,6 +15,9 @@ import error.InvalidGameStateException;
  * This class represents the bulk of the actions available in the game. It sets
  * up the game, and provides a layer of access to the game components for the
  * controller.
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 1.0
  */
 public class Game {
 
