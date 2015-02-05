@@ -196,7 +196,8 @@ public class Game {
 	 * potential game maneuvers.
 	 */
 	void simulate() {
-		/*areas.getCard("Small Gods").addTrouble();
+		/*
+		areas.getCard("Small Gods").addTrouble();
 		areas.getCard("Nap Hill").incTrolls();
 
 		areas.getCard("The Hippo").addMinion(players[1]);
@@ -208,5 +209,6 @@ public class Game {
 		players[0].addPlayerCard(playerDeck.drawCard().get());
 
 		players[1].addPlayerCard(playerDeck.drawCard().get());
-	*/}
+	*/
+	}
 }
