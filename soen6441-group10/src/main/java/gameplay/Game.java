@@ -37,10 +37,10 @@ public class Game {
 	}
 
 	/**
-	 * Set up game. Game has not started, but the deck is set up.
+	 * This method sets up game. Game has not started, but the deck is set up.
 	 * 
 	 * @param: numberOfPlayers how many people will be playing game
-	 * @param: playerNames array of what everybodys name is
+	 * @param: playerNames array of what everybody's name is
 	 * @Exception: if invalid number of players
 	 */
 	public void setUp(int numberOfPlayers, String[] playerNames)
@@ -74,7 +74,7 @@ public class Game {
 	}
 
 	/**
-	 * Start a new game.
+	 * This method starts a new game.
 	 */
 	public void init() {
 		// Give each player their money, personality and initial minions.
@@ -112,7 +112,7 @@ public class Game {
 	}
 
 	/**
-	 * Move the game forward by one turn.
+	 * This method moves the game forward by one turn.
 	 */
 	public void turn() {
 		int current = currentTurn;
@@ -125,44 +125,47 @@ public class Game {
 	}
 
 	/**
-	 * @return: Player[] Array of players in game
+	 * This method gets array of players in game.
+	 * @return the players in game
 	 */
 	public Player[] getPlayers() {
 		return players;
 	}
 
 	/**
-	 * 
-	 * @return Player class of next turn
+	 * This method gets The player whose turn is next.
+	 * @return The player whose turn is next.
 	 */
 	public Player getCurrentTurn() {
 		return players[currentTurn];
 	}
 
 	/**
-	 * @return: Deck of all personalities
+	 * This method gets the deck of personality cards.
+	 * @return: deck of all personality cards
 	 */
 	public PersonalityDeck getPersonalityDeck() {
 		return personalityDeck;
 	}
 
 	/**
-	 * @return Bank class used in the game.
+	 * This method gets bank class used in the game.
+	 * @return the bank used in the game
 	 */
 	public Bank getBank() {
 		return gameBank;
 	}
 
 	/**
-	 * 
-	 * @return current game status
+	 * This method gets current status of the game.
+	 * @return current status of the game
 	 */
 	public GameStatus getStatus() {
 		return status;
 	}
 
 	/**
-	 * 
+	 * This method gets the deck of city cards.
 	 * @return deck of city cards
 	 */
 	public CityDeck getCities() {
@@ -170,11 +173,9 @@ public class Game {
 	}
 
 	/**
-	 * Gets the Player of the given color.
-	 * 
-	 * @param c
-	 *            - the expected Player color
-	 * @return
+	 * This method gets the Player of the given color.
+	 * @param the expected Player color
+	 * @return the player
 	 */
 	public Player getPlayerOfColor(Color c) {
 		// TODO Change the players from an array to a list and then change this
@@ -184,7 +185,6 @@ public class Game {
 				return p;
 			}
 		}
-
 		return null;
 	}
 
