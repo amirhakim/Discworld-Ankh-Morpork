@@ -1,0 +1,627 @@
+{
+  "gameBank": {
+    "amount": 100
+  },
+  "players": [
+    {
+      "name": "Batman",
+      "personality": {
+        "title": "Commander Vimes"
+      },
+      "color": "RED",
+      "money": 10,
+      "minions": 9,
+      "buildings": 6,
+      "playerCards": []
+    },
+    {
+      "name": "Superman",
+      "personality": {
+        "title": "Chrysoprase"
+      },
+      "color": "YELLOW",
+      "money": 10,
+      "minions": 9,
+      "buildings": 6,
+      "playerCards": []
+    }
+  ],
+  "personalityDeck": {
+    "size": 5,
+    "names": [
+      "Lord Selachii",
+      "Chrysoprase",
+      "Lord Vetinaari",
+      "Dragon King of Arms",
+      "Commander Vimes"
+    ],
+    "cards": [
+      {
+        "title": "Lord Selachii"
+      },
+      {
+        "title": "Lord Vetinaari"
+      },
+      {
+        "title": "Dragon King of Arms"
+      }
+    ]
+  },
+  "playerDeck": {
+    "GREEN_CARD_AMOUNT": 48,
+    "BROWN_CARD_AMOUNT": 53,
+    "cards": [
+      {
+        "color": 4,
+        "title": "Brown card number 28"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 32"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 3"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 28"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 46"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 42"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 45"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 22"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 31"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 27"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 1"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 45"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 44"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 37"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 38"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 40"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 39"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 10"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 14"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 14"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 13"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 32"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 21"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 8"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 20"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 24"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 2"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 17"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 0"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 6"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 44"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 49"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 26"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 11"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 20"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 0"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 10"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 23"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 2"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 41"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 15"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 47"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 39"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 5"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 16"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 18"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 4"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 35"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 3"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 7"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 12"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 30"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 11"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 19"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 19"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 38"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 42"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 43"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 31"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 29"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 26"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 17"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 23"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 48"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 6"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 22"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 52"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 25"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 9"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 33"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 36"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 18"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 24"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 9"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 43"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 50"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 4"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 34"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 51"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 8"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 15"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 30"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 37"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 35"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 16"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 27"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 33"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 13"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 29"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 12"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 36"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 41"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 46"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 47"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 5"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 21"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 1"
+      },
+      {
+        "color": 4,
+        "title": "Brown card number 34"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 40"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 25"
+      },
+      {
+        "color": 2,
+        "title": "Green card number 7"
+      }
+    ]
+  },
+  "areas": {
+    "size": 12,
+    "cards": [
+      {
+        "title": "The Shades",
+        "minions": {
+          "YELLOW": 1,
+          "RED": 1
+        },
+        "troubleMaker": true,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 6
+      },
+      {
+        "title": "Dolly Sisters",
+        "minions": {
+          "YELLOW": 1,
+          "RED": 1
+        },
+        "troubleMaker": true,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 6
+      },
+      {
+        "title": "The Hippo",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 12
+      },
+      {
+        "title": "Dragon\u0027s Landing",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 12
+      },
+      {
+        "title": "Ils of Gods",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 12
+      },
+      {
+        "title": "The Scoures",
+        "minions": {
+          "YELLOW": 1,
+          "RED": 1
+        },
+        "troubleMaker": true,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 6
+      },
+      {
+        "title": "Small Gods",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 18
+      },
+      {
+        "title": "Dimwell",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 6
+      },
+      {
+        "title": "Nap Hill",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 12
+      },
+      {
+        "title": "Seven Sleepers",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 18
+      },
+      {
+        "title": "Unreal Estate",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 18
+      },
+      {
+        "title": "Longwall",
+        "minions": {},
+        "troubleMaker": false,
+        "demons": 0,
+        "trolls": 0,
+        "buildingCost": 12
+      }
+    ]
+  },
+  "events": {
+    "size": 12,
+    "names": [
+      "The Dragon",
+      "Flood",
+      "Fire",
+      "Fog",
+      "Riots",
+      "Explosion",
+      "Mysterious Murders",
+      "Demons from the Dungeon Dimensions",
+      "Subsidence",
+      "Bloody Stupid Johnson",
+      "Trolls",
+      "Earthquake"
+    ],
+    "cards": [
+      {
+        "title": "Bloody Stupid Johnson"
+      },
+      {
+        "title": "Flood"
+      },
+      {
+        "title": "Earthquake"
+      },
+      {
+        "title": "Mysterious Murders"
+      },
+      {
+        "title": "The Dragon"
+      },
+      {
+        "title": "Demons from the Dungeon Dimensions"
+      },
+      {
+        "title": "Explosion"
+      },
+      {
+        "title": "Fog"
+      },
+      {
+        "title": "Subsidence"
+      },
+      {
+        "title": "Fire"
+      },
+      {
+        "title": "Riots"
+      },
+      {
+        "title": "Trolls"
+      }
+    ]
+  },
+  "status": "PLAYING",
+  "currentTurn": 0
+}
