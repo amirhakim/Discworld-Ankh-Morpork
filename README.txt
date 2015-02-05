@@ -5,6 +5,7 @@ Ross Smith - 9072659
 Katayoon Noparast - 7398387
 Amir Hakim - 4050711
 Ashar Hussain - 6386687
+Georgios Kentritas - 27738226
 
 
 FILES
@@ -12,28 +13,39 @@ FILES
 
 	src/main/java	::	main java classes
 		bootstrap	::	main package
-			Bank.java	::	Represents Bank object for the game
+			MainAnkhMorporkStarter.java :: main class
+			
+		card
+			Area.java	::	Represents area of game board
 			Card.java	::	Interface for all game cards
-			CityCard.java	::	Represents area of game board				
-			Controller.java	::	Handles requests from views
+			CityDeck	::	Deck representing Area card
 			Deck.java	::	Parent for all decks of Cards
-			Game.java	::	Handles game set up and turns
-			InvalidGameStateException.java	::	Game exception		
-			mainAnkhMorporkStarter.java	::	Main class
-			PersonalityCard.java	::	Represents the personality cards
-			PersonalityDeck.java	::	Deck of personality cards
-			Player.java	::	Represents each player of the game
 			PlayerCard.java	::	Represents the games player cards
+			PersonalityDeck.java	::	Deck of personality cards
 			PlayerDeck.java		::	Deck of player cards
+			PersonalityCard.java	::	Represents the personality cards
 			RandomEventCard.java	::	Represents Random Event game card
 			RandomEventDeck.java	::	Deck of random event cards
+		error
+			InvalidGameStateException.java	::	Game exception
+		gameplay
+			Bank.java	::	Represents Bank object for the game
+			Controller.java	::	Handles requests from views
+			Game.java	::	Handles game set up and turns
+			GameStatus.java	::	Enum for game status
+			Player.java	::	Represents each player of the game
+		io
+			FileManager	::	
+			FileObject	::	
+			JSONFileManager	::
 			TextUserInterface.java	::	Handles view for CLI
+			UserOption 	::	Enum for user choices
+		util			
+			Color.java
 		io
 			FileManager.java
 			FileObject.java
 			JSONFileManager.java
-		util
-			Color.java
 	src/test/java	::	test java classes			
 		bootstrap	::	main package
 			BankTest.java	::	Test bank class
@@ -54,9 +66,3 @@ INSTALL
 If you don't have it search for it in the Eclipse Marketplace (Help -> Eclipse Marketplace, find it there and install it)
 3. Import the project into Eclipse: File -> Import -> (General -> Existing Projects into Workspace) 
 or (Maven -> Existing Maven Projects)
-
-			
-	
-			
-			
-			
