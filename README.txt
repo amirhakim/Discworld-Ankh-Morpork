@@ -66,3 +66,7 @@ INSTALL
 If you don't have it search for it in the Eclipse Marketplace (Help -> Eclipse Marketplace, find it there and install it)
 3. Import the project into Eclipse: File -> Import -> (General -> Existing Projects into Workspace) 
 or (Maven -> Existing Maven Projects)
+
+JAVADOCS
+-------------------------------------------
+http://162.209.98.223/soen6441/build1/
