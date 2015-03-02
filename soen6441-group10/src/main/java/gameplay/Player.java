@@ -24,7 +24,7 @@ public class Player {
 	private int money;
 	private int minions;
 	private int buildings;
-	private List<PlayerCard> playerCards = new ArrayList<PlayerCard>(5);
+	private List<PlayerCard> playerCards = new ArrayList<>();
 
 	/**
 	 * This constructor is invoked to create objects from the class Player.
@@ -248,6 +248,15 @@ public class Player {
 		return this.color;
 	}
 
+	/**
+	 * Net worth = cash + monetary cost of each owned building - 12 * loans taken
+	 * @return the player's net worth as described by the above logic.
+	 */
+	public int getTotalWorth() {
+		// TODO Implement this method
+		return 0;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

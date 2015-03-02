@@ -27,7 +27,7 @@ public class Game {
 	private PersonalityDeck personalityDeck;
 	private PlayerDeck playerDeck;
 	private CityDeck areas;
-	
+
 	private RandomEventDeck events;
 
 	// Identifies general game status, if it is initiated or not
@@ -129,6 +129,7 @@ public class Game {
 
 	/**
 	 * Get array of players in game.
+	 * 
 	 * @return the players in game
 	 */
 	public Player[] getPlayers() {
@@ -137,6 +138,7 @@ public class Game {
 
 	/**
 	 * Get The player whose turn is next.
+	 * 
 	 * @return The player whose turn is next.
 	 */
 	public Player getCurrentTurn() {
@@ -145,6 +147,7 @@ public class Game {
 
 	/**
 	 * Get the deck of personality cards.
+	 * 
 	 * @return: deck of all personality cards
 	 */
 	public PersonalityDeck getPersonalityDeck() {
@@ -153,6 +156,7 @@ public class Game {
 
 	/**
 	 * Get bank class used in the game.
+	 * 
 	 * @return the bank used in the game
 	 */
 	public Bank getBank() {
@@ -161,6 +165,7 @@ public class Game {
 
 	/**
 	 * Get current status of the game.
+	 * 
 	 * @return current status of the game
 	 */
 	public GameStatus getStatus() {
@@ -169,6 +174,7 @@ public class Game {
 
 	/**
 	 * Get the deck of city cards.
+	 * 
 	 * @return deck of city cards
 	 */
 	public CityDeck getCities() {
@@ -177,7 +183,9 @@ public class Game {
 
 	/**
 	 * This method gets the Player of the given color.
-	 * @param the expected Player color
+	 * 
+	 * @param the
+	 *            expected Player color
 	 * @return the player
 	 */
 	public Player getPlayerOfColor(Color c) {
@@ -197,18 +205,63 @@ public class Game {
 	 */
 	void simulate() {
 		/*
-		areas.getCard("Small Gods").addTrouble();
-		areas.getCard("Nap Hill").incTrolls();
-
-		areas.getCard("The Hippo").addMinion(players[1]);
-		areas.getCard("The Hippo").addMinion(players[1]);
-
-		areas.getCard("Nap Hill").setBuilding(players[1]);
-
-		players[0].addPlayerCard(playerDeck.drawCard().get());
-		players[0].addPlayerCard(playerDeck.drawCard().get());
-
-		players[1].addPlayerCard(playerDeck.drawCard().get());
-	*/
+		 * areas.getCard("Small Gods").addTrouble();
+		 * areas.getCard("Nap Hill").incTrolls();
+		 * 
+		 * areas.getCard("The Hippo").addMinion(players[1]);
+		 * areas.getCard("The Hippo").addMinion(players[1]);
+		 * 
+		 * areas.getCard("Nap Hill").setBuilding(players[1]);
+		 * 
+		 * players[0].addPlayerCard(playerDeck.drawCard().get());
+		 * players[0].addPlayerCard(playerDeck.drawCard().get());
+		 * 
+		 * players[1].addPlayerCard(playerDeck.drawCard().get());
+		 */
 	}
+
+	/**
+	 * Retrieves the total number of minions for the given player on the game
+	 * board.
+	 * 
+	 * @param player
+	 * @return the total numbers of minions for the given player on the game
+	 *         board.
+	 */
+	public int getTotalNumberOfMinions(Player player) {
+		// TODO Implement this method
+		return 0;
+	}
+	
+	/**
+	 * Returns the total number of areas controlled by the given player.
+	 * An area is controlled by a player if (s)he "has more playing pieces in it
+	 * than any single other player (a playing piece being a minion or a building)
+	 * and has more pieces than the total number of trolls in the area". An area that
+	 * has at least one demon cannot be controlled.
+	 * 
+	 * @param player
+	 * @return the total number of areas controlled by the given player.
+	 */
+	public int getNumberOfAreasControlled(Player player) {
+		// TODO Implement this method
+		return 0;
+	}
+	
+	/**
+	 * @return the total number of trouble markers currently placed on the board.
+	 */
+	public int getTotalNumberOfTroubleMarkers() {
+		// TODO Implement this method
+		return 0;
+	}
+	
+	/**
+	 * Checks if the draw pile still has cards.
+	 * @return true if the size of the draw pile is non-zero, false othewise.
+	 */
+	public boolean hasPlayerCardsLeft() {
+		return playerDeck.size() > 0;
+	}
+
 }
