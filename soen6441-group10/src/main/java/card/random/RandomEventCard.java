@@ -1,6 +1,7 @@
 
-package card;
+package card.random;
 
+import card.Card;
 import gameplay.Game;
 
 /**

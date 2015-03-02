@@ -1,5 +1,5 @@
 package gameplay;
 
 public enum GameStatus {
-	UNINITIATED, READY, PLAYING
+	UNINITIATED, READY, PLAYING, FINISHED
 }

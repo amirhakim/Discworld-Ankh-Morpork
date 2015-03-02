@@ -6,9 +6,9 @@ import util.Color;
 import card.Area;
 import card.CityDeck;
 import card.PlayerDeck;
-import card.RandomEventDeck;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
+import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
 
 /**
@@ -262,6 +262,124 @@ public class Game {
 	 */
 	public boolean hasPlayerCardsLeft() {
 		return playerDeck.size() > 0;
+	}
+
+	/**
+	 * Removes all pieces from the area with the given number.
+	 * @param areaId
+	 */
+	public void removeAllPiecesFromArea(int areaId) {
+		// TODO Implement this method
+	}
+	
+	/**
+	 * Executes the flooding on the game board:
+	 * - Only areas adjacent to the river are affected
+	 * - Players have to move their minions from the flooded areas to adjacent areas,
+	 *   starting with the player currently taking a turn
+	 * - Players can move their minions to areas adjacent to the river
+	 * - Buildings, trolls and demons are not affected by the flood
+	 * @param firstAreaId
+	 * @param secondAreaId
+	 */
+	public void floodAreas(int firstAreaId, int secondAreaId) {
+		// TODO Implement this method
+	}
+	
+	/**
+	 * Removes a building from the area with the given area ID.
+	 * @param areaId
+	 * @return true if a building was removed, false otherwise.
+	 */
+	public boolean burnBuilding(int areaId) {
+		// TODO Implement this method
+		return true;
+	}
+	
+	/**
+	 * Removes a building on the area with the given ID, if one exists.
+	 * @param areaId
+	 */
+	public boolean removeBuilding(int areaId) {
+		// TODO Implement this method
+		return false;
+	}
+	
+	/**
+	 * Subtracts $2 from each player for each building they own on the board.
+	 * If a player does not have enough money to pay for all of the buildings
+	 * (s)he owns, the building(s) are removed from the board.
+	 */
+	public void handleSubsidence() {
+		// TODO Implement this method
+	}
+	
+	/**
+	 * Disable the City Area Card corresponding to the passed areaID if it is in
+	 * effect. Also remove one minion from this area.
+	 * 
+	 * @return true if the area card for the given area ID was in effect and got
+	 *         disabled, false otherwise.
+	 */
+	public boolean disableAreaCard(int areaID) {
+		// TODO Implement this method
+		return false;
+	}
+
+	/**
+	 * Remove one minion belonging to the given player from the area with the
+	 * given area ID.
+	 * 
+	 * @param areaID
+	 * @return true if a minion was removed, false otherwise.
+	 */
+	public boolean removeMinion(int areaID, Player player) {
+		// TODO Implement this method
+		return false;
+	}
+	
+	/**
+	 * Place a troll to the area with the given ID.
+	 * 
+	 * @param areaID
+	 * @return true if the area where the troll was placed already contained a
+	 *         minion, false otherwise.
+	 */
+	public boolean placeTroll(int areaID) {
+		// TODO Implement this method
+		return false;
+	}
+	
+	/**
+	 * Place a demon to the area witht the given ID.
+	 * 
+	 * @param areaID
+	 * @return true if the demon was placed successfully, false otherwise.
+	 */
+	public boolean placeDemon(int areaID) {
+		// TODO Implement this method
+		return false;
+	}
+	
+	/**
+	 * Add a trouble marker to the area with the given ID.
+	 * 
+	 * @param areaID
+	 * @return true if the trouble marker was added successfully, false
+	 *         otherwise.
+	 */
+	public boolean addTroubleMarker(int areaID) {
+		// TODO Implement this method
+		return false;
+	}
+
+	/**
+	 * Figures out which player has won based on the total number of points.
+	 * The game is declared finished after that.
+	 */
+	public void finishOnPoints() {
+		// TODO Implement this method
+		status = GameStatus.FINISHED;
 	}
 
 }

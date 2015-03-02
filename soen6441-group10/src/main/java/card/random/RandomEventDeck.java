@@ -1,7 +1,9 @@
 
-package card;
+package card.random;
 
 import java.util.Stack;
+
+import card.Deck;
 
 /**
  * This class implements deck of random event cards of the game. 

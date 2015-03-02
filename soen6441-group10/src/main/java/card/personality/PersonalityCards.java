@@ -10,9 +10,10 @@ import java.util.Map;
  * An enumeration of the Personality Cards available in the game, which also
  * contains functionality for checking the winning conditions of each of them, 
  * encoded in functions.
- * @author (nothing)
+ * 
+ * @author gkentr
  */
-public enum EPersonalityCards {
+public enum PersonalityCards {
 	
 	LORD_VETINARI((playerCount, player, game) ->  
 		game.getTotalNumberOfMinions(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount)
@@ -33,7 +34,7 @@ public enum EPersonalityCards {
 	
 	private WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker;
 	
-	private EPersonalityCards(WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker) {
+	private PersonalityCards(WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker) {
 		this.winningConditionChecker = winningConditionChecker;
 	}
 	

@@ -248,4 +248,15 @@ public class Area implements Card {
 		return buildingCost;
 	}
 
+	/**
+	 * Look up whether 2 areas are adjacent on the game board.
+	 * @param firstAreaId
+	 * @param secondAreaId
+	 * @return true if the 2 areas are adjacent, false if they are not.
+	 */
+	public static boolean areAreasAdjacent(int firstAreaId, int secondAreaId) {
+		// TODO Implement this method
+		return true;
+	}
+
 }
