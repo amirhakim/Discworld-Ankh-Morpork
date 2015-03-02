@@ -5,10 +5,10 @@ import java.util.Optional;
 import util.Color;
 import card.Area;
 import card.CityDeck;
-import card.PersonalityCard;
-import card.PersonalityDeck;
 import card.PlayerDeck;
 import card.RandomEventDeck;
+import card.personality.PersonalityCard;
+import card.personality.PersonalityDeck;
 import error.InvalidGameStateException;
 
 /**

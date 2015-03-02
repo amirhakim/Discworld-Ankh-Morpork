@@ -1,5 +1,7 @@
 
-package card;
+package card.personality;
+
+import card.Card;
 
 /**
  * <b> This class implements the Personality cards of the game with their related rules<b>

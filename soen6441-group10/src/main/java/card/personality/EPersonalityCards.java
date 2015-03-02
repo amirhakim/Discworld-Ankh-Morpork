@@ -1,4 +1,4 @@
-package card;
+package card.personality;
 
 import gameplay.Game;
 import gameplay.Player;

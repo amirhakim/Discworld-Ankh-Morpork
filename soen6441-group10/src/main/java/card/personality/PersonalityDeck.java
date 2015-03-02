@@ -4,9 +4,11 @@
  * @author Team 10 - SOEN6441
  * @version 1.0
  */
-package card;
+package card.personality;
 
 import java.util.Stack;
+
+import card.Deck;
 
 public class PersonalityDeck extends Deck<PersonalityCard> {
 

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.Color;
-import card.PersonalityCard;
 import card.PlayerCard;
+import card.personality.PersonalityCard;
 
 /**
  * This class represents the players participating in the game, including the

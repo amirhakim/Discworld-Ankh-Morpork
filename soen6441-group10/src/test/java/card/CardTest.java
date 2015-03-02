@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-import card.PersonalityCard;
+import card.personality.PersonalityCard;
 
 public class CardTest {
 	

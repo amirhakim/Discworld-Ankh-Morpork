@@ -19,8 +19,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import card.CityDeck;
-import card.PersonalityDeck;
 import card.PlayerDeck;
+import card.personality.PersonalityDeck;
 import error.InvalidGameStateException;
 import gameplay.Game;
 

@@ -9,8 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import card.Deck;
-import card.PersonalityCard;
-import card.PersonalityDeck;
+import card.personality.PersonalityCard;
+import card.personality.PersonalityDeck;
 
 public class DeckTest {
 
