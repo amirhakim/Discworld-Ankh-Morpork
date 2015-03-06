@@ -18,18 +18,30 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import card.CityDeck;
+import card.PlayerDeck;
+import card.personality.PersonalityDeck;
+import error.InvalidGameStateException;
+import gameplay.Game;
+
 public class FileManagerTest {
 
 	private static final String TEST_FILE_NAME = "test_game.json";
 	private static final String TEST_FILE2_NAME = "test_game2.json";
+	private static final String TEST_DECK_FILE_NAME = "test_deck1.json";
+	private static final String TEST_GAME_FILE_NAME = "test_game3.json";
 
 	private MockGame testGame;
 	private List<MockPlayer> players = new ArrayList<>();
-	private JSONFileManager<MockGame> gameFileManager;
-	
+	private JSONFileManager<MockGame> mockGameFileManager;
+	private JSONFileManager<PersonalityDeck> deckFileManager;
+	private JSONFileManager<Game> gameFileManager;
+	private JSONFileManager<PlayerDeck> playerDeckFM;
+	private JSONFileManager<CityDeck> cityDeckFM;
+
 	@Before
 	public void setUp() {
-		gameFileManager = new JSONFileManager<>(MockGame.class);
+		mockGameFileManager = new JSONFileManager<>(MockGame.class);
 		testGame = new MockGame("Foo");
 
 		List<MockCard> handOne = new ArrayList<>();
@@ -37,7 +49,7 @@ public class FileManagerTest {
 		MockCard redCardOne = new MockCard(Color.RED, "One");
 		handOne.add(greenCardOne);
 		handOne.add(redCardOne);
-		
+
 		List<MockCard> handTwo = new ArrayList<>();
 		MockCard redCardTwo = new MockCard(Color.RED, "Two");
 		handTwo.add(redCardTwo);
@@ -48,12 +60,17 @@ public class FileManagerTest {
 		players.add(player2);
 
 		testGame.setPlayers(players);
+
+		deckFileManager = new JSONFileManager<>(PersonalityDeck.class);
+		playerDeckFM = new JSONFileManager<>(PlayerDeck.class);
+		cityDeckFM = new JSONFileManager<>(CityDeck.class);
+		gameFileManager = new JSONFileManager<>(Game.class);
 	}
-	
-	
+
 	@Test
 	public void testJsonOpen() {
-		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_NAME);
+		Optional<FileObject<MockGame>> f = mockGameFileManager
+				.open(TEST_FILE_NAME);
 		if (f.isPresent()) {
 			MockGame game = f.get().getPOJO();
 			assertEquals(testGame.getName(), game.getName());
@@ -63,7 +80,7 @@ public class FileManagerTest {
 			assertEquals(2, players.size());
 			assertEquals("Player 1", players.get(0).getName());
 			assertEquals("Player 2", players.get(1).getName());
-			
+
 			List<MockCard> handOne = players.get(0).getHand();
 			assertNotNull(handOne);
 			assertEquals(Color.RED, handOne.get(0).getColor());
@@ -71,44 +88,128 @@ public class FileManagerTest {
 			fail("The test JSON file was not found.");
 		}
 	}
-	
+
 	@Test
 	public void testSave() {
-		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_NAME);
+		Optional<FileObject<MockGame>> f = mockGameFileManager
+				.open(TEST_FILE_NAME);
 		if (f.isPresent()) {
 			// Alter the game and save it
 			MockGame game = f.get().getPOJO();
 			MockPlayer player1 = game.getPlayers().get(0);
 			player1.getHand().get(0).setColor(Color.GREEN);
-			gameFileManager.save(f.get());
-			
+			mockGameFileManager.save(f.get());
+
 			// Re-load it and verify it contains the new state
-			f = gameFileManager.open(TEST_FILE_NAME);
+			f = mockGameFileManager.open(TEST_FILE_NAME);
 			game = f.get().getPOJO();
 			player1 = game.getPlayers().get(0);
 			MockCard greenCardOne = player1.getHand().get(0);
 			assertEquals(Color.GREEN, greenCardOne.getColor());
-			
+
 			// Revert the state back to normal and save
 			greenCardOne.setColor(Color.RED);
-			gameFileManager.save(f.get());
+			mockGameFileManager.save(f.get());
 		} else {
 			fail("The test JSON file was not found.");
-		} 
+		}
 	}
-	
+
 	@Test
 	public void testSaveAs() {
-		Optional<FileObject<MockGame>> f = gameFileManager.open(TEST_FILE_NAME);
+		Optional<FileObject<MockGame>> f = mockGameFileManager
+				.open(TEST_FILE_NAME);
 		if (f.isPresent()) {
-			gameFileManager.saveAs(f.get(), TEST_FILE2_NAME);
-			assertTrue(Files.exists(Paths.get("src/resources/" + TEST_FILE2_NAME),
+			mockGameFileManager.saveAs(f.get(), TEST_FILE2_NAME);
+			assertTrue(Files.exists(
+					Paths.get("src/resources/" + TEST_FILE2_NAME),
 					LinkOption.NOFOLLOW_LINKS));
 		} else {
 			fail("The test JSON file was not found.");
-		} 
+		}
 	}
-	
+
+	@Test
+	public void testSerializePersonalityDeck() {
+		PersonalityDeck pDeck = new PersonalityDeck();
+		FileObject<PersonalityDeck> deckFO = new FileObject<>(pDeck,
+				TEST_DECK_FILE_NAME);
+		deckFileManager.save(deckFO);
+		assertTrue(Files.exists(
+				Paths.get("src/resources/" + TEST_DECK_FILE_NAME),
+				LinkOption.NOFOLLOW_LINKS));
+	}
+
+	@Test
+	public void testDeserializePersonalityDeck() {
+		Optional<FileObject<PersonalityDeck>> pDeckHolder = deckFileManager
+				.open(TEST_DECK_FILE_NAME);
+		assertTrue(pDeckHolder.isPresent());
+		PersonalityDeck pDeck = pDeckHolder.get().getPOJO();
+		assertEquals(5, pDeck.size());
+	}
+
+	@Test
+	public void testSerializePlayerDeck() {
+		PlayerDeck pDeck = new PlayerDeck();
+		FileObject<PlayerDeck> deckFO = new FileObject<>(pDeck,
+				TEST_DECK_FILE_NAME);
+		playerDeckFM.save(deckFO);
+		assertTrue(Files.exists(
+				Paths.get("src/resources/" + TEST_DECK_FILE_NAME),
+				LinkOption.NOFOLLOW_LINKS));
+	}
+
+	@Test
+	public void testDeserializePlayerDeck() {
+		Optional<FileObject<PlayerDeck>> pDeckHolder = playerDeckFM
+				.open(TEST_DECK_FILE_NAME);
+		assertTrue(pDeckHolder.isPresent());
+		PlayerDeck pDeck = pDeckHolder.get().getPOJO();
+		assertEquals(101, pDeck.size());
+	}
+
+	@Test
+	public void testSerializeCityDeck() {
+		CityDeck cDeck = new CityDeck();
+		FileObject<CityDeck> deckFO = new FileObject<>(cDeck,
+				TEST_DECK_FILE_NAME);
+		cityDeckFM.save(deckFO);
+		assertTrue(Files.exists(
+				Paths.get("src/resources/" + TEST_DECK_FILE_NAME),
+				LinkOption.NOFOLLOW_LINKS));
+	}
+
+	@Test
+	public void testDeserializeCityDeck() {
+		Optional<FileObject<CityDeck>> cDeckHolder = cityDeckFM
+				.open(TEST_DECK_FILE_NAME);
+		assertTrue(cDeckHolder.isPresent());
+		CityDeck cDeck = cDeckHolder.get().getPOJO();
+		assertEquals(12, cDeck.getCards().size());
+	}
+
+	@Test
+	public void testSerializeGame() throws InvalidGameStateException {
+		Game game = new Game();
+		game.setUp(2, new String[] { "George", "Dimitri" });
+		game.init();
+		FileObject<Game> gameFO = new FileObject<>(game, TEST_GAME_FILE_NAME);
+		gameFileManager.save(gameFO);
+		assertTrue(Files.exists(
+				Paths.get("src/resources/" + TEST_GAME_FILE_NAME),
+				LinkOption.NOFOLLOW_LINKS));
+	}
+
+	@Test
+	public void testDeserializeGame() {
+		Optional<FileObject<Game>> gDeckHolder = gameFileManager
+				.open(TEST_GAME_FILE_NAME);
+		assertTrue(gDeckHolder.isPresent());
+		Game game = gDeckHolder.get().getPOJO();
+		assertEquals(2, game.getPlayers().length);
+	}
+
 	@After
 	public void tearDown() {
 		// Clean up the extra file from saveAs test
@@ -121,7 +222,7 @@ public class FileManagerTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * Using this class for testing until Game is finalized.
 	 */
@@ -129,13 +230,14 @@ public class FileManagerTest {
 
 		private String name;
 		private List<MockPlayer> players;
-		
-		public MockGame() {}
-		
+
+		public MockGame() {
+		}
+
 		public MockGame(String name_) {
 			name = name_;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
@@ -151,9 +253,9 @@ public class FileManagerTest {
 		public void setPlayers(List<MockPlayer> players_) {
 			players = players_;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Using this class for testing until Player is finalized.
 	 */
@@ -162,8 +264,9 @@ public class FileManagerTest {
 		private String name;
 		private List<MockCard> hand;
 
-		public MockPlayer(){}
-		
+		public MockPlayer() {
+		}
+
 		public MockPlayer(String name_, List<MockCard> hand_) {
 			name = name_;
 			hand = hand_;
@@ -184,9 +287,9 @@ public class FileManagerTest {
 		public void setHand(List<MockCard> hand) {
 			this.hand = hand;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Using this class until Card is finalized.
 	 */
@@ -194,9 +297,10 @@ public class FileManagerTest {
 
 		private Color color;
 		private String name;
-		
-		public MockCard(){}
-		
+
+		public MockCard() {
+		}
+
 		public MockCard(Color color_, String name_) {
 			color = color_;
 			name = name_;
@@ -209,18 +313,18 @@ public class FileManagerTest {
 		public void setColor(Color color) {
 			this.color = color;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
-		
+
 		public void setName(String name) {
 			this.name = name;
 		}
 	}
-	
+
 	enum Color {
 		GREEN, RED
 	}
-	
+
 }
