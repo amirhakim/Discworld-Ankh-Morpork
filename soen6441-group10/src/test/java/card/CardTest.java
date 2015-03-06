@@ -2,9 +2,16 @@ package card;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.function.BiConsumer;
+
 import org.junit.*;
 
 import card.personality.PersonalityCard;
+import card.player.PlayerCards;
+import card.player.Symbol;
+import gameplay.Player;
+import gameplay.Game;
 
 public class CardTest {
 	
@@ -38,6 +45,31 @@ public class CardTest {
 	    	assertTrue(this.personality.equals(personality));
 	    }
 	 
+	    @Test
+	    /*
+	     * Test Card Enum Function
+	     * Create player and Game
+	     * Get symbols from player card MR BOGGIS
+	     * Loop through symbols and execute the functions they hold
+	     * Get the text MR BOGGIS has
+	     * Execute text for MR BOGGIS
+	     */
+	    public void testCard(){
+	    	Player p = new Player();
+	    	Game g = new Game();
+	    	p.setName("Rossco");
+
+	    	List<Symbol> symbols = PlayerCards.MR_BOGGIS.getSymbols();	
+	    	for(Symbol s : symbols){
+	    		s.getGameAction().accept(p, g);
+	    	}
+	    	
+	    	BiConsumer<Player, Game> text = PlayerCards.MR_BOGGIS.getText();
+	    	text.accept(p, new Game());
+	    	
+	    	
+	    }
+	    	
 	 
 	    @After
 	    public void tearDown() throws Exception {
