@@ -25,9 +25,9 @@ public interface WinningCondition<Integer, Player, Game, Boolean> {
 	
 	default <V> WinningCondition<Integer, Player, Game, V> andThen(
 			Function<? super Boolean, ? extends V> after) {
-		Objects.requireNonNull(after);
-		return (Integer numberOfPlayers, Player player, Game game)
-				-> after.apply(apply(numberOfPlayers, player, game));
-	}
-
+				Objects.requireNonNull(after);
+				return (Integer numberOfPlayers, Player player, Game game)
+						-> after.apply(apply(numberOfPlayers, player, game));
+			}
+	
 }
