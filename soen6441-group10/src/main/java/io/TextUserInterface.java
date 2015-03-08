@@ -5,13 +5,14 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
 import util.Color;
-import card.Area;
-import card.PlayerCard;
+import card.BoardArea;
+import card.player.PlayerCard;
 
 /**
  * <b> This class makes a command line interface to communicate with the players. <b> 
@@ -219,17 +220,17 @@ public class TextUserInterface {
 			System.out.println(String.format("%-20s%10s%30s%30s%30s%10s", "Area",
 					"Buildings", "Minions", "Trolls", "Demons", "Trouble"));
 
-			for (Area c : controller.getCities()) {
-				System.out.print(String.format("%-20s", c.getTitle()));
+			for (BoardArea a : controller.getBoard()) {
+				System.out.print(String.format("%-20s", a.getArea().name()));
 
-				Player p = c.getBuildingOwner();
+				Player p = controller.getPlayerForColor(a.getBuildingOwner());
 				if (p == null) {
-					System.out.print(String.format("%10s", "NON"));
+					System.out.print(String.format("%10s", "NONE"));
 				} else {
 					System.out.print(String.format("%10s", p.getName()));
 				}
 
-				Map<Color, Integer> minions = c.getMinions();
+				Map<Color, Integer> minions = a.getMinions();
 				String minionsAll = UserOption.BACK.getOptionString();
 
 				for (Map.Entry<Color, Integer> entry : minions.entrySet()) {
@@ -242,36 +243,36 @@ public class TextUserInterface {
 				}
 				System.out.format("%30s", minionsAll);
 
-				System.out.format("%30s", String.valueOf(c.getTrolls()));
-				System.out.format("%30s", String.valueOf(c.getDemons()));
+				System.out.format("%30s", String.valueOf(a.getTrollCount()));
+				System.out.format("%30s", String.valueOf(a.getDemonCount()));
 
-				System.out.format("%10s", c.hasTroubleMaker());
+				System.out.format("%10s", a.hasTroubleMarker());
 
 				System.out.println();
 			}
 
 			// Print player details
-			Player[] players = controller.getPlayers();
-			for (int i = 0; i < players.length; ++i) {
+			Collection<Player> players = controller.getPlayers();
+			for (Player p : players) {
 				System.out.println(System.getProperty("line.separator"));
-				System.out.print(players[i].getName());
+				System.out.print(p.getName());
 				System.out.print(" has personality ");
-				System.out.println(players[i].getPersonality().getTitle());
-				System.out.println(players[i].getName() + " is color "
-						+ players[i].getColor());
+				System.out.println(p.getPersonality().name());
+				System.out.println(p.getName() + " is color "
+						+ p.getColor());
 				System.out.println(" And has "
-						+ String.valueOf(players[i].getMinions())
+						+ String.valueOf(p.getMinionCount())
 						+ " minions left");
 				System.out.println(" And has "
-						+ String.valueOf(players[i].getBuildings())
+						+ String.valueOf(p.getBuildings())
 						+ " buildings left");
 				System.out.println(" And has "
-						+ String.valueOf(players[i].getAmount())
+						+ String.valueOf(p.getAmount())
 						+ " money left");
 				System.out.print(" And has Player cards: ");
 
-				for (PlayerCard c : players[i].getPlayerCards()) {
-					System.out.print(c.getTitle() + ", ");
+				for (PlayerCard c : p.getPlayerCards()) {
+					System.out.print(c.name() + ", ");
 				}
 			}
 

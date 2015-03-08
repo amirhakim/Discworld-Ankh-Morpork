@@ -12,39 +12,21 @@ import card.Deck;
 
 public class PersonalityDeck extends Deck<PersonalityCard> {
 
-	private final int size = 5;
-
-	/**
-	 *  Array of all card possibilities
-	 */
-	private final String[] names = { "Lord Selachii", "Chrysoprase",
-			"Lord Vetinaari", "Dragon King of Arms", "Commander Vimes" };
-
-	/**
-	 * This constructor is invoked from the class PersonalityDeck.
-	 */
 	public PersonalityDeck() {
 		populateDeck();
 	}
 	
-	/**
-	 * This method overrides "populateDeck" of super class Deck and
-	 *  puts all the personality cards in the deck and shuffle it.
-	 */
 	@Override
 	public void populateDeck() {
 		this.cards = new Stack<PersonalityCard>();
 
-		// Initialize each card with a title
-		for (int i = 0; i < this.size; ++i) {
-			PersonalityCard tmp = new PersonalityCard();
-			tmp.setTitle(this.names[i]);
-			this.cards.add(tmp);
+		// There is a special rule for not dealing Chrysoprase in the case
+		// of 2 players but this will be handled on the client side
+		for (PersonalityCard c : PersonalityCard.values()) {
+			this.cards.add(c);
 		}
 
 		super.shuffle();
 	}
-
-	
 	
 }

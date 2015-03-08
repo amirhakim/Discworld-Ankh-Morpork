@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,9 +35,11 @@ public class GameTest {
 			this.game.setUp(3, playerNames);
 			// Set up game and loop through players to make sure this player
 			// exists
-			Player[] players = this.game.getPlayers();
-			for (int i = 0; i < players.length; ++i) {
-				assertTrue(players[i].getName().equals(this.names[i]));
+			Collection<Player> players = this.game.getPlayers();
+			int i = 0;
+			for (Player p : players) {
+				assertTrue(p.getName().equals(this.names[i]));
+				i++;
 			}
 		} catch (Exception e) {
 			fail("Failed " + e.getMessage());
@@ -94,12 +97,12 @@ public class GameTest {
 			int numberOfPlayers = 3;
 			this.game.setUp(numberOfPlayers, this.names);
 			this.game.init();
-			Player[] players = this.game.getPlayers();
+			Collection<Player> players = this.game.getPlayers();
 			ArrayList<String> cardTitles = new ArrayList<String>();
 			// Loop through players and look at their personality cards
-			for (int i = 0; i < players.length; ++i) {
+			for (Player p : players) {
 				// Get players personality
-				String currentTitle = players[i].getPersonality().getTitle();
+				String currentTitle = p.getPersonality().name();
 				// Make sure its not already been given
 				assertTrue(!cardTitles.contains(currentTitle));
 				// Add it to the running list
@@ -138,11 +141,11 @@ public class GameTest {
 			this.game = new Game();
 			this.game.setUp(3, this.names);
 			this.game.init();
-			Player[] players = this.game.getPlayers();
-			for (int i = 0; i < players.length; ++i) {
+			Collection<Player> players = this.game.getPlayers();
+			for (Player p : players) {
 				// Make sure each player has 12 - 3 (12 is initial, 3 are parsed
 				// out).
-				assertTrue(players[i].getMinions() == (12 - 3));
+				assertTrue(p.getMinionCount() == (12 - 3));
 			}
 
 		} catch (InvalidGameStateException e) {

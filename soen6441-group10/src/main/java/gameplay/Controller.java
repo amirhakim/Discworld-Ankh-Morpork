@@ -1,9 +1,10 @@
 
 package gameplay;
 
-import java.util.List;
+import java.util.Collection;
 
-import card.Area;
+import util.Color;
+import card.BoardArea;
 import error.InvalidGameStateException;
 
 /**
@@ -61,7 +62,7 @@ public class Controller {
 	 * This method gets array of players in game.
 	 * @return the players in game
 	 */
-	public Player[] getPlayers() {
+	public Collection<Player> getPlayers() {
 		return game.getPlayers();
 	}
 	
@@ -82,11 +83,18 @@ public class Controller {
 	}
 
 	/**
-	 * This method gets city areas
-	 * @return the city area
+	 * Gets the game board in the form of a board area collection. These
+	 * board areas don't just contain the value of the underlying area 
+	 * (e.g. "Dolly Sisters") - they contain their state as well
+	 * (see {@link BoardArea}).
+	 * @return a collection of the game's board areas.
 	 */
-	public List<Area> getCities() {
-		return game.getCities().getCards();
+	public Collection<BoardArea> getBoard() {
+		return game.getBoard();
+	}
+	
+	public Player getPlayerForColor(Color c) {
+		return game.getPlayerOfColor(c);
 	}
 	
 	public void simulate() {

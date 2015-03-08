@@ -1,11 +1,11 @@
 package gameplay;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import util.Color;
-import card.PlayerCard;
 import card.personality.PersonalityCard;
+import card.player.PlayerCard;
 
 /**
  * This class represents the players participating in the game, including the
@@ -19,16 +19,24 @@ import card.personality.PersonalityCard;
 public class Player {
 
 	private String name;
+
 	private PersonalityCard personality;
+
 	private Color color;
+
 	private int money;
+
 	private int minions;
+	
 	private int buildings;
-	private List<PlayerCard> playerCards = new ArrayList<>();
 
 	/**
-	 * This constructor is invoked to create objects from the class Player.
+	 * This is the player's hand. It is implemented as a set because we can
+	 * invoke the cards' actions statically (since they are contained in the 
+	 * {@link PlayerCard} enum).
 	 */
+	private Set<PlayerCard> playerCards = new HashSet<>();
+
 	public Player() {
 		this.money = 0;
 		this.minions = 12;
@@ -37,7 +45,9 @@ public class Player {
 
 	/**
 	 * Sets player's name for the current object.
-	 * @param name the name of player
+	 * 
+	 * @param name
+	 *            the name of player
 	 * @return true if the name is valid
 	 */
 	public boolean setName(String name) {
@@ -52,7 +62,9 @@ public class Player {
 
 	/**
 	 * Checks criteria to see if the entry is a valid name.
-	 * @param name the name entered by player
+	 * 
+	 * @param name
+	 *            the name entered by player
 	 * @return true if the entry is a valid name
 	 */
 	private boolean isAlpha(String name) {
@@ -61,7 +73,8 @@ public class Player {
 
 	/**
 	 * Get player's name.
-	 * @return the player's name 
+	 * 
+	 * @return the player's name
 	 */
 	public String getName() {
 		return this.name;
@@ -69,7 +82,9 @@ public class Player {
 
 	/**
 	 * This method assigns the personality card to the player.
-	 * @param personality the personality card
+	 * 
+	 * @param personality
+	 *            the personality card
 	 */
 	public void setPersonality(PersonalityCard personality) {
 		this.personality = personality;
@@ -77,6 +92,7 @@ public class Player {
 
 	/**
 	 * Get the personality card of the player.
+	 * 
 	 * @return the assigned personality card
 	 */
 	public PersonalityCard getPersonality() {
@@ -86,13 +102,15 @@ public class Player {
 	/**
 	 * This method prints the player's turn
 	 */
-	public void turn() {
+	public void printTurn() {
 		System.out.println(this.getName() + " turn");
 	}
 
 	/**
 	 * This method increases the player's money
-	 * @param amount the amount of money
+	 * 
+	 * @param amount
+	 *            the amount of money
 	 * @return true if it increases the player's money successfully
 	 */
 	public boolean increaseMoney(int amount) {
@@ -102,7 +120,9 @@ public class Player {
 
 	/**
 	 * This method decreases the player's money.
-	 * @param amount the amount of money
+	 * 
+	 * @param amount
+	 *            the amount of money
 	 * @return true if it decreases the player's money successfully
 	 */
 	public boolean decreaseMoney(int amount) {
@@ -112,11 +132,11 @@ public class Player {
 			this.money = this.money - amount;
 			return true;
 		}
-
 	}
 
 	/**
 	 * Get the total amount of money the player currently has.
+	 * 
 	 * @return the amount
 	 */
 	public int getAmount() {
@@ -125,16 +145,19 @@ public class Player {
 
 	/**
 	 * Get the total number of minions the player currently has.
+	 * 
 	 * @return the minions
 	 */
-	public int getMinions() {
+	public int getMinionCount() {
 		return this.minions;
 	}
 
 	// Decrease the number of minions by one
 	/**
 	 * This method decrements the player's minions.
-	 * @return true if it decrements successfully (there is any minion to be decremented).
+	 * 
+	 * @return true if it decrements successfully (there is any minion to be
+	 *         decremented).
 	 */
 	public boolean decreaseMinion() {
 		if ((this.minions - 1) >= 0) {
@@ -147,7 +170,9 @@ public class Player {
 
 	/**
 	 * This method increments the player's minions.
-	 * @return true if it increments successfully (the number of minions wouldn't pass the upper bound).
+	 * 
+	 * @return true if it increments successfully (the number of minions
+	 *         wouldn't pass the upper bound).
 	 */
 	public boolean increaseMinion() {
 		if (this.minions < 12) {
@@ -160,6 +185,7 @@ public class Player {
 
 	/**
 	 * Get the total number of buildings the player currently has
+	 * 
 	 * @return the total number of buildings the player currently has
 	 */
 	public int getBuildings() {
@@ -168,7 +194,9 @@ public class Player {
 
 	/**
 	 * This method decrements the player's building.
-	 * @return true if it decrements successfully (there is any building to be decremented).
+	 * 
+	 * @return true if it decrements successfully (there is any building to be
+	 *         decremented).
 	 */
 	public boolean decreaseBuilding() {
 		if ((this.buildings - 1) > 0) {
@@ -181,7 +209,9 @@ public class Player {
 
 	/**
 	 * This method increments the player's building.
-	 * @return true if it increments successfully (there is any building to be incremented).
+	 * 
+	 * @return true if it increments successfully (there is any building to be
+	 *         incremented).
 	 */
 	public boolean increaseBuildings() {
 		if ((this.buildings + 1) < 6) {
@@ -194,47 +224,41 @@ public class Player {
 
 	/**
 	 * This method adds player's cards one by one.
-	 * @param card player card
+	 * 
+	 * @param card
+	 *            player card
 	 * @return true when adds a player card
 	 */
-	boolean addPlayerCard(PlayerCard card) {
+	public boolean addPlayerCard(PlayerCard card) {
 		this.playerCards.add(card);
 		return true;
 	}
 
-	// Remove Player's card one by one
 	/**
 	 * This method removes player's cards one by one.
-	 * @param card player card
+	 * 
+	 * @param card
+	 *            player card
 	 * @return true if it founds the player card and remove it successfully
 	 */
-	boolean removePlayerCard(PlayerCard card) {
-		int size = playerCards.size(); // Size of arrayList (equal to the
-										// number of cards in player's hand)
-
-		// Looking for the specific card in players hand
-		// Remove it if found and returns true else returns false
-		for (int i = 0; i < size; i++) {
-			if (playerCards.get(i).getTitle().equals(card.getTitle())) {
-				playerCards.remove(i);
-				return true;
-			}
-		}
-		return false;
+	public boolean removePlayerCard(PlayerCard card) {
+		return playerCards.remove(card);
 	}
 
 	/**
-	 * Get list of the player's cards
+	 * Get the set of the player's cards
+	 * 
 	 * @return the player's cards
 	 */
-	public List<PlayerCard> getPlayerCards() {
-		return this.playerCards;
+	public Set<PlayerCard> getPlayerCards() {
+		return playerCards;
 	}
 
-	
 	/**
 	 * Set Color for Player's pieces
-	 * @param color_ the color
+	 * 
+	 * @param color_
+	 *            the color
 	 */
 	public void setColor(Color color_) {
 		color = color_;
@@ -242,6 +266,7 @@ public class Player {
 
 	/**
 	 * Get Player's color
+	 * 
 	 * @return the Player's color
 	 */
 	public Color getColor() {
@@ -249,14 +274,16 @@ public class Player {
 	}
 
 	/**
-	 * Net worth = cash + monetary cost of each owned building - 12 * loans taken
+	 * Net worth = cash + monetary cost of each owned building - 12 * loans
+	 * taken
+	 * 
 	 * @return the player's net worth as described by the above logic.
 	 */
 	public int getTotalWorth() {
 		// TODO Implement this method
 		return 0;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -283,10 +310,9 @@ public class Player {
 		return true;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "Player[ name=" + name + ", color=" + color + "]";
+		return "Player[ name=" + name + ", color=" + color + " ]";
 	}
 
 }

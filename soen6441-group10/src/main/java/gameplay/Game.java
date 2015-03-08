@@ -1,13 +1,17 @@
 package gameplay;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import util.Color;
-import card.Area;
-import card.CityDeck;
-import card.PlayerDeck;
+import card.AnkhMorporkArea;
+import card.BoardArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
+import card.player.PlayerDeck;
 import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
 
@@ -21,18 +25,34 @@ import error.InvalidGameStateException;
  */
 public class Game {
 
-	// Game Components.
 	private Bank gameBank;
-	private Player[] players;
+
+	private Map<Color, Player> players;
+	
+	private Color[] playerTurnOrder;
+
 	private PersonalityDeck personalityDeck;
+
 	private PlayerDeck playerDeck;
-	private CityDeck areas;
+	
+	/**
+	 * For most, if not all, use cases, we need to alter the state
+	 * of a board area based on its area code (which is the value after
+	 * rolling the die). So it makes most sense to keep areas in an
+	 * Integer -> BoardArea map.
+	 */
+	private Map<Integer, BoardArea> gameBoard;
 
-	private RandomEventDeck events;
+	private RandomEventDeck randomEventDeck;
 
-	// Identifies general game status, if it is initiated or not
+	/**
+	 * Identifies general game status, if it is initiated or not.
+	 */
 	private GameStatus status;
-	// Identifies whose turn it is, uses index in the player array.
+
+	/**
+	 * Identifies whose turn it is, uses index in the player array.
+	 */
 	private int currentTurn;
 
 	public Game() {
@@ -58,20 +78,24 @@ public class Game {
 			throw new InvalidGameStateException("Incorrect player number");
 		} else {
 			gameBank = new Bank();
-			players = new Player[numberOfPlayers];
 
-			for (int i = 0; i < players.length; ++i) {
+			players = new HashMap<>();
+			for (int i = 0; i < numberOfPlayers; i++) {
 				Player p = new Player();
 				p.setName(playerNames[i]);
-				p.setColor(Color.forCode(i));
-				players[i] = p;
+				Color c = Color.forCode(i);
+				p.setColor(c);
+				players.put(c, p);
+				playerTurnOrder[i] = c;
+			}
+			
+			for (AnkhMorporkArea a : AnkhMorporkArea.values()) {
+				gameBoard.put(a.getAreaCode(), new BoardArea(a));
 			}
 		}
 
-		personalityDeck = new PersonalityDeck();
 		playerDeck = new PlayerDeck();
-		areas = new CityDeck();
-		events = new RandomEventDeck();
+		randomEventDeck = new RandomEventDeck();
 
 		status = GameStatus.READY;
 	}
@@ -82,30 +106,32 @@ public class Game {
 	public void init() {
 		// Give each player their money, personality and initial minions.
 		// Cards that have an initial state.
-		Area Shades = (areas.getCard("The Shades"));
-		Area theScoures = (areas.getCard("The Scoures"));
-		Area dollySisters = (areas.getCard("Dolly Sisters"));
+		BoardArea theShades = gameBoard.get(AnkhMorporkArea.THE_SHADES.getAreaCode());
+		BoardArea theScours = gameBoard.get(AnkhMorporkArea.THE_SCOURS.getAreaCode());
+		BoardArea dollySisters = gameBoard.get(AnkhMorporkArea.DOLLY_SISTERS.getAreaCode());
 
-		for (int i = 0; i < players.length; ++i) {
+		for (Entry<Color, Player> p : players.entrySet()) {
 			// Deal out 10 dollars.
-			players[i].increaseMoney(10);
+			p.getValue().increaseMoney(10);
 			gameBank.decreaseBalance(10);
 
 			Optional<PersonalityCard> popped = personalityDeck.drawCard();
-			// TODO We have to have a check for an empty deck somewhere here
-			players[i].setPersonality(popped.get());
+			// When 2 players are playing, nobody can have Chrysoprase
+			if (players.size() == 2 && popped.get() == PersonalityCard.CHRYSOPRASE) {
+				popped = personalityDeck.drawCard();
+			}
+			p.getValue().setPersonality(popped.get());
 
-			// Add minions to shades, sources and dolly sister regions.
-			Shades.addMinion(players[i]);
-			theScoures.addMinion(players[i]);
-			dollySisters.addMinion(players[i]);
-
+			// Based on the rules we have to add minions to these 3 regions:
+			theShades.addMinion(p.getValue());
+			theScours.addMinion(p.getValue());
+			dollySisters.addMinion(p.getValue());
 		}
 
 		// Starter regions also have trouble.
-		Shades.addTrouble();
-		theScoures.addTrouble();
-		dollySisters.addTrouble();
+		theShades.addTroubleMarker();
+		theScours.addTroubleMarker();
+		dollySisters.addTroubleMarker();
 
 		// Set turn to first in game.
 		currentTurn = 0;
@@ -114,35 +140,45 @@ public class Game {
 		status = GameStatus.PLAYING;
 	}
 
+	public Collection<BoardArea> getBoard() {
+		return gameBoard.values();
+	}
+
 	/**
-	 * This method moves the game forward by one turn.
+	 * Moves the game forward by one turn.
 	 */
 	public void turn() {
 		int current = currentTurn;
-		players[current].turn();
-		if ((current + 1) == players.length) {
-			currentTurn = 0;
-		} else {
-			currentTurn = current + 1;
-		}
+		players.get(playerTurnOrder[current]).printTurn();
+		currentTurn =  ((current + 1) == playerTurnOrder.length) ?
+				0 : current + 1;
 	}
 
 	/**
-	 * Get array of players in game.
+	 * Get a collection of the game players.
 	 * 
-	 * @return the players in game
+	 * @return the players in the game.
 	 */
-	public Player[] getPlayers() {
-		return players;
+	public Collection<Player> getPlayers() {
+		return players.values();
+	}
+	
+	/**
+	 * Returns the player who has the given color.
+	 * @param c
+	 * @return the player who has the given color.
+	 */
+	public Player getPlayerOfColor(Color c) {
+		return players.get(c);
 	}
 
 	/**
-	 * Get The player whose turn is next.
+	 * Get the player whose turn is next.
 	 * 
-	 * @return The player whose turn is next.
+	 * @return the player whose turn is next.
 	 */
 	public Player getCurrentTurn() {
-		return players[currentTurn];
+		return players.get(playerTurnOrder[currentTurn]);
 	}
 
 	/**
@@ -170,33 +206,6 @@ public class Game {
 	 */
 	public GameStatus getStatus() {
 		return status;
-	}
-
-	/**
-	 * Get the deck of city cards.
-	 * 
-	 * @return deck of city cards
-	 */
-	public CityDeck getCities() {
-		return areas;
-	}
-
-	/**
-	 * This method gets the Player of the given color.
-	 * 
-	 * @param the
-	 *            expected Player color
-	 * @return the player
-	 */
-	public Player getPlayerOfColor(Color c) {
-		// TODO Change the players from an array to a list and then change this
-		// to an HOO call
-		for (Player p : players) {
-			if (p.getColor() == c) {
-				return p;
-			}
-		}
-		return null;
 	}
 
 	/**

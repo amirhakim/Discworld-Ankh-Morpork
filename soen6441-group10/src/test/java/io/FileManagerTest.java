@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import error.InvalidGameStateException;
+import gameplay.Game;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,11 +20,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import card.CityDeck;
-import card.PlayerDeck;
 import card.personality.PersonalityDeck;
-import error.InvalidGameStateException;
-import gameplay.Game;
+import card.player.PlayerDeck;
 
 public class FileManagerTest {
 
@@ -37,7 +36,6 @@ public class FileManagerTest {
 	private JSONFileManager<PersonalityDeck> deckFileManager;
 	private JSONFileManager<Game> gameFileManager;
 	private JSONFileManager<PlayerDeck> playerDeckFM;
-	private JSONFileManager<CityDeck> cityDeckFM;
 
 	@Before
 	public void setUp() {
@@ -63,7 +61,6 @@ public class FileManagerTest {
 
 		deckFileManager = new JSONFileManager<>(PersonalityDeck.class);
 		playerDeckFM = new JSONFileManager<>(PlayerDeck.class);
-		cityDeckFM = new JSONFileManager<>(CityDeck.class);
 		gameFileManager = new JSONFileManager<>(Game.class);
 	}
 
@@ -170,26 +167,6 @@ public class FileManagerTest {
 	}
 
 	@Test
-	public void testSerializeCityDeck() {
-		CityDeck cDeck = new CityDeck();
-		FileObject<CityDeck> deckFO = new FileObject<>(cDeck,
-				TEST_DECK_FILE_NAME);
-		cityDeckFM.save(deckFO);
-		assertTrue(Files.exists(
-				Paths.get("src/resources/" + TEST_DECK_FILE_NAME),
-				LinkOption.NOFOLLOW_LINKS));
-	}
-
-	@Test
-	public void testDeserializeCityDeck() {
-		Optional<FileObject<CityDeck>> cDeckHolder = cityDeckFM
-				.open(TEST_DECK_FILE_NAME);
-		assertTrue(cDeckHolder.isPresent());
-		CityDeck cDeck = cDeckHolder.get().getPOJO();
-		assertEquals(12, cDeck.getCards().size());
-	}
-
-	@Test
 	public void testSerializeGame() throws InvalidGameStateException {
 		Game game = new Game();
 		game.setUp(2, new String[] { "George", "Dimitri" });
@@ -207,7 +184,7 @@ public class FileManagerTest {
 				.open(TEST_GAME_FILE_NAME);
 		assertTrue(gDeckHolder.isPresent());
 		Game game = gDeckHolder.get().getPOJO();
-		assertEquals(2, game.getPlayers().length);
+		assertEquals(2, game.getPlayers().size());
 	}
 
 	@After

@@ -1,46 +1,102 @@
-
 package card.random;
 
-import card.Card;
+import gameplay.Die;
 import gameplay.Game;
+import gameplay.Player;
 
-/**
- * <b> This class implements the Random Event cards of the game with their related rules<b>
- * 
- * @author Team 10 - SOEN6441
- * @version 1.0
- */
-public class RandomEventCard implements Card {
+import java.util.function.BiConsumer;
 
+import card.AnkhMorporkArea;
+import card.Card;
+
+public enum RandomEventCard implements Card {
 	
-	private String title;
-
-	/**
-	 * This constructor is invoked to create objects from the class RandomEventCard.
-	 */
-	public RandomEventCard() {}
-
-	/**
-	 * This method implements getTitle method of interface Card. 
-	 * Get title of Random Event card.
-	 */
-	@Override
-	public String getTitle() {
-			return this.title;
-	}
-
-	/**
-	 * This method implements setTitle method of interface Card. 
-	 * Set title of Random Event card.
-	 */
-	@Override
-	public void setTitle(String title) {
-		this.title=title;
+	DRAGON((game, player) -> {
+		int areaAffected = Die.getDie().roll();
+		game.removeAllPiecesFromArea(areaAffected);
+	}),
+	
+	FLOOD((game, player) -> {
+		Die die = Die.getDie();
+		int firstAreaAffected = die.roll();
+		int secondAreaAffected = die.roll();
+		game.floodAreas(firstAreaAffected, secondAreaAffected);
+	}),
+	
+	FIRE((game, player) -> {
+		Die die = Die.getDie();
+		int areaOnFire = die.roll();
+		int nextArea = areaOnFire;
+		while (AnkhMorporkArea.areAreasAdjacent(areaOnFire, nextArea) && game.burnBuilding(areaOnFire)) {
+			nextArea = die.roll();
+			// TODO Make fire expand
+		}
+	}),
+	
+	FOG((game, player) -> {
+		// TODO Draw the top five cards from the draw pile
+	}),
+	
+	RIOTS((game, player) -> {
+		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
+			game.finishOnPoints();
+		}
+	}),
+	
+	EXPLOSIONS((game, player) -> {
+		int area = Die.getDie().roll();
+		game.removeBuilding(area);
+	}),
+	
+	EARTHQUAKE((game, player) -> {
+		Die die = Die.getDie();
+		int firstArea = die.roll();
+		int secondArea = die.roll();
+		game.removeBuilding(firstArea);
+		game.removeBuilding(secondArea);
+	}),
+	
+	SUBSIDENCE((game, player) -> {
+		game.handleSubsidence();
+	}),
+	
+	BLOODY_STUPID_JOHNSON((game, player) -> {
+		int area = Die.getDie().roll();
+		game.disableAreaCard(area);
+		game.removeMinion(area, player);
+	}),
+	
+	TROLLS((game, player) -> {
+		Die die = Die.getDie();
+		int[] areas = { die.roll(), die.roll(), die.roll() };
+		for (int area : areas) {
+			if (game.placeTroll(area)) {
+				game.addTroubleMarker(area);
+			}
+		}
+	}),
+	
+	MYSTERIOUS_MURDERS((game, player) -> {
+		Die die = Die.getDie();
+		// TODO Implement the murder logic here
+	}),
+	
+	DEMONS_FROM_THE_DUNGEON_DIMENSIONS((game, player) -> {
+		Die die = Die.getDie();
+		int[] areas = { die.roll(), die.roll(), die.roll(), die.roll() };
+		for (int area : areas) {
+			game.placeDemon(area);
+		}
+	});
+	
+	private BiConsumer<Game, Player> gameAction;
+	
+	private RandomEventCard(BiConsumer<Game, Player> gameAction) {
+		this.gameAction = gameAction;
 	}
 	
-	public void performAction(Game game) {
-		
+	public BiConsumer<Game, Player> getGameAction() {
+		return gameAction;
 	}
 
 }
-

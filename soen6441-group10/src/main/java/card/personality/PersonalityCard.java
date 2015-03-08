@@ -1,76 +1,89 @@
-
 package card.personality;
+
+import gameplay.Game;
+import gameplay.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import card.Card;
 
 /**
- * <b> This class implements the Personality cards of the game with their related rules<b>
+ * An enumeration of the Personality Cards available in the game, which also
+ * contains functionality for checking the winning conditions of each of them, 
+ * encoded in functions.
  * 
- * @author Team 10 - SOEN6441
- * @version 1.0
+ * @author gkentr
  */
-public class PersonalityCard implements Card {
-
-	private String title;
+public enum PersonalityCard implements Card {
+	
+	LORD_VETINARI((playerCount, player, game) ->  
+		game.getTotalNumberOfMinions(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount)
+	),
+	
+	LORD_SELACHII(WinningConditionHelper::hasWonByControlledAreas),
+	
+	LORD_RUST(WinningConditionHelper::hasWonByControlledAreas),
+	
+	LORD_DE_WORDE(WinningConditionHelper::hasWonByControlledAreas),
+	
+	DRAGON_KING_OF_ARMS((playerCount, player, game) -> game.getTotalNumberOfTroubleMarkers() == 8),
+	
+	CHRYSOPRASE((playerCount, player, game) -> player.getTotalWorth() >= 50),
+	
+	COMMANDER_VIMES((playerCount, player, game) -> game.hasPlayerCardsLeft());
+	;
+	
+	private WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker;
+	
+	private PersonalityCard(WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker) {
+		this.winningConditionChecker = winningConditionChecker;
+	}
+	
+	public WinningCondition<Integer, Player, Game, Boolean> getWinningConditionChecker() {
+		return winningConditionChecker;
+	}
 	
 	/**
-	 * This method implements getTitle method of interface Card. 
-	 * It gets the title of personality card.
+	 * This can be used as an aid for lookups as needed by different personality cards.
+	 * @author gkentr
 	 */
-	@Override
-	public String getTitle() {
-		return this.title;
-	}
+	private static class WinningConditionHelper {
+		
+		private static final int CONDITION_COUNT = 3;
 
-	/**
-	 * This method implements setTitle method of interface Card. 
-	 * It sets the title of personality card.
-	 */
-	@Override
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
+		/**
+		 * Depending on the number of players you have to have a certain number
+		 * of minions in different areas on the board.
+		 */
+		private static final Map<Integer, Integer> minimumRequiredMinions = 
+				new HashMap<>(CONDITION_COUNT);
+		
+		static {
+			minimumRequiredMinions.put(2, 11);
+			minimumRequiredMinions.put(3, 10);
+			minimumRequiredMinions.put(4, 9);
 		}
-		if (obj == null) {
-			return false;
+		
+		private static final Map<Integer, Integer> minimumControlledAreas = 
+				new HashMap<>(CONDITION_COUNT);
+		
+		static {
+			minimumControlledAreas.put(2, 7);
+			minimumControlledAreas.put(3, 5);
+			minimumControlledAreas.put(4, 4);
 		}
-		if (!(obj instanceof PersonalityCard)) {
-			return false;
+		
+		private WinningConditionHelper() {};
+		
+		private static Integer getMinimumRequiredMinions(Integer numberOfPlayers) {
+			return minimumRequiredMinions.get(numberOfPlayers);
 		}
-		PersonalityCard other = (PersonalityCard) obj;
-		if (title == null) {
-			if (other.title != null) {
-				return false;
-			}
-		} else if (!title.equals(other.title)) {
-			return false;
+		
+		private static Boolean hasWonByControlledAreas(Integer numberOfPlayers, Player player, Game game) {
+			return game.getNumberOfAreasControlled(player) >= minimumControlledAreas.get(numberOfPlayers);
+			
 		}
-		return true;
-	}
-
-	/**
-	 * This method overrides implementation of toString in a way to print the title of the personality card.
-	 */
-	@Override
-	public String toString() {
-		return "PersonalityCard[ " + title + " ]";
 	}
 
 }
-

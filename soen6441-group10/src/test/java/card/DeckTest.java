@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import card.Deck;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
 
@@ -37,14 +36,14 @@ public class DeckTest {
 		}
 
 		// Get the last card title in this array of decks
-		String lastCardTitle = pd[0].drawCard().get().getTitle();
+		String lastCardTitle = pd[0].drawCard().get().name();
 
 		int count = 1;
 		for (int i = 1; i < pd.length; ++i) {
 			// Get the last card of each deck
 			PersonalityCard tmp = pd[i].drawCard().get();
 			// If it is the same as the last of the first, increase count
-			if (lastCardTitle.equals(tmp.getTitle())) {
+			if (lastCardTitle.equals(tmp.name())) {
 				count++;
 			}
 		}
