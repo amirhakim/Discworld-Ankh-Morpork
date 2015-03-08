@@ -17,14 +17,6 @@ import card.Card;
  */
 public enum PlayerCard implements Card {
 
-	MR_BOGGIS(
-			new ArrayList<Symbol>() {{
-				add(Symbol.PLACE_MINION);
-			}},
-			(player, game) -> {
-				System.out.println("You Called MR_BOGGIS TEXT");
-			}
-	),
 
 	INIGO_SKIMMER(
 			new ArrayList<Symbol>() {{
@@ -334,7 +326,224 @@ public enum PlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}}
 			
-	)
+	),
+	MR_BOGGIS(
+	new ArrayList<Symbol>() {{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLACE_MINION);
+	}},
+	(player, game) -> {
+		System.out.println("MR_BOGGIS: Take $2 if possible "
+				+ "from every other player");
+	}
+	
+	
+),
+MR_BENT(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("MR_BENT: place this card infront of you and "
+				+ "take $10 loan from the bank,"
+				+ " at the end of the game you must pay "
+				+ "back $12 or loose 15 points");
+	}
+),
+THE_BEGGARS_GUILD(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLACE_MINION);
+	}},
+	(player, game) -> {
+		System.out.println("Select one player, they must give you "
+				+ "two cards of their choice");
+	}
+),
+THE_BANK_OF_ANKH_MORPORK(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("THE_BANK_OF_ANKH_MORPORK: place this card infront of you and "
+				+ "take $10 loan from the bank,"
+				+ " at the end of the game you must pay "
+				+ "back $12 or loose 15 points");
+	}
+),
+THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY: "
+				+ "each player must give you either $1 or one of their cards");
+	}
+),
+SERGANT_ANGUA(
+	new ArrayList<Symbol>(){{
+		add(Symbol.REMOVE_TROUBLE_MARKET);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("SERGANT_ANGUA");
+	}
+),
+THE_AGONY_AUNTS(
+	new ArrayList<Symbol>() {{
+		add(Symbol.ASSASINATION);
+		add(Symbol.TAKE_MONEY);
+		add(Symbol.PLACE_MINION);
+	}},
+	(player, game) -> {
+		System.out.println("THE_AGONY_AUNTS");
+	}
+	
+	
+),
+THE_DYSK(
+	new ArrayList<Symbol>(){{
+		add(Symbol.PLACE_A_BUILDING);
+//		add(Symbol.SCROLL);
+	}},
+	(player, game) -> {
+		System.out.println("THE_DYSK: earn $1 for each minion in the Isle of Gods");
+	}
+),
+THE_DUCKMAN(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+	}},
+	(player, game) -> {
+		System.out.println("THE_DUCKMAN: move a minion belonging to "
+				+ "another player from one area "
+				+ "to an adjacent area");
+	}
+),
+DRUMKNOTT(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+	}},
+	(player, game) -> {
+		System.out.println("DRUMKNOTT: play any two other cards from your hand");
+	}
+),
+COMT_DIBBLER(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("COMT_DIBBLER: Roll the die. on the role of 7 or more"
+				+ "you take $4 from the bank. on a roll"
+				+ "of 1 you must pay $2 to the bank"
+				+ "or remove one of your minions from"
+				+ "the board, all other results have"
+				+ "no effect");
+	}
+),
+DR_CRUCES(
+	new ArrayList<Symbol>() {{
+		add(Symbol.ASSASINATION);
+		add(Symbol.TAKE_MONEY);
+	}},
+	(player, game) -> {
+		System.out.println("DR_CRUCES");
+	}
+),
+CAPTAIN_CARROT(
+	new ArrayList<Symbol>() {{
+		add(Symbol.PLACE_MINION);
+		add(Symbol.REMOVE_TROUBLE_MARKET);
+		add(Symbol.TAKE_MONEY);
+	}},
+	(player, game) -> {
+		System.out.println("CAPTAIN_CARROT");
+	}	
+),
+MRS_CAKE(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.TAKE_MONEY);
+		add(Symbol.PLACE_A_BUILDING);
+	}},
+	(player, game) -> {
+		System.out.println("MRS_CAKE: look at all but one of the"
+				+ "unused personality cards");
+	}
+),
+GROAT(
+	new ArrayList<Symbol>() {{
+		add(Symbol.PLACE_MINION);
+	}},
+	(player, game) -> {
+		System.out.println("GROAT");
+	}	
+),
+GIMLETS_DWARF_DELICATESSEN(
+	new ArrayList<Symbol>() {{
+		add(Symbol.TAKE_MONEY);
+		add(Symbol.PLACE_MINION);				
+	}},
+	(player, game) -> {
+		System.out.println("GIMLETS_DWARF_DELICATESSEN");
+	}	
+),
+GASPODE(
+	new ArrayList<Symbol>() {{
+		add(Symbol.INTERRUPT);
+	}},
+	(player, game) -> {
+		System.out.println("GASPODE: stop a player from moving or"
+				+ "removing one of your minions");
+	}	
+),
+THE_FRESH_START_CLUB(
+	new ArrayList<Symbol>() {{
+		add(Symbol.INTERRUPT);
+	}},
+	(player, game) -> {
+		System.out.println("THE_FRESH_START_CLUB: if you have a minion removed you can"
+				+ "place him in a different area");
+	}	
+),
+FOUL_OLE_RON(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("FOUL_OLE_RON: move a minion belonging to"
+				+ "another player from one area"
+				+ "to an adjacent area");
+	}
+),
+THE_FOOLS_GUILD(
+	new ArrayList<Symbol>() {{
+//		add(SYMBOL.SCROLL);
+		add(Symbol.PLACE_MINION);
+	}},
+	(player, game) -> {
+		System.out.println("THE_FOOLS_GUILD: Select another player. if they do not"
+				+ "give you $5 then place this card in front of them. this card now counts towards"
+				+ "their hand size of five cards when they"
+				+ "come to refill their hand. they cannot"
+				+ "get rid of this card");
+	}	
+),
+THE_FIRE_BRIGADE(
+	new ArrayList<Symbol>(){{
+//		add(Symbol.SCROLL);
+		add(Symbol.PLAY_ANOTHER_CARD);
+	}},
+	(player, game) -> {
+		System.out.println("THE_FIRE_BRIGADE: choose a player. if he does not pay"
+				+ "you $5 then you can remove one of his buildings from the board");
+	}
+),
 	;
 	
 	private BiConsumer<Player, Game> text;
