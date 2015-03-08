@@ -15,7 +15,7 @@ import card.Card;
  * Each ENUM will have a list of symbols available for that card
  * Some cards will also have text function (bottom of a card)
  */
-public enum PlayerCard implements Card {
+public enum GreenPlayerCard implements Card {
 
 	MR_BOGGIS(
 			new ArrayList<Symbol>() {{
@@ -343,19 +343,19 @@ public enum PlayerCard implements Card {
 
 	private boolean textFirst;
 	
-	PlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text) {
+	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text) {
 		this.symbols = symbols;
 		this.text = text;
 		textFirst = false;
 	}
 	
-	PlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols) {
+	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols) {
 		this.symbols = symbols;
 		this.text = text;
 		textFirst = true;
 	}
 	
-	PlayerCard(List<Symbol> symbols) {
+	GreenPlayerCard(List<Symbol> symbols) {
 		this.symbols = symbols;
 		this.text = null;
 		this.textFirst = false;

@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import util.Color;
 import card.BoardArea;
-import card.player.PlayerCard;
+import card.player.GreenPlayerCard;
 
 /**
  * <b> This class makes a command line interface to communicate with the players. <b> 
@@ -271,7 +271,7 @@ public class TextUserInterface {
 						+ " money left");
 				System.out.print(" And has Player cards: ");
 
-				for (PlayerCard c : p.getPlayerCards()) {
+				for (GreenPlayerCard c : p.getPlayerCards()) {
 					System.out.print(c.name() + ", ");
 				}
 			}

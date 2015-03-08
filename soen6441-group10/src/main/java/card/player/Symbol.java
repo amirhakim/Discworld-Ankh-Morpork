@@ -3,7 +3,13 @@ package card.player;
 import gameplay.Game;
 import gameplay.Player;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.function.BiConsumer;
+
+import card.AnkhMorporkArea;
+import card.BoardArea;
 
 /**
  * 
@@ -27,7 +33,57 @@ public enum Symbol {
 	 * minion in any area. 
 	*/
 	PLACE_MINION((player, game)->{
-		System.out.println("YOU CALLED PLACE MINION");
+		Scanner scanner = new Scanner(System.in);
+		// Get players minion count
+		int availableMinions = player.getMinionCount();
+		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
+		if(availableMinions == player.TOTAL_MINIONS) {
+			System.out.println("Pick area to place minion");
+			
+			for(BoardArea ba : gameBoard.values()) {
+				System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea());
+			}
+			
+			int action = scanner.nextInt();
+			BoardArea chosenArea = gameBoard.get(action);
+			chosenArea.addMinion(player);
+		} else if(availableMinions == 0) {
+			// Get areas where player has minions
+			Map<Integer, BoardArea> subGameBoard = game.getAreasWithPlayerMinions(player);
+			
+			System.out.println("Pick area to remove minion");
+			
+			for(BoardArea ba : subGameBoard.values()) {
+				System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea());
+			}
+			
+			int action = scanner.nextInt();
+			BoardArea chosenArea = gameBoard.get(action);
+			chosenArea.removeMinion(player);
+			// Get areas that player CAN player on
+			Map<Integer, BoardArea> possibilities = game.getMinionPlacementAreas(player);
+
+			System.out.println("Pick area to place minion");
+			for(BoardArea ba : possibilities.values()) {
+				System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea().getAreaCode());
+			}
+			action = scanner.nextInt();
+			chosenArea = gameBoard.get(action);
+			chosenArea.addMinion(player);
+			
+		} else {
+			int action = scanner.nextInt();
+			Map<Integer, BoardArea> possibilities = game.getMinionPlacementAreas(player);
+
+			System.out.println("Pick area to place minion");
+			for(BoardArea ba : possibilities.values()) {
+				System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea().getAreaCode());
+			}
+			action = scanner.nextInt();
+			BoardArea chosenArea = gameBoard.get(action);
+			chosenArea.addMinion(player);
+			
+		}
 	}),
 	
 	

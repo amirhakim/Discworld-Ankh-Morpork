@@ -57,6 +57,8 @@ public class Game {
 
 	public Game() {
 		status = GameStatus.UNINITIATED;
+		gameBoard = new HashMap<Integer, BoardArea>();
+		
 	}
 
 	/**
@@ -79,6 +81,7 @@ public class Game {
 		} else {
 			gameBank = new Bank();
 
+			playerTurnOrder = new Color[numberOfPlayers];
 			players = new HashMap<>();
 			for (int i = 0; i < numberOfPlayers; i++) {
 				Player p = new Player();
@@ -88,7 +91,6 @@ public class Game {
 				players.put(c, p);
 				playerTurnOrder[i] = c;
 			}
-			
 			for (AnkhMorporkArea a : AnkhMorporkArea.values()) {
 				gameBoard.put(a.getAreaCode(), new BoardArea(a));
 			}
@@ -140,10 +142,18 @@ public class Game {
 		status = GameStatus.PLAYING;
 	}
 
+	
 	public Collection<BoardArea> getBoard() {
 		return gameBoard.values();
 	}
-
+		
+	/**
+	 * Similar to getBoard but returns areas with indexes
+	 */
+	public Map<Integer, BoardArea> getGameBoard() {
+		return gameBoard;
+	}
+	
 	/**
 	 * Moves the game forward by one turn.
 	 */
@@ -255,6 +265,53 @@ public class Game {
 	public int getNumberOfAreasControlled(Player player) {
 		// TODO Implement this method
 		return 0;
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @return Map of baordAreas which player has minions on
+	 */
+	public Map<Integer, BoardArea> getAreasWithPlayerMinions(Player player) {
+		Map<Integer, BoardArea> playersAreas = new HashMap<Integer, BoardArea>();
+		
+		for(BoardArea ba : gameBoard.values()) {
+			AnkhMorporkArea area = ba.getArea();
+			if(ba.numberOfMinions(player) > 0) {
+				playersAreas.put(area.getAreaCode(), ba);
+			}
+    	}
+		
+		return playersAreas;
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @return Map of areas player CAN place a minion
+	 */
+	public Map<Integer, BoardArea> getMinionPlacementAreas(Player player) {
+		// Can place a minion if player has a minion on that area
+		Map<Integer, BoardArea> possibleAreas = new HashMap<Integer, BoardArea>();
+		
+		for(BoardArea ba : gameBoard.values()) {
+			AnkhMorporkArea area = ba.getArea();
+			if(ba.numberOfMinions(player) != 0) {
+				possibleAreas.put(area.getAreaCode(), ba);	
+				// FIND ALL NEIGHBOURS TO AREA
+				//TODO REFACTOR INTO AREA ENUM
+				for(BoardArea ba2 : gameBoard.values()) {
+					// TODO: WEIRD UNKNOWN AT CODE 0 IN AREAS
+					if(ba2.getArea().getAreaCode() ==0) continue;
+					if(ba.isNeighboringWith(ba2)) {
+						possibleAreas.put(ba2.getArea().getAreaCode(), ba2);
+					}
+				}
+			}
+    	}
+		
+		
+		return possibleAreas;
 	}
 	
 	/**

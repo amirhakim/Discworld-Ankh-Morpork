@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import card.player.PlayerCard;
+import card.player.GreenPlayerCard;
 import card.player.Symbol;
 
 public class CardTest {
@@ -36,12 +36,12 @@ public class CardTest {
 		Game g = new Game();
 		p.setName("Rossco");
 
-		List<Symbol> symbols = PlayerCard.MR_BOGGIS.getSymbols();
+		List<Symbol> symbols = GreenPlayerCard.MR_BOGGIS.getSymbols();
 		for (Symbol s : symbols) {
 			s.getGameAction().accept(p, g);
 		}
 
-		BiConsumer<Player, Game> text = PlayerCard.MR_BOGGIS.getText();
+		BiConsumer<Player, Game> text = GreenPlayerCard.MR_BOGGIS.getText();
 		text.accept(p, new Game());
 	}
 

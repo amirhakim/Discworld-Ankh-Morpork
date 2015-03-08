@@ -11,13 +11,13 @@ import card.Deck;
  * @author Team 10 - SOEN6441
  * @version 1.0
  */
-public class PlayerDeck extends Deck<PlayerCard> {
+public class PlayerDeck extends Deck<GreenPlayerCard> {
 
 	/**
 	 * This constructor is invoked to create objects from the class PlayerDeck.
 	 */
 	public PlayerDeck() {
-		super.cards = new Stack<PlayerCard>();
+		super.cards = new Stack<GreenPlayerCard>();
 		populateDeck();
 	}
 
@@ -29,7 +29,7 @@ public class PlayerDeck extends Deck<PlayerCard> {
 	public void populateDeck() {
 
 		// TODO: Add the brown cards here whenever appropriate
-		for (PlayerCard p : PlayerCard.values()) {
+		for (GreenPlayerCard p : GreenPlayerCard.values()) {
 			super.cards.add(p);
 		}
 

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import util.Color;
 import card.personality.PersonalityCard;
-import card.player.PlayerCard;
+import card.player.GreenPlayerCard;
 
 /**
  * This class represents the players participating in the game, including the
@@ -29,17 +29,19 @@ public class Player {
 	private int minions;
 	
 	private int buildings;
+	
+	final public int TOTAL_MINIONS = 12;
 
 	/**
 	 * This is the player's hand. It is implemented as a set because we can
 	 * invoke the cards' actions statically (since they are contained in the 
-	 * {@link PlayerCard} enum).
+	 * {@link GreenPlayerCard} enum).
 	 */
-	private Set<PlayerCard> playerCards = new HashSet<>();
+	private Set<GreenPlayerCard> playerCards = new HashSet<>();
 
 	public Player() {
 		this.money = 0;
-		this.minions = 12;
+		this.minions = TOTAL_MINIONS;
 		this.buildings = 6;
 	}
 
@@ -229,7 +231,7 @@ public class Player {
 	 *            player card
 	 * @return true when adds a player card
 	 */
-	public boolean addPlayerCard(PlayerCard card) {
+	public boolean addPlayerCard(GreenPlayerCard card) {
 		this.playerCards.add(card);
 		return true;
 	}
@@ -241,7 +243,7 @@ public class Player {
 	 *            player card
 	 * @return true if it founds the player card and remove it successfully
 	 */
-	public boolean removePlayerCard(PlayerCard card) {
+	public boolean removePlayerCard(GreenPlayerCard card) {
 		return playerCards.remove(card);
 	}
 
@@ -250,7 +252,7 @@ public class Player {
 	 * 
 	 * @return the player's cards
 	 */
-	public Set<PlayerCard> getPlayerCards() {
+	public Set<GreenPlayerCard> getPlayerCards() {
 		return playerCards;
 	}
 

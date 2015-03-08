@@ -113,7 +113,7 @@ public class BoardArea {
 	 * @return number of the minions of the player
 	 */
 	public int numberOfMinions(Player p) {
-		return (minions.get(p) == null) ? 0 : minions.get(p);
+		return (minions.get(p.getColor()) == null) ? 0 : minions.get(p.getColor());
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class BoardArea {
 		if (minions.get(p.getColor()) == null) {
 			return;
 		} else {
-			int numberOfMinions = minions.get(p);
+			int numberOfMinions = minions.get(p.getColor());
 			minions.put(p.getColor(), numberOfMinions - 1);
 			p.increaseMinion();
 		}
