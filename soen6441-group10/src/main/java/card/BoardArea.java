@@ -70,7 +70,8 @@ public class BoardArea {
 	public boolean isNeighboringWith(BoardArea card2) {
 		return area.isNeighboringWith(card2.getArea());
 	}
-
+	
+	
 	/**
 	 * Checks to see if there is a trouble marker in the city area.
 	 * 

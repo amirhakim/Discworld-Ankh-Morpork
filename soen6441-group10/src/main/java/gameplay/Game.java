@@ -313,26 +313,37 @@ public class Game {
 	 * @return Map of areas player CAN place a minion
 	 */
 	public Map<Integer, BoardArea> getMinionPlacementAreas(Player player) {
-		// Can place a minion if player has a minion on that area
 		Map<Integer, BoardArea> possibleAreas = new HashMap<Integer, BoardArea>();
 		
 		for(BoardArea ba : gameBoard.values()) {
 			AnkhMorporkArea area = ba.getArea();
 			if(ba.numberOfMinions(player) != 0) {
 				possibleAreas.put(area.getAreaCode(), ba);	
-				// FIND ALL NEIGHBOURS TO AREA
-				//TODO REFACTOR INTO AREA ENUM
-				for(BoardArea ba2 : gameBoard.values()) {
-					// TODO: WEIRD UNKNOWN AT CODE 0 IN AREAS
-					if(ba2.getArea().getAreaCode() ==0) continue;
-					if(ba.isNeighboringWith(ba2)) {
-						possibleAreas.put(ba2.getArea().getAreaCode(), ba2);
-					}
-				}
+				Map<Integer, BoardArea> neighbours = getNeighbours(ba);
+				possibleAreas.putAll(neighbours);
 			}
     	}
 		
 		return possibleAreas;
+	}
+	
+	
+	/**
+	 * 
+	 * @param boardArea
+	 * @return Map of baordArea neighbouring to boardArea
+	 */
+	public Map<Integer, BoardArea> getNeighbours(BoardArea boardArea) {
+		Map<Integer, BoardArea> neighbours = new HashMap<Integer, BoardArea>();
+		for(BoardArea otherBoardArea : gameBoard.values()) {
+			// TODO: UNKNOWN AT CODE 0 IN AREAS
+			if(otherBoardArea.getArea().getAreaCode() ==0) continue;
+			if(boardArea.isNeighboringWith(otherBoardArea)) {
+				neighbours.put(otherBoardArea.getArea().getAreaCode(), otherBoardArea);
+			}
+		}
+		return neighbours;
+		
 	}
 	
 	/**

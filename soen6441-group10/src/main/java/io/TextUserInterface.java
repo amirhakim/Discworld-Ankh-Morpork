@@ -5,6 +5,7 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -337,6 +338,19 @@ public class TextUserInterface {
 			System.out.println(System.getProperty("line.separator"));
 		}
 
+	}
+	
+	public BoardArea getAreaChoice(Map<Integer, BoardArea> gameBoard, String outputMsg, String inputMsg) {
+		System.out.println(outputMsg);
+		for(BoardArea ba : gameBoard.values()) {
+			System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea());
+		}
+		
+		Scanner scanner = new Scanner(System.in);
+		System.out.print(inputMsg);
+		int action = scanner.nextInt();
+		return gameBoard.get(action);
+		
 	}
 
 }

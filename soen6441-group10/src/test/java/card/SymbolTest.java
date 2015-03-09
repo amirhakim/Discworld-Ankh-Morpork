@@ -14,7 +14,10 @@ import util.Color;
 
 public class SymbolTest {
 
-		
+			Game game;
+			Player player;
+			Map<Integer, BoardArea> gameBoard;
+	
 		    @BeforeClass
 		    public static void setUpClass() throws Exception {
 		        // Code executed before the first test method    
@@ -22,33 +25,77 @@ public class SymbolTest {
 		 
 		    @Before
 		    public void setUp() throws Exception {
-		    }
-		 
-		    @Test
-		    public void placeMinionTest() {
-		    //	System.out.println("test");
-		    	Symbol placeMinionSymbol = Symbol.PLACE_MINION;
-		    	Game game = new Game();
+		    	game = new Game();
 		    	String[] playerNames = {"Ross", "Smith"};
 		    	try {
 		    		game.setUp(playerNames.length, playerNames);
 		    	}catch(Exception e) {fail("Exception caught");}
-		    	Player player = game.getPlayerOfColor(Color.RED);
-		    	Map<Integer, BoardArea> gameBoard = game.getGameBoard();
+		    	player = game.getPlayerOfColor(Color.RED);
+		    	gameBoard = game.getGameBoard();
+		    }
+		 
+		    @Test
+		    /**
+		     * Test PLACE_MINION symbol
+		     * Condition that player has no free minions
+		     */
+		    public void placeMinionNoMinionsTest() {
 		    	
+		    	System.out.println("~~PLACE MINION NO MINIONS TEST~~");
+		    	
+		    	Symbol placeMinionSymbol = Symbol.PLACE_MINION;
+		    	// Fill up an area so player has no minions
 		    	BoardArea secondArea = gameBoard.get(1);
 		    	while(player.getMinionCount() != 0) {
 		    		secondArea.addMinion(player);
 		    	}
-		    	Map<Integer, BoardArea> ggg = game.getGameBoard();
+		    	int secondAreaMinionsBefore = secondArea.numberOfMinions(player);
 		    	placeMinionSymbol.getGameAction().accept(player, game);
+		    	int secondAreaMinionsAfter = secondArea.numberOfMinions(player);
+		    	assertEquals(secondAreaMinionsAfter, secondAreaMinionsBefore - 1);
+		    }
+		    
+		    @Test
+		    /**
+		     * Test PLACE_MINION symbol
+		     * Condition that player has only free minions
+		     */
+		    public void placeMinionFullMinionsTest() {
 		    	
+		    	System.out.println("~~PLACE MINION FULL MINIONS TEST~~");
+		    	
+		    	Symbol placeMinionSymbol = Symbol.PLACE_MINION;
+		    	// Make Sure player has all his minions
+		    	assertTrue(player.getMinionCount() == player.TOTAL_MINIONS);
+		    	placeMinionSymbol.getGameAction().accept(player, game);
+		    	assertEquals(player.getMinionCount(), player.TOTAL_MINIONS - 1);
 		    	
 		    }
-		 
+		    
+		    @Test
+		    /**
+		     * Test PLACE_MINIONS symbol]
+		     * Condition that payer has some free minions
+		     */
+		    public void placceMinionPartialMinionsTest() {
+		    	
+		    	System.out.println("~~PLACE MINION PARTIAL MINIONS TEST~~");
+		    	
+		    	Symbol placeMinionTest = Symbol.PLACE_MINION;
+		    	
+		    	// Take away some of the players minions
+		    	BoardArea area = gameBoard.get(1);
+		    	area.addMinion(player);
+		    	assertEquals(player.getMinionCount(), player.TOTAL_MINIONS-1);
+		    	placeMinionTest.getGameAction().accept(player, game);
+		    	assertEquals(player.getMinionCount(), player.TOTAL_MINIONS-2);
+		    }
+		    
+		    
 		    @After
 		    public void tearDown() throws Exception {
 		        // Code executed after each test  
+		    	System.out.println();
 		    }
 		 
 		    @AfterClass
