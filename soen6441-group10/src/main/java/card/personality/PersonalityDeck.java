@@ -6,7 +6,6 @@
  */
 package card.personality;
 
-import java.util.Optional;
 import java.util.Stack;
 
 import card.Deck;
@@ -30,5 +29,4 @@ public class PersonalityDeck extends Deck<PersonalityCard> {
 		super.shuffle();
 	}
 
-	
 }
