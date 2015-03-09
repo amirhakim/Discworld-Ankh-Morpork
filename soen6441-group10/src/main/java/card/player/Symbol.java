@@ -36,7 +36,7 @@ public enum Symbol {
 		// Get players minion count
 		int availableMinions = player.getMinionCount();
 		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
-		if(availableMinions == player.TOTAL_MINIONS) {
+		if(availableMinions == Player.TOTAL_MINIONS) {
 			BoardArea chosenArea = UI.getAreaChoice(gameBoard, "All minions available. Select area to place minion",
 								"Choose Area: ");
 
