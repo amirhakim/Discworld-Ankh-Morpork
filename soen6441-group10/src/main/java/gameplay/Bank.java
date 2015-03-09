@@ -60,7 +60,7 @@ public class Bank {
 	 * @param amount the amount
 	 */
 	public void increaseBalance(int amount) {
-		this.amount = this.amount - amount;
+		this.amount = this.amount + amount;
 	}
 	
 }
