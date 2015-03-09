@@ -95,13 +95,18 @@ public class BoardArea {
 	 * 
 	 * @return true if the building belongs to the player
 	 */
-	public boolean setBuilding(Player p) {
+	public boolean addBuildingForPlayer(Player p) {
 		if (buildingColor != Color.UNDEFINED) {
 			return false;
 		}
 
 		buildingColor = p.getColor();
 		p.decreaseBuilding();
+		return true;
+	}
+	
+	public boolean removeBuilding() {
+		buildingColor = Color.UNDEFINED;
 		return true;
 	}
 
@@ -228,6 +233,18 @@ public class BoardArea {
 	 */
 	public int getBuildingCost() {
 		return area.getBuildingCost();
+	}
+	
+	/**
+	 * Removes all the pieces from this board area (minions, trouble marker,
+	 * building).
+	 */
+	public void clearAllPieces() {
+		minions.clear();
+		troubleMarker = false;
+		demonCount = 0;
+		trollCount = 0;
+		buildingColor = Color.UNDEFINED;
 	}
 
 }

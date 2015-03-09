@@ -292,7 +292,7 @@ public class Game {
 	/**
 	 * 
 	 * @param player
-	 * @return Map of baordAreas which player has minions on
+	 * @return Map of boardAreas which player has minions on
 	 */
 	public Map<Integer, BoardArea> getAreasWithPlayerMinions(Player player) {
 		Map<Integer, BoardArea> playersAreas = new HashMap<Integer, BoardArea>();
@@ -339,8 +339,11 @@ public class Game {
 	 * @return the total number of trouble markers currently placed on the board.
 	 */
 	public int getTotalNumberOfTroubleMarkers() {
-		// TODO Implement this method
-		return 0;
+		return gameBoard
+				.values()
+				.stream()
+				.map(area -> area.hasTroubleMarker() ? 1 : 0)
+				.reduce(0, (partialSum, current) -> partialSum + current);
 	}
 	
 	/**
@@ -352,11 +355,12 @@ public class Game {
 	}
 
 	/**
-	 * Removes all pieces from the area with the given number.
-	 * @param areaId
+	 * Removes all pieces from the area with the given number (see 
+	 * {@link BoardArea#clearAllPieces()}).
+	 * @param areaId the area from which all pieces will be removed.
 	 */
 	public void removeAllPiecesFromArea(int areaId) {
-		// TODO Implement this method
+		gameBoard.get(areaId).clearAllPieces();
 	}
 	
 	/**
@@ -385,10 +389,17 @@ public class Game {
 	
 	/**
 	 * Removes a building on the area with the given ID, if one exists.
+	 * 
 	 * @param areaId
+	 * @return true if the building was removed successfully in this area, false
+	 *         otherwise.
 	 */
 	public boolean removeBuilding(int areaId) {
-		// TODO Implement this method
+		BoardArea a = gameBoard.get(areaId);
+		if (a.removeBuilding()) {
+			getPlayerOfColor(a.getBuildingOwner()).increaseBuildings();
+			return true;
+		}
 		return false;
 	}
 	
