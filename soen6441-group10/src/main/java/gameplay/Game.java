@@ -112,6 +112,7 @@ public class Game {
 
 		playerDeck = new PlayerDeck();
 		randomEventDeck = new RandomEventDeck();
+		personalityDeck = new PersonalityDeck();
 
 		status = GameStatus.READY;
 	}
@@ -131,12 +132,8 @@ public class Game {
 			p.getValue().increaseMoney(10);
 			gameBank.decreaseBalance(10);
 
-			Optional<PersonalityCard> popped = personalityDeck.drawCard();
-			// When 2 players are playing, nobody can have Chrysoprase
-			if (players.size() == 2 && popped.get() == PersonalityCard.CHRYSOPRASE) {
-				popped = personalityDeck.drawCard();
-			}
-			p.getValue().setPersonality(popped.get());
+			// Deal personality card.
+			assignPersonality(p.getValue());
 
 			// Based on the rules we have to add minions to these 3 regions:
 			theShades.addMinion(p.getValue());
@@ -162,6 +159,19 @@ public class Game {
 		status = GameStatus.PLAYING;
 	}
 
+	
+	/**
+	 * Deal a player a personality card from deck
+	 * @param p of Entry<Color, Player>
+	 */
+	public void assignPersonality(Player p) {
+		Optional<PersonalityCard> popped = personalityDeck.drawCard();
+		// When 2 players are playing, nobody can have Chrysoprase
+		if (players.size() == 2 && popped.get() == PersonalityCard.CHRYSOPRASE) {
+			popped = personalityDeck.drawCard();
+		}
+		p.setPersonality(popped.get());
+	}
 	
 	public Collection<BoardArea> getBoard() {
 		return gameBoard.values();

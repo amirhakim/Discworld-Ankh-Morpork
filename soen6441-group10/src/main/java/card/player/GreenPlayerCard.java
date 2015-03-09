@@ -247,14 +247,16 @@ public enum GreenPlayerCard implements Card {
 		}}		
 	),
 	
-	ZERO_THE_RETRO_PHRENOLOGIST(
+	ZORGO_THE_RETRO_PHRENOLOGIST(
 		/*
 		 * You may exchange your Personality Card
 		 * with one drawn randomly from those
 		 * not in use
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED ZERO");
+			// Get another personality card
+			game.assignPersonality(player);
+			
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);
