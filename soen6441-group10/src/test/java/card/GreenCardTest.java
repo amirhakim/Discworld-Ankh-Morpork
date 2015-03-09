@@ -6,8 +6,6 @@ import static org.junit.Assert.fail;
 import gameplay.Game;
 import gameplay.Player;
 
-import java.util.Map;
-import java.util.Optional;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,10 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.Color;
-import card.personality.PersonalityCard;
-import card.personality.PersonalityDeck;
 import card.player.GreenPlayerCard;
-import card.player.Symbol;
 
 public class GreenCardTest {
 

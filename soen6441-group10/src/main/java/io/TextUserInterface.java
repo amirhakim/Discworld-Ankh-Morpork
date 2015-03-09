@@ -353,7 +353,6 @@ public class TextUserInterface {
 			action = scanner.nextInt();
 			
 		}
-			
 		// Can't close scanner or receive unknown source error in symbol test
 		//scanner.close()
 		return gameBoard.get(action);
