@@ -7,6 +7,7 @@ import gameplay.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -14,6 +15,7 @@ import java.util.Scanner;
 import util.Color;
 import card.BoardArea;
 import card.player.GreenPlayerCard;
+import card.player.Symbol;
 
 /**
  * <b> This class makes a command line interface to communicate with the players. <b> 
@@ -115,11 +117,14 @@ public class TextUserInterface {
 
 				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
-				} else if (action
-						.equals(UserOption.NEXT_TURN.getOptionString())) {
-					controller.nextTurn();
-				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS
-						.getOptionString())) {
+				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
+					if (!controller.isGameOver()) {
+						playTurn(controller.advanceToNextTurn());
+					} else {
+						System.out.println("The game has finished!");
+						break;
+					}
+				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
 					printGameStatus();
 				} else if (action.equals(UserOption.LOAD.getOptionString())) {
 					// Hold on to that reference to save later
@@ -139,6 +144,48 @@ public class TextUserInterface {
 			System.out.println("Sorry, only 2 to 4 players can play this game!");
 		}
 
+	}
+	
+	/**
+	 * Runs the given player's turn which consists of drawing a card (or more,
+	 * if applicable), performing selectively the symbols on the card 
+	 * (except for Random Events, which are mandatory) and restoring the hand
+	 * back to 5 cards (if applicable).
+	 * @param p
+	 */
+	private void playTurn(Player p) {
+		System.out.println("It's the turn of player " + p.getName() + "!");
+		GreenPlayerCard c = getCardToPlay(p);
+
+		// Perform the symbols on the cards selectively
+		for (Symbol s : c.getSymbols()) {
+			// Only Random Events are mandatory
+			if (s != Symbol.RANDOM_EVENT) {
+				System.out.println("Do you want to perform " + s + "? (y/n)");
+				System.out.print("> ");
+				String choice = scanner.nextLine();
+				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
+					controller.performSymbolAction(p, s);
+				}
+			} else {
+				controller.performSymbolAction(p, s);
+			}
+		}
+		
+		controller.restorePlayerHand(p);
+	}
+	
+	private GreenPlayerCard getCardToPlay(Player p) {
+		Map<Integer, GreenPlayerCard> cards = new HashMap<>();
+		System.out.println("Choose one of your cards to play:");
+		int i = 1;
+		for (GreenPlayerCard c : p.getPlayerCards()) {
+			System.out.println(i + ") " + c.name());
+			cards.put(i, c);
+		}
+		
+		// TODO Won't bother now with bound checks, will do it later
+		return cards.get(scanner.nextInt());
 	}
 
 	/**
@@ -282,7 +329,7 @@ public class TextUserInterface {
 			System.out.println(" Bank has balance of "
 					+ Integer.toString(bank.getBalance()));
 			System.out.print(" Current turn is ");
-			System.out.println(controller.getCurrentTurn().getName());
+			System.out.println(controller.getPlayerOfCurrentTurn().getName());
 			System.out.println(System.getProperty("line.separator"));
 
 		} else {

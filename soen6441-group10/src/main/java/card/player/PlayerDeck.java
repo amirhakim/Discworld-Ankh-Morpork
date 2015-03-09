@@ -13,18 +13,11 @@ import card.Deck;
  */
 public class PlayerDeck extends Deck<GreenPlayerCard> {
 
-	/**
-	 * This constructor is invoked to create objects from the class PlayerDeck.
-	 */
 	public PlayerDeck() {
 		super.cards = new Stack<GreenPlayerCard>();
 		populateDeck();
 	}
 
-	/**
-	 * This method overrides "populateDeck" of super class Deck and
-	 * puts all the player cards in the deck and shuffles it.
-	 */
 	@Override
 	public void populateDeck() {
 

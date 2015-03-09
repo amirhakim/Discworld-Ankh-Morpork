@@ -28,13 +28,14 @@ public class Die {
 	}
 	
 	/**
-	 * Returns an integer between 1 (inclusive) and the given number of players (inclusive) which 
-	 * determines which player should play first.
+	 * Returns an integer between 0 (inclusive) and the given number of players 
+	 * (exclusive) which determines which player should play first (the result
+	 * is used as an index into an array.
 	 * @param numberOfPlayers
-	 * @return an integer in [1, number of players].
+	 * @return an integer in [0, number of players).
 	 */
 	public int determineFirstPlayer(int numberOfPlayers) {
-		return (roll() % numberOfPlayers) + 1;
+		return (roll() % numberOfPlayers);
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import util.Color;
 import card.BoardArea;
+import card.player.Symbol;
 import error.InvalidGameStateException;
 
 /**
@@ -44,18 +45,20 @@ public class Controller {
 	}
 	
 	/**
-	 * This method changes the turn of the players
+	 * Advances the turn to the next player and returns the player whose turn
+	 * it currently is.
+	 * @return the player whose turn it currently is.
 	 */
-	public void nextTurn() {
-		game.turn();
+	public Player advanceToNextTurn() {
+		return game.advanceTurnToNextPlayer();
 	}
 	
 	/**
-	 * This method gets The player whose turn is next.
-	 * @return The player whose turn is next.
+	 * Gets the player whose turn it currently is.
+	 * @return the player whose turn it currently is.
 	 */
-	public Player getCurrentTurn() {
-		return game.getCurrentTurn();
+	public Player getPlayerOfCurrentTurn() {
+		return game.getPlayerOfCurrentTurn();
 	}
 	
 	/**
@@ -101,12 +104,20 @@ public class Controller {
 		game.simulate();
 	}
 	
-	/**
-	 * Get current game
-	 * @return the game
-	 */
 	public Game getGame() {
 		return game;
+	}
+	
+	public void performSymbolAction(Player p, Symbol s) {
+		s.getGameAction().accept(p, game);
+	}
+	
+	public void restorePlayerHand(Player p) {
+		game.restorePlayerHand(p);
+	}
+	
+	public boolean isGameOver()  {
+		return game.isOver();
 	}
 
 }

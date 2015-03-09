@@ -4,12 +4,10 @@ import gameplay.Game;
 import io.TextUserInterface;
 import gameplay.Player;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
 
-import card.AnkhMorporkArea;
 import card.BoardArea;
 
 /**
@@ -41,6 +39,7 @@ public enum Symbol {
 		if(availableMinions == player.TOTAL_MINIONS) {
 			BoardArea chosenArea = UI.getAreaChoice(gameBoard, "All minions available. Select area to place minion",
 								"Choose Area: ");
+
 			
 			
 			chosenArea.addMinion(player);
@@ -70,6 +69,7 @@ public enum Symbol {
 
 			chosenArea.addMinion(player);	
 		}
+		
 	}),
 	
 	

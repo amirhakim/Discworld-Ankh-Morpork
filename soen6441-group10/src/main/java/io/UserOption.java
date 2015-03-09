@@ -9,7 +9,9 @@ public enum UserOption {
 	NEW_GAME("n"),
 	EXIT("e"),
 	NEXT_TURN("t"),
-	BACK("");
+	BACK(""),
+	YES("y"),
+	NO("n");
 	
 	private final String option;
 	
