@@ -5,7 +5,6 @@ import io.TextUserInterface;
 import gameplay.Player;
 
 import java.util.Map;
-import java.util.Scanner;
 import java.util.function.BiConsumer;
 
 import card.BoardArea;
