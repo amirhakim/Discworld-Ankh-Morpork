@@ -110,7 +110,7 @@ public enum Symbol {
 	 * You remove one trouble marker from an area
 	 * of your choice. 
 	 */
-	REMOVE_TROUBLE_MARKET((player, game) ->{
+	REMOVE_TROUBLE_MARKER((player, game) ->{
 		System.out.println("YOU CALLED TROUBLE MARKER");
 	}),
 	

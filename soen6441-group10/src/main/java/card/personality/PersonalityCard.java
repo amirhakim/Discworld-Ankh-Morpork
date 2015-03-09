@@ -18,7 +18,7 @@ import card.Card;
 public enum PersonalityCard implements Card {
 	
 	LORD_VETINARI((playerCount, player, game) ->  
-		game.getTotalNumberOfMinions(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount)
+		game.getTotalMinionCountForPlayer(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount)
 	),
 	
 	LORD_SELACHII(WinningConditionHelper::hasWonByControlledAreas),
@@ -78,7 +78,6 @@ public enum PersonalityCard implements Card {
 		 */
 		private static final Map<Integer, Integer> minimumRequiredMinions = 
 				new HashMap<>(CONDITION_COUNT);
-		
 		static {
 			minimumRequiredMinions.put(2, 11);
 			minimumRequiredMinions.put(3, 10);
@@ -101,8 +100,8 @@ public enum PersonalityCard implements Card {
 		
 		private static Boolean hasWonByControlledAreas(Integer numberOfPlayers, Player player, Game game) {
 			return game.getNumberOfAreasControlled(player) >= minimumControlledAreas.get(numberOfPlayers);
-			
 		}
+
 	}
 
 }

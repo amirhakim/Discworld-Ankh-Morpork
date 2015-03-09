@@ -2,9 +2,11 @@ package gameplay;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import util.Color;
 import card.AnkhMorporkArea;
@@ -12,6 +14,7 @@ import card.BoardArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
 import card.player.PlayerDeck;
+import card.random.RandomEventCard;
 import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
 
@@ -24,6 +27,17 @@ import error.InvalidGameStateException;
  * @version 1.0
  */
 public class Game {
+
+	/**
+	 * Every time a player cannot pay back for a loan card, 15 points are deducted
+	 * from his/her final score.
+	 */
+	private static final int LOAN_PENALTY = 15;
+	
+	/**
+	 * Each minion on the board gives 5 points.
+	 */
+	private static final int MINION_POINTS = 5;
 
 	private Bank gameBank;
 
@@ -214,6 +228,16 @@ public class Game {
 	}
 
 	/**
+	 * Draws a random event card.
+	 * 
+	 * @return an object that contains either the random event card drawn or
+	 *         nothing, if the deck is out of cards.
+	 */
+	public Optional<RandomEventCard> drawRandomEventCard() {
+		 return randomEventDeck.drawCard();
+	}
+
+	/**
 	 * Get the deck of personality cards.
 	 * 
 	 * @return: deck of all personality cards
@@ -269,9 +293,10 @@ public class Game {
 	 * @return the total numbers of minions for the given player on the game
 	 *         board.
 	 */
-	public int getTotalNumberOfMinions(Player player) {
-		// TODO Implement this method
-		return 0;
+	public int getTotalMinionCountForPlayer(Player player) {
+		return gameBoard.values().stream()
+				.map(area -> area.getMinionCountForPlayer(player))
+				.reduce(0, (sumSoFar, next) -> sumSoFar + next);
 	}
 	
 	/**
@@ -285,8 +310,11 @@ public class Game {
 	 * @return the total number of areas controlled by the given player.
 	 */
 	public int getNumberOfAreasControlled(Player player) {
-		// TODO Implement this method
-		return 0;
+		return gameBoard
+				.values()
+				.stream()
+				.map(a -> a.isControlledBy(player) ? 1 : 0)
+				.reduce(0, (partialSum, areaContribution) -> partialSum + areaContribution);
 	}
 	
 	/**
@@ -299,7 +327,7 @@ public class Game {
 		
 		for (BoardArea ba : gameBoard.values()) {
 			AnkhMorporkArea area = ba.getArea();
-			if (ba.numberOfMinions(player) > 0) {
+			if (ba.getMinionCountForPlayer(player) > 0) {
 				playersAreas.put(area.getAreaCode(), ba);
 			}
 		}
@@ -314,16 +342,16 @@ public class Game {
 	 */
 	public Map<Integer, BoardArea> getMinionPlacementAreas(Player player) {
 		Map<Integer, BoardArea> possibleAreas = new HashMap<Integer, BoardArea>();
-		
-		for(BoardArea ba : gameBoard.values()) {
+
+		for (BoardArea ba : gameBoard.values()) {
 			AnkhMorporkArea area = ba.getArea();
-			if(ba.numberOfMinions(player) != 0) {
-				possibleAreas.put(area.getAreaCode(), ba);	
+			if (ba.getMinionCountForPlayer(player) != 0) {
+				possibleAreas.put(area.getAreaCode(), ba);
 				Map<Integer, BoardArea> neighbours = getNeighbours(ba);
 				possibleAreas.putAll(neighbours);
 			}
-    	}
-		
+		}
+
 		return possibleAreas;
 	}
 	
@@ -335,15 +363,13 @@ public class Game {
 	 */
 	public Map<Integer, BoardArea> getNeighbours(BoardArea boardArea) {
 		Map<Integer, BoardArea> neighbours = new HashMap<Integer, BoardArea>();
-		for(BoardArea otherBoardArea : gameBoard.values()) {
-			// TODO: UNKNOWN AT CODE 0 IN AREAS
-			if(otherBoardArea.getArea().getAreaCode() ==0) continue;
-			if(boardArea.isNeighboringWith(otherBoardArea)) {
-				neighbours.put(otherBoardArea.getArea().getAreaCode(), otherBoardArea);
+		for (BoardArea otherBoardArea : gameBoard.values()) {
+			if (boardArea.isNeighboringWith(otherBoardArea)) {
+				neighbours.put(otherBoardArea.getArea().getAreaCode(),
+						otherBoardArea);
 			}
 		}
 		return neighbours;
-		
 	}
 	
 	/**
@@ -443,8 +469,7 @@ public class Game {
 	 * @return true if a minion was removed, false otherwise.
 	 */
 	public boolean removeMinion(int areaID, Player player) {
-		// TODO Implement this method
-		return false;
+		return gameBoard.get(areaID).removeMinion(player);
 	}
 	
 	/**
@@ -455,8 +480,7 @@ public class Game {
 	 *         minion, false otherwise.
 	 */
 	public boolean placeTroll(int areaID) {
-		// TODO Implement this method
-		return false;
+		return gameBoard.get(areaID).addTroll();
 	}
 	
 	/**
@@ -466,8 +490,7 @@ public class Game {
 	 * @return true if the demon was placed successfully, false otherwise.
 	 */
 	public boolean placeDemon(int areaID) {
-		// TODO Implement this method
-		return false;
+		return gameBoard.get(areaID).addDemon();
 	}
 	
 	/**
@@ -482,12 +505,25 @@ public class Game {
 	}
 
 	/**
-	 * Figures out which player has won based on the total number of points.
+	 * Figures out which player has won based on the total number of points:
+	 * - Each minion on the board is worth five points. 
+	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
+	 *   is worth one point. 
+	 * - If you have the Dent card or the Bank card then you must pay back the amount noted on the card. 
+	 * - If you cannot do so then you lose fifteen points each. 
+	 * - In the case of a tie the tied player with the highest monetary value City Area
+	 *   card is the winner. 
+	 * - If there is still a tie then the tied players shared the honours of a joint win.
+	 * 
 	 * The game is declared finished after that.
+	 * 
+	 * @return the player(s) who won the game based on points.
 	 */
-	public void finishOnPoints() {
-		// TODO Implement this method
-		status = GameStatus.FINISHED;
+	public List<Player> finishOnPoints() {
+		Map<Integer, List<Player>> pointsToPlayers =
+				players.values().stream().collect(Collectors.groupingBy(p -> getPlayerPoints(p)));
+		int maxPoints = pointsToPlayers.keySet().stream().max((a, b) -> a - b).get();
+		return pointsToPlayers.get(maxPoints);
 	}
 
 	/**
@@ -502,10 +538,19 @@ public class Game {
 			return true;
 		}
 
-		boolean isOver = !hasPlayerCardsLeft() || hasAnyPlayerWon();
+		boolean hasPlayerCardsLeft = hasPlayerCardsLeft();
+		boolean hasAnyPlayerWon = hasAnyPlayerWon();
+		boolean isOver = !hasPlayerCardsLeft || hasAnyPlayerWon;
+		
+		if (!hasPlayerCardsLeft && !hasAnyPlayerWon) {
+			// Nobody had Commander Vimes so end the game on points.
+			finishOnPoints();
+		}
+
 		if (isOver) {
 			status = GameStatus.FINISHED;
 		}
+
 		return isOver;
 	}
 
@@ -521,6 +566,36 @@ public class Game {
 				.stream()
 				.anyMatch(
 						p -> p.getPersonality().hasWon(players.size(), p, this));
+	}
+	
+	/**
+	 * Retrieves the total number of points for the given player.
+	 * - Each minion on the board is worth five points. 
+	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
+	 *   is worth one point. 
+	 * - If you have the Mr. Bent card or the Bank card then you must pay back the amount noted on the card. 
+	 * - If you cannot do so then you lose fifteen points each. 
+	 * 
+	 * @return the number of points for the given player.
+	 */
+	public int getPlayerPoints(Player p) {
+		int points = gameBoard
+				.values()
+				.stream()
+				.map(area -> (area.getMinionCountForPlayer(p) * MINION_POINTS + (area
+						.getBuildingOwner() == p.getColor() ? area
+						.getBuildingCost() : 0)))
+				.reduce(0, (s, areaPoints) -> s + areaPoints);
+		
+		
+		int playerMoneyMinusLoans = p.getMoney() - p.getLoanBalance();
+		if (playerMoneyMinusLoans < 0) {
+			points -= LOAN_PENALTY
+					* ((Math.abs(playerMoneyMinusLoans) + Bank.LOAN_REPAY_AMOUNT)
+					/ Bank.LOAN_REPAY_AMOUNT);
+		}
+		
+		return points;
 	}
 	
 }

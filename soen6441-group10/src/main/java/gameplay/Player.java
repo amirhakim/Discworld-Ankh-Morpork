@@ -143,8 +143,8 @@ public class Player {
 	 * 
 	 * @return the amount
 	 */
-	public int getAmount() {
-		return this.money;
+	public int getMoney() {
+		return money;
 	}
 
 	/**
@@ -294,6 +294,22 @@ public class Player {
 	public int getTotalWorth() {
 		// TODO Implement this method
 		return 0;
+	}
+	
+	/**
+	 * Retrieves the amount owed by the player due to having "loan" cards
+	 * ({@link GreenPlayerCard#MR_BENT}, {@link GreenPlayerCard#THE_BANK_OF_ANKH_MORPORK}).
+	 * @return
+	 */
+	public int getLoanBalance() {
+		int balance = 0;
+		if (playerCards.contains(GreenPlayerCard.MR_BENT)) {
+			balance -= 12;
+		}
+		if (playerCards.contains(GreenPlayerCard.THE_BANK_OF_ANKH_MORPORK)) {
+			balance -= 12;
+		}
+		return balance;
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import gameplay.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import util.Color;
 
@@ -92,12 +93,14 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method specifies the building of the player as building owner.
+	 * Adds a building to this board area for the given player. Note that a 
+	 * building cannot be added to an area that contains a trouble marker or 
+	 * already contains a building.
 	 * 
-	 * @return true if the building belongs to the player
+	 * @return true if the building was successfully added, false otherwise.
 	 */
 	public boolean addBuildingForPlayer(Player p) {
-		if (buildingColor != Color.UNDEFINED) {
+		if (buildingColor != Color.UNDEFINED || hasTroubleMarker()) {
 			return false;
 		}
 
@@ -118,8 +121,8 @@ public class BoardArea {
 	 *            the player
 	 * @return number of the minions of the player
 	 */
-	public int numberOfMinions(Player p) {
-		return (minions.get(p.getColor()) == null) ? 0 : minions.get(p.getColor());
+	public int getMinionCountForPlayer(Player p) {
+		return minions.getOrDefault(p.getColor(), 0);
 	}
 
 	/**
@@ -151,19 +154,21 @@ public class BoardArea {
 
 	/**
 	 * This method removes the minion of the player from the city area, and
-	 * justifies the balance of stocked minions.
+	 * justifies the balance of stocked minions. Also, if the area has a troublemarker
+	 * it is removed.
 	 * 
 	 * @param p
 	 *            the player
 	 */
-	public void removeMinion(Player p) {
+	public boolean removeMinion(Player p) {
 		if (minions.get(p.getColor()) == null) {
-			return;
-		} else {
-			int numberOfMinions = minions.get(p.getColor());
-			minions.put(p.getColor(), numberOfMinions - 1);
-			p.increaseMinion();
+			return false;
 		}
+		int numberOfMinions = minions.get(p.getColor());
+		minions.put(p.getColor(), numberOfMinions - 1);
+		p.increaseMinion();
+		troubleMarker = false;
+		return true;
 	}
 
 	/**
@@ -185,67 +190,134 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method increments the number of trolls on the spot.
+	 * Increments the number of trolls on the area.
+	 * Trolls are regarded as minions so they will affect trouble in the area.
+	 * 
+	 * @return true if adding a troll succeeded, false otherwise.
 	 */
-	public void addTroll() {
+	public boolean addTroll() {
 		trollCount++;
+		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0));
+		return true;
 	}
 
 	/**
-	 * This method decrements the number of trolls on the spot.
+	 * Decrements the number of trolls on the area.
+	 * Trolls are regarded as minions so they will affect trouble in the area.
+	 * 
+	 * @return true if removing a troll succeeded, false otherwise.
 	 */
-	public void removeTroll() {
+	public boolean removeTroll() {
 		trollCount--;
+		troubleMarker = false;
+		return true;
 	}
 
 	/**
-	 * This method increments the number of demons on the spot.
+	 * Increments the number of demons on the area.
+	 * Demons are regarded as minions so they will affect trouble in the area.
+	 * 
+	 * @return true if adding a demon succeeded, false otherwise.
 	 */
-	public void addDemon() {
+	public boolean addDemon() {
 		demonCount++;
+		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0));
+		return true;
 	}
 
 	/**
-	 * This method increments the number of demons on the spot.
+	 * Decrements the number of demons on the area.
+	 * Demons are regarded as minions so they will affect trouble in the area.
+	 * 
+	 * @return true if removing a demon succeeded, false otherwise.
 	 */
-	public void removeDemon() {
+	public boolean removeDemon() {
 		demonCount--;
+		troubleMarker = false;
+		return true;
 	}
 
 	/**
 	 * This method adds trouble markers to the city area in case there has not
 	 * been any before.
 	 * 
-	 * @return true if it adds a trouble marker successfully
+	 * @return true if it a trouble marker was added successfully.
 	 */
 	public boolean addTroubleMarker() {
 		if (troubleMarker == true) {
 			return false;
-		} else {
-			troubleMarker = true;
-			return true;
-		}
+		} 
+
+		troubleMarker = true;
+		return true;
 	}
 
 	/**
-	 * This method gets the cost of building in the city area.
+	 * Retrieves the cost of placing a building in the area.
 	 * 
-	 * @return the cost of building on the spot
+	 * @return the cost of building on the area.
 	 */
 	public int getBuildingCost() {
 		return area.getBuildingCost();
 	}
 	
 	/**
-	 * Removes all the pieces from this board area (minions, trouble marker,
-	 * building).
+	 * Removes all the pieces from this area (minions, trouble marker, building).
 	 */
 	public void clearAllPieces() {
 		minions.clear();
-		troubleMarker = false;
 		demonCount = 0;
 		trollCount = 0;
+		troubleMarker = false;
 		buildingColor = Color.UNDEFINED;
+	}
+
+	/**
+	 * Determines whether this board area is controlled by the given player.
+	 * An area is controlled by a player if (s)he "has more playing pieces in it
+	 * than any single other player (a playing piece being a minion or a building)
+	 * and has more pieces than the total number of trolls in the area". An area that
+	 * has at least one demon cannot be controlled.
+	 * 
+	 * @param player
+	 * @return the total number of areas controlled by the given player.
+	 */
+	public boolean isControlledBy(Player p) {
+		int pieceCountForPlayer = getPieceCountForPlayer(p);
+		if (demonCount > 0 || pieceCountForPlayer == 0) {
+			return false;
+		}
+
+		// Find if this player has the maximum number of pieces on the board
+		Optional<Integer> maxPiecesOwnedByPlayer = getMaximumNumberOfPiecesAmongPlayers();
+		return (pieceCountForPlayer == (maxPiecesOwnedByPlayer.isPresent() ? maxPiecesOwnedByPlayer
+				.get() : 0))
+				&& pieceCountForPlayer > trollCount;
+	}
+	
+	/**
+	 * Counts the pieces owned by the given player.
+	 * Pieces include minions and buildings.
+	 * @param p
+	 * @return the number of pieces owned by the given player.
+	 */
+	private int getPieceCountForPlayer(Player p) {
+		return minions.get(p.getColor()) + (buildingColor == p.getColor() ? 1 : 0);
+	}
+	
+	/**
+	 * Retrieves the maximum number of pieces owned by any player on this area.
+	 * Pieces include minions and buildings.
+	 * 
+	 * @return the maximum number of pieces owned by any player on this area.
+	 */
+	private Optional<Integer> getMaximumNumberOfPiecesAmongPlayers() {
+		return minions
+				.entrySet()
+				.stream()
+				.map(minionCountEntry -> minionCountEntry.getValue()
+						+ (buildingColor == minionCountEntry.getKey() ? 1 : 0))
+				.max((a, b) -> a - b);
 	}
 
 }

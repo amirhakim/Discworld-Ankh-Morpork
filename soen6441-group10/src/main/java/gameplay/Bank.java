@@ -9,6 +9,16 @@ package gameplay;
  */
 public class Bank {
 
+	/**
+	 * "Mr. Bent" and "The Bank of Ankh Morpork" allow you to borrow $10.
+	 */
+	public static final int LOAN_AMOUNT = 10;
+
+	/**
+	 * At the end of the game, for each "loan card", you have to pay back $12.
+	 */
+	public static final int LOAN_REPAY_AMOUNT = 12;
+	
 	/* Add these items in later builds */
 //	private int numSilver;
 //	private int numGold;

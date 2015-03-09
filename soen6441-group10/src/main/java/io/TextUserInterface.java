@@ -314,7 +314,7 @@ public class TextUserInterface {
 						+ String.valueOf(p.getBuildings())
 						+ " buildings left");
 				System.out.println(" And has "
-						+ String.valueOf(p.getAmount())
+						+ String.valueOf(p.getMoney())
 						+ " money left");
 				System.out.print(" And has Player cards: ");
 

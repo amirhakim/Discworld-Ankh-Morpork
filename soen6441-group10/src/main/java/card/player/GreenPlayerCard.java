@@ -385,7 +385,7 @@ THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY(
 ),
 SERGANT_ANGUA(
 	new ArrayList<Symbol>(){{
-		add(Symbol.REMOVE_TROUBLE_MARKET);
+		add(Symbol.REMOVE_TROUBLE_MARKER);
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
@@ -457,7 +457,7 @@ DR_CRUCES(
 CAPTAIN_CARROT(
 	new ArrayList<Symbol>() {{
 		add(Symbol.PLACE_MINION);
-		add(Symbol.REMOVE_TROUBLE_MARKET);
+		add(Symbol.REMOVE_TROUBLE_MARKER);
 		add(Symbol.TAKE_MONEY);
 	}},
 	(player, game) -> {

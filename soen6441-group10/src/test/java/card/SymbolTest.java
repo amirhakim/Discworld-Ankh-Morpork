@@ -56,9 +56,9 @@ public class SymbolTest {
 		while (player.getMinionCount() != 0) {
 			secondArea.addMinion(player);
 		}
-		int secondAreaMinionsBefore = secondArea.numberOfMinions(player);
+		int secondAreaMinionsBefore = secondArea.getMinionCountForPlayer(player);
 		placeMinionSymbol.getGameAction().accept(player, game);
-		int secondAreaMinionsAfter = secondArea.numberOfMinions(player);
+		int secondAreaMinionsAfter = secondArea.getMinionCountForPlayer(player);
 		assertEquals(secondAreaMinionsAfter, secondAreaMinionsBefore - 1);
 	}
 
