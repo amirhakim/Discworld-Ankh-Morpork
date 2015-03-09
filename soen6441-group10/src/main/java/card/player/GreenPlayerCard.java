@@ -580,7 +580,7 @@ THE_FIRE_BRIGADE(
 		return this.text;
 	}
 	
-	public boolean textFirst() {
+	public boolean isTextFirst() {
 		return this.textFirst;
 	}
 

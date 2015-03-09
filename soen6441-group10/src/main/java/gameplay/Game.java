@@ -162,7 +162,7 @@ public class Game {
 	
 	/**
 	 * Deal a player a personality card from deck
-	 * @param p of Entry<Color, Player>
+	 * @param p Player
 	 */
 	public void assignPersonality(Player p) {
 		Optional<PersonalityCard> popped = personalityDeck.drawCard();

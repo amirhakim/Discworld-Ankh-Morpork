@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.BiConsumer;
 
 import util.Color;
 import card.BoardArea;
@@ -156,12 +157,50 @@ public class TextUserInterface {
 		System.out.println("It's the turn of player " + p.getName() + "!");
 		GreenPlayerCard c = getCardToPlay(p);
 
+		// Determine which needs to be completed first
+		// Symbols or text
+		if(c.isTextFirst()) {
+			playText(c, p);
+			playSymbols(c, p);
+		} else {
+			playSymbols(c, p);
+			playText(c, p);
+		}
+		
+
+		
+		controller.restorePlayerHand(p);
+	}
+	
+	/**
+	 * 
+	 * @param c GreenPlayerCard being played
+	 * @param p Player who's turn it is
+	 */
+	private void playText(GreenPlayerCard c, Player p) {
+		System.out.println("Playing Text on the card");
+		BiConsumer<Player, Game> textAction = c.getText();
+		
+		if(textAction != null){
+			textAction.accept(p, controller.getGame());
+		}
+	}
+	
+	/**
+	 * 
+	 * @param c GreenPlayerCard currently in use
+	 * @param p Player who turn it is
+	 */
+	private void playSymbols(GreenPlayerCard c, Player p) {
+		System.out.println("Playing Symbols on the card");
 		// Perform the symbols on the cards selectively
 		for (Symbol s : c.getSymbols()) {
 			// Only Random Events are mandatory
 			if (s != Symbol.RANDOM_EVENT) {
-				System.out.println("Do you want to perform " + s + "? (y/n)");
+				System.out.println("Do you want to perform " + s + "? (yes/no)");
 				System.out.print("> ");
+				//Extra next line seems to be needed ... not sure why
+				scanner.nextLine();
 				String choice = scanner.nextLine();
 				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
 					controller.performSymbolAction(p, s);
@@ -171,8 +210,8 @@ public class TextUserInterface {
 			}
 		}
 		
-		controller.restorePlayerHand(p);
 	}
+	
 	
 	private GreenPlayerCard getCardToPlay(Player p) {
 		Map<Integer, GreenPlayerCard> cards = new HashMap<>();
@@ -181,6 +220,7 @@ public class TextUserInterface {
 		for (GreenPlayerCard c : p.getPlayerCards()) {
 			System.out.println(i + ") " + c.name());
 			cards.put(i, c);
+			i++;
 		}
 		
 		// TODO Won't bother now with bound checks, will do it later
