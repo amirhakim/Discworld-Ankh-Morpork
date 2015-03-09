@@ -5,7 +5,6 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -349,6 +348,7 @@ public class TextUserInterface {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print(inputMsg);
 		int action = scanner.nextInt();
+		scanner.close();
 		return gameBoard.get(action);
 		
 	}
