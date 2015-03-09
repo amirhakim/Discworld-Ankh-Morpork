@@ -34,12 +34,14 @@ public enum RandomEventCard implements Card {
 	}),
 	
 	FOG((game, player) -> {
-		// TODO Draw the top five cards from the draw pile
+		for (int i = 0; i < 5; i++) {
+			game.drawPlayerCard();
+		}
 	}),
 	
 	RIOTS((game, player) -> {
 		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
-			game.finishOnPoints();
+			game.getWinnersByPoints();
 		}
 	}),
 	

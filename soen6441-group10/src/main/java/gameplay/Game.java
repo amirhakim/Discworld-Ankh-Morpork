@@ -13,6 +13,7 @@ import card.AnkhMorporkArea;
 import card.BoardArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
+import card.player.GreenPlayerCard;
 import card.player.PlayerDeck;
 import card.random.RandomEventCard;
 import card.random.RandomEventDeck;
@@ -227,6 +228,16 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Draws a player card.
+	 * 
+	 * @return an object that contains either the player card drawn or
+	 *         nothing, if the deck is out of cards.
+	 */
+	public Optional<GreenPlayerCard> drawPlayerCard() {
+		 return playerDeck.drawCard();
+	}
+	
 	/**
 	 * Draws a random event card.
 	 * 
@@ -519,11 +530,18 @@ public class Game {
 	 * 
 	 * @return the player(s) who won the game based on points.
 	 */
-	public List<Player> finishOnPoints() {
+	public List<Player> getWinnersByPoints() {
 		Map<Integer, List<Player>> pointsToPlayers =
 				players.values().stream().collect(Collectors.groupingBy(p -> getPlayerPoints(p)));
 		int maxPoints = pointsToPlayers.keySet().stream().max((a, b) -> a - b).get();
-		return pointsToPlayers.get(maxPoints);
+		if (pointsToPlayers.get(maxPoints).size() == 1) {
+			return pointsToPlayers.get(maxPoints);
+		}
+			
+		Map<Integer, List<Player>> moneyToPlayers =
+				players.values().stream().collect(Collectors.groupingBy(p -> p.getMoney()));
+		int maxMoney = moneyToPlayers.keySet().stream().max((a, b) -> a - b).get();
+		return moneyToPlayers.get(maxMoney);
 	}
 
 	/**
@@ -544,7 +562,7 @@ public class Game {
 		
 		if (!hasPlayerCardsLeft && !hasAnyPlayerWon) {
 			// Nobody had Commander Vimes so end the game on points.
-			finishOnPoints();
+			getWinnersByPoints();
 		}
 
 		if (isOver) {
