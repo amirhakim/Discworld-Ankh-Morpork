@@ -345,10 +345,17 @@ public class TextUserInterface {
 			System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea());
 		}
 		
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 		System.out.print(inputMsg);
 		int action = scanner.nextInt();
-		scanner.close();
+		while(gameBoard.get(action) == null ) {
+			System.out.println("Invalid selection.  "  + inputMsg);
+			action = scanner.nextInt();
+			
+		}
+			
+		// Can't close scanner or receive unknown source error in symbol test
+		//scanner.close()
 		return gameBoard.get(action);
 		
 	}

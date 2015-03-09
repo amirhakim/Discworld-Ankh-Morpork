@@ -62,11 +62,12 @@ public class SymbolTest {
 		assertEquals(secondAreaMinionsAfter, secondAreaMinionsBefore - 1);
 	}
 
-	@Test
+	
 	/**
 	 * Test PLACE_MINION symbol
 	 * Condition that player has only free minions
 	 */
+	@Test
 	public void placeMinionFullMinionsTest() {
 
 		System.out.println("~~PLACE MINION FULL MINIONS TEST~~");
