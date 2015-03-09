@@ -33,9 +33,7 @@ public enum AnkhMorporkArea {
 
 	SEVEN_SLEEPERS(11, 18),
 
-	NAP_HILL(12, 12),
-
-	UNKNOWN(0, 0);
+	NAP_HILL(12, 12);
 
 	private static final Map<Integer, AnkhMorporkArea> codeToAreaMap = new HashMap<>();
 	static {
@@ -76,7 +74,7 @@ public enum AnkhMorporkArea {
 	}
 
 	public static AnkhMorporkArea forCode(int areaCode) {
-		return codeToAreaMap.getOrDefault(areaCode, AnkhMorporkArea.UNKNOWN);
+		return codeToAreaMap.get(areaCode);
 	}
 
 	public boolean isNeighboringWith(AnkhMorporkArea otherArea) {

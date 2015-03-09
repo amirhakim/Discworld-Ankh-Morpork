@@ -3,12 +3,10 @@ package card.player;
 import gameplay.Game;
 import gameplay.Player;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
 
-import card.AnkhMorporkArea;
 import card.BoardArea;
 
 /**
@@ -37,7 +35,7 @@ public enum Symbol {
 		// Get players minion count
 		int availableMinions = player.getMinionCount();
 		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
-		if(availableMinions == player.TOTAL_MINIONS) {
+		if(availableMinions == Player.TOTAL_MINIONS) {
 			System.out.println("Pick area to place minion");
 			
 			for(BoardArea ba : gameBoard.values()) {
@@ -84,6 +82,8 @@ public enum Symbol {
 			chosenArea.addMinion(player);
 			
 		}
+		
+		scanner.close();
 	}),
 	
 	

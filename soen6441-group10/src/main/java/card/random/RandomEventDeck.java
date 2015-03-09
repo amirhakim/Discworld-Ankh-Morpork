@@ -14,16 +14,12 @@ import card.Deck;
 public class RandomEventDeck extends Deck<RandomEventCard> {
 	
 	public RandomEventDeck() {
+		super.cards = new Stack<RandomEventCard>();
 		populateDeck();
 	}
 
-	/**
-	 * This method overrides "populateDeck" of super class Deck and
-	 * puts all the random event cards in the deck and shuffle it.
-	 */
 	@Override
 	public void populateDeck() {
-		cards = new Stack<RandomEventCard>();
 
 		// Initialize each card with a title
 		for (RandomEventCard c : RandomEventCard.values()) {

@@ -18,6 +18,10 @@ import card.player.GreenPlayerCard;
  */
 public class Player {
 
+	public static final int TOTAL_MINIONS = 12;
+	
+	public static final int PLAYER_MAX_HAND_SIZE = 5;
+
 	private String name;
 
 	private PersonalityCard personality;
@@ -30,8 +34,6 @@ public class Player {
 	
 	private int buildings;
 	
-	final public int TOTAL_MINIONS = 12;
-
 	/**
 	 * This is the player's hand. It is implemented as a set because we can
 	 * invoke the cards' actions statically (since they are contained in the 
@@ -255,6 +257,14 @@ public class Player {
 	public Set<GreenPlayerCard> getPlayerCards() {
 		return playerCards;
 	}
+	
+	/**
+	 * Returns the number of cards in the player's hand.
+	 * @return the number of cards in the player's hand.
+	 */
+	public int getHandSize() {
+		return playerCards.size();
+	}
 
 	/**
 	 * Set Color for Player's pieces
@@ -285,7 +295,7 @@ public class Player {
 		// TODO Implement this method
 		return 0;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

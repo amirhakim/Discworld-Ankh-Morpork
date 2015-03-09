@@ -58,7 +58,6 @@ public class Game {
 	public Game() {
 		status = GameStatus.UNINITIATED;
 		gameBoard = new HashMap<Integer, BoardArea>();
-		
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class Game {
 	}
 
 	/**
-	 * This method starts a new game.
+	 * This method performs the necessary actions prior to the start of a new game.
 	 */
 	public void init() {
 		// Give each player their money, personality and initial minions.
@@ -113,7 +112,7 @@ public class Game {
 		BoardArea dollySisters = gameBoard.get(AnkhMorporkArea.DOLLY_SISTERS.getAreaCode());
 
 		for (Entry<Color, Player> p : players.entrySet()) {
-			// Deal out 10 dollars.
+			// Deal out 10 dollars
 			p.getValue().increaseMoney(10);
 			gameBank.decreaseBalance(10);
 
@@ -128,6 +127,13 @@ public class Game {
 			theShades.addMinion(p.getValue());
 			theScours.addMinion(p.getValue());
 			dollySisters.addMinion(p.getValue());
+			
+			// Deal 5 cards to each player in the beginning
+			// TODO: Need to exclude the "Hubert" and "Cosmos Lavish" brown-bordered
+			//		 player cards later when we do them 
+			for (int i = 0; i < Player.PLAYER_MAX_HAND_SIZE; i++) {
+				p.getValue().addPlayerCard(playerDeck.drawCard().get());
+			}
 		}
 
 		// Starter regions also have trouble.
@@ -135,10 +141,9 @@ public class Game {
 		theScours.addTroubleMarker();
 		dollySisters.addTroubleMarker();
 
-		// Set turn to first in game.
-		currentTurn = 0;
+		// Decide who the first player in the game is
+		currentTurn = Die.getDie().determineFirstPlayer(players.size());
 
-		// Set game status as playing.
 		status = GameStatus.PLAYING;
 	}
 
@@ -154,16 +159,6 @@ public class Game {
 		return gameBoard;
 	}
 	
-	/**
-	 * Moves the game forward by one turn.
-	 */
-	public void turn() {
-		int current = currentTurn;
-		players.get(playerTurnOrder[current]).printTurn();
-		currentTurn =  ((current + 1) == playerTurnOrder.length) ?
-				0 : current + 1;
-	}
-
 	/**
 	 * Get a collection of the game players.
 	 * 
@@ -181,14 +176,41 @@ public class Game {
 	public Player getPlayerOfColor(Color c) {
 		return players.get(c);
 	}
-
+	
 	/**
-	 * Get the player whose turn is next.
-	 * 
-	 * @return the player whose turn is next.
+	 * Moves the game forward by one turn and returns the player
+	 * whose turn it currently is.
+	 * @return the player whose turn it currently is.
 	 */
-	public Player getCurrentTurn() {
+	public Player advanceTurnToNextPlayer() {
+		int current = currentTurn;
+		players.get(playerTurnOrder[current]).printTurn();
+		currentTurn =  ((current + 1) == playerTurnOrder.length) ?
+				0 : current + 1;
+		return getPlayerOfCurrentTurn();
+	}
+	
+	/**
+	 * Get the player whose turn it currently is.
+	 * @return the player whose turn it currently is.
+	 */
+	public Player getPlayerOfCurrentTurn() {
 		return players.get(playerTurnOrder[currentTurn]);
+	}
+	
+	/**
+	 * Brings the given player's hand size back to 5 if it is less than that.
+	 * If no more player cards are available, the player's hand is left as it is
+	 * at the time when the cards are up (the game should end after the player's
+	 * turn is finished).
+	 * @param p the player whose hand size must be restored.
+	 */
+	public void restorePlayerHand(Player p) {
+		Player actualPlayer = players.get(p.getColor());
+		while (hasPlayerCardsLeft() && 
+				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
+			actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+		}
 	}
 
 	/**
@@ -275,12 +297,12 @@ public class Game {
 	public Map<Integer, BoardArea> getAreasWithPlayerMinions(Player player) {
 		Map<Integer, BoardArea> playersAreas = new HashMap<Integer, BoardArea>();
 		
-		for(BoardArea ba : gameBoard.values()) {
+		for (BoardArea ba : gameBoard.values()) {
 			AnkhMorporkArea area = ba.getArea();
-			if(ba.numberOfMinions(player) > 0) {
+			if (ba.numberOfMinions(player) > 0) {
 				playersAreas.put(area.getAreaCode(), ba);
 			}
-    	}
+		}
 		
 		return playersAreas;
 	}
@@ -309,7 +331,6 @@ public class Game {
 				}
 			}
     	}
-		
 		
 		return possibleAreas;
 	}
@@ -435,8 +456,7 @@ public class Game {
 	 *         otherwise.
 	 */
 	public boolean addTroubleMarker(int areaID) {
-		// TODO Implement this method
-		return false;
+		return gameBoard.get(areaID).addTroubleMarker();
 	}
 
 	/**
@@ -448,4 +468,37 @@ public class Game {
 		status = GameStatus.FINISHED;
 	}
 
+	/**
+	 * Checks if the game is over either due to not having any player cards left
+	 * on the draw pile or a player having won by meeting the conditions
+	 * indicated on his/her Personality card.
+	 * 
+	 * @return true if the game is over, false otherwise.
+	 */
+	public boolean isOver() {
+		if (status == GameStatus.FINISHED) {
+			return true;
+		}
+
+		boolean isOver = !hasPlayerCardsLeft() || hasAnyPlayerWon();
+		if (isOver) {
+			status = GameStatus.FINISHED;
+		}
+		return isOver;
+	}
+
+	/**
+	 * Checks the personality cards of all the players to find out whether
+	 * someone has won the game.
+	 * 
+	 * @return true if someone has won the game, false otherwise.
+	 */
+	private boolean hasAnyPlayerWon() {
+		return players
+				.values()
+				.stream()
+				.anyMatch(
+						p -> p.getPersonality().hasWon(players.size(), p, this));
+	}
+	
 }

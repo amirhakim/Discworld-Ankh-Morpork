@@ -48,7 +48,8 @@ public abstract class Deck<C extends Card> {
 	}
 	
 	/**
-	 * Puts all the cards in the deck and shuffles it.
+	 * Puts all the cards of the applicable type (e.g. Green player cards) 
+	 * in the deck and shuffles it.
 	 */
 	public abstract void populateDeck();
 	

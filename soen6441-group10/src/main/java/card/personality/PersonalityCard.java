@@ -45,6 +45,26 @@ public enum PersonalityCard implements Card {
 	}
 	
 	/**
+	 * Checks if the player holding this personality card has won the game. It
+	 * also prints a message on stdout to indicate this.
+	 * 
+	 * @param numberOfPlayers
+	 * @param player
+	 * @param game
+	 * @return true if the player holding this personality card has won the game
+	 *         by meeting the card's conditions, false otherwise.
+	 */
+	public boolean hasWon(int numberOfPlayers, Player player, Game game) {
+		boolean hasPlayerWon = winningConditionChecker.apply(numberOfPlayers,
+				player, game);
+		if (hasPlayerWon) {
+			System.out.println(player.getName() + " has won the game with " +
+					name());
+		}
+		return hasPlayerWon;
+	}
+	
+	/**
 	 * This can be used as an aid for lookups as needed by different personality cards.
 	 * @author gkentr
 	 */
@@ -67,7 +87,6 @@ public enum PersonalityCard implements Card {
 		
 		private static final Map<Integer, Integer> minimumControlledAreas = 
 				new HashMap<>(CONDITION_COUNT);
-		
 		static {
 			minimumControlledAreas.put(2, 7);
 			minimumControlledAreas.put(3, 5);
