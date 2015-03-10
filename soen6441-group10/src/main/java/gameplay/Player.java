@@ -1,9 +1,12 @@
 package gameplay;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import util.Color;
+import card.city.CityAreaCard;
 import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
 
@@ -35,6 +38,8 @@ public class Player {
 	private int minions;
 	
 	private int buildings;
+	
+	private List<CityAreaCard> cityCards = new ArrayList<>();
 	
 	/**
 	 * This is the player's hand. It is implemented as a set because we can
@@ -241,11 +246,9 @@ public class Player {
 	}
 
 	/**
-	 * This method removes player's cards one by one.
+	 * Removes the given player card from the player's hand.
 	 * 
-	 * @param card
-	 *            player card
-	 * @return true if it founds the player card and remove it successfully
+	 * @return true if the player card was removed successfully, false otherwise.
 	 */
 	public boolean removePlayerCard(GreenPlayerCard card) {
 		return playerCards.remove(card);

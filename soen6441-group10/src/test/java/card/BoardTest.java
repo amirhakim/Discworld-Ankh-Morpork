@@ -1,10 +1,9 @@
 package card;
 
 import static org.junit.Assert.*;
+import gameplay.BoardArea;
 
 import org.junit.*;
-
-import card.BoardArea;
 
 public class BoardTest {
 

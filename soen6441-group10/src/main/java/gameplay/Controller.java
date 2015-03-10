@@ -4,7 +4,6 @@ package gameplay;
 import java.util.Collection;
 
 import util.Color;
-import card.BoardArea;
 import card.player.Symbol;
 import error.InvalidGameStateException;
 

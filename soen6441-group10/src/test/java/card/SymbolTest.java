@@ -3,6 +3,7 @@ package card;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gameplay.BoardArea;
 import gameplay.Game;
 import gameplay.Player;
 
