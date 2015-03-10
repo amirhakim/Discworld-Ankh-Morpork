@@ -19,6 +19,10 @@ import card.player.GreenPlayerCard;
  * An enumeration of all the areas available in the game. Each area is uniquely
  * identified by a number (which is visible on the physical game board).
  * 
+ * Note that this area implements the Card marker interface, because it serves as
+ * the enumeration of all the City Area cards in the game while {@link CityAreaCard}
+ * actually bears the state of the card (played or not, playable more than once etc.).
+ * 
  * @author gkentr
  */
 public enum AnkhMorporkArea implements Card {
@@ -49,6 +53,8 @@ public enum AnkhMorporkArea implements Card {
 
 	private static final int AREA_COUNT = 12;
 	
+	private static final int MINION_COST = 3;
+	
 	protected static final Map<Integer, AnkhMorporkArea> codeToAreaMap = new HashMap<>();
 	static {
 		for (AnkhMorporkArea a : AnkhMorporkArea.values()) {
@@ -65,7 +71,7 @@ public enum AnkhMorporkArea implements Card {
 			TextUserInterface UI = new TextUserInterface();
 			Map<Integer, BoardArea> gameBoard = game.getGameBoard();
 
-			if (player.decreaseMoney(3)) {
+			if (player.decreaseMoney(MINION_COST)) {
 
 				int availableMinions = player.getMinionCount();
 				List<AnkhMorporkArea> dollySistersAndNeighbors = 
@@ -104,6 +110,7 @@ public enum AnkhMorporkArea implements Card {
 			}
 		}); 
 		
+		// 2. UNREAL ESTATE
 		cityCardFunctionMap.put(UNREAL_ESTATE, (player, game) -> {
 			// Draw one card and then discard one card
 			Optional<GreenPlayerCard> card = game.drawPlayerCard();
