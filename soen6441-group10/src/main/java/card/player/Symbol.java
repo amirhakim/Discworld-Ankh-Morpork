@@ -1,13 +1,15 @@
 package card.player;
 
+import gameplay.BoardArea;
 import gameplay.Game;
-import io.TextUserInterface;
 import gameplay.Player;
+import io.TextUserInterface;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
-import card.BoardArea;
+import card.city.AnkhMorporkArea;
 
 /**
  * 
@@ -34,39 +36,48 @@ public enum Symbol {
 		TextUserInterface UI = new TextUserInterface();
 		// Get players minion count
 		int availableMinions = player.getMinionCount();
-		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
-		if(availableMinions == Player.TOTAL_MINIONS) {
-			BoardArea chosenArea = UI.getAreaChoice(gameBoard, "All minions available. Select area to place minion",
-								"Choose Area: ");
 
-			
-			
-			chosenArea.addMinion(player);
-		} else if(availableMinions == 0) {
+		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
+		if (availableMinions == Player.TOTAL_MINIONS) {
+				AnkhMorporkArea chosenArea = UI.getAreaChoice(
+						gameBoard.values().stream().map(BoardArea::getArea)
+								.collect(Collectors.toList()),
+						"All minions available. Select area to place minion",
+						"Choose Area: ");
+				gameBoard.get(chosenArea.getAreaCode()).addMinion(player);
+
+		} else if (availableMinions == 0) {
+
 			// Get areas where player has minions
 			Map<Integer, BoardArea> subGameBoard = game.getAreasWithPlayerMinions(player);
-			
-			BoardArea chosenArea = UI.getAreaChoice(subGameBoard, "All minions in play. Select area to remove minion",
-								"Choose Area: ");
-			
-			chosenArea.removeMinion(player);
+			AnkhMorporkArea chosenArea = UI.getAreaChoice(
+					subGameBoard.values().stream().map(BoardArea::getArea)
+							.collect(Collectors.toList()),
+					"All minions in play. Select area to remove minion",
+					"Choose Area: ");
+			subGameBoard.get(chosenArea.getAreaCode()).removeMinion(player);
+
 			// Get areas that player CAN player on
-			Map<Integer, BoardArea> possibilities = game.getMinionPlacementAreas(player);
-			possibilities.remove(chosenArea.getArea().getAreaCode());
-			
-			
-			chosenArea = UI.getAreaChoice(possibilities, "Select Area to place removed minion.", 
-									"Choose Area: ");
-			chosenArea.addMinion(player);
-			
+			Map<Integer, BoardArea> possibilities = game
+					.getMinionPlacementAreas(player);
+			possibilities.remove(chosenArea.getAreaCode());
+			chosenArea = UI.getAreaChoice(
+					possibilities.values().stream().map(BoardArea::getArea)
+							.collect(Collectors.toList()),
+					"Select Area to place removed minion.", "Choose Area: ");
+			gameBoard.get(chosenArea.getAreaCode()).addMinion(player);
+
 		} else {
+
 			Map<Integer, BoardArea> possibilities = game.getMinionPlacementAreas(player);
-
-			BoardArea chosenArea = UI.getAreaChoice(possibilities, "Unused minions available. Select area to palce new minion",
-									"Choose Area: ");
-					
-
-			chosenArea.addMinion(player);	
+			AnkhMorporkArea chosenArea = UI
+					.getAreaChoice(
+							possibilities.values().stream()
+									.map(BoardArea::getArea)
+									.collect(Collectors.toList()),
+							"Unused minions available. Select area to palce new minion",
+							"Choose Area: ");
+			possibilities.get(chosenArea.getAreaCode()).addMinion(player);	
 		}
 		
 	}),

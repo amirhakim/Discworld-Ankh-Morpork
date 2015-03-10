@@ -6,8 +6,8 @@ import gameplay.Player;
 
 import java.util.function.BiConsumer;
 
-import card.AnkhMorporkArea;
 import card.Card;
+import card.city.AnkhMorporkArea;
 
 public enum RandomEventCard implements Card {
 	

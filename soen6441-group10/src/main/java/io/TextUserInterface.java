@@ -1,6 +1,7 @@
 package io;
 
 import gameplay.Bank;
+import gameplay.BoardArea;
 import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
@@ -13,7 +14,7 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 
 import util.Color;
-import card.BoardArea;
+import card.city.AnkhMorporkArea;
 import card.player.GreenPlayerCard;
 import card.player.Symbol;
 
@@ -155,7 +156,7 @@ public class TextUserInterface {
 	 */
 	private void playTurn(Player p) {
 		System.out.println("It's the turn of player " + p.getName() + "!");
-		GreenPlayerCard c = getCardToPlay(p);
+		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
 
 		// Determine which needs to be completed first
 		// Symbols or text
@@ -213,18 +214,18 @@ public class TextUserInterface {
 	}
 	
 	
-	private GreenPlayerCard getCardToPlay(Player p) {
-		Map<Integer, GreenPlayerCard> cards = new HashMap<>();
-		System.out.println("Choose one of your cards to play:");
+	public GreenPlayerCard getCardChoice(Collection<GreenPlayerCard> cards, String message) {
+		Map<Integer, GreenPlayerCard> cardMap = new HashMap<>();
+		System.out.println(message);
 		int i = 1;
-		for (GreenPlayerCard c : p.getPlayerCards()) {
+		for (GreenPlayerCard c : cards) {
 			System.out.println(i + ") " + c.name());
-			cards.put(i, c);
+			cardMap.put(i, c);
 			i++;
 		}
 		
 		// TODO Won't bother now with bound checks, will do it later
-		return cards.get(scanner.nextInt());
+		return cardMap.get(scanner.nextInt());
 	}
 
 	/**
@@ -379,24 +380,24 @@ public class TextUserInterface {
 
 	}
 	
-	public BoardArea getAreaChoice(Map<Integer, BoardArea> gameBoard, String outputMsg, String inputMsg) {
+	public AnkhMorporkArea getAreaChoice(Collection<AnkhMorporkArea> availableAreas, 
+			String outputMsg, String inputMsg) {
+
 		System.out.println(outputMsg);
-		for(BoardArea ba : gameBoard.values()) {
-			System.out.println(ba.getArea().getAreaCode() + ": " + ba.getArea());
+		for (AnkhMorporkArea a : availableAreas) {
+			System.out.println(a.getAreaCode() + ": " + a); 
 		}
 		
 		scanner = new Scanner(System.in);
 		System.out.print(inputMsg);
+
 		int action = scanner.nextInt();
-		while(gameBoard.get(action) == null ) {
+		while (AnkhMorporkArea.forCode(action) == null ) {
 			System.out.println("Invalid selection.  "  + inputMsg);
 			action = scanner.nextInt();
-			
 		}
-		// Can't close scanner or receive unknown source error in symbol test
-		//scanner.close()
-		return gameBoard.get(action);
-		
+
+		return AnkhMorporkArea.forCode(action);
 	}
 
 }
