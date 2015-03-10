@@ -399,6 +399,27 @@ public class TextUserInterface {
 
 		return AnkhMorporkArea.forCode(action);
 	}
+	
+	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas, 
+		
+		String outputMsg, String inputMsg) {
+
+		System.out.println(outputMsg);
+		for (BoardArea a : availableAreas.values()) {
+			System.out.println(a.getArea().getAreaCode() + ": " + a.getArea()); 
+		}
+		
+		scanner = new Scanner(System.in);
+		System.out.print(inputMsg);
+
+		int action = scanner.nextInt();
+		while (AnkhMorporkArea.forCode(action) == null ) {
+			System.out.println("Invalid selection.  "  + inputMsg);
+			action = scanner.nextInt();
+		}
+
+		return availableAreas.get(action);
+	}
 
 
 }
