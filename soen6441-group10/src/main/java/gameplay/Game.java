@@ -435,6 +435,56 @@ public class Game {
 		// TODO Implement this method
 	}
 	
+
+	
+	/**
+	 * Finds all buildings a player owns
+	 * @param player
+	 * @return Map of boardAreas owned by the player
+	 */
+	public Map<Integer, BoardArea> getBuildingAreas(Player player) {
+		Map<Integer, BoardArea> buildingAreas = new HashMap<Integer, BoardArea>();
+		
+		for(BoardArea boardArea: gameBoard.values()) {
+			if(boardArea.getBuildingOwner() == player.getColor()) {
+				buildingAreas.put(boardArea.getArea().getAreaCode(), boardArea);
+			}	
+		}
+		
+		return buildingAreas;	
+	}
+	
+	/**
+	 * 
+	 * @return Map of areas that a player could use assassinate on
+	 */
+	public Map<Integer, BoardArea> getTroubleAreas(Player player) {
+		Map<Integer, BoardArea> possibilities = new HashMap<Integer, BoardArea>();
+		
+		for(BoardArea boardArea : gameBoard.values()) {
+			if(boardArea.hasTroubleMarker()) {
+				possibilities.put(boardArea.getArea().getAreaCode(), boardArea);
+			}
+		}
+		return possibilities;
+	}
+	
+	/**
+	 * 
+	 * @return Map of all areas which have no buildings
+	 */
+	public Map<Integer, BoardArea> getBuidlingFreeAreas(){
+		Map<Integer, BoardArea> freeAreas = new HashMap<Integer, BoardArea>();
+		
+		for(BoardArea boardArea: gameBoard.values()) {
+			if(boardArea.getBuildingOwner() == Color.UNDEFINED) {
+				freeAreas.put(boardArea.getArea().getAreaCode(), boardArea);
+			}
+		}
+		
+		return freeAreas;
+	}
+	
 	/**
 	 * Removes a building from the area with the given area ID.
 	 * @param areaId
@@ -460,6 +510,23 @@ public class Game {
 		}
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param boardArea
+	 * @return true if adding building was success
+	 */
+	public boolean addBuilding(Player player, BoardArea boardArea) {
+		if(boardArea.addBuildingForPlayer(player)) {
+			if(player.decreaseMoney(boardArea.getBuildingCost())) {
+				getBank().increaseBalance(boardArea.getBuildingCost());
+				return true;
+			}
+		} 
+		return false;
+	}
+	
 	
 	/**
 	 * Subtracts $2 from each player for each building they own on the board.

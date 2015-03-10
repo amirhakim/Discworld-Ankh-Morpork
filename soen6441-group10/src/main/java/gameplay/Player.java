@@ -20,6 +20,8 @@ public class Player {
 
 	public static final int TOTAL_MINIONS = 12;
 	
+	public static final int TOTAL_BUILDINGS = 6;
+	
 	public static final int PLAYER_MAX_HAND_SIZE = 5;
 
 	private String name;
@@ -44,7 +46,7 @@ public class Player {
 	public Player() {
 		this.money = 0;
 		this.minions = TOTAL_MINIONS;
-		this.buildings = 6;
+		this.buildings = TOTAL_BUILDINGS;
 	}
 
 	/**
@@ -203,7 +205,7 @@ public class Player {
 	 *         decremented).
 	 */
 	public boolean decreaseBuilding() {
-		if ((this.buildings - 1) > 0) {
+		if ((this.buildings - 1) >= 0) {
 			this.buildings = this.buildings - 1;
 			return true;
 		} else {

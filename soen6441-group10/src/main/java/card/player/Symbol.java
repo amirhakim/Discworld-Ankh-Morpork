@@ -91,7 +91,29 @@ public enum Symbol {
 	 * your building from.
 	 */
 	PLACE_A_BUILDING((player, game)->{
-		System.out.println("YOU CALLED PLACE A BUILDING");
+		// Get players buildings
+		int playerBuildings = player.getBuildings();
+		TextUserInterface UI = new TextUserInterface();
+		// Case 1: Must remove a building first
+		if(playerBuildings == 0){
+			// Choose Area to remove building from
+			Map<Integer, BoardArea> playerAreas = game.getBuildingAreas(player);
+			BoardArea chosenRemoveArea = UI.getAreaChoice(playerAreas, "Choose Area to remove building from", "Choose Area: ");
+			// Choose Area to place building on
+			Map<Integer, BoardArea> freeAreas = game.getBuidlingFreeAreas();
+			freeAreas.remove(chosenRemoveArea);
+			
+			BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
+			game.addBuilding(player, chosenPlaceArea);
+		} else {
+			// Player has free buildings too place
+			// Choose Area to place building on
+			Map<Integer, BoardArea> freeAreas = game.getBuidlingFreeAreas();
+						
+			BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
+			game.addBuilding(player, chosenPlaceArea);
+			
+		}
 	}),
 	
 	/**
@@ -102,6 +124,7 @@ public enum Symbol {
 	 * marker from the area.
 	 */
 	ASSASINATION((player, game)->{
+		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas(player);
 		System.out.println("YOU CALLED ASSASINATION");
 	}),
 	

@@ -101,10 +101,14 @@ public class BoardArea {
 	 */
 	public boolean addBuildingForPlayer(Player p) {
 		if (buildingColor != Color.UNDEFINED || hasTroubleMarker()) {
+			System.out.println(buildingColor);
+			System.out.println(hasTroubleMarker());
 			return false;
 		}
 
 		buildingColor = p.getColor();
+		
+		// TODO move this to game.addBuilding()
 		p.decreaseBuilding();
 		return true;
 	}
