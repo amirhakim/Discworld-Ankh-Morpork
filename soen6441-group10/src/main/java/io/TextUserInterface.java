@@ -8,9 +8,11 @@ import gameplay.Player;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 
 import util.Color;
@@ -400,6 +402,13 @@ public class TextUserInterface {
 		return AnkhMorporkArea.forCode(action);
 	}
 	
+	/**
+	 * Same as above but using boardAreas
+	 * @param availableAreas
+	 * @param outputMsg
+	 * @param inputMsg
+	 * @return
+	 */
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas, 
 		
 		String outputMsg, String inputMsg) {
@@ -420,6 +429,94 @@ public class TextUserInterface {
 
 		return availableAreas.get(action);
 	}
+	
+	/**
+	 * Same as above but displays extra information
+	 * @param availableAreas
+	 * @param outputMsg
+	 * @param inputMsg
+	 * @param details
+	 * @return
+	 */
+	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas,
+			String outputMsg, String inputMsg, boolean details) {
+		
+		System.out.println(outputMsg);
+		if(details) {
+			for(BoardArea a: availableAreas.values()) {
+				System.out.println(a.getArea().getAreaCode() + ": " + a.getArea());
+				System.out.println("\tWith " + a.getDemonCount() + " demons");
+				System.out.println("\tWith " + a.getTrollCount() + " trolls");
+			
+				Map<Color, Integer> minions = a.getMinions();
+				for (Map.Entry<Color, Integer> entry : minions.entrySet()) {
+					System.out.println("\tWith " + entry.getValue() + " from player " + entry.getKey());
+				}
+			}
+		}
+		System.out.print(inputMsg);
+		scanner = new Scanner(System.in);
+		int action = scanner.nextInt();
+		while(availableAreas.get(action) == null) {
+			System.out.print("Invalid selection: " + inputMsg);
+		}
+		return availableAreas.get(action);
+	}
+	
+	/**
+	 * Remove a troll, demon or minion from a baordArea
+	 * @param trouble
+	 * @param killer
+	 */
+	public void assinate(BoardArea trouble, Player killer) {
+		scanner = new Scanner(System.in);
+		
+		// Display all assination options
+	    if(trouble.getDemonCount() > 0) {
+	    	System.out.println("\tPress d for demon");
+	    }
+	    if(trouble.getTrollCount() > 0) {
+	    	System.out.println("\tPress t for troll");
+	    }
+	    // Display minions available for assination
+		Map<Color, Integer> troubleMinions = trouble.getMinions();
+		Iterator<Entry<Color, Integer>> it = troubleMinions.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<Color, Integer> pair = (Map.Entry<Color, Integer>)it.next();
+	        System.out.println("\tType " + pair.getKey() + " for minion of player " + pair.getValue());
+	    }
+	    
+	    String actionKill = null;
+	    boolean removed = false;
+	    while(!removed) {
+	    	System.out.print("Choice: ");
+	    	actionKill = scanner.nextLine();	
+	    
+	    	if(actionKill.equals("t") && trouble.getTrollCount() > 0){
+	    		trouble.removeTroll();
+	    		removed = true;
+	    	} else if(actionKill.equals("d") && trouble.getDemonCount() > 0) {
+	    		trouble.removeDemon();
+	    		removed = true;
+	    	} else {
+	    		try {
+	    			// Make sure minion being assinated is valid and isn't your own
+	    			Player losingMinion = controller.getGame().getPlayerOfColor(Color.valueOf(actionKill));
+	    			if(losingMinion != null &&
+	    					Color.valueOf(actionKill) != killer.getColor() &&
+	    					trouble.getMinionCountForPlayer(losingMinion) != 0) {
+	    				
+	    				trouble.removeMinion(losingMinion);
+	    				removed = true;
+	    			}
+	    		}catch(IllegalArgumentException e) {
+	    			continue;
+	    		}
+	    		
+	    	}
+	    }
+	}
+	
 
 
 }

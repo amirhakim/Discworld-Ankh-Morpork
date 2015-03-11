@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import util.Color;
 import card.city.AnkhMorporkArea;
 
 /**
@@ -136,8 +137,22 @@ public enum Symbol {
 	 * marker from the area.
 	 */
 	ASSASINATION((player, game)->{
-//		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas(player);
-		System.out.println("YOU CALLED ASSASINATION");
+		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas(player);
+		// Ensure there is a troll, demon or minion other than your own on the area
+		for(BoardArea trouble : troubleAreas.values()) {
+			Map<Color, Integer> troubleMinions = trouble.getMinions();
+			troubleMinions.remove(player.getColor());
+			
+			if(trouble.getDemonCount() < 0 && trouble.getTrollCount() < 0 
+					&& troubleMinions.size() < 0 ) {
+				troubleAreas.remove(trouble.getArea().getAreaCode());
+			}
+			
+		}
+		
+		TextUserInterface textUI = new TextUserInterface();
+		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area for assination", "choice: ", true);
+		textUI.assinate(trouble, player);
 	}),
 	
 	
