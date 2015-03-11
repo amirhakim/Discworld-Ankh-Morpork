@@ -46,7 +46,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has no free minions
 	 */
-//	@Test
+	@Test
 	public void placeMinionNoMinionsTest() {
 
 		System.out.println("~~PLACE MINION NO MINIONS TEST~~");
@@ -68,7 +68,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has only free minions
 	 */
-//	@Test
+	@Test
 	public void placeMinionFullMinionsTest() {
 
 		System.out.println("~~PLACE MINION FULL MINIONS TEST~~");
@@ -85,7 +85,7 @@ public class SymbolTest {
 	 * Test PLACE_MINIONS symbol
 	 * Condition that payer has some free minions
 	 */
-//	@Test
+	@Test
 	public void placceMinionPartialMinionsTest() {
 
 		System.out.println("~~PLACE MINION PARTIAL MINIONS TEST~~");
@@ -103,7 +103,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has no free buildings to place
 	 */
-//	@Test
+	@Test
 	public void placeBuildingNoFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING NO BUILDINGS TEST~~");
@@ -130,7 +130,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has free buildings to place
 	 */
-//	@Test
+	@Test
 	public void placeBuildingFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING FREE BUILDINGS TEST~~");
