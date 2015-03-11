@@ -215,7 +215,7 @@ public class Game {
 	 */
 	public Player advanceTurnToNextPlayer() {
 		int current = currentTurn;
-		players.get(playerTurnOrder[current]).printTurn();
+		//players.get(playerTurnOrder[current]).printTurn();
 		currentTurn =  ((current + 1) == playerTurnOrder.length) ?
 				0 : current + 1;
 		return getPlayerOfCurrentTurn();

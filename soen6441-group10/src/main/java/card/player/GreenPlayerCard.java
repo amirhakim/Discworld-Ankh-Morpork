@@ -40,6 +40,7 @@ public enum GreenPlayerCard implements Card {
 			 * Place the remaining cards back as the discard pile.
 			 */
 			(player, game) -> {
+				System.out.println("Playing text -> getting four cards from discard pile");
 				DiscardPile pile = game.getDiscardPile();
 				pile.shuffle();
 				game.drawDiscardCards(player, 4);
@@ -55,6 +56,7 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				//System.out.println("YOU CALLED HEX");
+				System.out.println("Playing text -> taking 3 cards from draw deck");
 				game.drawPlayerCard(player,3);			
 			},
 			new ArrayList<Symbol>() {{
@@ -71,7 +73,6 @@ public enum GreenPlayerCard implements Card {
 			 * no effect.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED HERE'N'NOW");
 				int dieRoll = Die.getDie().roll();
 				System.out.println("Dice rolled: " + dieRoll);
 
@@ -96,6 +97,8 @@ public enum GreenPlayerCard implements Card {
 				} else if(dieRoll == 1) {
 					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
 					chosenArea.removeMinion(player);
+				} else {
+					System.out.println("No Action");
 				}
 				
 				
@@ -115,7 +118,7 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_MINION);		
 			}},	
 			(player, game) -> {
-				System.out.println("YOU CALLED HARRY KING");
+				System.out.println("YOU CALLED HARRY KING TEXT");
 			}			
 	), 
 	
@@ -148,7 +151,7 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_A_BUILDING);	
 			}},
 			(player, game) -> {
-				System.out.println("YOU CALLED THE OPERA HOUSE");
+				System.out.println("YOU CALLED THE OPERA HOUSE TEXT");
 			}
 	),
 	
@@ -157,7 +160,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take $3 from a player of your choice.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED NOBBY NOBBS");
+				System.out.println("YOU CALLED NOBBY NOBBS TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLAY_ANOTHER_CARD);	
@@ -169,7 +172,7 @@ public enum GreenPlayerCard implements Card {
 			 * Discard one card.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED MODO");
+				System.out.println("YOU CALLED MODO TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);	
@@ -189,7 +192,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED LIBRARIAN");
+				System.out.println("YOU CALLED LIBRARIAN TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -201,7 +204,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED LEONARD OF QUIRM");
+				System.out.println("YOU CALLED LEONARD OF QUIRM TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -214,7 +217,7 @@ public enum GreenPlayerCard implements Card {
 		 * take $1 for each one discarded.
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED SHONKY SHOP");
+			System.out.println("YOU CALLED SHONKY SHOP TEXT");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);	
@@ -226,7 +229,7 @@ public enum GreenPlayerCard implements Card {
 		 * Earn $1 for each trouble marker on the board.
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED SACHARISSA CRIPSLOCK");
+			System.out.println("YOU CALLED SACHARISSA CRIPSLOCK TEXT");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);	
@@ -242,25 +245,24 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);	
 		}},
 		(player, game) -> {
-			System.out.println("YOU CALLED RORIE PALM");
+			System.out.println("YOU CALLED RORIE PALM TEXT");
 		}		
 	),
 
-	//RINCEWIND(
-	//	/*
-	//	 * Move one of your minions from an area containing 
-	//	 * a trouble marker to an adjacent area.
-	//	 */
-	//	new ArrayList<Symbol>() {{
-	//		add(Symbol.RANDOM_EVENT);	
-	//	}},
-	//	(player, game) -> {
-	//		System.out.println("YOU CALLED RINCEWIND");
-	//	},
-	//	new ArrayList<Symbol>() {{
-	//		add(Symbol.PLAY_ANOTHER_CARD);	
-	//	}}
-	//),
+	RINCEWIND(
+		/*
+		 * Move one of your minions from an area containing 
+		 * a trouble marker to an adjacent area.
+		 */
+		//TODO text area should be in middle
+		new ArrayList<Symbol>() {{
+			add(Symbol.RANDOM_EVENT);	
+			add(Symbol.PLAY_ANOTHER_CARD);	
+		}},
+		(player, game) -> {
+			System.out.println("YOU CALLED RINCEWIND TEXT");
+		}
+	),
 	
 	THE_ROYAL_MINT(
 		new ArrayList<Symbol>() {{
@@ -280,7 +282,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("YOU CALLED QUEEN MOLLY");
+			System.out.println("YOU CALLED QUEEN MOLLY TEXT");
 		}			
 	),
 	
@@ -319,7 +321,7 @@ public enum GreenPlayerCard implements Card {
 		 * They cannot get rid of this card.	
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED DR WHITEFACE");
+			System.out.println("YOU CALLED DR WHITEFACE TEXT");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -336,7 +338,7 @@ public enum GreenPlayerCard implements Card {
 		 * played by another player
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED WALLACE SONKY");			
+			System.out.println("YOU CALLED WALLACE SONKY TEXT");			
 		}
 	),
 	
@@ -347,7 +349,7 @@ public enum GreenPlayerCard implements Card {
 			 * one of your cards.  They must 
 			 * give you 2$ in return
 			 */
-			System.out.println("YOU CALLED THE SEAMSTRESS GUILD");	
+			System.out.println("YOU CALLED THE SEAMSTRESS GUILD TEXT");	
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -368,7 +370,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take $2, if possible, from
 			 * every other player.
 			 */
-			System.out.println("YOU CALLED THE THIEVES GUILD");
+			System.out.println("YOU CALLED THE THIEVES GUILD TEXT");
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);

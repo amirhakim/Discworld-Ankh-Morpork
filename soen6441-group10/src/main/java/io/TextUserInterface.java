@@ -123,13 +123,13 @@ public class TextUserInterface {
 				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
 				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
-					if (!controller.isGameOver()) {
+	//				if (!controller.isGameOver()) {
 
 						playTurn(controller.advanceToNextTurn());
-					} else {
-						System.out.println("The game has finished!");
-						break;
-					}
+	//				} else {
+	//					System.out.println("The game has finished!");
+	//					break;
+	//				}
 				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
 					printGameStatus();
 				} else if (action.equals(UserOption.LOAD.getOptionString())) {
@@ -160,7 +160,7 @@ public class TextUserInterface {
 	 * @param p
 	 */
 	private void playTurn(Player p) {
-		System.out.println("Player " + p.getName() + "turn!");
+		System.out.println("Player " + p.getName() + " turn!");
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
 		controller.getGame().setCurrentCardInPlay(c);
 		
