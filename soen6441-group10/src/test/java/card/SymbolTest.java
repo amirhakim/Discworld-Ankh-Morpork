@@ -174,7 +174,7 @@ public class SymbolTest {
 		int demon = area.getDemonCount();
 		int player2Minions = area.getMinionCountForPlayer(player2);
 		
-		
+
 		Symbol.ASSASINATION.getGameAction().accept(player, game);
 		
 		// Get count of pieces after

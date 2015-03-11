@@ -176,7 +176,6 @@ public enum Symbol {
 	 * the bank.
 	 */
 	TAKE_MONEY((player, game) -> {
-		System.out.println("YOU CALLED TAKE MONEY");
 		// Get calling card
 		GreenPlayerCard playerCard = game.getCurrentCardInPlay();
 		if(playerCard != null) {
@@ -184,6 +183,7 @@ public enum Symbol {
 			Integer amount = playerCard.getMoney();
 			game.getBank().decreaseBalance(amount);
 			player.increaseMoney(amount);
+			System.out.println("Took " + amount + " from bank");
 		}
 	}),
 	

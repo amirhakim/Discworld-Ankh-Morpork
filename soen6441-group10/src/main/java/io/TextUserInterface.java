@@ -52,6 +52,7 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		String action = "";
 
+		
 		// Main menu loop
 		while (!action.equals(UserOption.QUIT.getOptionString())) {
 			System.out
@@ -509,7 +510,7 @@ public class TextUserInterface {
 	    	} else {
 	    		try {
 	    			// Make sure minion being assinated is valid and isn't your own
-	    			Player losingMinion = controller.getGame().getPlayerOfColor(Color.valueOf(actionKill));
+	    			Player losingMinion = controller.getPlayerOfColor(Color.valueOf(actionKill));
 	    			if(losingMinion != null &&
 	    					Color.valueOf(actionKill) != killer.getColor() &&
 	    					trouble.getMinionCountForPlayer(losingMinion) != 0) {
