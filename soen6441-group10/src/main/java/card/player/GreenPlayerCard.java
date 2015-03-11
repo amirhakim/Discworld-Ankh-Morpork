@@ -23,7 +23,7 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.ASSASINATION);
 				add(Symbol.TAKE_MONEY);	// Take 2 Dollars		
 			}},	
-			10
+			2
 	), 
 	
 	HISTORY_MONKS(
@@ -84,14 +84,16 @@ public enum GreenPlayerCard implements Card {
 			new ArrayList<Symbol>() {{
 				add(Symbol.TAKE_MONEY);	//3 Dollars	
 				add(Symbol.PLACE_MINION);
-			}}		
+			}},		
+			3
 	),
 	
 	MR_GRYLE(
 			new ArrayList<Symbol>() {{
 				add(Symbol.ASSASINATION);	
 				add(Symbol.TAKE_MONEY); // 1 Dollar
-			}}		
+			}},		
+			1
 	),
 	
 	THE_PEELED_NUTS(
@@ -139,7 +141,8 @@ public enum GreenPlayerCard implements Card {
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_A_BUILDING);	
 				add(Symbol.TAKE_MONEY); //2 Dollars
-			}}
+			}},
+			2
 	),
 	
 	LIBRARIAN(
@@ -224,7 +227,8 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);
 			add(Symbol.TAKE_MONEY); //5 Dollars
-		}}			
+		}},
+		5
 	),
 	
 	
@@ -245,7 +249,8 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>() {{
 			add(Symbol.TAKE_MONEY);//3 Dollars
 			add(Symbol.PLAY_ANOTHER_CARD);
-		}}		
+		}},
+		3
 	),
 	
 	ZORGO_THE_RETRO_PHRENOLOGIST(
@@ -314,7 +319,8 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>() {{
 			add(Symbol.ASSASINATION);
 			add(Symbol.TAKE_MONEY);		
-		}}		
+		}},
+		1
 	),
 	
 	THE_THIEVES_GUILD(
@@ -403,7 +409,8 @@ THE_AGONY_AUNTS(
 	}},
 	(player, game) -> {
 		System.out.println("THE_AGONY_AUNTS");
-	}
+	},
+	2
 	
 	
 ),
@@ -455,7 +462,8 @@ DR_CRUCES(
 	}},
 	(player, game) -> {
 		System.out.println("DR_CRUCES");
-	}
+	},
+	3
 ),
 CAPTAIN_CARROT(
 	new ArrayList<Symbol>() {{
@@ -465,7 +473,8 @@ CAPTAIN_CARROT(
 	}},
 	(player, game) -> {
 		System.out.println("CAPTAIN_CARROT");
-	}	
+	},
+	1
 ),
 MRS_CAKE(
 	new ArrayList<Symbol>(){{
@@ -476,7 +485,8 @@ MRS_CAKE(
 	(player, game) -> {
 		System.out.println("MRS_CAKE: look at all but one of the"
 				+ "unused personality cards");
-	}
+	},
+	2
 ),
 GROAT(
 	new ArrayList<Symbol>() {{
@@ -493,7 +503,8 @@ GIMLETS_DWARF_DELICATESSEN(
 	}},
 	(player, game) -> {
 		System.out.println("GIMLETS_DWARF_DELICATESSEN");
-	}	
+	},
+	3
 ),
 GASPODE(
 	new ArrayList<Symbol>() {{
@@ -563,10 +574,24 @@ THE_FIRE_BRIGADE(
 		textFirst = false;
 	}
 	
+	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text, Integer money) {
+		this.symbols = symbols;
+		this.text = text;
+		this.textFirst = false;
+		this.money = money;
+	}
+	
 	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols) {
 		this.symbols = symbols;
 		this.text = text;
 		textFirst = true;
+	}
+	
+	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols, Integer money) {
+		this.symbols = symbols;
+		this.text = text;
+		this.textFirst = true;
+		this.money = money;
 	}
 	
 	GreenPlayerCard(List<Symbol> symbols) {
