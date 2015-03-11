@@ -159,7 +159,8 @@ public class TextUserInterface {
 	private void playTurn(Player p) {
 		System.out.println("It's the turn of player " + p.getName() + "!");
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
-
+		controller.getGame().setCurrentCardInPlay(c);
+		
 		// Determine which needs to be completed first
 		// Symbols or text
 		if(c.isTextFirst()) {
@@ -171,7 +172,7 @@ public class TextUserInterface {
 		}
 		
 
-		
+		controller.getGame().setCurrentCardInPlay(null);
 		controller.restorePlayerHand(p);
 	}
 	

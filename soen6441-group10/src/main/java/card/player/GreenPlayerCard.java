@@ -22,7 +22,8 @@ public enum GreenPlayerCard implements Card {
 			new ArrayList<Symbol>() {{
 				add(Symbol.ASSASINATION);
 				add(Symbol.TAKE_MONEY);	// Take 2 Dollars		
-			}}	
+			}},	
+			10
 	), 
 	
 	HISTORY_MONKS(
@@ -553,6 +554,8 @@ THE_FIRE_BRIGADE(
 	private List<Symbol> symbols;
 
 	private boolean textFirst;
+
+	private Integer money;
 	
 	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text) {
 		this.symbols = symbols;
@@ -572,6 +575,13 @@ THE_FIRE_BRIGADE(
 		this.textFirst = false;
 	}
 	
+	GreenPlayerCard(List<Symbol> symbols, Integer money) {
+		this.symbols = symbols;
+		this.text = null;
+		this.textFirst = false;
+		this.money = money;
+	}
+	
 	public List<Symbol> getSymbols() {
 		return this.symbols;
 	}
@@ -584,4 +594,7 @@ THE_FIRE_BRIGADE(
 		return this.textFirst;
 	}
 
+	public Integer getMoney() {
+		return this.money;
+	}
 }

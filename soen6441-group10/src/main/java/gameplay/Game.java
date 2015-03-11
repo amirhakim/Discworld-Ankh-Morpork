@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import util.Color;
+import card.Card;
 import card.city.AnkhMorporkArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
@@ -69,9 +70,12 @@ public class Game {
 	 */
 	private int currentTurn;
 
+	private GreenPlayerCard currentCardInPlay;
+
 	public Game() {
 		status = GameStatus.UNINITIATED;
 		gameBoard = new HashMap<Integer, BoardArea>();
+		currentCardInPlay = null;
 	}
 
 	/**
@@ -457,7 +461,7 @@ public class Game {
 	 * 
 	 * @return Map of areas that a player could use assassinate on
 	 */
-	public Map<Integer, BoardArea> getTroubleAreas(Player player) {
+	public Map<Integer, BoardArea> getTroubleAreas() {
 		Map<Integer, BoardArea> possibilities = new HashMap<Integer, BoardArea>();
 		
 		for(BoardArea boardArea : gameBoard.values()) {
@@ -482,6 +486,14 @@ public class Game {
 		}
 		
 		return freeAreas;
+	}
+	
+	public void setCurrentCardInPlay(GreenPlayerCard c) {
+		this.currentCardInPlay = c;
+	}
+	
+	public GreenPlayerCard getCurrentCardInPlay() {
+		return this.currentCardInPlay;
 	}
 	
 	/**

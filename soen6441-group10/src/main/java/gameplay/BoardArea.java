@@ -254,6 +254,22 @@ public class BoardArea {
 		troubleMarker = true;
 		return true;
 	}
+	
+	/**
+	 * This method removes a trouble marker
+	 * Returns true if there was previously a trouble marker on area
+	 */
+	public boolean removeTroubleMarker() {
+		if(hasTroubleMarker()){
+			troubleMarker = false;
+			return true;
+		} else {
+			troubleMarker = false;
+			return false;
+		}
+		
+	}
+	
 
 	/**
 	 * Retrieves the cost of placing a building in the area.
