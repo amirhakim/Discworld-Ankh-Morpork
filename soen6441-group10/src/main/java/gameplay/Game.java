@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import util.Color;
-import card.Card;
 import card.city.AnkhMorporkArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;

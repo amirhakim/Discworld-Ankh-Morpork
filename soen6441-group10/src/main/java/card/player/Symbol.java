@@ -1,19 +1,15 @@
 package card.player;
 
-import gameplay.Bank;
 import gameplay.BoardArea;
 import gameplay.Game;
 import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import util.Color;
-import card.Card;
 import card.city.AnkhMorporkArea;
 import card.random.RandomEventCard;
 
