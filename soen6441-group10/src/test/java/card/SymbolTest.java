@@ -49,7 +49,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has no free minions
 	 */
-	@Test
+	//@Test
 	public void placeMinionNoMinionsTest() {
 
 		System.out.println("~~PLACE MINION NO MINIONS TEST~~");
@@ -71,7 +71,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has only free minions
 	 */
-	@Test
+	//@Test
 	public void placeMinionFullMinionsTest() {
 
 		System.out.println("~~PLACE MINION FULL MINIONS TEST~~");
@@ -88,7 +88,7 @@ public class SymbolTest {
 	 * Test PLACE_MINIONS symbol
 	 * Condition that payer has some free minions
 	 */
-	@Test
+	//@Test
 	public void placceMinionPartialMinionsTest() {
 
 		System.out.println("~~PLACE MINION PARTIAL MINIONS TEST~~");
@@ -106,7 +106,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has no free buildings to place
 	 */
-	@Test
+	//@Test
 	public void placeBuildingNoFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING NO BUILDINGS TEST~~");
@@ -133,7 +133,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has free buildings to place
 	 */
-	@Test
+	//@Test
 	public void placeBuildingFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING FREE BUILDINGS TEST~~");
@@ -154,7 +154,7 @@ public class SymbolTest {
 	 * Test assination symbol
 	 * 
 	 */
-	@Test
+	//@Test
 	public void assinateTest(){
 		System.out.println("~~ASSINATE TEST~~");
 		
@@ -194,7 +194,7 @@ public class SymbolTest {
 	/**
 	 * Test Symbole.REMOVE_TROUBLE_MARKER
 	 */
-	@Test
+	//@Test
 	public void troubleMarkerTest() {
 		System.out.println("~~TROUBLE MARKER TEST~~");
 		// Add trouble marker to area
@@ -209,7 +209,7 @@ public class SymbolTest {
 	/**
 	 * Test TAKE_MONEY symbol
 	 */
-	@Test
+	//@Test
 	public void takeMoneyTest() {
 		System.out.println("~~TAKE MONEY TEST~~");	
 		Integer money = GreenPlayerCard.INIGO_SKIMMER.getMoney();
@@ -224,6 +224,18 @@ public class SymbolTest {
 		
 		
 	}
+	
+	/**
+	 * Test RANDOM EVENT symbol
+	 * 
+	 */
+	@Test
+	public void randomEventTest() {
+		System.out.println("~~RANDOM EVENT TEST");
+		Symbol.RANDOM_EVENT.getGameAction().accept(player, game);
+		// No test really .. just make sure its called in IO
+	}
+	
 	@After
 	public void tearDown() throws Exception {
 		// Code executed after each test

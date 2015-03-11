@@ -7,6 +7,7 @@ import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 import util.Color;
 import card.Card;
 import card.city.AnkhMorporkArea;
+import card.random.RandomEventCard;
 
 /**
  * 
@@ -201,7 +203,11 @@ public enum Symbol {
 	 * in the entire game).
 	 */
 	RANDOM_EVENT((player, game) -> {
-		System.out.println("YOU CALLED RANDOM EVENT");
+		
+		RandomEventCard random = game.drawRandomEventCard().get();
+		System.out.println(random + " was called");
+		random.getGameAction().accept(game, player);
+		
 	}),
 	
 	/**
@@ -210,7 +216,7 @@ public enum Symbol {
 	 *succession of cards that have this symbol on.
 	 */
 	PLAY_ANOTHER_CARD((player, game) -> {
-		System.out.println("YOU CALLED PLAY ANOTHER CARD");
+		// DONT DO ANYTHING HERE ... in game flow if this symbol is found move on
 	}),
 	
 	/**

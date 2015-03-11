@@ -122,6 +122,8 @@ public class TextUserInterface {
 					return;
 				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
 					if (!controller.isGameOver()) {
+
+						System.out.println("It's the turn of player " + p.getName() + "!");
 						playTurn(controller.advanceToNextTurn());
 					} else {
 						System.out.println("The game has finished!");
@@ -157,7 +159,6 @@ public class TextUserInterface {
 	 * @param p
 	 */
 	private void playTurn(Player p) {
-		System.out.println("It's the turn of player " + p.getName() + "!");
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
 		controller.getGame().setCurrentCardInPlay(c);
 		
@@ -207,6 +208,10 @@ public class TextUserInterface {
 				scanner.nextLine();
 				String choice = scanner.nextLine();
 				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
+					if(s == Symbol.PLAY_ANOTHER_CARD) {
+						playTurn(p);
+						return;
+					}
 					controller.performSymbolAction(p, s);
 				}
 			} else {
