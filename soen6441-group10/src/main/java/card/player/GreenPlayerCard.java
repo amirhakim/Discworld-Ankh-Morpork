@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 
 import card.Card;
 
+
 @SuppressWarnings("serial")
 /**
  * Enum for player cards
@@ -44,7 +45,8 @@ public enum GreenPlayerCard implements Card {
 			 * Take 3 cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED HEX");
+				//System.out.println("YOU CALLED HEX");
+				game.drawPlayerCard(player,3);			
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_A_BUILDING);		

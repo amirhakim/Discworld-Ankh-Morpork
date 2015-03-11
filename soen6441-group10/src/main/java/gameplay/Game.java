@@ -240,12 +240,33 @@ public class Game {
 		}
 	}
 
+	
+	/**
+	 * Draws player cards.
+	 * Adds the given player's hand size (i) if it is less than five.
+	 * If no more player cards are available, the player's hand is left as it is
+	 * at the time when the cards are up (the game should end after the player's
+	 * turn is finished). 
+	 * @param p the player whose hand size must be restored.
+	 */
+	public void drawPlayerCard(Player p , int i){
+		Player actualPlayer = players.get(p.getColor());
+		if (hasPlayerCardsLeft() && 
+				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
+			while(i>0){
+			actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+			i--;
+			}
+		}
+	}
+	
+	
 	/**
 	 * Draws a player card.
 	 * 
 	 * @return an object that contains either the player card drawn or
 	 *         nothing, if the deck is out of cards.
-	 */
+	 */	
 	public Optional<GreenPlayerCard> drawPlayerCard() {
 		 return playerDeck.drawCard();
 	}
