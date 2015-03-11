@@ -3,8 +3,13 @@ package card;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.Set;
+
 import gameplay.Game;
 import gameplay.Player;
+
+
 
 
 import org.junit.After;
@@ -14,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.Color;
+import card.player.DiscardPile;
 import card.player.GreenPlayerCard;
 
 public class GreenCardTest {
@@ -40,7 +46,7 @@ public class GreenCardTest {
 
 	/**
 	 */
-	@Test
+	//@Test
 	public void zorgoTest() {
 		game.assignPersonality(player);
 		Card personalityBefore = player.getPersonality();
@@ -52,6 +58,30 @@ public class GreenCardTest {
 		
 	}
 
+	@Test
+	public void historyMonksTest() {
+		// Set up some fake discard files
+		game.discardCard(GreenPlayerCard.INIGO_SKIMMER);
+		game.discardCard(GreenPlayerCard.HEX);
+		game.discardCard(GreenPlayerCard.HERE_N_NOW);
+		game.discardCard(GreenPlayerCard.HARRY_KING);
+		
+		int cardsBeforeSize = player.getPlayerCards().size();
+		DiscardPile pile = game.getDiscardPile();
+		int pileSizeBefore = pile.size();
+
+		GreenPlayerCard.HISTORY_MONKS.getText().accept(player, game);
+
+		int cardsAfterSize= player.getPlayerCards().size();
+		int pileSizeAfter = pile.size();
+		
+		assertEquals(pileSizeAfter, pileSizeBefore - 4);
+		assertEquals(cardsAfterSize, cardsBeforeSize + 4);
+		
+		
+		
+	}
+	
 	@After
 	public void tearDown() throws Exception {
 		// Code executed after each test

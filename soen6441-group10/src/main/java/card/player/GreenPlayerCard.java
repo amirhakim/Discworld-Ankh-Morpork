@@ -34,6 +34,9 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				System.out.println("YOU CALLED HISTORY MONKS");
+				DiscardPile pile = game.getDiscardPile();
+				pile.shuffle();
+				game.drawDiscardCards(player, 4);
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);		

@@ -12,6 +12,7 @@ import util.Color;
 import card.city.AnkhMorporkArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
+import card.player.DiscardPile;
 import card.player.GreenPlayerCard;
 import card.player.PlayerDeck;
 import card.random.RandomEventCard;
@@ -48,6 +49,8 @@ public class Game {
 	private PersonalityDeck personalityDeck;
 
 	private PlayerDeck playerDeck;
+	
+	private DiscardPile discardPile;
 	
 	/**
 	 * For most, if not all, use cases, we need to alter the state
@@ -115,6 +118,7 @@ public class Game {
 		playerDeck = new PlayerDeck();
 		randomEventDeck = new RandomEventDeck();
 		personalityDeck = new PersonalityDeck();
+		discardPile = new DiscardPile();
 
 		status = GameStatus.READY;
 	}
@@ -722,6 +726,43 @@ public class Game {
 		}
 		
 		return points;
+	}
+
+	/**
+	 * If not asking for too many cards, draw these cards and assign to player
+	 * 
+	 * @param player
+	 * @param numberOfCards
+	 * @return false if asking for too many cards
+	 */
+	public boolean drawDiscardCards(Player player, int numberOfCards) {
+
+		if(getDiscardPile().size() >= numberOfCards) {
+			while(numberOfCards > 0) {
+				player.addPlayerCard(discardPile.drawCard().get());		
+				numberOfCards--;
+			}
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @return discardPile used by game
+	 */
+	public DiscardPile getDiscardPile() {
+		return discardPile;
+	}
+	
+	/**
+	 * Discar card by adding it to the pile
+	 * @param card
+	 */
+	public void discardCard(GreenPlayerCard card) {
+		discardPile.addCard(card);
 	}
 	
 }
