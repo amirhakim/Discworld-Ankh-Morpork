@@ -1,12 +1,19 @@
 package card.player;
 
+import gameplay.BoardArea;
+import gameplay.Die;
 import gameplay.Game;
 import gameplay.Player;
+import io.TextUserInterface;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 
+import util.Color;
 import card.Card;
 
 
@@ -33,7 +40,6 @@ public enum GreenPlayerCard implements Card {
 			 * Place the remaining cards back as the discard pile.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED HISTORY MONKS");
 				DiscardPile pile = game.getDiscardPile();
 				pile.shuffle();
 				game.drawDiscardCards(player, 4);
@@ -66,6 +72,34 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				System.out.println("YOU CALLED HERE'N'NOW");
+				int dieRoll = Die.getDie().roll();
+				System.out.println("Dice rolled: " + dieRoll);
+
+				TextUserInterface textUI = new TextUserInterface();
+				if(dieRoll == 7) {
+					Collection<Player> players = game.getPlayers();
+					Map<Color, Player> playerMap = new HashMap<Color, Player>();
+					for(Player p : players) {
+						if(p.getColor() == player.getColor()) continue;
+						if(p.getMoney() < 3) continue;
+						playerMap.put(p.getColor(), p);
+					}
+					if(playerMap.size() == 0 ) {
+						System.out.println("All players are broke.");
+						return;
+					}
+					Player chosenPlayer = textUI.getPlayer(playerMap);
+					chosenPlayer.decreaseMoney(3);
+					player.increaseMoney(3);
+					
+					
+				} else if(dieRoll == 1) {
+					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
+					chosenArea.removeMinion(player);
+				}
+				
+				
+				
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLAY_ANOTHER_CARD);		

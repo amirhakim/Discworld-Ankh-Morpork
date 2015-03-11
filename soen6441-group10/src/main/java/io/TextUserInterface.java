@@ -6,9 +6,11 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -522,6 +524,31 @@ public class TextUserInterface {
 	    	}
 	    }
 	}
+
+	/**
+	 * Get user to chose a player by typing a color
+	 * 
+	 * @param excludePlayer do not let user return this player
+	 * @return chosen player
+	 */
+	public Player getPlayer(Map<Color, Player> playerMap) {
+		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<Color, Player> pair = (Map.Entry<Color, Player>)it.next();
+			System.out.println(pair.getKey() + ": " + pair.getValue().getName());
+		}
+		System.out.println("Type color of player: ");
+		scanner = new Scanner(System.in);
+		String action = scanner.nextLine();
+		//TODO need to catch bad valueOf
+		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null) {
+			System.out.println("Invalid selection.  Try again: ");
+			action = scanner.nextLine();
+		}
+		return playerMap.get(Color.valueOf(action));
+	}
+
+
 	
 
 
