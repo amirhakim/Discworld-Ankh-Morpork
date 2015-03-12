@@ -312,7 +312,13 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);	
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED RORIE PALM TEXT");
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap;
+			myPlayersMap = game.getPlayersMap();
+			myPlayersMap.remove(player);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			if(choosenPlayer.getHandSize()<5) choosenPlayer.addPlayerCard(UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player"));
+			else System.out.println("that player has no place in his hand for another card");
 		}		
 	),
 
