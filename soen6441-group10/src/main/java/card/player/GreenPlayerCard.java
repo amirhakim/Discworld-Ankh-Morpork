@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 
 import util.Color;
 import card.Card;
+import card.city.AnkhMorporkArea;
 
 
 @SuppressWarnings("serial")
@@ -159,7 +160,10 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_A_BUILDING);	
 			}},
 			(player, game) -> {
-				System.out.println("NOT IMPLEMENTED: YOU CALLED THE OPERA HOUSE TEXT");
+				int minionCount=game.getMinionCountForArea(AnkhMorporkArea.ISLE_OF_GODS);
+				game.getBank().decreaseBalance(minionCount);
+				player.increaseMoney(minionCount);
+				System.out.println("Took " + minionCount + " from bank");
 			}
 	),
 	
