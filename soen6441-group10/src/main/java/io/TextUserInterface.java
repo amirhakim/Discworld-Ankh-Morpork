@@ -167,9 +167,17 @@ public class TextUserInterface {
 		System.out.println("Playing symbols");
 		if (c.isTextFirst()) {
 			playText(c, p);
-			playSymbols(c, p);
+			// Perform symbols
+			// If symbols return false
+			// Its because we've recursed into playig another card
+			boolean res = playSymbols(c, p);
+			if(!res) return;
 		} else {
-			playSymbols(c, p);
+			// Perform symbols
+			// If symbols return false
+			// Its because we've recursed into playig another card
+			boolean res = playSymbols(c, p);
+			if(!res) return;
 			playText(c, p);
 		}
 		System.out.println("Done playing symbols");
@@ -203,7 +211,7 @@ public class TextUserInterface {
 	 * @param c GreenPlayerCard currently in use
 	 * @param p Player who turn it is
 	 */
-	private void playSymbols(GreenPlayerCard c, Player p) {
+	private boolean playSymbols(GreenPlayerCard c, Player p) {
 		// Perform the symbols on the cards selectively
 		for (Symbol s : c.getSymbols()) {
 			// Only Random Events are mandatory
@@ -213,16 +221,18 @@ public class TextUserInterface {
 				String choice = scanner.nextLine();
 				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
 					if(s == Symbol.PLAY_ANOTHER_CARD) {
-						controller.getGame().setCurrentCardInPlay(null);
+						controller.getGame().discardCard(c, p);
 						playTurn(p);
-						return;
+						return false;
 					}
 					controller.performSymbolAction(p, s);
 				}
 			} else {
+				System.out.println("Random Event Symbol, must play...");
 				controller.performSymbolAction(p, s);
 			}
 		}
+		return true;
 		
 	}
 	
