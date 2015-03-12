@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.function.BiConsumer;
 
 import util.Color;
@@ -123,10 +124,28 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_MINION);		
 			}},	
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
-				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
-						"Choose a card to discard: ");
-				player.removePlayerCard(discardCard);
+				boolean haveCards = true;
+				int discardedCount=0;
+				while (haveCards){
+					TextUserInterface UI = new TextUserInterface();
+					GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+							"Choose a card to discard: ");
+					if(player.removePlayerCard(discardCard)) discardedCount ++;
+					else{
+						System.out.println("can't remove any more cards");
+						break;
+					}
+					if (player.getHandSize()==0) haveCards=false;
+					else {
+						System.out.println("to stop removing cards type (x)");
+						Scanner scanner = new Scanner(System.in);
+						String action = scanner.nextLine();
+						if (action.equals("x")) haveCards=false;
+						scanner.close();
+					}
+				}
+				// player gets $2 for each discarded card
+				player.increaseMoney(discardedCount*2);
 			}			
 	), 
 	
@@ -173,7 +192,10 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				TextUserInterface UI = new TextUserInterface();
-				Player choosenPlayer = UI.getPlayer(game.getPlayersMap());
+				Map<Color,Player> myPlayersMap;
+				myPlayersMap = game.getPlayersMap();
+				myPlayersMap.remove(player);
+				Player choosenPlayer = UI.getPlayer(myPlayersMap);
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);
 				}
@@ -191,7 +213,10 @@ public enum GreenPlayerCard implements Card {
 			 * Discard one card.
 			 */
 			(player, game) -> {
-				System.out.println("NOT IMPLEMENTED: YOU CALLED MODO TEXT");
+				TextUserInterface UI = new TextUserInterface();
+				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+						"Choose a card to discard: ");
+				player.removePlayerCard(discardCard);
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);	
