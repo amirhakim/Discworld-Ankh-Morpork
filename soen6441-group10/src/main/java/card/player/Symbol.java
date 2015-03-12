@@ -116,18 +116,26 @@ public enum Symbol {
 			BoardArea chosenRemoveArea = UI.getAreaChoice(playerAreas, "Choose Area to remove building from", "Choose Area: ");
 			// Choose Area to place building on
 			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas();
-			freeAreas.remove(chosenRemoveArea);
-			
-			BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
-			game.addBuilding(player, chosenPlaceArea);
+			// Check that you can place a building
+			if(freeAreas.size() == 0) {
+				System.out.println("All areas have a building or a trouble marker.");
+			} else {
+				//Do the building removal and placement
+				freeAreas.remove(chosenRemoveArea);		
+				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
+				game.addBuilding(player, chosenPlaceArea);
+				
+			}
 		} else {
 			// Player has free buildings too place
 			// Choose Area to place building on
 			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas();
-					
-			BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
-			game.addBuilding(player, chosenPlaceArea);
-			
+			if(freeAreas.size() == 0) {
+				System.out.println("All areas either has a building or a trouble marker.");
+			} else {
+				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
+				game.addBuilding(player, chosenPlaceArea);
+			}
 		}
 	}),
 	
@@ -153,7 +161,7 @@ public enum Symbol {
 			
 		}
 		TextUserInterface textUI = new TextUserInterface();
-		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area for assination", "choice: ", true);
+		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area for assasinnation", "choice: ", true);
 		textUI.assinate(trouble, player, game);
 	}),
 	
