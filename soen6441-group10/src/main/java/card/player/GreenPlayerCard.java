@@ -359,7 +359,15 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED QUEEN MOLLY TEXT");
+			TextUserInterface UI = new TextUserInterface();
+			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
+			for(int i =0; i<2; i++){
+				System.out.println(selectedPlayer.getName() +" has to choose one of his cards to give away");
+				if(!player.addPlayerCard(UI.getCardChoice(selectedPlayer.getPlayerCards(),"choose a card to give away"))){
+					System.out.println("no more cards to give");
+					break;
+				}	
+			}
 		}			
 	),
 	
