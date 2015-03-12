@@ -492,7 +492,8 @@ public class Game {
 		Map<Integer, BoardArea> freeAreas = new HashMap<Integer, BoardArea>();
 
 		for (BoardArea boardArea : gameBoard.values()) {
-			if (boardArea.getBuildingOwner() == Color.UNDEFINED) {
+			if (boardArea.getBuildingOwner() == Color.UNDEFINED &&
+					boardArea.hasTroubleMarker() == false) {
 				freeAreas.put(boardArea.getArea().getAreaCode(), boardArea);
 			}
 		}

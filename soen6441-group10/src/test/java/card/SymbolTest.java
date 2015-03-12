@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 import gameplay.BoardArea;
 import gameplay.Game;
 import gameplay.Player;
-import io.TextUserInterface;
 
 import java.util.Map;
 
@@ -149,6 +148,52 @@ public class SymbolTest {
 		// Ensure building cost something
 		assertTrue(player.getMoney() < previousPlayerBalance);
 		
+	}
+	
+	
+	/**
+	 * Test that if all areas have trouble marker
+	 * your presented with the only area that doesn't
+	 * have a trouble marker
+	 */
+	@Test
+	public void placeBuildingNoTroubleTest() {
+		
+		System.out.println("~~PLACE BUILDING NO TROUBLE TEST~~");
+		
+		// Give player unlimited funds
+		player.increaseMoney(10000);
+		int previousPlayerBalance = player.getMoney();
+		// Can not add building to build area with trouble
+		for(BoardArea ba : gameBoard.values()) {
+			ba.addTroubleMarker();
+		}
+		gameBoard.get(1).removeTroubleMarker();
+		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
+		
+		// Ensure that the players buildings have decreased
+		assertEquals(player.getBuildings(), Player.TOTAL_BUILDINGS - 1);
+		// Ensure building cost something
+		assertTrue(player.getMoney() < previousPlayerBalance);
+		
+		//Only one place to place a building, area(1) which doesn't have trouble marker
+		//Ensure player chose this area
+		assertTrue(gameBoard.get(1).getBuildingOwner() == player.getColor());
+	}
+	
+	/**
+	 * Test that you cannot place a building if they have trouble markers
+	 */
+	@Test
+	public void impossibleBuildingPlacementTest() {
+		player.increaseMoney(1000);
+		// Can not add building to build area with trouble
+		for(BoardArea ba : gameBoard.values()) {
+			ba.addTroubleMarker();
+		}
+		int buildingCount = player.getBuildings();
+		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
+		assertEquals(player.getBuildings(), buildingCount);
 	}
 	
 	/**

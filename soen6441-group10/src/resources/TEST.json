@@ -1,0 +1,225 @@
+{
+  "gameBank": {
+    "amount": 100
+  },
+  "players": {
+    "RED": {
+      "name": "Ross",
+      "personality": "COMMANDER_VIMES",
+      "color": "RED",
+      "money": 10,
+      "minions": 8,
+      "buildings": 5,
+      "cityCards": [],
+      "playerCards": [
+        "MR_PIN_AND_MR_TULIP",
+        "THE_MENDED_DRUM",
+        "DR_WHIEFACE",
+        "MR_BENT",
+        "THE_SEAMSTRESS_GUILD"
+      ]
+    },
+    "YELLOW": {
+      "name": "Smmith",
+      "personality": "LORD_RUST",
+      "color": "YELLOW",
+      "money": 10,
+      "minions": 7,
+      "buildings": 6,
+      "cityCards": [],
+      "playerCards": [
+        "DRUMKNOTT",
+        "PINK_PUSSYCAT_CLUB",
+        "SHONKY_SHOP",
+        "HARGAS_HOUSE_OF_RIBS",
+        "THE_PEELED_NUTS"
+      ]
+    }
+  },
+  "playerTurnOrder": [
+    "RED",
+    "YELLOW"
+  ],
+  "personalityDeck": {
+    "cards": [
+      "LORD_VETINARI",
+      "LORD_DE_WORDE",
+      "LORD_SELACHII",
+      "DRAGON_KING_OF_ARMS"
+    ]
+  },
+  "playerDeck": {
+    "cards": [
+      "THE_BEGGARS_GUILD",
+      "RINCEWIND",
+      "THE_ROYAL_MINT",
+      "WALLACE_SONKY",
+      "THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY",
+      "GASPODE",
+      "THE_AGONY_AUNTS",
+      "NOBBY_NOBBS",
+      "COMT_DIBBLER",
+      "FOUL_OLE_RON",
+      "ROSIE_PALM",
+      "CAPTAIN_CARROT",
+      "MR_GRYLE",
+      "DR_CRUCES",
+      "MR_BOGGIS",
+      "LEONARD_OF_QUIRM",
+      "THE_OPERA_HOUSE",
+      "MRS_CAKE",
+      "HEX",
+      "QUEEN_MOLLY",
+      "ZORGO_THE_RETRO_PHRENOLOGIST",
+      "LIBRARIAN",
+      "HISTORY_MONKS",
+      "GROAT",
+      "THE_BANK_OF_ANKH_MORPORK",
+      "THE_FIRE_BRIGADE",
+      "MODO",
+      "INIGO_SKIMMER",
+      "HERE_N_NOW",
+      "THE_DUCKMAN",
+      "THE_THIEVES_GUILD",
+      "GIMLETS_DWARF_DELICATESSEN",
+      "THE_FRESH_START_CLUB"
+    ]
+  },
+  "discardPile": {
+    "cards": [
+      "THE_DYSK",
+      "SACHARISSA_CRIPSLOCK",
+      "THE_FOOLS_GUILD",
+      "SERGANT_ANGUA",
+      "HARRY_KING"
+    ]
+  },
+  "gameBoard": {
+    "1": {
+      "area": "DOLLY_SISTERS",
+      "minions": {
+        "RED": 1,
+        "YELLOW": 1
+      },
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "2": {
+      "area": "UNREAL_ESTATE",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "3": {
+      "area": "DRAGONS_LANDING",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "4": {
+      "area": "SMALL_GODS",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "5": {
+      "area": "THE_SCOURS",
+      "minions": {
+        "RED": 1,
+        "YELLOW": 1
+      },
+      "troubleMarker": true,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "6": {
+      "area": "THE_HIPPO",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "7": {
+      "area": "THE_SHADES",
+      "minions": {
+        "RED": 1,
+        "YELLOW": 1
+      },
+      "troubleMarker": true,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "8": {
+      "area": "DIMWELL",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "9": {
+      "area": "LONGWALL",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "10": {
+      "area": "ISLE_OF_GODS",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "11": {
+      "area": "SEVEN_SLEEPERS",
+      "minions": {},
+      "troubleMarker": false,
+      "buildingColor": "UNDEFINED",
+      "demonCount": 0,
+      "trollCount": 0
+    },
+    "12": {
+      "area": "NAP_HILL",
+      "minions": {
+        "RED": 1,
+        "YELLOW": 2
+      },
+      "troubleMarker": false,
+      "buildingColor": "RED",
+      "demonCount": 0,
+      "trollCount": 0
+    }
+  },
+  "randomEventDeck": {
+    "cards": [
+      "TROLLS",
+      "DRAGON",
+      "RIOTS",
+      "FLOOD",
+      "FIRE",
+      "DEMONS_FROM_THE_DUNGEON_DIMENSIONS",
+      "MYSTERIOUS_MURDERS",
+      "BLOODY_STUPID_JOHNSON",
+      "FOG",
+      "EARTHQUAKE",
+      "EXPLOSIONS",
+      "SUBSIDENCE"
+    ]
+  },
+  "status": "PLAYING",
+  "currentTurn": 1
+}
