@@ -152,10 +152,9 @@ public enum Symbol {
 			}
 			
 		}
-		
 		TextUserInterface textUI = new TextUserInterface();
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area for assination", "choice: ", true);
-		textUI.assinate(trouble, player);
+		textUI.assinate(trouble, player, game);
 	}),
 	
 	
@@ -180,7 +179,6 @@ public enum Symbol {
 		// Get calling card
 		GreenPlayerCard playerCard = game.getCurrentCardInPlay();
 		if(playerCard != null) {
-			System.out.println(playerCard);
 			Integer amount = playerCard.getMoney();
 			game.getBank().decreaseBalance(amount);
 			player.increaseMoney(amount);
@@ -202,9 +200,9 @@ public enum Symbol {
 	RANDOM_EVENT((player, game) -> {
 		
 		RandomEventCard random = game.drawRandomEventCard().get();
-		System.out.println(random + " was called");
 		random.getGameAction().accept(game, player);
-		
+
+		System.out.println(random + " was played");
 	}),
 	
 	/**

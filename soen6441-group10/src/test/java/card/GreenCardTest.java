@@ -69,10 +69,10 @@ public class GreenCardTest {
 	@Test
 	public void historyMonksTest() {
 		// Set up some fake discard files
-		game.discardCard(GreenPlayerCard.INIGO_SKIMMER);
-		game.discardCard(GreenPlayerCard.HEX);
-		game.discardCard(GreenPlayerCard.HERE_N_NOW);
-		game.discardCard(GreenPlayerCard.HARRY_KING);
+		game.discardCard(GreenPlayerCard.INIGO_SKIMMER, null);
+		game.discardCard(GreenPlayerCard.HEX, null);
+		game.discardCard(GreenPlayerCard.HERE_N_NOW, null);
+		game.discardCard(GreenPlayerCard.HARRY_KING, null);
 		
 		int cardsBeforeSize = player.getPlayerCards().size();
 		DiscardPile pile = game.getDiscardPile();

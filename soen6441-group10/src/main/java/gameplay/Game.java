@@ -774,12 +774,19 @@ public class Game {
 		return discardPile;
 	}
 	
+
+	
+	
 	/**
 	 * <b>Discard card by adding it to the pile.</b>
 	 * @param card
 	 */
-	public void discardCard(GreenPlayerCard card) {
+	public void discardCard(GreenPlayerCard card, Player p) {
+		if(p != null) {
+			p.removePlayerCard(card);
+		}
 		discardPile.addCard(card);
 	}
+	
 	
 }

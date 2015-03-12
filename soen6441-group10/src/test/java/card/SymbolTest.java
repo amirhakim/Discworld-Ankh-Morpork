@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import gameplay.BoardArea;
 import gameplay.Game;
 import gameplay.Player;
+import io.TextUserInterface;
 
 import java.util.Map;
 
