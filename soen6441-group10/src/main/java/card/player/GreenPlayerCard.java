@@ -140,6 +140,7 @@ public enum GreenPlayerCard implements Card {
 	
 	THE_PEELED_NUTS(
 			new ArrayList<Symbol>() {{		
+				
 			}}		
 	),
 	
@@ -302,6 +303,7 @@ public enum GreenPlayerCard implements Card {
 		 */
 		(player, game) -> {
 			// Get another personality card
+			System.out.println("Assigning new personality card!");
 			game.assignPersonality(player);
 			
 		}, 

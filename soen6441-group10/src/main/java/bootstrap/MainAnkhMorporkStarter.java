@@ -8,5 +8,4 @@ public class MainAnkhMorporkStarter {
 		TextUserInterface newGame = new TextUserInterface();
 		newGame.runMainMenu();
 	}
-
 }

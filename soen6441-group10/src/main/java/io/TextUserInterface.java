@@ -33,6 +33,7 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
+	
 	/**
 	 * This method implements an interactive interface to:</br>
 	 * Choose one of the following:</br>
@@ -163,6 +164,7 @@ public class TextUserInterface {
 		controller.getGame().setCurrentCardInPlay(c);
 		
 		// Determine which needs to be completed first (symbols or text)
+		System.out.println("Playing symbols");
 		if (c.isTextFirst()) {
 			playText(c, p);
 			playSymbols(c, p);
@@ -170,8 +172,9 @@ public class TextUserInterface {
 			playSymbols(c, p);
 			playText(c, p);
 		}
+		System.out.println("Done playing symbols");
 		
-
+		controller.getGame().discardCard(c, p);
 		controller.getGame().setCurrentCardInPlay(null);
 		controller.restorePlayerHand(p);
 	}
@@ -182,12 +185,17 @@ public class TextUserInterface {
 	 * @param p Player who's turn it is
 	 */
 	private void playText(GreenPlayerCard c, Player p) {
-		System.out.println("Playing Text on the card:");
 		BiConsumer<Player, Game> textAction = c.getText();
-
-		if (textAction != null) {
-			textAction.accept(p, controller.getGame());
+		if(textAction != null){
+			System.out.println("Do you want to perform scroll symbol? (yes/no)");
+			System.out.print("> ");
+			String choice = scanner.nextLine();
+			if (UserOption.YES.name().equalsIgnoreCase(choice)) {
+				textAction.accept(p, controller.getGame());
+			}
 		}
+			
+
 	}
 	
 	/**
@@ -196,18 +204,16 @@ public class TextUserInterface {
 	 * @param p Player who turn it is
 	 */
 	private void playSymbols(GreenPlayerCard c, Player p) {
-		System.out.println("Playing Symbols on the card");
 		// Perform the symbols on the cards selectively
 		for (Symbol s : c.getSymbols()) {
 			// Only Random Events are mandatory
 			if (s != Symbol.RANDOM_EVENT) {
 				System.out.println("Do you want to perform " + s + "? (yes/no)");
 				System.out.print("> ");
-				//Extra next line seems to be needed ... not sure why
-				scanner.nextLine();
 				String choice = scanner.nextLine();
 				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
 					if(s == Symbol.PLAY_ANOTHER_CARD) {
+						controller.getGame().setCurrentCardInPlay(null);
 						playTurn(p);
 						return;
 					}
@@ -232,7 +238,9 @@ public class TextUserInterface {
 		}
 		
 		// TODO Won't bother now with bound checks, will do it later
-		return cardMap.get(scanner.nextInt());
+		int action = scanner.nextInt();
+		scanner.nextLine();
+		return cardMap.get(action);
 	}
 
 	/**
@@ -399,9 +407,11 @@ public class TextUserInterface {
 		System.out.print(inputMsg);
 
 		int action = scanner.nextInt();
+		scanner.nextLine();
 		while (AnkhMorporkArea.forCode(action) == null ) {
 			System.out.println("Invalid selection.  "  + inputMsg);
 			action = scanner.nextInt();
+			scanner.nextLine();
 		}
 
 		return AnkhMorporkArea.forCode(action);
@@ -427,9 +437,11 @@ public class TextUserInterface {
 		System.out.print(inputMsg);
 
 		int action = scanner.nextInt();
+		scanner.nextLine();
 		while (AnkhMorporkArea.forCode(action) == null ) {
 			System.out.println("Invalid selection.  "  + inputMsg);
 			action = scanner.nextInt();
+			scanner.nextLine();
 		}
 
 		return availableAreas.get(action);
@@ -462,8 +474,11 @@ public class TextUserInterface {
 		System.out.print(inputMsg);
 		scanner = new Scanner(System.in);
 		int action = scanner.nextInt();
+		scanner.nextLine();
 		while(availableAreas.get(action) == null) {
 			System.out.print("Invalid selection: " + inputMsg);
+			action = scanner.nextInt();
+			scanner.nextLine();
 		}
 		return availableAreas.get(action);
 	}
@@ -473,7 +488,7 @@ public class TextUserInterface {
 	 * @param trouble
 	 * @param killer
 	 */
-	public void assinate(BoardArea trouble, Player killer) {
+	public void assinate(BoardArea trouble, Player killer, Game game) {
 		scanner = new Scanner(System.in);
 		
 		// Display all assination options
@@ -505,8 +520,9 @@ public class TextUserInterface {
 	    		removed = true;
 	    	} else {
 	    		try {
+	    			Color c =Color.valueOf(actionKill);
 	    			// Make sure minion being assinated is valid and isn't your own
-	    			Player losingMinion = controller.getPlayerOfColor(Color.valueOf(actionKill));
+	    			Player losingMinion = game.getPlayerOfColor(c);
 	    			if(losingMinion != null &&
 	    					Color.valueOf(actionKill) != killer.getColor() &&
 	    					trouble.getMinionCountForPlayer(losingMinion) != 0) {

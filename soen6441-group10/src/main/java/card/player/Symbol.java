@@ -150,10 +150,9 @@ public enum Symbol {
 			}
 			
 		}
-		
 		TextUserInterface textUI = new TextUserInterface();
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area for assination", "choice: ", true);
-		textUI.assinate(trouble, player);
+		textUI.assinate(trouble, player, game);
 	}),
 	
 	
