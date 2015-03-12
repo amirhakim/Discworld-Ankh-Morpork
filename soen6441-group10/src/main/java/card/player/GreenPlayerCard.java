@@ -261,7 +261,28 @@ public enum GreenPlayerCard implements Card {
 		 * take $1 for each one discarded.
 		 */
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED SHONKY SHOP TEXT");
+			boolean haveCards = true;
+			int discardedCount=0;
+			while (haveCards){
+				TextUserInterface UI = new TextUserInterface();
+				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+						"Choose a card to discard: ");
+				if(player.removePlayerCard(discardCard)) discardedCount ++;
+				else{
+					System.out.println("can't remove any more cards");
+					break;
+				}
+				if (player.getHandSize()==0) haveCards=false;
+				else {
+					System.out.println("to stop removing cards type (x)");
+					Scanner scanner = new Scanner(System.in);
+					String action = scanner.nextLine();
+					if (action.equals("x")) haveCards=false;
+					scanner.close();
+				}
+			}
+			// player gets $2 for each discarded card
+			player.increaseMoney(discardedCount*1);
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);	
