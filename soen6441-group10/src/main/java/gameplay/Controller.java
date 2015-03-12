@@ -8,11 +8,11 @@ import card.player.Symbol;
 import error.InvalidGameStateException;
 
 /**
- * <b> This class represents the Controller layer of MVC pattern. <b> 
- * It is used to interpret UI actions and calls the appropriate model like File IO and class Game.
+ * <b> This class represents the Controller layer of MVC pattern.
+ * It is used to interpret UI actions and calls the appropriate model like File IO and class Game. </b> 
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class Controller {
 
@@ -27,7 +27,7 @@ public class Controller {
 	}
 	
 	/**
-	 * This method starts a new game - initialize all the required data structures etc.
+	 * <b>This method starts a new game - initialize all the required data structures etc.</b>
 	 * @param: numberOfPlayers required for game, humane players name
 	 * @return true if the game was successfully initialized, false otherwise.
 	 */
@@ -44,8 +44,8 @@ public class Controller {
 	}
 	
 	/**
-	 * Advances the turn to the next player and returns the player whose turn
-	 * it currently is.
+	 * <b>Advances the turn to the next player and returns the player whose turn
+	 * it currently is.</b>
 	 * @return the player whose turn it currently is.
 	 */
 	public Player advanceToNextTurn() {
@@ -53,7 +53,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Gets the player whose turn it currently is.
+	 * <b>Gets the player whose turn it currently is.</b>
 	 * @return the player whose turn it currently is.
 	 */
 	public Player getPlayerOfCurrentTurn() {
@@ -61,7 +61,7 @@ public class Controller {
 	}
 	
 	/**
-	 * This method gets array of players in game.
+	 * <b>This method gets array of players in game.</b>
 	 * @return the players in game
 	 */
 	public Collection<Player> getPlayers() {
@@ -73,7 +73,7 @@ public class Controller {
 	}
 	
 	/**
-	 * This method gets bank class used in the game.
+	 * <b>This method gets bank class used in the game.</b>
 	 * @return the bank used in the game
 	 */
 	public Bank getBank() {
@@ -81,7 +81,7 @@ public class Controller {
 	}
 	
 	/**
-	 * This method checks to see if the game is playing.
+	 * <b>This method checks to see if the game is playing.</b>
 	 * @return true if the game is playing
 	 */
 	public boolean gameExists() {
@@ -89,10 +89,10 @@ public class Controller {
 	}
 
 	/**
-	 * Gets the game board in the form of a board area collection. These
+	 * <b>Gets the game board in the form of a board area collection.<br> These
 	 * board areas don't just contain the value of the underlying area 
 	 * (e.g. "Dolly Sisters") - they contain their state as well
-	 * (see {@link BoardArea}).
+	 * (see {@link BoardArea}).</b>
 	 * @return a collection of the game's board areas.
 	 */
 	public Collection<BoardArea> getBoard() {

@@ -24,7 +24,7 @@ import card.player.Symbol;
  * <b> This class makes a command line interface to communicate with the players. <b> 
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class TextUserInterface {
 

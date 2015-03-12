@@ -6,10 +6,10 @@ import java.util.Stack;
 import card.Deck;
 
 /**
- * This class implements the deck of Random Event cards.
+ * <b>This class implements the deck of Random Event cards.</b>
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class RandomEventDeck extends Deck<RandomEventCard> {
 	

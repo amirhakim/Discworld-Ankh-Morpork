@@ -19,14 +19,15 @@ import card.player.Symbol;
 
 
 /**
- * An enumeration of all the areas available in the game. Each area is uniquely
- * identified by a number (which is visible on the physical game board).
+ * <b>An enumeration of all the areas available in the game. Each area is uniquely
+ * identified by a number (which is visible on the physical game board).</b><br>
  * 
- * Note that this area implements the Card marker interface, because it serves as
+ * <b>Note that this area implements the Card marker interface, because it serves as
  * the enumeration of all the City Area cards in the game while {@link CityAreaCard}
- * actually bears the state of the card (played or not, playable more than once etc.).
+ * actually bears the state of the card (played or not, playable more than once etc.).</b>
  * 
- * @author gkentr
+ * @author Team 10 - SOEN6441
+ * @version 2.0
  */
 public enum AnkhMorporkArea implements Card {
 

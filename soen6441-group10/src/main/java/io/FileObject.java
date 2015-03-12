@@ -5,11 +5,11 @@ import java.nio.file.Paths;
 
 
 /**
- * <b> This class encapsulates an object and the filename it is mapped to for saving/loading <b> 
+ * <b> This class encapsulates an object and the filename it is mapped to for saving/loading. </b> 
  * 
  * @param <T>
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class FileObject<T> {
 	

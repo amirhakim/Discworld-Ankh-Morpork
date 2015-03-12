@@ -8,13 +8,16 @@ import util.Color;
 import card.city.AnkhMorporkArea;
 
 /**
- * <p>
+ * <p><b>
  * This class implements areas on the board, including neighbours, building
  * costs, number of minions on the spot, if there is a building, etc with their
- * related rules and all information relevant to that area on the board.
+ * related rules and all information relevant to that area on the board.<br>
  * 
  * Thus, it is just the area enumeration plus the state.
- * </p>
+ * </b></p>
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 2.0
  */
 public class BoardArea {
 
@@ -25,8 +28,8 @@ public class BoardArea {
 	private boolean troubleMarker;
 
 	/**
-	 * Recall the each color uniquely identifies a player - in that sense, by
-	 * knowing the color of the building, we know which player it belongs to.
+	 * <b>Recall the each color uniquely identifies a player - in that sense, by
+	 * knowing the color of the building, we know which player it belongs to.</b>
 	 */
 	private Color buildingColor;
 
@@ -35,7 +38,7 @@ public class BoardArea {
 	private int trollCount;
 
 	/**
-	 * This constructor is invoked to create objects from the class Area.
+	 * <b>This constructor is invoked to create objects from the class Area.</b>
 	 */
 	public BoardArea() {
 		minions = new HashMap<Color, Integer>();
@@ -46,7 +49,7 @@ public class BoardArea {
 	}
 
 	/**
-	 * This constructor is invoked to create objects from the class Area.
+	 * <b>This constructor is invoked to create objects from the class Area.</b>
 	 */
 	public BoardArea(AnkhMorporkArea area_) {
 		this();
@@ -61,10 +64,9 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method checks to see the neighbour of the city area.
+	 * <b>This method checks to see the neighbour of the city area.</b>
 	 * 
-	 * @param card2
-	 *            the city area
+	 * @param card2 the city area
 	 * @return true if that is adjacent to the city area
 	 */
 	public boolean isNeighboringWith(BoardArea card2) {
@@ -73,7 +75,7 @@ public class BoardArea {
 	
 	
 	/**
-	 * Checks to see if there is a trouble marker in the city area.
+	 * <b>Checks to see if there is a trouble marker in the city area.</b>
 	 * 
 	 * @return true if there is a trouble market in the city area
 	 */
@@ -82,7 +84,7 @@ public class BoardArea {
 	}
 
 	/**
-	 * Get the color of the building, which indicates the player to whom the
+	 * <b>Get the color of the building, which indicates the player to whom the</b>
 	 * building belongs.
 	 * 
 	 * @return the color of the building owner, if any.
@@ -92,10 +94,10 @@ public class BoardArea {
 	}
 
 	/**
-	 * Adds a building to this board area for the given player. Note that a 
+	 * <b>Adds a building to this board area for the given player.<br> Note that a 
 	 * building cannot be added to an area that contains a trouble marker or 
-	 * already contains a building.
-	 * 
+	 * already contains a building.</b>
+	 * @param p the player
 	 * @return true if the building was successfully added, false otherwise.
 	 */
 	public boolean addBuildingForPlayer(Player p) {
@@ -118,10 +120,9 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method determines the number of minions of the player
+	 * <b>This method determines the number of minions of the player.</b>
 	 * 
-	 * @param p
-	 *            the player
+	 * @param p the player
 	 * @return number of the minions of the player
 	 */
 	public int getMinionCountForPlayer(Player p) {
@@ -129,7 +130,7 @@ public class BoardArea {
 	}
 
 	/**
-	 * Get the minions of each player mapped with a color.
+	 * <b>Get the minions of each player mapped with a color.</b>
 	 * 
 	 * @return minions mapped to a color
 	 */
@@ -138,8 +139,8 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method adds the minion of the player in the city area, and justifies
-	 * the balance of stocked minions.
+	 * <b>This method adds the minion of the player in the city area, and justifies
+	 * the balance of stocked minions.</b>
 	 * 
 	 * @param p
 	 *            the player
@@ -156,9 +157,9 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method removes the minion of the player from the city area, and
+	 * <b>This method removes the minion of the player from the city area, and
 	 * justifies the balance of stocked minions. Also, if the area has a troublemarker
-	 * it is removed.
+	 * it is removed.</b>
 	 * 
 	 * @param p
 	 *            the player
@@ -175,7 +176,7 @@ public class BoardArea {
 	}
 
 	/**
-	 * Get the number of demons.
+	 * <b>Get the number of demons.</b>
 	 * 
 	 * @return number of demons on the spot
 	 */
@@ -184,7 +185,7 @@ public class BoardArea {
 	}
 
 	/**
-	 * Get the number of trolls.
+	 * <b>Get the number of trolls.</b>
 	 * 
 	 * @return number of trolls on the spot
 	 */
@@ -193,8 +194,8 @@ public class BoardArea {
 	}
 
 	/**
-	 * Increments the number of trolls on the area.
-	 * Trolls are regarded as minions so they will affect trouble in the area.
+	 * <b>Increments the number of trolls on the area.<br>
+	 * Trolls are regarded as minions so they will affect trouble in the area.</b>
 	 * 
 	 * @return true if adding a troll succeeded, false otherwise.
 	 */
@@ -205,8 +206,8 @@ public class BoardArea {
 	}
 
 	/**
-	 * Decrements the number of trolls on the area.
-	 * Trolls are regarded as minions so they will affect trouble in the area.
+	 * <b>Decrements the number of trolls on the area.<br>
+	 * Trolls are regarded as minions so they will affect trouble in the area.</b>
 	 * 
 	 * @return true if removing a troll succeeded, false otherwise.
 	 */
@@ -217,8 +218,8 @@ public class BoardArea {
 	}
 
 	/**
-	 * Increments the number of demons on the area.
-	 * Demons are regarded as minions so they will affect trouble in the area.
+	 * <b>Increments the number of demons on the area.<br>
+	 * Demons are regarded as minions so they will affect trouble in the area.</b>
 	 * 
 	 * @return true if adding a demon succeeded, false otherwise.
 	 */
@@ -229,8 +230,8 @@ public class BoardArea {
 	}
 
 	/**
-	 * Decrements the number of demons on the area.
-	 * Demons are regarded as minions so they will affect trouble in the area.
+	 * <b>Decrements the number of demons on the area.<br>
+	 * Demons are regarded as minions so they will affect trouble in the area.</b>
 	 * 
 	 * @return true if removing a demon succeeded, false otherwise.
 	 */
@@ -241,8 +242,8 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method adds trouble markers to the city area in case there has not
-	 * been any before.
+	 * <b>This method adds trouble markers to the city area in case there has not
+	 * been any before.</b>
 	 * 
 	 * @return true if it a trouble marker was added successfully.
 	 */
@@ -256,8 +257,8 @@ public class BoardArea {
 	}
 	
 	/**
-	 * This method removes a trouble marker
-	 * Returns true if there was previously a trouble marker on area
+	 * <b>This method removes a trouble marker.<br>
+	 * Returns true if there was previously a trouble marker on area.</b>
 	 */
 	public boolean removeTroubleMarker() {
 		if(hasTroubleMarker()){
@@ -272,7 +273,7 @@ public class BoardArea {
 	
 
 	/**
-	 * Retrieves the cost of placing a building in the area.
+	 * <b>Retrieves the cost of placing a building in the area.</b>
 	 * 
 	 * @return the cost of building on the area.
 	 */
@@ -281,8 +282,8 @@ public class BoardArea {
 	}
 	
 	/**
-	 * Removes all the pieces from this area (minions, trouble marker, building).
-	 * From what I understand these are not handed back to the players.
+	 * <b>Removes all the pieces from this area (minions, trouble marker, building).<br>
+	 * From what I understand these are not handed back to the players.</b>
 	 */
 	public void clearAllPieces() {
 		minions.clear();
@@ -293,11 +294,11 @@ public class BoardArea {
 	}
 
 	/**
-	 * Determines whether this board area is controlled by the given player.
+	 * <b>Determines whether this board area is controlled by the given player.<br>
 	 * An area is controlled by a player if (s)he "has more playing pieces in it
 	 * than any single other player (a playing piece being a minion or a building)
-	 * and has more pieces than the total number of trolls in the area". An area that
-	 * has at least one demon cannot be controlled.
+	 * and has more pieces than the total number of trolls in the area".<br> An area that
+	 * has at least one demon cannot be controlled.</b>
 	 * 
 	 * @param player
 	 * @return the total number of areas controlled by the given player.
@@ -316,9 +317,9 @@ public class BoardArea {
 	}
 	
 	/**
-	 * Counts the pieces owned by the given player.
-	 * Pieces include minions and buildings.
-	 * @param p
+	 * <b>Counts the pieces owned by the given player.<br>
+	 * Pieces include minions and buildings.</b>
+	 * @param p the player
 	 * @return the number of pieces owned by the given player.
 	 */
 	private int getPieceCountForPlayer(Player p) {
@@ -326,8 +327,8 @@ public class BoardArea {
 	}
 	
 	/**
-	 * Retrieves the maximum number of pieces owned by any player on this area.
-	 * Pieces include minions and buildings.
+	 * <b>Retrieves the maximum number of pieces owned by any player on this area.<br>
+	 * Pieces include minions and buildings.</b>
 	 * 
 	 * @return the maximum number of pieces owned by any player on this area.
 	 */

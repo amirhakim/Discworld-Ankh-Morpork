@@ -4,13 +4,14 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * A functional interface that captures the possible winning condition checks that
- * we can perform for personality cards. Unfortunately in Java we are really constrained
+ * <b>A functional interface that captures the possible winning condition checks that
+ * we can perform for personality cards. <br>Unfortunately in Java we are really constrained
  * in terms of function types that we can have - if you want to have an arbitrary
  * function type that has an interface other than those contained in the standard library,
- * you have to resort to tricks like this.
+ * you have to resort to tricks like this.</b>
  * 
- * @author (nothing)
+ * @author Team 10 - SOEN6441
+ * @version 2.0
  *
  * @param <Integer> the number of players in the game
  * @param <Player> the player for whom we will check the winning condition

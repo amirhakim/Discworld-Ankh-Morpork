@@ -1,5 +1,5 @@
 /**
- * This class implements deck of personality cards of the game. 
+ * <b>This class implements deck of personality cards of the game. </b>
  * 
  * @author Team 10 - SOEN6441
  * @version 1.0

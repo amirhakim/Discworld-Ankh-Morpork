@@ -1,13 +1,15 @@
 package card.city;
 
 /**
- * This is a wrapper around the board areas to hold the state of a city card.
+ * <b>This is a wrapper around the board areas to hold the state of a city card.<br>
  * City cards belong to players and can be played once per round (except for
  * {@link AnkhMorporkArea#SMALL_GODS}. So we need to keep track of that 
- * "played" vs. "not played" state.
+ * "played" vs. "not played" state.</b>
  * 
- * @author gkentr
+ * @author Team 10 - SOEN6441
+ * @version 2.0
  */
+ 
 public class CityAreaCard {
 	
 	private AnkhMorporkArea area;

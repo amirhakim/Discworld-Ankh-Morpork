@@ -20,23 +20,23 @@ import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
 
 /**
- * This class represents the bulk of the actions available in the game. It sets
+ * <b>This class represents the bulk of the actions available in the game.<br> It sets
  * up the game, and provides a layer of access to the game components for the
- * controller.
+ * controller.</b>
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class Game {
 
 	/**
-	 * Every time a player cannot pay back for a loan card, 15 points are deducted
-	 * from his/her final score.
+	 * <b>Every time a player cannot pay back for a loan card, 15 points are deducted
+	 * from his/her final score.</b>
 	 */
 	private static final int LOAN_PENALTY = 15;
 	
 	/**
-	 * Each minion on the board gives 5 points.
+	 * <b>Each minion on the board gives 5 points.</b>
 	 */
 	private static final int MINION_POINTS = 5;
 
@@ -53,22 +53,22 @@ public class Game {
 	private DiscardPile discardPile;
 	
 	/**
-	 * For most, if not all, use cases, we need to alter the state
+	 * <b>For most, if not all, use cases, we need to alter the state
 	 * of a board area based on its area code (which is the value after
-	 * rolling the die). So it makes most sense to keep areas in an
-	 * Integer -> BoardArea map.
+	 * rolling the die).<br> So it makes most sense to keep areas in an
+	 * Integer -> BoardArea map.</b>
 	 */
 	private Map<Integer, BoardArea> gameBoard;
 
 	private RandomEventDeck randomEventDeck;
 
 	/**
-	 * Identifies general game status, if it is initiated or not.
+	 * <b>Identifies general game status, if it is initiated or not.</b>
 	 */
 	private GameStatus status;
 
 	/**
-	 * Identifies whose turn it is, uses index in the player array.
+	 * <b>Identifies whose turn it is, uses index in the player array.</b>
 	 */
 	private int currentTurn;
 
@@ -81,7 +81,7 @@ public class Game {
 	}
 
 	/**
-	 * This method sets up game. Game has not started, but the deck is set up.
+	 * <b>This method sets up game. Game has not started, but the deck is set up.</b>
 	 * 
 	 * @param: numberOfPlayers how many people will be playing game
 	 * @param: playerNames array of what everybody's name is
@@ -124,7 +124,7 @@ public class Game {
 	}
 
 	/**
-	 * This method performs the necessary actions prior to the start of a new game.
+	 * <b>This method performs the necessary actions prior to the start of a new game.</b>
 	 */
 	public void init() {
 		// Give each player their money, personality and initial minions.
@@ -167,7 +167,7 @@ public class Game {
 
 	
 	/**
-	 * Deal a player a personality card from deck
+	 * <b>Deal a player a personality card from deck.</b>
 	 * @param p Player
 	 */
 	public void assignPersonality(Player p) {
@@ -184,14 +184,14 @@ public class Game {
 	}
 		
 	/**
-	 * Similar to getBoard but returns areas with indexes
+	 * <b>Similar to getBoard but returns areas with indexes.</b>
 	 */
 	public Map<Integer, BoardArea> getGameBoard() {
 		return gameBoard;
 	}
 	
 	/**
-	 * Get a collection of the game players.
+	 * <b>Get a collection of the game players.</b>
 	 * 
 	 * @return the players in the game.
 	 */
@@ -200,7 +200,7 @@ public class Game {
 	}
 	
 	/**
-	 * Returns the player who has the given color.
+	 * <b>Returns the player who has the given color.</b>
 	 * @param c
 	 * @return the player who has the given color.
 	 */
@@ -209,8 +209,8 @@ public class Game {
 	}
 	
 	/**
-	 * Moves the game forward by one turn and returns the player
-	 * whose turn it currently is.
+	 * <b>Moves the game forward by one turn and returns the player
+	 * whose turn it currently is.</b>
 	 * @return the player whose turn it currently is.
 	 */
 	public Player advanceTurnToNextPlayer() {
@@ -222,7 +222,7 @@ public class Game {
 	}
 	
 	/**
-	 * Get the player whose turn it currently is.
+	 * <b>Get the player whose turn it currently is.</b>
 	 * @return the player whose turn it currently is.
 	 */
 	public Player getPlayerOfCurrentTurn() {
@@ -230,10 +230,10 @@ public class Game {
 	}
 	
 	/**
-	 * Brings the given player's hand size back to 5 if it is less than that.
+	 * <b>Brings the given player's hand size back to 5 if it is less than that.<br>
 	 * If no more player cards are available, the player's hand is left as it is
 	 * at the time when the cards are up (the game should end after the player's
-	 * turn is finished).
+	 * turn is finished).</b>
 	 * @param p the player whose hand size must be restored.
 	 */
 	public void restorePlayerHand(Player p) {
@@ -246,11 +246,11 @@ public class Game {
 
 	
 	/**
-	 * Draws player cards.
-	 * Adds the given player's hand size (i) if it is less than five.
+	 * <b>Draws player cards.<br>
+	 * Adds the given player's hand size (i) if it is less than five.<br>
 	 * If no more player cards are available, the player's hand is left as it is
 	 * at the time when the cards are up (the game should end after the player's
-	 * turn is finished). 
+	 * turn is finished). </b>
 	 * @param p the player whose hand size must be restored.
 	 */
 	public void drawPlayerCard(Player p , int i){
@@ -266,7 +266,7 @@ public class Game {
 	
 	
 	/**
-	 * Draws a player card.
+	 * <b>Draws a player card.</b>
 	 * 
 	 * @return an object that contains either the player card drawn or
 	 *         nothing, if the deck is out of cards.
@@ -276,7 +276,7 @@ public class Game {
 	}
 	
 	/**
-	 * Draws a random event card.
+	 * <b>Draws a random event card.</b>
 	 * 
 	 * @return an object that contains either the random event card drawn or
 	 *         nothing, if the deck is out of cards.
@@ -286,7 +286,7 @@ public class Game {
 	}
 
 	/**
-	 * Get the deck of personality cards.
+	 * <b>Get the deck of personality cards.</b>
 	 * 
 	 * @return: deck of all personality cards
 	 */
@@ -295,7 +295,7 @@ public class Game {
 	}
 
 	/**
-	 * Get bank class used in the game.
+	 * <b>Get bank class used in the game.</b>
 	 * 
 	 * @return the bank used in the game
 	 */
@@ -304,7 +304,7 @@ public class Game {
 	}
 
 	/**
-	 * Get current status of the game.
+	 * <b>Get current status of the game.</b>
 	 * 
 	 * @return current status of the game
 	 */
@@ -313,8 +313,8 @@ public class Game {
 	}
 
 	/**
-	 * Each players turn has not been implemented so this actions A series of
-	 * potential game maneuvers.
+	 * <b>Each players turn has not been implemented so this actions A series of
+	 * potential game maneuvers.</b>
 	 */
 	void simulate() {
 		/*
@@ -334,8 +334,8 @@ public class Game {
 	}
 
 	/**
-	 * Retrieves the total number of minions for the given player on the game
-	 * board.
+	 * <b>Retrieves the total number of minions for the given player on the game
+	 * board.</b>
 	 * 
 	 * @param player
 	 * @return the total numbers of minions for the given player on the game
@@ -348,11 +348,11 @@ public class Game {
 	}
 	
 	/**
-	 * Returns the total number of areas controlled by the given player.
+	 * <b>Returns the total number of areas controlled by the given player.<br>
 	 * An area is controlled by a player if (s)he "has more playing pieces in it
 	 * than any single other player (a playing piece being a minion or a building)
-	 * and has more pieces than the total number of trolls in the area". An area that
-	 * has at least one demon cannot be controlled.
+	 * and has more pieces than the total number of trolls in the area".<br> An area that
+	 * has at least one demon cannot be controlled.</b>
 	 * 
 	 * @param player
 	 * @return the total number of areas controlled by the given player.
@@ -436,7 +436,7 @@ public class Game {
 	}
 	
 	/**
-	 * Checks if the draw pile still has cards.
+	 * <b>Checks if the draw pile still has cards.</b>
 	 * @return true if the size of the draw pile is non-zero, false othewise.
 	 */
 	public boolean hasPlayerCardsLeft() {
@@ -444,8 +444,8 @@ public class Game {
 	}
 
 	/**
-	 * Removes all pieces from the area with the given number (see 
-	 * {@link BoardArea#clearAllPieces()}).
+	 * <b>Removes all pieces from the area with the given number (see 
+	 * {@link BoardArea#clearAllPieces()}).</b>
 	 * @param areaId the area from which all pieces will be removed.
 	 */
 	public void removeAllPiecesFromArea(int areaId) {
@@ -453,7 +453,7 @@ public class Game {
 	}
 	
 	/**
-	 * Finds all buildings a player owns
+	 * <b>Finds all buildings a player owns.</b>
 	 * @param player
 	 * @return Map of boardAreas owned by the player
 	 */
@@ -509,7 +509,7 @@ public class Game {
 	}
 	
 	/**
-	 * Removes a building from the area with the given area ID.
+	 * <b>Removes a building from the area with the given area ID.</b>
 	 * @param areaId
 	 * @return true if a building was removed, false otherwise.
 	 */
@@ -519,8 +519,8 @@ public class Game {
 	}
 	
 	/**
-	 * Removes a building on the area with the given ID, if one exists and 
-	 * also removes the corresponding city card form the player's hand.
+	 * <b>Removes a building on the area with the given ID, if one exists and 
+	 * also removes the corresponding city card form the player's hand.</b>
 	 * 
 	 * @return true if the building was removed successfully in this area, false
 	 *         otherwise.
@@ -536,7 +536,7 @@ public class Game {
 	}
 	
 	/**
-	 * Completes a transaction by giving money to the given player from the game's bank. 
+	 * <b>Completes a transaction by giving money to the given player from the game's bank.</b>
 	 */
 	public void givePlayerMoneyFromBank(Player p, int amount) {
 		if (gameBank.decreaseBalance(amount)) {
@@ -545,8 +545,8 @@ public class Game {
 	}
 
 	/**
-	 * Completes a transaction by taking money from the given player and storing it 
-	 * in the game's bank.
+	 * <b>Completes a transaction by taking money from the given player and storing it 
+	 * in the game's bank.</b>
 	 */
 	public void giveBankMoneyFromPlayer(Player p, int amount) {
 		if (gameBank.decreaseBalance(amount)) {
@@ -573,9 +573,9 @@ public class Game {
 	
 	
 	/**
-	 * All players must pay $2 for each building they have on the
-	 * board. If they cannot pay for a building then it is removed
-	 * from the board. 
+	 * <b>All players must pay $2 for each building they have on the
+	 * board.<br> If they cannot pay for a building then it is removed
+	 * from the board. </b>
 	 */
 	public void handleSubsidence() {
 		for (BoardArea a : gameBoard.values()) {
@@ -591,8 +591,8 @@ public class Game {
 	}
 	
 	/**
-	 * Disable the City Area Card corresponding to the passed areaID if it is in
-	 * effect. Also remove one minion from this area.
+	 * <b>Disable the City Area Card corresponding to the passed areaID, if it is in
+	 * effect.<br> Also remove one minion from this area.</b>
 	 * 
 	 * @return true if the area card for the given area ID was in effect and got
 	 *         disabled, false otherwise.
@@ -603,8 +603,8 @@ public class Game {
 	}
 
 	/**
-	 * Remove one minion belonging to the given player from the area with the
-	 * given area ID.
+	 * <b>Remove one minion belonging to the given player from the area with the
+	 * given area ID.</b>
 	 * 
 	 * @param areaID
 	 * @return true if a minion was removed, false otherwise.
@@ -614,7 +614,7 @@ public class Game {
 	}
 	
 	/**
-	 * Place a troll to the area with the given ID.
+	 * <b:Place a troll to the area with the given ID.</b>
 	 * 
 	 * @param areaID
 	 * @return true if the area where the troll was placed already contained a
@@ -625,7 +625,7 @@ public class Game {
 	}
 	
 	/**
-	 * Place a demon to the area witht the given ID.
+	 * <b>Place a demon to the area witht the given ID.</b>
 	 * 
 	 * @param areaID
 	 * @return true if the demon was placed successfully, false otherwise.
@@ -635,7 +635,7 @@ public class Game {
 	}
 	
 	/**
-	 * Add a trouble marker to the area with the given ID.
+	 * <b>Add a trouble marker to the area with the given ID.</b>
 	 * 
 	 * @param areaID
 	 * @return true if the trouble marker was added successfully, false
@@ -646,17 +646,16 @@ public class Game {
 	}
 
 	/**
-	 * Figures out which player has won based on the total number of points:
-	 * - Each minion on the board is worth five points. 
+	 * <b>Figures out which player has won based on the total number of points:<br>
+	 * - Each minion on the board is worth five points. <br>
 	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
-	 *   is worth one point. 
-	 * - If you have the Dent card or the Bank card then you must pay back the amount noted on the card. 
-	 * - If you cannot do so then you lose fifteen points each. 
-	 * - In the case of a tie the tied player with the highest monetary value City Area
-	 *   card is the winner. 
-	 * - If there is still a tie then the tied players shared the honours of a joint win.
+	 *   is worth one point. <br>
+	 * - If you have the Dent card or the Bank card then you must pay back the amount noted on the card. <br>
+	 * - If you cannot do so then you lose fifteen points each. <br>
+	 * - In the case of a tie the tied player with the highest monetary value City Area card is the winner. <br>
+	 * - If there is still a tie then the tied players shared the honours of a joint win.<br>
 	 * 
-	 * The game is declared finished after that.
+	 * The game is declared finished after that.</b>
 	 * 
 	 * @return the player(s) who won the game based on points.
 	 */
@@ -675,9 +674,9 @@ public class Game {
 	}
 
 	/**
-	 * Checks if the game is over either due to not having any player cards left
+	 * <b>Checks if the game is over either due to not having any player cards left
 	 * on the draw pile or a player having won by meeting the conditions
-	 * indicated on his/her Personality card.
+	 * indicated on his/her Personality card.</b>
 	 * 
 	 * @return true if the game is over, false otherwise.
 	 */
@@ -703,8 +702,8 @@ public class Game {
 	}
 
 	/**
-	 * Checks the personality cards of all the players to find out whether
-	 * someone has won the game.
+	 * <b>Checks the personality cards of all the players to find out whether
+	 * someone has won the game.</b>
 	 * 
 	 * @return true if someone has won the game, false otherwise.
 	 */
@@ -717,12 +716,12 @@ public class Game {
 	}
 	
 	/**
-	 * Retrieves the total number of points for the given player.
-	 * - Each minion on the board is worth five points. 
+	 * <b>Retrieves the total number of points for the given player.<br>
+	 * - Each minion on the board is worth five points. <br>
 	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
-	 *   is worth one point. 
-	 * - If you have the Mr. Bent card or the Bank card then you must pay back the amount noted on the card. 
-	 * - If you cannot do so then you lose fifteen points each. 
+	 *   is worth one point. <br>
+	 * - If you have the Mr. Bent card or the Bank card then you must pay back the amount noted on the card. <br>
+	 * - If you cannot do so then you lose fifteen points each. </b>
 	 * 
 	 * @return the number of points for the given player.
 	 */
@@ -747,7 +746,7 @@ public class Game {
 	}
 
 	/**
-	 * If not asking for too many cards, draw these cards and assign to player
+	 * <b>If not asking for too many cards, draw these cards and assign to player</b>
 	 * 
 	 * @param player
 	 * @param numberOfCards
@@ -776,7 +775,7 @@ public class Game {
 	}
 	
 	/**
-	 * Discard card by adding it to the pile
+	 * <b>Discard card by adding it to the pile.</b>
 	 * @param card
 	 */
 	public void discardCard(GreenPlayerCard card) {

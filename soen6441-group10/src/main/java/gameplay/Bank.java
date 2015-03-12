@@ -1,21 +1,21 @@
 package gameplay;
 
 /**
- * <b> This class represents the bank of game <b> 
- * It shows how much money is available in the bank by the method getBalance()
+ * <b> This class represents the bank of game.</br>
+ * It shows how much money is available in the bank by the method getBalance().</b>
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class Bank {
 
 	/**
-	 * "Mr. Bent" and "The Bank of Ankh Morpork" allow you to borrow $10.
+	 * <b>"Mr. Bent" and "The Bank of Ankh Morpork" allow you to borrow $10.</b>
 	 */
 	public static final int LOAN_AMOUNT = 10;
 
 	/**
-	 * At the end of the game, for each "loan card", you have to pay back $12.
+	 * <b>At the end of the game, for each "loan card", you have to pay back $12.</b>
 	 */
 	public static final int LOAN_REPAY_AMOUNT = 12;
 	
@@ -31,7 +31,7 @@ public class Bank {
 	 *It sets up silver and gold numbers. 
 	 */
 	/**
-	 * This constructor is invoked to create objects from the class Bank.
+	 * <b>This constructor is invoked to create objects from the class Bank.</b>
 	 */
 	public Bank() {
 	//	this.numSilver = 35;
@@ -40,7 +40,7 @@ public class Bank {
 	}
 		
 	/**
-	 * This method gets amount remaining in the bank.
+	 * <b>This method gets amount remaining in the bank.</b>
 	 * @return The balance
 	 */
 	public int getBalance() {
@@ -48,7 +48,7 @@ public class Bank {
 	}
 	
 	/**
-	 * This method decreases the balance of Bank
+	 * <b>This method decreases the balance of Bank.</b>
 	 * @param amount the amount
 	 */
 	public boolean decreaseBalance(int amount) {
@@ -61,7 +61,7 @@ public class Bank {
 	}
 	
 	/**
-	 * This method increases the balance of Bank
+	 * <b>This method increases the balance of Bank.</b>
 	 * @param amount the amount
 	 */
 	public void increaseBalance(int amount) {

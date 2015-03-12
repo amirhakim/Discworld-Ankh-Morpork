@@ -12,13 +12,13 @@ import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
 
 /**
- * This class represents the players participating in the game, including the
- * pieces they hold as well as their hands.
+ * <b>This class represents the players participating in the game, including the
+ * pieces they hold as well as their hands.<br>
  * 
- * It is important to note that a player's color uniquely identifies the player.
+ * It is important to note that a player's color uniquely identifies the player.</b>
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class Player {
 
@@ -43,9 +43,9 @@ public class Player {
 	private List<CityAreaCard> cityCards = new ArrayList<>();
 	
 	/**
-	 * This is the player's hand. It is implemented as a set because we can
+	 * <b>This is the player's hand.<br> It is implemented as a set because we can
 	 * invoke the cards' actions statically (since they are contained in the 
-	 * {@link GreenPlayerCard} enum).
+	 * {@link GreenPlayerCard} enum).</b>
 	 */
 	private Set<GreenPlayerCard> playerCards = new HashSet<>();
 
@@ -56,7 +56,7 @@ public class Player {
 	}
 
 	/**
-	 * Sets player's name for the current object.
+	 * <b>Sets player's name for the current object.</b>
 	 * 
 	 * @param name
 	 *            the name of player
@@ -73,7 +73,7 @@ public class Player {
 	}
 
 	/**
-	 * Checks criteria to see if the entry is a valid name.
+	 * <b>Checks criteria to see if the entry is a valid name.</b>
 	 * 
 	 * @param name
 	 *            the name entered by player
@@ -84,7 +84,7 @@ public class Player {
 	}
 
 	/**
-	 * Get player's name.
+	 * <b>Get player's name.</br>
 	 * 
 	 * @return the player's name
 	 */
@@ -93,7 +93,7 @@ public class Player {
 	}
 
 	/**
-	 * This method assigns the personality card to the player.
+	 * <b>This method assigns the personality card to the player.</b>
 	 * 
 	 * @param personality
 	 *            the personality card
@@ -103,7 +103,7 @@ public class Player {
 	}
 
 	/**
-	 * Get the personality card of the player.
+	 * <b>Get the personality card of the player.</b>
 	 * 
 	 * @return the assigned personality card
 	 */
@@ -112,14 +112,14 @@ public class Player {
 	}
 
 	/**
-	 * This method prints the player's turn
+	 * <b>This method prints the player's turn.</b>
 	 */
 	public void printTurn() {
 		System.out.println(this.getName() + " turn");
 	}
 
 	/**
-	 * This method increases the player's money
+	 * <b>This method increases the player's money.</b>
 	 * 
 	 * @param amount
 	 *            the amount of money
@@ -131,7 +131,7 @@ public class Player {
 	}
 
 	/**
-	 * This method decreases the player's money.
+	 * <b>This method decreases the player's money.</b>
 	 * 
 	 * @param amount
 	 *            the amount of money
@@ -147,7 +147,7 @@ public class Player {
 	}
 
 	/**
-	 * Get the total amount of money the player currently has.
+	 * <b>Get the total amount of money the player currently has.</b>
 	 * 
 	 * @return the amount
 	 */
@@ -163,7 +163,7 @@ public class Player {
 	}
 
 	/**
-	 * Get the total number of minions the player currently has.
+	 * <b>Get the total number of minions the player currently has.</b>
 	 * 
 	 * @return the minions
 	 */
@@ -173,7 +173,7 @@ public class Player {
 
 	// Decrease the number of minions by one
 	/**
-	 * This method decrements the player's minions.
+	 * <b>This method decrements the player's minions.</b>
 	 * 
 	 * @return true if it decrements successfully (there is any minion to be
 	 *         decremented).
@@ -188,7 +188,7 @@ public class Player {
 	}
 
 	/**
-	 * This method increments the player's minions.
+	 * <b>This method increments the player's minions.</b>
 	 * 
 	 * @return true if it increments successfully (the number of minions
 	 *         wouldn't pass the upper bound).
@@ -203,7 +203,7 @@ public class Player {
 	}
 
 	/**
-	 * Get the total number of buildings the player currently has
+	 * <b>Get the total number of buildings the player currently has.</b>
 	 * 
 	 * @return the total number of buildings the player currently has
 	 */
@@ -212,7 +212,7 @@ public class Player {
 	}
 
 	/**
-	 * This method decrements the player's building.
+	 * <b>This method decrements the player's building.</b>
 	 * 
 	 * @return true if it decrements successfully (there is any building to be
 	 *         decremented).
@@ -227,7 +227,7 @@ public class Player {
 	}
 
 	/**
-	 * This method increments the player's building.
+	 * <b>This method increments the player's building.</b>
 	 * 
 	 * @return true if it increments successfully (there is any building to be
 	 *         incremented).
@@ -242,7 +242,7 @@ public class Player {
 	}
 
 	/**
-	 * This method adds player's cards one by one.
+	 * <b>This method adds player's cards one by one.</b>
 	 * 
 	 * @param card
 	 *            player card
@@ -254,7 +254,7 @@ public class Player {
 	}
 
 	/**
-	 * Removes the given player card from the player's hand.
+	 * <b>Removes the given player card from the player's hand.</b>
 	 * 
 	 * @return true if the player card was removed successfully, false otherwise.
 	 */
@@ -263,23 +263,23 @@ public class Player {
 	}
 	
 	/**
-	 * Adds the city area card corresponding to the given area 
-	 * to the player's hand.
+	 * <b>Adds the city area card corresponding to the given area 
+	 * to the player's hand.</b>
 	 */
 	public void addCityCard(AnkhMorporkArea a) {
 		cityCards.add(new CityAreaCard(a));
 	}
 	
 	/**
-	 * Removes the city area card corresponding to the given area from the 
-	 * player's hand.
+	 * <b>Removes the city area card corresponding to the given area from the 
+	 * player's hand.</b>
 	 */
 	public void removeCityCard(AnkhMorporkArea a) {
 		cityCards.remove(new CityAreaCard(a));
 	}
 
 	/**
-	 * Get the set of the player's cards
+	 * <b>Get the set of the player's cards.</b>
 	 * 
 	 * @return the player's cards
 	 */
@@ -288,7 +288,7 @@ public class Player {
 	}
 	
 	/**
-	 * Returns the number of cards in the player's hand.
+	 * <b>Returns the number of cards in the player's hand.</b>
 	 * @return the number of cards in the player's hand.
 	 */
 	public int getHandSize() {
@@ -296,7 +296,7 @@ public class Player {
 	}
 
 	/**
-	 * Set Color for Player's pieces
+	 * <b>Set Color for Player's pieces.<b>
 	 * 
 	 * @param color_
 	 *            the color
@@ -306,7 +306,7 @@ public class Player {
 	}
 
 	/**
-	 * Get Player's color
+	 * <b>Get Player's color</b>
 	 * 
 	 * @return the Player's color
 	 */
@@ -315,8 +315,8 @@ public class Player {
 	}
 
 	/**
-	 * Net worth = cash + monetary cost of each owned building - 12 * loans
-	 * taken
+	 * <b>Net worth = cash + monetary cost of each owned building - 12 * loans
+	 * taken</b>
 	 * 
 	 * @return the player's net worth as described by the above logic.
 	 */
@@ -326,8 +326,8 @@ public class Player {
 	}
 	
 	/**
-	 * Retrieves the amount owed by the player due to having "loan" cards
-	 * ({@link GreenPlayerCard#MR_BENT}, {@link GreenPlayerCard#THE_BANK_OF_ANKH_MORPORK}).
+	 * <b>Retrieves the amount owed by the player due to having "loan" cards
+	 * ({@link GreenPlayerCard#MR_BENT}, {@link GreenPlayerCard#THE_BANK_OF_ANKH_MORPORK}).</b>
 	 * @return
 	 */
 	public int getLoanBalance() {

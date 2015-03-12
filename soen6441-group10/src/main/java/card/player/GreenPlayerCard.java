@@ -19,10 +19,14 @@ import card.Card;
 
 @SuppressWarnings("serial")
 /**
- * Enum for player cards
+ * <b>Enum for player cards
  * Each ENUM will have a list of symbols available for that card
- * Some cards will also have text function (bottom of a card)
+ * Some cards will also have text function (bottom of a card)</b>
+ * 
+ * @author Team 10 - SOEN6441
+ * @version 2.0
  */
+
 public enum GreenPlayerCard implements Card {
 
 

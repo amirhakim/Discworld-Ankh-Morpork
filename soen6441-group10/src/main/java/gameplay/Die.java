@@ -28,9 +28,9 @@ public class Die {
 	}
 	
 	/**
-	 * Returns an integer between 0 (inclusive) and the given number of players 
+	 * <b>Returns an integer between 0 (inclusive) and the given number of players 
 	 * (exclusive) which determines which player should play first (the result
-	 * is used as an index into an array.
+	 * is used as an index into an array.</b>
 	 * @param numberOfPlayers
 	 * @return an integer in [0, number of players).
 	 */

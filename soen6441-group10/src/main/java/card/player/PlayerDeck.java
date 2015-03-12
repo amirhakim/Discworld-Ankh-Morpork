@@ -6,11 +6,11 @@ import java.util.Stack;
 import card.Deck;
 
 /**
- * This class implements deck of player cards of the game. 
+ * <b>This class implements deck of player cards of the game. </b>
  * 
  * @author Team 10 - SOEN6441
- * @version 1.0
- */
+ * @version 2.0
+  */
 public class PlayerDeck extends Deck<GreenPlayerCard> {
 
 	public PlayerDeck() {

@@ -15,7 +15,7 @@ import com.google.gson.GsonBuilder;
  * 
  * @param <T>
  * @author Team 10 - SOEN6441
- * @version 1.0
+ * @version 2.0
  */
 public class JSONFileManager<T> implements FileManager<T> {
 	

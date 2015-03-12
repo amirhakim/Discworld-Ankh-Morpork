@@ -9,12 +9,14 @@ import java.util.Map;
 import card.Card;
 
 /**
- * An enumeration of the Personality Cards available in the game, which also
+ * <b>An enumeration of the Personality Cards available in the game, which also
  * contains functionality for checking the winning conditions of each of them, 
- * encoded in functions.
+ * encoded in functions.</b>
  * 
- * @author gkentr
+ * @author Team 10 - SOEN6441
+ * @version 2.0
  */
+
 public enum PersonalityCard implements Card {
 	
 	LORD_VETINARI((playerCount, player, game) ->  
