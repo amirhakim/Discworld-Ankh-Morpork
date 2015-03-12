@@ -172,7 +172,14 @@ public enum GreenPlayerCard implements Card {
 			 * Take $3 from a player of your choice.
 			 */
 			(player, game) -> {
-				System.out.println("NOT IMPLEMENTED: YOU CALLED NOBBY NOBBS TEXT");
+				TextUserInterface UI = new TextUserInterface();
+				Player choosenPlayer = UI.getPlayer(game.getPlayersMap());
+				if(choosenPlayer.decreaseMoney(3)){
+					player.increaseMoney(3);
+				}
+				else{
+					System.out.println("That Player don't have $3, sorry action can't be completed");
+				}
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLAY_ANOTHER_CARD);	

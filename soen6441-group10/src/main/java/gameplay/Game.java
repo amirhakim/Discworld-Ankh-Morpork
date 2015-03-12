@@ -788,5 +788,9 @@ public class Game {
 		discardPile.addCard(card);
 	}
 	
+	public Map<Color, Player> getPlayersMap(){
+		return this.players;
+	}
+	
 	
 }
