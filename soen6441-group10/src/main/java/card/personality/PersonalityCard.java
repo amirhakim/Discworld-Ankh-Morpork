@@ -31,7 +31,7 @@ public enum PersonalityCard implements Card {
 	
 	CHRYSOPRASE((playerCount, player, game) -> player.getTotalWorth() >= 50),
 	
-	COMMANDER_VIMES((playerCount, player, game) -> game.hasPlayerCardsLeft());
+	COMMANDER_VIMES((playerCount, player, game) -> !game.hasPlayerCardsLeft());
 	;
 	
 	private WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker;

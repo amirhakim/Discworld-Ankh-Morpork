@@ -6,10 +6,8 @@ import java.util.Stack;
 import card.Deck;
 
 /**
- * This class implements deck of player cards of the game. 
- * 
- * @author Team 10 - SOEN6441
- * @version 1.0
+ * Represents the discard pile of the game. It is needed due to some actions
+ * indicated on, say, green player cards.
  */
 public class DiscardPile extends Deck<GreenPlayerCard> {
 
@@ -17,15 +15,13 @@ public class DiscardPile extends Deck<GreenPlayerCard> {
 		super.cards = new Stack<GreenPlayerCard>();
 	}
 	
+	@Override
 	public void populateDeck() {
-		// Populating a discard pile really means emptying
 		super.cards = new Stack<GreenPlayerCard>();
 	}
 	
 	public void addCard(GreenPlayerCard card) {
-		cards.push(card);
+		super.cards.push(card);
 	}
-
-	
 
 }

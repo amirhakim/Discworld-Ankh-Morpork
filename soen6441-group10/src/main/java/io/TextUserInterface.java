@@ -6,15 +6,13 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 
 import util.Color;
@@ -124,13 +122,12 @@ public class TextUserInterface {
 				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
 				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
-	//				if (!controller.isGameOver()) {
-
+					if (!controller.isGameOver()) {
 						playTurn(controller.advanceToNextTurn());
-	//				} else {
-	//					System.out.println("The game has finished!");
-	//					break;
-	//				}
+					} else {
+						System.out.println("The game has finished!");
+						break;
+					}
 				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
 					printGameStatus();
 				} else if (action.equals(UserOption.LOAD.getOptionString())) {
@@ -161,13 +158,12 @@ public class TextUserInterface {
 	 * @param p
 	 */
 	private void playTurn(Player p) {
-		System.out.println("Player " + p.getName() + " turn!");
+		System.out.println(p.getName() + "'s turn!");
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
 		controller.getGame().setCurrentCardInPlay(c);
 		
-		// Determine which needs to be completed first
-		// Symbols or text
-		if(c.isTextFirst()) {
+		// Determine which needs to be completed first (symbols or text)
+		if (c.isTextFirst()) {
 			playText(c, p);
 			playSymbols(c, p);
 		} else {
@@ -186,10 +182,10 @@ public class TextUserInterface {
 	 * @param p Player who's turn it is
 	 */
 	private void playText(GreenPlayerCard c, Player p) {
-		System.out.println("Playing Text on the card");
+		System.out.println("Playing Text on the card:");
 		BiConsumer<Player, Game> textAction = c.getText();
-		
-		if(textAction != null){
+
+		if (textAction != null) {
 			textAction.accept(p, controller.getGame());
 		}
 	}
@@ -491,7 +487,7 @@ public class TextUserInterface {
 		Map<Color, Integer> troubleMinions = trouble.getMinions();
 		Iterator<Entry<Color, Integer>> it = troubleMinions.entrySet().iterator();
 	    while (it.hasNext()) {
-	        Map.Entry<Color, Integer> pair = (Map.Entry<Color, Integer>)it.next();
+	        Map.Entry<Color, Integer> pair = it.next();
 	        System.out.println("\tType " + pair.getKey() + " for minion of player " + pair.getValue());
 	    }
 	    
@@ -535,7 +531,7 @@ public class TextUserInterface {
 	public Player getPlayer(Map<Color, Player> playerMap) {
 		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
 	    while (it.hasNext()) {
-	        Map.Entry<Color, Player> pair = (Map.Entry<Color, Player>)it.next();
+	        Map.Entry<Color, Player> pair = it.next();
 			System.out.println(pair.getKey() + ": " + pair.getValue().getName());
 		}
 		System.out.println("Type color of player: ");
@@ -548,9 +544,11 @@ public class TextUserInterface {
 		}
 		return playerMap.get(Color.valueOf(action));
 	}
-
-
 	
-
+	public boolean getUserYesOrNoChoice(String msg) {
+		System.out.println(msg + "(Y for \"yes\")");
+		System.out.print("> ");
+		return UserOption.YES.getOptionString().equalsIgnoreCase(scanner.nextLine());
+	}
 
 }

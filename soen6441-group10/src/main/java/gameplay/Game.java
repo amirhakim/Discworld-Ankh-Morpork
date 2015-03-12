@@ -403,6 +403,10 @@ public class Game {
 		return possibleAreas;
 	}
 	
+	public int getMinionCountForArea(AnkhMorporkArea a) {
+		return gameBoard.get(a.getAreaCode()).getMinionCount();
+	}
+	
 	
 	/**
 	 * 
@@ -449,22 +453,6 @@ public class Game {
 	}
 	
 	/**
-	 * Executes the flooding on the game board:
-	 * - Only areas adjacent to the river are affected
-	 * - Players have to move their minions from the flooded areas to adjacent areas,
-	 *   starting with the player currently taking a turn
-	 * - Players can move their minions to areas adjacent to the river
-	 * - Buildings, trolls and demons are not affected by the flood
-	 * @param firstAreaId
-	 * @param secondAreaId
-	 */
-	public void floodAreas(int firstAreaId, int secondAreaId) {
-		// TODO Implement this method
-	}
-	
-
-	
-	/**
 	 * Finds all buildings a player owns
 	 * @param player
 	 * @return Map of boardAreas owned by the player
@@ -500,15 +488,15 @@ public class Game {
 	 * 
 	 * @return Map of all areas which have no buildings
 	 */
-	public Map<Integer, BoardArea> getBuidlingFreeAreas(){
+	public Map<Integer, BoardArea> getBuildingFreeAreas() {
 		Map<Integer, BoardArea> freeAreas = new HashMap<Integer, BoardArea>();
-		
-		for(BoardArea boardArea: gameBoard.values()) {
-			if(boardArea.getBuildingOwner() == Color.UNDEFINED) {
+
+		for (BoardArea boardArea : gameBoard.values()) {
+			if (boardArea.getBuildingOwner() == Color.UNDEFINED) {
 				freeAreas.put(boardArea.getArea().getAreaCode(), boardArea);
 			}
 		}
-		
+
 		return freeAreas;
 	}
 	
@@ -531,21 +519,41 @@ public class Game {
 	}
 	
 	/**
-	 * Removes a building on the area with the given ID, if one exists.
+	 * Removes a building on the area with the given ID, if one exists and 
+	 * also removes the corresponding city card form the player's hand.
 	 * 
-	 * @param areaId
 	 * @return true if the building was removed successfully in this area, false
 	 *         otherwise.
 	 */
-	public boolean removeBuilding(int areaId) {
+	public boolean removeBuilding(Player p, int areaId) {
 		BoardArea a = gameBoard.get(areaId);
 		if (a.removeBuilding()) {
 			getPlayerOfColor(a.getBuildingOwner()).increaseBuildings();
+			p.removeCityCard(a.getArea());
 			return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * Completes a transaction by giving money to the given player from the game's bank. 
+	 */
+	public void givePlayerMoneyFromBank(Player p, int amount) {
+		if (gameBank.decreaseBalance(amount)) {
+			p.increaseMoney(amount);
+		}
+	}
+
+	/**
+	 * Completes a transaction by taking money from the given player and storing it 
+	 * in the game's bank.
+	 */
+	public void giveBankMoneyFromPlayer(Player p, int amount) {
+		if (gameBank.decreaseBalance(amount)) {
+			p.increaseMoney(amount);
+		}
+	}
+
 	/**
 	 * 
 	 * @param player
@@ -553,23 +561,33 @@ public class Game {
 	 * @return true if adding building was success
 	 */
 	public boolean addBuilding(Player player, BoardArea boardArea) {
-		if(boardArea.addBuildingForPlayer(player)) {
-			if(player.decreaseMoney(boardArea.getBuildingCost())) {
+		if (boardArea.addBuildingForPlayer(player)) {
+			if (player.decreaseMoney(boardArea.getBuildingCost())) {
 				getBank().increaseBalance(boardArea.getBuildingCost());
+				player.addCityCard(boardArea.getArea());
 				return true;
 			}
-		} 
+		}
 		return false;
 	}
 	
 	
 	/**
-	 * Subtracts $2 from each player for each building they own on the board.
-	 * If a player does not have enough money to pay for all of the buildings
-	 * (s)he owns, the building(s) are removed from the board.
+	 * All players must pay $2 for each building they have on the
+	 * board. If they cannot pay for a building then it is removed
+	 * from the board. 
 	 */
 	public void handleSubsidence() {
-		// TODO Implement this method
+		for (BoardArea a : gameBoard.values()) {
+			if (a.getBuildingOwner() != Color.UNDEFINED) {
+				Player p = players.get(a.getBuildingOwner());
+				if (p.getMoney() - 2 >= 0) {
+					p.decreaseMoney(2);
+				} else {
+					removeBuilding(p, a.getArea().getAreaCode());
+				}
+			}
+		}
 	}
 	
 	/**
@@ -758,7 +776,7 @@ public class Game {
 	}
 	
 	/**
-	 * Discar card by adding it to the pile
+	 * Discard card by adding it to the pile
 	 * @param card
 	 */
 	public void discardCard(GreenPlayerCard card) {

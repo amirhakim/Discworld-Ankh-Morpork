@@ -143,7 +143,7 @@ public class FileManagerTest {
 				.open(TEST_DECK_FILE_NAME);
 		assertTrue(pDeckHolder.isPresent());
 		PersonalityDeck pDeck = pDeckHolder.get().getPOJO();
-		assertEquals(5, pDeck.size());
+		assertEquals(7, pDeck.size());
 	}
 
 	@Test

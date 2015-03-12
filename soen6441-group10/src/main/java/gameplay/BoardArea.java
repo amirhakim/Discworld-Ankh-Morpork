@@ -282,6 +282,7 @@ public class BoardArea {
 	
 	/**
 	 * Removes all the pieces from this area (minions, trouble marker, building).
+	 * From what I understand these are not handed back to the players.
 	 */
 	public void clearAllPieces() {
 		minions.clear();
@@ -337,6 +338,15 @@ public class BoardArea {
 				.map(minionCountEntry -> minionCountEntry.getValue()
 						+ (buildingColor == minionCountEntry.getKey() ? 1 : 0))
 				.max((a, b) -> a - b);
+	}
+	
+	public int getMinionCount() {
+		return minions
+				.values()
+				.stream()
+				.map(v -> v != null ? v : 0)
+				.reduce(0,
+						(partialSum, contribution) -> partialSum + contribution);
 	}
 
 }

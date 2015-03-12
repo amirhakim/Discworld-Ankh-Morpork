@@ -33,6 +33,13 @@ public abstract class Deck<C extends Card> {
 	}
 	
 	/**
+	 * Puts card into the deck.
+	 */
+	public void putCardOnTop() {
+		
+	}
+	
+	/**
 	 * Shuffles the deck.
 	 */
 	public void shuffle() {

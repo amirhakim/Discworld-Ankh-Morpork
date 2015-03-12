@@ -24,7 +24,7 @@ public class Die {
 	 * @return an integer in [1, 12].
 	 */
 	public int roll() {
-		return randomGen.nextInt(SIDES + 1);
+		return randomGen.nextInt(SIDES) + 1;
 	}
 	
 	/**

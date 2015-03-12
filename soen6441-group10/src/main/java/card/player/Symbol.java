@@ -113,7 +113,7 @@ public enum Symbol {
 			Map<Integer, BoardArea> playerAreas = game.getBuildingAreas(player);
 			BoardArea chosenRemoveArea = UI.getAreaChoice(playerAreas, "Choose Area to remove building from", "Choose Area: ");
 			// Choose Area to place building on
-			Map<Integer, BoardArea> freeAreas = game.getBuidlingFreeAreas();
+			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas();
 			freeAreas.remove(chosenRemoveArea);
 			
 			BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
@@ -121,7 +121,7 @@ public enum Symbol {
 		} else {
 			// Player has free buildings too place
 			// Choose Area to place building on
-			Map<Integer, BoardArea> freeAreas = game.getBuidlingFreeAreas();
+			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas();
 					
 			BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
 			game.addBuilding(player, chosenPlaceArea);
@@ -166,7 +166,6 @@ public enum Symbol {
 		TextUserInterface textUI = new TextUserInterface();
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area to remove trouble", "Choice: ");
 		trouble.removeTroubleMarker();
-		
 	}),
 	
 	

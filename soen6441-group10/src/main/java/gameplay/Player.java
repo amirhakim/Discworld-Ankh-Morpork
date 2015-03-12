@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import util.Color;
+import card.city.AnkhMorporkArea;
 import card.city.CityAreaCard;
 import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
@@ -153,6 +154,13 @@ public class Player {
 	public int getMoney() {
 		return money;
 	}
+	
+	/**
+	 * @return true if the player has at least the amount given, false otherwise.
+	 */
+	public boolean hasMoney(int amount) {
+		return money >= amount;
+	}
 
 	/**
 	 * Get the total number of minions the player currently has.
@@ -252,6 +260,22 @@ public class Player {
 	 */
 	public boolean removePlayerCard(GreenPlayerCard card) {
 		return playerCards.remove(card);
+	}
+	
+	/**
+	 * Adds the city area card corresponding to the given area 
+	 * to the player's hand.
+	 */
+	public void addCityCard(AnkhMorporkArea a) {
+		cityCards.add(new CityAreaCard(a));
+	}
+	
+	/**
+	 * Removes the city area card corresponding to the given area from the 
+	 * player's hand.
+	 */
+	public void removeCityCard(AnkhMorporkArea a) {
+		cityCards.remove(new CityAreaCard(a));
 	}
 
 	/**
