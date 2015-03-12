@@ -294,7 +294,9 @@ public enum GreenPlayerCard implements Card {
 		 * Earn $1 for each trouble marker on the board.
 		 */
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED SACHARISSA CRIPSLOCK TEXT");
+			if (player.increaseMoney(game.getTotalNumberOfTroubleMarkers()))
+				System.out.println("You earned $1 for each trouble marker on the board");
+			else System.out.println("Can't add any money");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);	
