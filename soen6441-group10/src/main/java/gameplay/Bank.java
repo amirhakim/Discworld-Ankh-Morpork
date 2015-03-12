@@ -51,8 +51,13 @@ public class Bank {
 	 * This method decreases the balance of Bank
 	 * @param amount the amount
 	 */
-	public void decreaseBalance(int amount) {
+	public boolean decreaseBalance(int amount) {
+		// Check if the bank has enough money first
+		if (this.amount - amount < 0) {
+			return false;
+		}
 		this.amount = this.amount - amount;
+		return true;
 	}
 	
 	/**

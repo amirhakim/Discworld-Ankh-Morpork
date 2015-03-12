@@ -125,6 +125,29 @@ public enum AnkhMorporkArea implements Card {
 					"Choose a card to discard: ");
 			player.removePlayerCard(discardCard);
 		});
+		
+		// 3. DRAGON'S LANDING
+		cityCardFunctionMap.put(DRAGONS_LANDING, (player, game) -> {
+			
+		});
+		
+		// 4. SMALL GODS
+		
+		// 5. THE SCOURS
+		
+		// 6. THE HIPPO
+		
+		// 7. THE SHADES
+		
+		// 8. DIMWELL
+		
+		// 9. LONGWALL
+		
+		// 10. ISLE OF GODS
+		
+		// 11. SEVEN SLEEPERS
+		
+		// 12. NAP HILL
 	}
 
 	private static final int[][] ADJACENCY_MATRIX = new int[][] {
@@ -138,14 +161,13 @@ public enum AnkhMorporkArea implements Card {
 			{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0 }, // DIMWELL
 			{ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0 }, // LONGWALL
 			{ 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0 }, // ISLE_OF_GODS
-			{ 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 }  // NAP_HILL
+			{ 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, // SEVEN_SLEEPERS
+			{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 }  // NAP_HILL
 	};
 
 	private final int areaCode;
 
 	private final int buildingCost;
-	
-	private BiConsumer<Player, Game> cityAreaCardFunction;
 
 	private AnkhMorporkArea(int code, int cost) {
 		areaCode = code;

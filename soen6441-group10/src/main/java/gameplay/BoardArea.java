@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import card.city.AnkhMorporkArea;
 import util.Color;
+import card.city.AnkhMorporkArea;
 
 /**
  * <p>
@@ -305,7 +305,7 @@ public class BoardArea {
 	 * @return the number of pieces owned by the given player.
 	 */
 	private int getPieceCountForPlayer(Player p) {
-		return minions.get(p.getColor()) + (buildingColor == p.getColor() ? 1 : 0);
+		return minions.getOrDefault(p.getColor(), 0) + (buildingColor == p.getColor() ? 1 : 0);
 	}
 	
 	/**
