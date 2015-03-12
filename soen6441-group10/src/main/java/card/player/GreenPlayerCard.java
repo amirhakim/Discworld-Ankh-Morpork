@@ -236,7 +236,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("NOT IMPLEMENTED: YOU CALLED LIBRARIAN TEXT");
+				game.drawPlayerCard(player,4);
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -248,7 +248,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("NOT IMPLEMENTED: YOU CALLED LEONARD OF QUIRM TEXT");
+				game.drawPlayerCard(player,4);
 			},
 			new ArrayList<Symbol>() {{
 				
