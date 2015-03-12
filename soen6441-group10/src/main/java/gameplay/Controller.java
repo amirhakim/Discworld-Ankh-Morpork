@@ -68,6 +68,10 @@ public class Controller {
 		return game.getPlayers();
 	}
 	
+	public Player getPlayerOfColor(Color c) {
+		return game.getPlayerOfColor(c);
+	}
+	
 	/**
 	 * This method gets bank class used in the game.
 	 * @return the bank used in the game

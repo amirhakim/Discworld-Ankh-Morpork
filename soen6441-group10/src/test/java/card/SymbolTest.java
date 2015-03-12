@@ -1,6 +1,7 @@
 package card;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gameplay.BoardArea;
@@ -16,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.Color;
+import card.player.GreenPlayerCard;
 import card.player.Symbol;
 
 public class SymbolTest {
@@ -40,6 +42,7 @@ public class SymbolTest {
 		}
 		player = game.getPlayerOfColor(Color.RED);
 		gameBoard = game.getGameBoard();
+//		game.init();
 	}
 
 	/**
@@ -171,7 +174,7 @@ public class SymbolTest {
 		int demon = area.getDemonCount();
 		int player2Minions = area.getMinionCountForPlayer(player2);
 		
-		
+
 		Symbol.ASSASINATION.getGameAction().accept(player, game);
 		
 		// Get count of pieces after
@@ -186,10 +189,51 @@ public class SymbolTest {
 		
 		assertTrue(trollsBool || demonBool || player2MinionsBool);
 		
+	}
+	
+	/**
+	 * Test Symbole.REMOVE_TROUBLE_MARKER
+	 */
+	@Test
+	public void troubleMarkerTest() {
+		System.out.println("~~TROUBLE MARKER TEST~~");
+		// Add trouble marker to area
+		BoardArea area = gameBoard.get(1);
+		area.addTroubleMarker();
+		boolean hasTroubleBefore = area.hasTroubleMarker();
+		Symbol.REMOVE_TROUBLE_MARKER.getGameAction().accept(player, game);
+		assertNotEquals(hasTroubleBefore, area.hasTroubleMarker());
+	}
+	
+	
+	/**
+	 * Test TAKE_MONEY symbol
+	 */
+	@Test
+	public void takeMoneyTest() {
+		System.out.println("~~TAKE MONEY TEST~~");	
+		Integer money = GreenPlayerCard.INIGO_SKIMMER.getMoney();
+		Integer bankBefore = game.getBank().getBalance();
+		Integer playerBefore = player.getMoney();
+		game.setCurrentCardInPlay(GreenPlayerCard.INIGO_SKIMMER);
+		Symbol.TAKE_MONEY.getGameAction().accept(player, game);
+		
+		assertEquals(bankBefore - money, game.getBank().getBalance());
+		assertEquals(playerBefore + money, player.getMoney());
 		
 		
 		
-		
+	}
+	
+	/**
+	 * Test RANDOM EVENT symbol
+	 * 
+	 */
+	@Test
+	public void randomEventTest() {
+		System.out.println("~~RANDOM EVENT TEST");
+		Symbol.RANDOM_EVENT.getGameAction().accept(player, game);
+		// No test really .. just make sure its called in IO
 	}
 	
 	@After

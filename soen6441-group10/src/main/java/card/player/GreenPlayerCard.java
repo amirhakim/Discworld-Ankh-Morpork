@@ -1,13 +1,21 @@
 package card.player;
 
+import gameplay.BoardArea;
+import gameplay.Die;
 import gameplay.Game;
 import gameplay.Player;
+import io.TextUserInterface;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 
+import util.Color;
 import card.Card;
+
 
 @SuppressWarnings("serial")
 /**
@@ -22,7 +30,8 @@ public enum GreenPlayerCard implements Card {
 			new ArrayList<Symbol>() {{
 				add(Symbol.ASSASINATION);
 				add(Symbol.TAKE_MONEY);	// Take 2 Dollars		
-			}}	
+			}},	
+			2
 	), 
 	
 	HISTORY_MONKS(
@@ -31,7 +40,10 @@ public enum GreenPlayerCard implements Card {
 			 * Place the remaining cards back as the discard pile.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED HISTORY MONKS");
+				System.out.println("Playing text -> getting four cards from discard pile");
+				DiscardPile pile = game.getDiscardPile();
+				pile.shuffle();
+				game.drawDiscardCards(player, 4);
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);		
@@ -43,7 +55,9 @@ public enum GreenPlayerCard implements Card {
 			 * Take 3 cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED HEX");
+				//System.out.println("YOU CALLED HEX");
+				System.out.println("Playing text -> taking 3 cards from draw deck");
+				game.drawPlayerCard(player,3);			
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_A_BUILDING);		
@@ -59,7 +73,36 @@ public enum GreenPlayerCard implements Card {
 			 * no effect.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED HERE'N'NOW");
+				int dieRoll = Die.getDie().roll();
+				System.out.println("Dice rolled: " + dieRoll);
+
+				TextUserInterface textUI = new TextUserInterface();
+				if(dieRoll == 7) {
+					Collection<Player> players = game.getPlayers();
+					Map<Color, Player> playerMap = new HashMap<Color, Player>();
+					for(Player p : players) {
+						if(p.getColor() == player.getColor()) continue;
+						if(p.getMoney() < 3) continue;
+						playerMap.put(p.getColor(), p);
+					}
+					if(playerMap.size() == 0 ) {
+						System.out.println("All players are broke.");
+						return;
+					}
+					Player chosenPlayer = textUI.getPlayer(playerMap);
+					chosenPlayer.decreaseMoney(3);
+					player.increaseMoney(3);
+					
+					
+				} else if(dieRoll == 1) {
+					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
+					chosenArea.removeMinion(player);
+				} else {
+					System.out.println("No Action");
+				}
+				
+				
+				
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLAY_ANOTHER_CARD);		
@@ -75,7 +118,7 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_MINION);		
 			}},	
 			(player, game) -> {
-				System.out.println("YOU CALLED HARRY KING");
+				System.out.println("NOT IMPLEMENTED: YOU CALLED HARRY KING TEXT");
 			}			
 	), 
 	
@@ -83,14 +126,16 @@ public enum GreenPlayerCard implements Card {
 			new ArrayList<Symbol>() {{
 				add(Symbol.TAKE_MONEY);	//3 Dollars	
 				add(Symbol.PLACE_MINION);
-			}}		
+			}},		
+			3
 	),
 	
 	MR_GRYLE(
 			new ArrayList<Symbol>() {{
 				add(Symbol.ASSASINATION);	
 				add(Symbol.TAKE_MONEY); // 1 Dollar
-			}}		
+			}},		
+			1
 	),
 	
 	THE_PEELED_NUTS(
@@ -106,7 +151,7 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_A_BUILDING);	
 			}},
 			(player, game) -> {
-				System.out.println("YOU CALLED THE OPERA HOUSE");
+				System.out.println("NOT IMPLEMENTED: YOU CALLED THE OPERA HOUSE TEXT");
 			}
 	),
 	
@@ -115,7 +160,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take $3 from a player of your choice.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED NOBBY NOBBS");
+				System.out.println("NOT IMPLEMENTED: YOU CALLED NOBBY NOBBS TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLAY_ANOTHER_CARD);	
@@ -127,7 +172,7 @@ public enum GreenPlayerCard implements Card {
 			 * Discard one card.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED MODO");
+				System.out.println("NOT IMPLEMENTED: YOU CALLED MODO TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);	
@@ -138,7 +183,8 @@ public enum GreenPlayerCard implements Card {
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_A_BUILDING);	
 				add(Symbol.TAKE_MONEY); //2 Dollars
-			}}
+			}},
+			2
 	),
 	
 	LIBRARIAN(
@@ -146,7 +192,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED LIBRARIAN");
+				System.out.println("NOT IMPLEMENTED: YOU CALLED LIBRARIAN TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -158,7 +204,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				System.out.println("YOU CALLED LEONARD OF QUIRM");
+				System.out.println("NOT IMPLEMENTED: YOU CALLED LEONARD OF QUIRM TEXT");
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -171,7 +217,7 @@ public enum GreenPlayerCard implements Card {
 		 * take $1 for each one discarded.
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED SHONKY SHOP");
+			System.out.println("NOT IMPLEMENTED: YOU CALLED SHONKY SHOP TEXT");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);	
@@ -183,7 +229,7 @@ public enum GreenPlayerCard implements Card {
 		 * Earn $1 for each trouble marker on the board.
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED SACHARISSA CRIPSLOCK");
+			System.out.println("NOT IMPLEMENTED: YOU CALLED SACHARISSA CRIPSLOCK TEXT");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);	
@@ -199,31 +245,31 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);	
 		}},
 		(player, game) -> {
-			System.out.println("YOU CALLED RORIE PALM");
+			System.out.println("NOT IMPLEMENTED: YOU CALLED RORIE PALM TEXT");
 		}		
 	),
 
-	//RINCEWIND(
-	//	/*
-	//	 * Move one of your minions from an area containing 
-	//	 * a trouble marker to an adjacent area.
-	//	 */
-	//	new ArrayList<Symbol>() {{
-	//		add(Symbol.RANDOM_EVENT);	
-	//	}},
-	//	(player, game) -> {
-	//		System.out.println("YOU CALLED RINCEWIND");
-	//	},
-	//	new ArrayList<Symbol>() {{
-	//		add(Symbol.PLAY_ANOTHER_CARD);	
-	//	}}
-	//),
+	RINCEWIND(
+		/*
+		 * Move one of your minions from an area containing 
+		 * a trouble marker to an adjacent area.
+		 */
+		//TODO text area should be in middle
+		new ArrayList<Symbol>() {{
+			add(Symbol.RANDOM_EVENT);	
+			add(Symbol.PLAY_ANOTHER_CARD);	
+		}},
+		(player, game) -> {
+			System.out.println("NOT IMPLEMENTED: YOU CALLED RINCEWIND TEXT");
+		}
+	),
 	
 	THE_ROYAL_MINT(
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);
 			add(Symbol.TAKE_MONEY); //5 Dollars
-		}}			
+		}},
+		5
 	),
 	
 	
@@ -236,7 +282,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("YOU CALLED QUEEN MOLLY");
+			System.out.println("NOT IMPLEMENTED: YOU CALLED QUEEN MOLLY TEXT");
 		}			
 	),
 	
@@ -244,7 +290,8 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>() {{
 			add(Symbol.TAKE_MONEY);//3 Dollars
 			add(Symbol.PLAY_ANOTHER_CARD);
-		}}		
+		}},
+		3
 	),
 	
 	ZORGO_THE_RETRO_PHRENOLOGIST(
@@ -274,7 +321,7 @@ public enum GreenPlayerCard implements Card {
 		 * They cannot get rid of this card.	
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED DR WHITEFACE");
+			System.out.println("NOT IMPLEMENTED: YOU CALLED DR WHITEFACE TEXT");
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -291,7 +338,7 @@ public enum GreenPlayerCard implements Card {
 		 * played by another player
 		 */
 		(player, game) -> {
-			System.out.println("YOU CALLED WALLACE SONKY");			
+			System.out.println("NOT IMPLEMENTED: YOU CALLED WALLACE SONKY TEXT");			
 		}
 	),
 	
@@ -302,7 +349,7 @@ public enum GreenPlayerCard implements Card {
 			 * one of your cards.  They must 
 			 * give you 2$ in return
 			 */
-			System.out.println("YOU CALLED THE SEAMSTRESS GUILD");	
+			System.out.println("NOT IMPLEMENTED: YOU CALLED THE SEAMSTRESS GUILD TEXT");	
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -313,7 +360,8 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>() {{
 			add(Symbol.ASSASINATION);
 			add(Symbol.TAKE_MONEY);		
-		}}		
+		}},
+		1
 	),
 	
 	THE_THIEVES_GUILD(
@@ -322,7 +370,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take $2, if possible, from
 			 * every other player.
 			 */
-			System.out.println("YOU CALLED THE THIEVES GUILD");
+			System.out.println("NOT IMPLEMENTED: YOU CALLED THE THIEVES GUILD TEXT");
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -335,7 +383,7 @@ public enum GreenPlayerCard implements Card {
 		add(Symbol.PLACE_MINION);
 	}},
 	(player, game) -> {
-		System.out.println("MR_BOGGIS: Take $2 if possible "
+		System.out.println("NOT IMPLEMENTED: MR_BOGGIS: Take $2 if possible "
 				+ "from every other player");
 	}
 	
@@ -347,7 +395,7 @@ MR_BENT(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("MR_BENT: place this card infront of you and "
+		System.out.println("NOT IMPLEMENTED: MR_BENT: place this card infront of you and "
 				+ "take $10 loan from the bank,"
 				+ " at the end of the game you must pay "
 				+ "back $12 or loose 15 points");
@@ -359,7 +407,7 @@ THE_BEGGARS_GUILD(
 		add(Symbol.PLACE_MINION);
 	}},
 	(player, game) -> {
-		System.out.println("Select one player, they must give you "
+		System.out.println("NOT IMPLEMENTED: Select one player, they must give you "
 				+ "two cards of their choice");
 	}
 ),
@@ -369,7 +417,7 @@ THE_BANK_OF_ANKH_MORPORK(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("THE_BANK_OF_ANKH_MORPORK: place this card infront of you and "
+		System.out.println("NOT IMPLEMENTED: THE_BANK_OF_ANKH_MORPORK: place this card infront of you and "
 				+ "take $10 loan from the bank,"
 				+ " at the end of the game you must pay "
 				+ "back $12 or loose 15 points");
@@ -381,7 +429,7 @@ THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY: "
+		System.out.println("NOT IMPLEMENTED: THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY: "
 				+ "each player must give you either $1 or one of their cards");
 	}
 ),
@@ -391,7 +439,7 @@ SERGANT_ANGUA(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("SERGANT_ANGUA");
+		System.out.println("NOT IMPLEMENTED: SERGANT_ANGUA");
 	}
 ),
 THE_AGONY_AUNTS(
@@ -401,8 +449,9 @@ THE_AGONY_AUNTS(
 		add(Symbol.PLACE_MINION);
 	}},
 	(player, game) -> {
-		System.out.println("THE_AGONY_AUNTS");
-	}
+		System.out.println("NOT IMPLEMENTED: THE_AGONY_AUNTS");
+	},
+	2
 	
 	
 ),
@@ -412,7 +461,7 @@ THE_DYSK(
 //		add(Symbol.SCROLL);
 	}},
 	(player, game) -> {
-		System.out.println("THE_DYSK: earn $1 for each minion in the Isle of Gods");
+		System.out.println("NOT IMPLEMENTED: THE_DYSK: earn $1 for each minion in the Isle of Gods");
 	}
 ),
 THE_DUCKMAN(
@@ -420,7 +469,7 @@ THE_DUCKMAN(
 //		add(Symbol.SCROLL);
 	}},
 	(player, game) -> {
-		System.out.println("THE_DUCKMAN: move a minion belonging to "
+		System.out.println("NOT IMPLEMENTED: THE_DUCKMAN: move a minion belonging to "
 				+ "another player from one area "
 				+ "to an adjacent area");
 	}
@@ -430,7 +479,7 @@ DRUMKNOTT(
 //		add(Symbol.SCROLL);
 	}},
 	(player, game) -> {
-		System.out.println("DRUMKNOTT: play any two other cards from your hand");
+		System.out.println("NOT IMPLEMENTED: DRUMKNOTT: play any two other cards from your hand");
 	}
 ),
 COMT_DIBBLER(
@@ -439,7 +488,7 @@ COMT_DIBBLER(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("COMT_DIBBLER: Roll the die. on the role of 7 or more"
+		System.out.println("NOT IMPLEMENTED: COMT_DIBBLER: Roll the die. on the role of 7 or more"
 				+ "you take $4 from the bank. on a roll"
 				+ "of 1 you must pay $2 to the bank"
 				+ "or remove one of your minions from"
@@ -453,8 +502,9 @@ DR_CRUCES(
 		add(Symbol.TAKE_MONEY);
 	}},
 	(player, game) -> {
-		System.out.println("DR_CRUCES");
-	}
+		System.out.println("NOT IMPLEMENTED: DR_CRUCES");
+	},
+	3
 ),
 CAPTAIN_CARROT(
 	new ArrayList<Symbol>() {{
@@ -463,8 +513,9 @@ CAPTAIN_CARROT(
 		add(Symbol.TAKE_MONEY);
 	}},
 	(player, game) -> {
-		System.out.println("CAPTAIN_CARROT");
-	}	
+		System.out.println("NOT IMPLEMENTED: CAPTAIN_CARROT");
+	},
+	1
 ),
 MRS_CAKE(
 	new ArrayList<Symbol>(){{
@@ -473,16 +524,17 @@ MRS_CAKE(
 		add(Symbol.PLACE_A_BUILDING);
 	}},
 	(player, game) -> {
-		System.out.println("MRS_CAKE: look at all but one of the"
+		System.out.println("NOT IMPLEMENTED: MRS_CAKE: look at all but one of the"
 				+ "unused personality cards");
-	}
+	},
+	2
 ),
 GROAT(
 	new ArrayList<Symbol>() {{
 		add(Symbol.PLACE_MINION);
 	}},
 	(player, game) -> {
-		System.out.println("GROAT");
+		System.out.println("NOT IMPLEMENTED: GROAT");
 	}	
 ),
 GIMLETS_DWARF_DELICATESSEN(
@@ -491,15 +543,16 @@ GIMLETS_DWARF_DELICATESSEN(
 		add(Symbol.PLACE_MINION);				
 	}},
 	(player, game) -> {
-		System.out.println("GIMLETS_DWARF_DELICATESSEN");
-	}	
+		System.out.println("NOT IMPLEMENTED: GIMLETS_DWARF_DELICATESSEN");
+	},
+	3
 ),
 GASPODE(
 	new ArrayList<Symbol>() {{
 		add(Symbol.INTERRUPT);
 	}},
 	(player, game) -> {
-		System.out.println("GASPODE: stop a player from moving or"
+		System.out.println("NOT IMPLEMENTED: GASPODE: stop a player from moving or"
 				+ "removing one of your minions");
 	}	
 ),
@@ -508,7 +561,7 @@ THE_FRESH_START_CLUB(
 		add(Symbol.INTERRUPT);
 	}},
 	(player, game) -> {
-		System.out.println("THE_FRESH_START_CLUB: if you have a minion removed you can"
+		System.out.println("NOT IMPLEMENTED: THE_FRESH_START_CLUB: if you have a minion removed you can"
 				+ "place him in a different area");
 	}	
 ),
@@ -518,7 +571,7 @@ FOUL_OLE_RON(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("FOUL_OLE_RON: move a minion belonging to"
+		System.out.println("NOT IMPLEMENTED: FOUL_OLE_RON: move a minion belonging to"
 				+ "another player from one area"
 				+ "to an adjacent area");
 	}
@@ -529,7 +582,7 @@ THE_FOOLS_GUILD(
 		add(Symbol.PLACE_MINION);
 	}},
 	(player, game) -> {
-		System.out.println("THE_FOOLS_GUILD: Select another player. if they do not"
+		System.out.println("NOT IMPLEMENTED: THE_FOOLS_GUILD: Select another player. if they do not"
 				+ "give you $5 then place this card in front of them. this card now counts towards"
 				+ "their hand size of five cards when they"
 				+ "come to refill their hand. they cannot"
@@ -542,7 +595,7 @@ THE_FIRE_BRIGADE(
 		add(Symbol.PLAY_ANOTHER_CARD);
 	}},
 	(player, game) -> {
-		System.out.println("THE_FIRE_BRIGADE: choose a player. if he does not pay"
+		System.out.println("NOT IMPLEMENTED: THE_FIRE_BRIGADE: choose a player. if he does not pay"
 				+ "you $5 then you can remove one of his buildings from the board");
 	}
 ),
@@ -553,11 +606,20 @@ THE_FIRE_BRIGADE(
 	private List<Symbol> symbols;
 
 	private boolean textFirst;
+
+	private Integer money;
 	
 	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text) {
 		this.symbols = symbols;
 		this.text = text;
 		textFirst = false;
+	}
+	
+	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text, Integer money) {
+		this.symbols = symbols;
+		this.text = text;
+		this.textFirst = false;
+		this.money = money;
 	}
 	
 	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols) {
@@ -566,10 +628,24 @@ THE_FIRE_BRIGADE(
 		textFirst = true;
 	}
 	
+	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols, Integer money) {
+		this.symbols = symbols;
+		this.text = text;
+		this.textFirst = true;
+		this.money = money;
+	}
+	
 	GreenPlayerCard(List<Symbol> symbols) {
 		this.symbols = symbols;
 		this.text = null;
 		this.textFirst = false;
+	}
+	
+	GreenPlayerCard(List<Symbol> symbols, Integer money) {
+		this.symbols = symbols;
+		this.text = null;
+		this.textFirst = false;
+		this.money = money;
 	}
 	
 	public List<Symbol> getSymbols() {
@@ -584,4 +660,7 @@ THE_FIRE_BRIGADE(
 		return this.textFirst;
 	}
 
+	public Integer getMoney() {
+		return this.money;
+	}
 }

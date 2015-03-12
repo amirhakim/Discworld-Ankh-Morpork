@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import util.Color;
 import card.city.AnkhMorporkArea;
+import card.random.RandomEventCard;
 
 /**
  * 
@@ -137,7 +138,7 @@ public enum Symbol {
 	 * marker from the area.
 	 */
 	ASSASINATION((player, game)->{
-		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas(player);
+		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas();
 		// Ensure there is a troll, demon or minion other than your own on the area
 		for(BoardArea trouble : troubleAreas.values()) {
 			Map<Color, Integer> troubleMinions = trouble.getMinions();
@@ -161,7 +162,11 @@ public enum Symbol {
 	 * of your choice. 
 	 */
 	REMOVE_TROUBLE_MARKER((player, game) ->{
-		System.out.println("YOU CALLED TROUBLE MARKER");
+		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas();
+		TextUserInterface textUI = new TextUserInterface();
+		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area to remove trouble", "Choice: ");
+		trouble.removeTroubleMarker();
+		
 	}),
 	
 	
@@ -171,7 +176,15 @@ public enum Symbol {
 	 * the bank.
 	 */
 	TAKE_MONEY((player, game) -> {
-		System.out.println("YOU CALLED TAKE MONEY");
+		// Get calling card
+		GreenPlayerCard playerCard = game.getCurrentCardInPlay();
+		if(playerCard != null) {
+			System.out.println(playerCard);
+			Integer amount = playerCard.getMoney();
+			game.getBank().decreaseBalance(amount);
+			player.increaseMoney(amount);
+			System.out.println("Took " + amount + " from bank");
+		}
 	}),
 	
 	
@@ -186,7 +199,11 @@ public enum Symbol {
 	 * in the entire game).
 	 */
 	RANDOM_EVENT((player, game) -> {
-		System.out.println("YOU CALLED RANDOM EVENT");
+		
+		RandomEventCard random = game.drawRandomEventCard().get();
+		System.out.println(random + " was called");
+		random.getGameAction().accept(game, player);
+		
 	}),
 	
 	/**
@@ -195,7 +212,7 @@ public enum Symbol {
 	 *succession of cards that have this symbol on.
 	 */
 	PLAY_ANOTHER_CARD((player, game) -> {
-		System.out.println("YOU CALLED PLAY ANOTHER CARD");
+		// DONT DO ANYTHING HERE ... in game flow if this symbol is found move on
 	}),
 	
 	/**
@@ -232,6 +249,7 @@ public enum Symbol {
 	 */
 	private BiConsumer<Player, Game> gameAction;
 	
+	
 	/** 
 	 * Constructor
 	 * @param gameAction
@@ -248,6 +266,7 @@ public enum Symbol {
 		return gameAction;
 	}
 
+	
 }
 
 

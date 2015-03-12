@@ -6,9 +6,11 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -50,6 +52,7 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		String action = "";
 
+		
 		// Main menu loop
 		while (!action.equals(UserOption.QUIT.getOptionString())) {
 			System.out
@@ -121,12 +124,13 @@ public class TextUserInterface {
 				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
 				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
-					if (!controller.isGameOver()) {
+	//				if (!controller.isGameOver()) {
+
 						playTurn(controller.advanceToNextTurn());
-					} else {
-						System.out.println("The game has finished!");
-						break;
-					}
+	//				} else {
+	//					System.out.println("The game has finished!");
+	//					break;
+	//				}
 				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
 					printGameStatus();
 				} else if (action.equals(UserOption.LOAD.getOptionString())) {
@@ -157,9 +161,10 @@ public class TextUserInterface {
 	 * @param p
 	 */
 	private void playTurn(Player p) {
-		System.out.println("It's the turn of player " + p.getName() + "!");
+		System.out.println("Player " + p.getName() + " turn!");
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
-
+		controller.getGame().setCurrentCardInPlay(c);
+		
 		// Determine which needs to be completed first
 		// Symbols or text
 		if(c.isTextFirst()) {
@@ -171,7 +176,7 @@ public class TextUserInterface {
 		}
 		
 
-		
+		controller.getGame().setCurrentCardInPlay(null);
 		controller.restorePlayerHand(p);
 	}
 	
@@ -206,6 +211,10 @@ public class TextUserInterface {
 				scanner.nextLine();
 				String choice = scanner.nextLine();
 				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
+					if(s == Symbol.PLAY_ANOTHER_CARD) {
+						playTurn(p);
+						return;
+					}
 					controller.performSymbolAction(p, s);
 				}
 			} else {
@@ -501,7 +510,7 @@ public class TextUserInterface {
 	    	} else {
 	    		try {
 	    			// Make sure minion being assinated is valid and isn't your own
-	    			Player losingMinion = controller.getGame().getPlayerOfColor(Color.valueOf(actionKill));
+	    			Player losingMinion = controller.getPlayerOfColor(Color.valueOf(actionKill));
 	    			if(losingMinion != null &&
 	    					Color.valueOf(actionKill) != killer.getColor() &&
 	    					trouble.getMinionCountForPlayer(losingMinion) != 0) {
@@ -516,6 +525,31 @@ public class TextUserInterface {
 	    	}
 	    }
 	}
+
+	/**
+	 * Get user to chose a player by typing a color
+	 * 
+	 * @param excludePlayer do not let user return this player
+	 * @return chosen player
+	 */
+	public Player getPlayer(Map<Color, Player> playerMap) {
+		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<Color, Player> pair = (Map.Entry<Color, Player>)it.next();
+			System.out.println(pair.getKey() + ": " + pair.getValue().getName());
+		}
+		System.out.println("Type color of player: ");
+		scanner = new Scanner(System.in);
+		String action = scanner.nextLine();
+		//TODO need to catch bad valueOf
+		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null) {
+			System.out.println("Invalid selection.  Try again: ");
+			action = scanner.nextLine();
+		}
+		return playerMap.get(Color.valueOf(action));
+	}
+
+
 	
 
 

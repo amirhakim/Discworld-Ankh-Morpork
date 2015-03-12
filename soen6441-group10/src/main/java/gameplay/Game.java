@@ -12,6 +12,7 @@ import util.Color;
 import card.city.AnkhMorporkArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
+import card.player.DiscardPile;
 import card.player.GreenPlayerCard;
 import card.player.PlayerDeck;
 import card.random.RandomEventCard;
@@ -49,6 +50,8 @@ public class Game {
 
 	private PlayerDeck playerDeck;
 	
+	private DiscardPile discardPile;
+	
 	/**
 	 * For most, if not all, use cases, we need to alter the state
 	 * of a board area based on its area code (which is the value after
@@ -69,9 +72,12 @@ public class Game {
 	 */
 	private int currentTurn;
 
+	private GreenPlayerCard currentCardInPlay;
+
 	public Game() {
 		status = GameStatus.UNINITIATED;
 		gameBoard = new HashMap<Integer, BoardArea>();
+		currentCardInPlay = null;
 	}
 
 	/**
@@ -112,6 +118,7 @@ public class Game {
 		playerDeck = new PlayerDeck();
 		randomEventDeck = new RandomEventDeck();
 		personalityDeck = new PersonalityDeck();
+		discardPile = new DiscardPile();
 
 		status = GameStatus.READY;
 	}
@@ -208,7 +215,7 @@ public class Game {
 	 */
 	public Player advanceTurnToNextPlayer() {
 		int current = currentTurn;
-		players.get(playerTurnOrder[current]).printTurn();
+		//players.get(playerTurnOrder[current]).printTurn();
 		currentTurn =  ((current + 1) == playerTurnOrder.length) ?
 				0 : current + 1;
 		return getPlayerOfCurrentTurn();
@@ -237,12 +244,33 @@ public class Game {
 		}
 	}
 
+	
+	/**
+	 * Draws player cards.
+	 * Adds the given player's hand size (i) if it is less than five.
+	 * If no more player cards are available, the player's hand is left as it is
+	 * at the time when the cards are up (the game should end after the player's
+	 * turn is finished). 
+	 * @param p the player whose hand size must be restored.
+	 */
+	public void drawPlayerCard(Player p , int i){
+		Player actualPlayer = players.get(p.getColor());
+		if (hasPlayerCardsLeft() && 
+				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
+			while(i>0){
+			actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+			i--;
+			}
+		}
+	}
+	
+	
 	/**
 	 * Draws a player card.
 	 * 
 	 * @return an object that contains either the player card drawn or
 	 *         nothing, if the deck is out of cards.
-	 */
+	 */	
 	public Optional<GreenPlayerCard> drawPlayerCard() {
 		 return playerDeck.drawCard();
 	}
@@ -457,7 +485,7 @@ public class Game {
 	 * 
 	 * @return Map of areas that a player could use assassinate on
 	 */
-	public Map<Integer, BoardArea> getTroubleAreas(Player player) {
+	public Map<Integer, BoardArea> getTroubleAreas() {
 		Map<Integer, BoardArea> possibilities = new HashMap<Integer, BoardArea>();
 		
 		for(BoardArea boardArea : gameBoard.values()) {
@@ -482,6 +510,14 @@ public class Game {
 		}
 		
 		return freeAreas;
+	}
+	
+	public void setCurrentCardInPlay(GreenPlayerCard c) {
+		this.currentCardInPlay = c;
+	}
+	
+	public GreenPlayerCard getCurrentCardInPlay() {
+		return this.currentCardInPlay;
 	}
 	
 	/**
@@ -690,6 +726,43 @@ public class Game {
 		}
 		
 		return points;
+	}
+
+	/**
+	 * If not asking for too many cards, draw these cards and assign to player
+	 * 
+	 * @param player
+	 * @param numberOfCards
+	 * @return false if asking for too many cards
+	 */
+	public boolean drawDiscardCards(Player player, int numberOfCards) {
+
+		if(getDiscardPile().size() >= numberOfCards) {
+			while(numberOfCards > 0) {
+				player.addPlayerCard(discardPile.drawCard().get());		
+				numberOfCards--;
+			}
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @return discardPile used by game
+	 */
+	public DiscardPile getDiscardPile() {
+		return discardPile;
+	}
+	
+	/**
+	 * Discar card by adding it to the pile
+	 * @param card
+	 */
+	public void discardCard(GreenPlayerCard card) {
+		discardPile.addCard(card);
 	}
 	
 }
