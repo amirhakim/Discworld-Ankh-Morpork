@@ -122,7 +122,10 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_MINION);		
 			}},	
 			(player, game) -> {
-				System.out.println("NOT IMPLEMENTED: YOU CALLED HARRY KING TEXT");
+				TextUserInterface UI = new TextUserInterface();
+				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+						"Choose a card to discard: ");
+				player.removePlayerCard(discardCard);
 			}			
 	), 
 	
