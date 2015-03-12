@@ -333,7 +333,11 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);	
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED RINCEWIND TEXT");
+			TextUserInterface UI = new TextUserInterface();
+			BoardArea beforeArea = UI.getAreaChoice(game.getTroubleAreas(),"choose an area to move a minion from","your minion will be removed");
+			beforeArea.removeMinion(player);
+			BoardArea afterArea = UI.getAreaChoice(game.getTroubleAreas(),"choose an area to move a minion from","your minion will be removed");
+			afterArea.addMinion(player);
 		}
 	),
 	
