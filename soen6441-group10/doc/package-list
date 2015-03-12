@@ -1,5 +1,9 @@
 bootstrap
 card
+card.city
+card.personality
+card.player
+card.random
 error
 gameplay
 io
