@@ -223,9 +223,12 @@ public enum GreenPlayerCard implements Card {
 			}},
 			(player, game) -> {
 				int minionCount=game.getMinionCountForArea(AnkhMorporkArea.ISLE_OF_GODS);
-				game.getBank().decreaseBalance(minionCount);
-				player.increaseMoney(minionCount);
-				System.out.println("Took " + minionCount + " from bank");
+				if(game.getBank().decreaseBalance(minionCount)){
+					player.increaseMoney(minionCount);
+					System.out.println("Took " + minionCount + " from bank");
+				} else {
+					System.out.println("Bank is too poor to be able to take that money");
+				}
 			},
 			// Money
 			0,
@@ -239,9 +242,13 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				TextUserInterface UI = new TextUserInterface();
-				Map<Color,Player> myPlayersMap;
-				myPlayersMap = game.getPlayersMap();
-				myPlayersMap.remove(player);
+				Map<Color,Player> myPlayersMap = game.getPlayersMap();
+				
+				// Cannot chose your self
+				if(myPlayersMap.get(player.getColor()) != null) {
+					myPlayersMap.remove(player.getColor());
+				}
+				
 				Player choosenPlayer = UI.getPlayer(myPlayersMap);
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);

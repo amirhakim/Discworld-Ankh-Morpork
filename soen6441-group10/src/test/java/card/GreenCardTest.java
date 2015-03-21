@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.Color;
+import card.city.AnkhMorporkArea;
 import card.player.DiscardPile;
 import card.player.GreenPlayerCard;
 
@@ -48,7 +49,7 @@ public class GreenCardTest {
 		gameBoard = game.getGameBoard();
 	}
 
-	@Test
+	//@Test
 	public void zorgoTest() {
 		System.out.println("~~~TESTING ZARGO~~~");
 		game.assignPersonality(player);
@@ -61,7 +62,7 @@ public class GreenCardTest {
 		
 	}
 
-	@Test
+	//@Test
 	public void historyMonksTest() {
 		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
@@ -83,7 +84,7 @@ public class GreenCardTest {
 		assertEquals(cardsAfterSize, cardsBeforeSize + 4);
 	}
 	
-	@Test
+	//@Test
 	public void hereNowTest() {
 
 		System.out.println("~~~TESTING NERE NOW~~~");
@@ -103,7 +104,7 @@ public class GreenCardTest {
 	 * Test size of player deck before and after
 	 * Test player hand size before and after
 	 */
-	@Test
+	//@Test
 	public void HexTest() {
 		
 		System.out.println("~~~TESTING HEX~~~");
@@ -128,7 +129,7 @@ public class GreenCardTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void harrKingTest(){
 		
 		System.out.println("~~TESTING HARRY KING~~");
@@ -138,7 +139,7 @@ public class GreenCardTest {
 		// Ensure that with no cards the player couldn't remove any
 		assertEquals(player.getPlayerCards().size(),0);
 		// Give player 3 cards
-		for(int i=0;i<3;++i){
+		for(int i=0;i<3;++i) {
 			Optional<GreenPlayerCard> card = game.drawPlayerCard();
 			player.addPlayerCard(card.get());
 		}
@@ -151,6 +152,64 @@ public class GreenCardTest {
 		player.addPlayerCard(gp);
 		System.out.println("...testing removing cards with HARRY KING as option");
 		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
+	}
+	
+	//@Test
+	public void operaHouseTest() {
+		System.out.println("~~TESTING THE_OPERA_HOUSE ~~");
+		
+		// Assert that player can not get any money if has no minions
+		assertEquals(player.getMoney(), 0);
+		BoardArea isles = null;
+		for(BoardArea ba: gameBoard.values()) {
+			if(ba.getArea() == AnkhMorporkArea.ISLE_OF_GODS) {
+				isles = ba;
+				break;
+			}
+		}
+		// add 3 minions to isles
+		isles.addMinion(player);
+		isles.addMinion(player);
+		isles.addMinion(player);
+		
+		GreenPlayerCard.THE_OPERA_HOUSE.getText().accept(player, game);
+		// Assert that the player now has 3 dollars
+		assertEquals(player.getMoney(), 3);
+		
+		// Assert player stays at 3 dollars if bank has no money
+		game.getBank().decreaseBalance(game.getBank().getBalance());
+		GreenPlayerCard.THE_OPERA_HOUSE.getText().accept(player, game);
+		assertEquals(player.getMoney(),3);	
+	}
+	
+	@Test
+	public void nobbyNobbTest() {
+		System.out.println("~~Testing NOBBY_NOBBS~~");
+		
+		// Currently player doesn't have any money
+		// Assert that we didn't get any money
+		GreenPlayerCard.NOBBY_NOBBS.getText().accept(player,game);
+		assertEquals(player.getMoney(), 0);
+		//give all players 3 dollars
+		for(Player p : game.getPlayers()) {
+			p.increaseMoney(3);
+		}
+		
+		player.increaseMoney(3);
+		GreenPlayerCard.NOBBY_NOBBS.getText().accept(player, game);
+		// Assert player got +3 dollars
+		assertEquals(player.getMoney(), 6);
+		// Assert that some player lost 3 dollars
+		int playersLessThan3 = 0;
+		for(Player p : game.getPlayers()) {
+			if(p.getMoney() < 3) {
+				System.out.println(p.getMoney());
+				playersLessThan3++;
+			}
+		}
+		
+		assertEquals(playersLessThan3, 1);
+		
 		
 		
 		
