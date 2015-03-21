@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import util.Color;
+import card.Deck;
 import card.city.AnkhMorporkArea;
 import card.personality.PersonalityCard;
 import card.personality.PersonalityDeck;
@@ -791,6 +792,14 @@ public class Game {
 	
 	public Map<Color, Player> getPlayersMap(){
 		return this.players;
+	}
+
+	/**
+	 * 
+	 * @return game player deck
+	 */
+	public Deck<GreenPlayerCard> getPlayerDeck() {
+		return this.playerDeck;
 	}
 	
 	

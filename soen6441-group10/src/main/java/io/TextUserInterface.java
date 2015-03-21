@@ -246,7 +246,7 @@ public class TextUserInterface {
 			cardMap.put(i, c);
 			i++;
 		}
-		
+		scanner = new Scanner(System.in);
 		// TODO Won't bother now with bound checks, will do it later
 		int action = scanner.nextInt();
 		scanner.nextLine();

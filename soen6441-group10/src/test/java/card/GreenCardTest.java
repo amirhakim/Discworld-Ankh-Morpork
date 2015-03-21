@@ -1,22 +1,18 @@
 package card;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import gameplay.BoardArea;
 import gameplay.Game;
 import gameplay.Player;
-
-
-
-
-
-
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -52,10 +48,9 @@ public class GreenCardTest {
 		gameBoard = game.getGameBoard();
 	}
 
-	/**
-	 */
 	@Test
 	public void zorgoTest() {
+		System.out.println("~~~TESTING ZARGO~~~");
 		game.assignPersonality(player);
 		Card personalityBefore = player.getPersonality();
 		GreenPlayerCard card = GreenPlayerCard.ZORGO_THE_RETRO_PHRENOLOGIST;
@@ -68,6 +63,7 @@ public class GreenCardTest {
 
 	@Test
 	public void historyMonksTest() {
+		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
 		game.discardCard(GreenPlayerCard.INIGO_SKIMMER, null);
 		game.discardCard(GreenPlayerCard.HEX, null);
@@ -89,6 +85,8 @@ public class GreenCardTest {
 	
 	@Test
 	public void hereNowTest() {
+
+		System.out.println("~~~TESTING NERE NOW~~~");
 		// Give both players in game money
 		Collection<Player> players = game.getPlayers();
 		
@@ -99,6 +97,65 @@ public class GreenCardTest {
 	
 		GreenPlayerCard.HERE_N_NOW.getText().accept(player, game);
 	}
+	
+	
+	/**
+	 * Test size of player deck before and after
+	 * Test player hand size before and after
+	 */
+	@Test
+	public void HexTest() {
+		
+		System.out.println("~~~TESTING HEX~~~");
+		
+		int playerDeck1 = game.getPlayerDeck().size();
+		
+		for(int i=0;i<3;++i){
+			Optional<GreenPlayerCard> card = game.drawPlayerCard();
+			player.addPlayerCard(card.get());
+		}
+		
+		// Make sure set up ran correctly
+		assertEquals(playerDeck1, game.getPlayerDeck().size()+3);
+		assertEquals(player.getPlayerCards().size(), 3);
+		
+		GreenPlayerCard.HEX.getText().accept(player, game);
+		
+		// Assert player has 6 cards (3 from start, 3 green card)
+		assertEquals(player.getPlayerCards().size(), 6);
+		// Assert game has 48-6 cards (6 from 3 before, 3 from green card);
+		assertEquals(game.getPlayerDeck().size(), 48-6);
+		
+	}
+	
+	@Test
+	public void harrKingTest(){
+		
+		System.out.println("~~TESTING HARRY KING~~");
+		
+		System.out.println("...testing cant remove any cards if dont have any");
+		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
+		// Ensure that with no cards the player couldn't remove any
+		assertEquals(player.getPlayerCards().size(),0);
+		// Give player 3 cards
+		for(int i=0;i<3;++i){
+			Optional<GreenPlayerCard> card = game.drawPlayerCard();
+			player.addPlayerCard(card.get());
+		}
+		System.out.println("...testing removing cards - no restrictions");
+		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
+		// Ensure player chose at least one card
+		assertFalse(player.getPlayerCards().size() == 3);
+		
+		GreenPlayerCard gp = GreenPlayerCard.HARRY_KING;
+		player.addPlayerCard(gp);
+		System.out.println("...testing removing cards with HARRY KING as option");
+		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
+		
+		
+		
+	}
+	
 	
 	@After
 	public void tearDown() throws Exception {
