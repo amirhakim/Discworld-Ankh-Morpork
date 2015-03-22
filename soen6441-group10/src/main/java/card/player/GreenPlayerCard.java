@@ -393,12 +393,15 @@ public enum GreenPlayerCard implements Card {
 		 * Earn $1 for each trouble marker on the board.
 		 */
 		(player, game) -> {
-			if (player.increaseMoney(game.getTotalNumberOfTroubleMarkers()))
-				System.out.println("You earned $1 for each trouble marker on the board");
-			else System.out.println("Can't add any money");
+			int numberTrouble = game.getTotalNumberOfTroubleMarkers();
+			if (game.getBank().decreaseBalance(numberTrouble) && player.increaseMoney(numberTrouble)) {
+				System.out.println("You earned " + numberTrouble);
+			} else {
+				System.out.println("Not enough funds to pay player");
+			}
 		}, 
 		new ArrayList<Symbol>() {{
-			add(Symbol.PLACE_MINION);	
+			add(Symbol.PLACE_MINION);
 		}},
 		// Money
 		0,
@@ -418,13 +421,47 @@ public enum GreenPlayerCard implements Card {
 			TextUserInterface UI = new TextUserInterface();
 			Map<Color,Player> myPlayersMap;
 			myPlayersMap = game.getPlayersMap();
+			
+			boolean validChoice = false;
+			// Ensure at least one player has 2$
+			for(Player p : myPlayersMap.values()) {
+				if(p.getMoney() > 1 && p.getColor() != player.getColor()) {
+					validChoice = true;
+					break;
+				}
+			}
+			if(!validChoice) {
+				System.out.println("No other player in game has 2$, sorry");
+				return;
+			}
+			
+			// Ensure player has cards to give
+			if(player.getPlayerCards().size() == 1) {
+				System.out.println("You have no other cards to give");
+				return;
+			}
+			
 			Player choosenPlayer = UI.getPlayer(myPlayersMap);
 			while(choosenPlayer == player) {
 				System.out.println("You cannot choose yourself!");
 				choosenPlayer = UI.getPlayer(myPlayersMap);
 			}
-			if(choosenPlayer.getHandSize()<5) choosenPlayer.addPlayerCard(UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player"));
-			else System.out.println("that player has no place in his hand for another card");
+			while(choosenPlayer.getMoney() < 2) {
+				System.out.println("This player does not have 2$");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+
+			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			while(card.getID() == 17) {
+				System.out.println("Cannot choose current card in player");
+				card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			}
+			
+			player.removePlayerCard(card);
+			choosenPlayer.addPlayerCard(card);
+			choosenPlayer.decreaseMoney(2);
+			player.increaseMoney(2);
+				
 		},
 		// Money
 		0,

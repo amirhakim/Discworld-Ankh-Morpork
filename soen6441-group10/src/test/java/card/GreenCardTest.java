@@ -30,6 +30,7 @@ public class GreenCardTest {
 	Game game;
 	Player player;
 	Player player2;
+	Player player3;
 	Map<Integer, BoardArea> gameBoard;
 	
 	@BeforeClass
@@ -40,7 +41,7 @@ public class GreenCardTest {
 	@Before
 	public void setUp() throws Exception {
 		game = new Game();
-		String[] playerNames = { "Ross", "Smith" };
+		String[] playerNames = { "Ross", "Smith", "Rocco"};
 		try {
 			game.setUp(playerNames.length, playerNames);
 		} catch (Exception e) {
@@ -48,6 +49,8 @@ public class GreenCardTest {
 		}
 		player = game.getPlayerOfColor(Color.RED);
 		player2 = game.getPlayerOfColor(Color.YELLOW);
+		player3 = game.getPlayerOfColor(Color.GREEN);
+		
 		gameBoard = game.getGameBoard();
 	}
 
@@ -231,7 +234,7 @@ public class GreenCardTest {
 		
 	}
 	
-//	@Test
+	@Test
 	public void librarianTest() {
 		System.out.println("~~TESTING LIBRARIAN~~~");
 		// Let give player a full hand
@@ -254,7 +257,7 @@ public class GreenCardTest {
 	}
 	
 	
-//	@Test
+	@Test
 	public void leonardOfQuirmTest() {
 		System.out.println("~~TESTING LEONARD OF QUIRM~~");
 
@@ -299,12 +302,67 @@ public class GreenCardTest {
 		
 		// Ensure the player now has a dollar
 		assertEquals(player.getMoney(), 1);
+	}
+	
+	@Test
+	public void sacharissaTest() {
+		System.out.println("~~TESTING SACHARISSA_CRIPSLOCK~~");
+	
+		// No trouble on board, player should get 0
+		GreenPlayerCard.SACHARISSA_CRIPSLOCK.getText().accept(player, game);
+		
+		assertEquals(player.getMoney(), 0);
+		
+		// Set 10 trouble markings
+		for(int i=1; i<11; i++) {
+			gameBoard.get(i).addTroubleMarker();
+		}
+		GreenPlayerCard.SACHARISSA_CRIPSLOCK.getText().accept(player, game);
+		
+		assertEquals(player.getMoney(), 10);
+		
+		// try giving 10 when bank has nothing
+		game.getBank().decreaseBalance(game.getBank().getBalance());
+		
+		// Assert player doesn't get his 10 $
+		GreenPlayerCard.SACHARISSA_CRIPSLOCK.getText().accept(player, game);
+		assertEquals(player.getMoney(), 10);
+	}
+	
+	@Test
+	public void rosiePalmTest() {
+		System.out.println("~~TESTING ROSIE_PALM~~~");
+		
+		// Test if no player has more than 2$
+		GreenPlayerCard.ROSIE_PALM.getText().accept(player, game);
+		assertEquals(player.getMoney(), 0);
+		
+		// Given 2 players, and you only have the rosie card
+		// Ensure that no card is chosen
+		player2.increaseMoney(5);
+		player.addPlayerCard(GreenPlayerCard.ROSIE_PALM);
+
+		GreenPlayerCard.ROSIE_PALM.getText().accept(player, game);
+		assertEquals(player.getMoney(), 0);
+		assertEquals(player2.getMoney(), 5);
+		
+		// Given three players and only 1 with >2$, choose that player
+		// Ensure that player card count increases and money decreases
+		// Ensure your card count decreases and your money increases
+		player3.increaseMoney(1);
+		player.addPlayerCard(game.getPlayerDeck().drawCard().get());
+
+
+		GreenPlayerCard.ROSIE_PALM.getText().accept(player, game);
+		
+		assertEquals(player.getMoney(), 2);
+		assertEquals(player2.getMoney(), 3);
+		assertEquals(player.getPlayerCards().size(), 1);
+		assertEquals(player2.getPlayerCards().size(), 1);
 		
 		
 		
 	}
-	
-		
 	
 	@After
 	public void tearDown() throws Exception {
