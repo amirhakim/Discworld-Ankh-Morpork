@@ -128,6 +128,7 @@ public class SymbolTest {
 		assertTrue(player.getMoney() < previousPlayerBalance);
 		
 		
+		
 	}
 	
 	/**

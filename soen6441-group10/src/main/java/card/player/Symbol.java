@@ -5,7 +5,9 @@ import gameplay.Game;
 import gameplay.Player;
 import io.TextUserInterface;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -64,12 +66,19 @@ public enum Symbol {
 			// Get areas that player CAN player on
 			Map<Integer, BoardArea> possibilities = game
 					.getMinionPlacementAreas(player);
-			possibilities.remove(chosenArea.getAreaCode());
-			chosenArea = UI.getAreaChoice(
-					possibilities.values().stream().map(BoardArea::getArea)
-							.collect(Collectors.toList()),
-					"Select Area to place removed minion.", "Choose Area: ");
-			gameBoard.get(chosenArea.getAreaCode()).addMinion(player);
+	//		possibilities.remove(chosenArea.getAreaCode());
+			ArrayList<Integer> excludeList = new ArrayList<Integer>();
+			excludeList.add(chosenArea.getAreaCode());
+	//		chosenArea = UI.getAreaChoice(
+	//				possibilities.values().stream().map(BoardArea::getArea)
+	//						.collect(Collectors.toList()),
+	//				"Select Area to place removed minion.", "Choose Area: ",
+	//				excludeList);
+			
+			BoardArea placeArea = UI.getAreaChoice(possibilities, "Select area to place removed minion",
+					"Choose Area: ", true, excludeList);
+			
+			gameBoard.get(placeArea.getArea().getAreaCode()).addMinion(player);
 
 		} else {
 
@@ -121,8 +130,11 @@ public enum Symbol {
 				System.out.println("All areas have a building or a trouble marker.");
 			} else {
 				//Do the building removal and placement
-				freeAreas.remove(chosenRemoveArea);		
-				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
+				chosenRemoveArea.removeBuilding();
+		//		freeAreas.remove(chosenRemoveArea);	
+				ArrayList<Integer> excludeList = new ArrayList<Integer>();
+				excludeList.add(chosenRemoveArea.getArea().getAreaCode());
+				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ", excludeList);
 				game.addBuilding(player, chosenPlaceArea);
 				
 			}
@@ -149,19 +161,32 @@ public enum Symbol {
 	 */
 	ASSASINATION((player, game)->{
 		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas();
+		Map<Integer, BoardArea> troubleAreas2 = new HashMap<Integer, BoardArea>();
 		// Ensure there is a troll, demon or minion other than your own on the area
 		for(BoardArea trouble : troubleAreas.values()) {
 			Map<Color, Integer> troubleMinions = trouble.getMinions();
-			troubleMinions.remove(player.getColor());
+			//troubleMinions.remove(player.getColor());
 			
 			if(trouble.getDemonCount() < 0 && trouble.getTrollCount() < 0 
 					&& troubleMinions.size() < 0 ) {
 				troubleAreas.remove(trouble.getArea().getAreaCode());
 			}
 			
+			boolean hasOtherMinion = false;
+			if(troubleMinions.size() > 1) {
+				hasOtherMinion = true;
+			} else if(troubleMinions.size() == 1 && troubleMinions.get(player.getColor()) == null) {
+				hasOtherMinion = true;
+			}
+			
+			
+			if(trouble.getDemonCount() > 0 || trouble.getTrollCount() > 0 || hasOtherMinion) {
+				troubleAreas2.put(trouble.getArea().getAreaCode(), trouble);
+			}
+			
 		}
 		TextUserInterface textUI = new TextUserInterface();
-		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area for assasinnation", "choice: ", true);
+		BoardArea trouble = textUI.getAreaChoice(troubleAreas2, "Select area for assasinnation", "choice: ", true);
 		textUI.assinate(trouble, player, game);
 	}),
 	

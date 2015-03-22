@@ -29,6 +29,7 @@ public class GreenCardTest {
 
 	Game game;
 	Player player;
+	Player player2;
 	Map<Integer, BoardArea> gameBoard;
 	
 	@BeforeClass
@@ -46,10 +47,11 @@ public class GreenCardTest {
 			fail("Exception caught");
 		}
 		player = game.getPlayerOfColor(Color.RED);
+		player2 = game.getPlayerOfColor(Color.YELLOW);
 		gameBoard = game.getGameBoard();
 	}
 
-	//@Test
+	@Test
 	public void zorgoTest() {
 		System.out.println("~~~TESTING ZARGO~~~");
 		game.assignPersonality(player);
@@ -62,7 +64,7 @@ public class GreenCardTest {
 		
 	}
 
-	//@Test
+	@Test
 	public void historyMonksTest() {
 		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
@@ -84,7 +86,7 @@ public class GreenCardTest {
 		assertEquals(cardsAfterSize, cardsBeforeSize + 4);
 	}
 	
-	//@Test
+	@Test
 	public void hereNowTest() {
 
 		System.out.println("~~~TESTING NERE NOW~~~");
@@ -104,7 +106,7 @@ public class GreenCardTest {
 	 * Test size of player deck before and after
 	 * Test player hand size before and after
 	 */
-	//@Test
+	@Test
 	public void HexTest() {
 		
 		System.out.println("~~~TESTING HEX~~~");
@@ -129,7 +131,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void harrKingTest(){
 		
 		System.out.println("~~TESTING HARRY KING~~");
@@ -154,7 +156,7 @@ public class GreenCardTest {
 		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
 	}
 	
-	//@Test
+	@Test
 	public void operaHouseTest() {
 		System.out.println("~~TESTING THE_OPERA_HOUSE ~~");
 		
@@ -195,7 +197,6 @@ public class GreenCardTest {
 			p.increaseMoney(3);
 		}
 		
-		player.increaseMoney(3);
 		GreenPlayerCard.NOBBY_NOBBS.getText().accept(player, game);
 		// Assert player got +3 dollars
 		assertEquals(player.getMoney(), 6);
@@ -203,18 +204,35 @@ public class GreenCardTest {
 		int playersLessThan3 = 0;
 		for(Player p : game.getPlayers()) {
 			if(p.getMoney() < 3) {
-				System.out.println(p.getMoney());
 				playersLessThan3++;
 			}
 		}
 		
 		assertEquals(playersLessThan3, 1);
+	}
+	
+//	@Test
+	public void modoTest() {	
+		// Test discarding with 1+ cards
+		player.addPlayerCard(GreenPlayerCard.NOBBY_NOBBS);
+		player.addPlayerCard(GreenPlayerCard.MODO);
+		GreenPlayerCard.MODO.getText().accept(player, game);
 		
+		assertEquals(game.getDiscardPile().size(), 1);
+		assertEquals(player.getPlayerCards().size(), 1);
 		
+		// Test discarding with only modo card
+		player2.addPlayerCard(GreenPlayerCard.MODO);
+		GreenPlayerCard.MODO.getText().accept(player, game);
 		
+		// No change in discard pile or players hand
+		assertEquals(game.getDiscardPile().size(), 1);
+		assertEquals(player2.getPlayerCards().size(), 1);
 		
 	}
 	
+		
+		
 	
 	@After
 	public void tearDown() throws Exception {

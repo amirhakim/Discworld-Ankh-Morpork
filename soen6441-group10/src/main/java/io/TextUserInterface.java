@@ -6,6 +6,7 @@ import gameplay.Controller;
 import gameplay.Game;
 import gameplay.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -436,26 +437,27 @@ public class TextUserInterface {
 	 */
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas, 
 		
+		String outputMsg, String inputMsg, ArrayList<Integer> excludeList) {
+
+		return getAreaChoice(availableAreas, outputMsg, inputMsg, false, excludeList);
+	
+	}
+	
+	
+	/**
+	 * Same as above but using boardAreas
+	 * @param availableAreas
+	 * @param outputMsg
+	 * @param inputMsg
+	 * @return
+	 */
+	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas, 
 		String outputMsg, String inputMsg) {
 
-		System.out.println(outputMsg);
-		for (BoardArea a : availableAreas.values()) {
-			System.out.println(a.getArea().getAreaCode() + ": " + a.getArea()); 
-		}
-		
-		scanner = new Scanner(System.in);
-		System.out.print(inputMsg);
-
-		int action = scanner.nextInt();
-		scanner.nextLine();
-		while (AnkhMorporkArea.forCode(action) == null ) {
-			System.out.println("Invalid selection.  "  + inputMsg);
-			action = scanner.nextInt();
-			scanner.nextLine();
-		}
-
-		return availableAreas.get(action);
+		ArrayList<Integer> excludeList = new ArrayList<Integer>();
+		return getAreaChoice(availableAreas, outputMsg, inputMsg, false, excludeList);
 	}
+	
 	
 	/**
 	 * Same as above but displays extra information
@@ -468,10 +470,32 @@ public class TextUserInterface {
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas,
 			String outputMsg, String inputMsg, boolean details) {
 		
+		ArrayList<Integer> excludeList = new ArrayList<Integer>();
+		return getAreaChoice(availableAreas, outputMsg, inputMsg, details, excludeList);
+		
+	}
+	
+	/**
+	 * Same as above but displays extra information
+	 * @param availableAreas
+	 * @param outputMsg
+	 * @param inputMsg
+	 * @param details
+	 * @param excludeList
+	 * @return
+	 */
+	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas,
+			String outputMsg, String inputMsg, boolean details, ArrayList<Integer> excludeList) {
+		
+		
 		System.out.println(outputMsg);
-		if(details) {
-			for(BoardArea a: availableAreas.values()) {
-				System.out.println(a.getArea().getAreaCode() + ": " + a.getArea());
+		for(BoardArea a: availableAreas.values()) {
+			if(excludeList.contains(a.getArea().getAreaCode())) {
+				continue;
+			}
+			System.out.println(a.getArea().getAreaCode() + ": " + a.getArea());
+
+			if(details) {
 				System.out.println("\tWith " + a.getDemonCount() + " demons");
 				System.out.println("\tWith " + a.getTrollCount() + " trolls");
 			
@@ -492,6 +516,7 @@ public class TextUserInterface {
 		}
 		return availableAreas.get(action);
 	}
+	
 	
 	/**
 	 * Remove a troll, demon or minion from a baordArea

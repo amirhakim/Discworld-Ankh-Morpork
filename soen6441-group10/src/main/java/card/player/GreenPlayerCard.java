@@ -146,20 +146,19 @@ public enum GreenPlayerCard implements Card {
 				// Find out if player has cards to play
 				Set<GreenPlayerCard> playerCards = player.getPlayerCards();
 				
-				// Remove HARRY KING from the set
-				// You cannot discard the card your playing..
-				for(GreenPlayerCard c: playerCards) {
-					if(c.getID() == 5) {
-						playerCards.remove(c);
-						break;
-					}
-				}
 				
 				// Can play if have other cards than Harry King
-				while(playerCards.size() > 0) {
-					GreenPlayerCard discardCard = UI.getCardChoice(playerCards, 
-							"Choose a card to discard: ");
-					// Use game.discardCard instead of player.removePlayerCard
+				while(playerCards.size() > 1) {
+					GreenPlayerCard discardCard = null;
+					while(discardCard == null || discardCard.getID() == 5) {
+						discardCard = UI.getCardChoice(playerCards, 
+								"Choose a card to discard: ");
+						// Use game.discardCard instead of player.removePlayerCard
+						if(discardCard.getID() == 5) {
+							System.out.println("Can't play the current hand");
+						}
+					}
+
 					game.discardCard(discardCard, player);
 					// Keep playing ?
 					if(!UI.getUserYesOrNoChoice("Remove another card?")) {
@@ -168,7 +167,7 @@ public enum GreenPlayerCard implements Card {
 					playerCards = player.getPlayerCards();
 				}
 				
-				if(playerCards.size() == 0) {
+				if(playerCards.size() == 1) {
 					System.out.println("No cards in hand to play.");
 				}
 				
@@ -244,12 +243,13 @@ public enum GreenPlayerCard implements Card {
 				TextUserInterface UI = new TextUserInterface();
 				Map<Color,Player> myPlayersMap = game.getPlayersMap();
 				
-				// Cannot chose your self
-				if(myPlayersMap.get(player.getColor()) != null) {
-					myPlayersMap.remove(player.getColor());
-				}
+				
 				
 				Player choosenPlayer = UI.getPlayer(myPlayersMap);
+				while(choosenPlayer == player) {
+					System.out.println("You cannot choose yourself!");
+					choosenPlayer = UI.getPlayer(myPlayersMap);
+				}
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);
 				}
@@ -272,9 +272,24 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				TextUserInterface UI = new TextUserInterface();
-				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
-						"Choose a card to discard: ");
-				player.removePlayerCard(discardCard);
+				Set<GreenPlayerCard> playerCards = player.getPlayerCards();
+				if(playerCards.size() == 1) {
+					System.out.println("Only have 1 card and thats modo, so can't discard one");
+					return;
+				}
+				
+				
+				GreenPlayerCard discardCard = null;
+				while(discardCard == null || discardCard.getID() == 11) {
+					discardCard = UI.getCardChoice(playerCards, 
+							"Choose a card to discard: ");
+					if(discardCard.getID() == 11) {
+						System.out.println("You are playing that card and it cannot be removed");
+					}
+				}
+				// USE GAME DISCARD CARD
+//				player.removePlayerCard(discardCard);
+				game.discardCard(discardCard, player);
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);	
@@ -397,8 +412,11 @@ public enum GreenPlayerCard implements Card {
 			TextUserInterface UI = new TextUserInterface();
 			Map<Color,Player> myPlayersMap;
 			myPlayersMap = game.getPlayersMap();
-			myPlayersMap.remove(player);
 			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
 			if(choosenPlayer.getHandSize()<5) choosenPlayer.addPlayerCard(UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player"));
 			else System.out.println("that player has no place in his hand for another card");
 		},
