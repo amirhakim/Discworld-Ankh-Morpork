@@ -441,6 +441,7 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
+			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap);
 			while(choosenPlayer == player) {
 				System.out.println("You cannot choose yourself!");
@@ -451,6 +452,7 @@ public enum GreenPlayerCard implements Card {
 				choosenPlayer = UI.getPlayer(myPlayersMap);
 			}
 
+			// Make selection, cannot get rid of this card
 			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			while(card.getID() == 17) {
 				System.out.println("Cannot choose current card in player");
@@ -480,11 +482,40 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);	
 		}},
 		(player, game) -> {
+			// Ensure player has minions in trouble area
+			// if so remove it and place it on adjacent area
+			Map<Integer, BoardArea> minionAreas = game.getAreasWithPlayerMinions(player);
+			Map<Integer, BoardArea> troubleMinionAreas = new HashMap<Integer, BoardArea>();
+			if(minionAreas.size() == 0) {
+				System.out.println("You have no minions to move");
+				return;
+			}
+			
+			for(BoardArea ba: minionAreas.values()) {
+				if(ba.hasTroubleMarker()) {
+					troubleMinionAreas.put(ba.getArea().getAreaCode(), ba);
+				}
+			}
+			
+			if(troubleMinionAreas.size() == 0) {
+				System.out.println("No minion areas contain trouble");
+				return;
+			}
+			
+			// Get remove minion area
 			TextUserInterface UI = new TextUserInterface();
-			BoardArea beforeArea = UI.getAreaChoice(game.getTroubleAreas(),"choose an area to move a minion from","your minion will be removed");
-			beforeArea.removeMinion(player);
-			BoardArea afterArea = UI.getAreaChoice(game.getTroubleAreas(),"choose an area to move a minion from","your minion will be removed");
-			afterArea.addMinion(player);
+			BoardArea removeArea = UI.getAreaChoice(troubleMinionAreas, "Choose area to remove minion", "Choose area", true);
+			// Get nighbouring areas
+			Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
+			ArrayList<Integer> excludeList = new ArrayList<Integer>();
+			excludeList.add(removeArea.getArea().getAreaCode());
+			// get placecment area
+			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);
+			
+			// Actually do the movement
+			removeArea.removeMinion(player);
+			chosenArea.addMinion(player);
+			
 		},
 		// Money
 		0,
@@ -514,14 +545,31 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
+			
+			// Ensure one player has two cards to give
+			boolean validChoice = false;
+			for(Player p: game.getPlayers()) {
+				if(p.getPlayerCards().size() > 2 && p.getColor() != player.getColor()){
+					validChoice = true;
+				}
+			}
+			if(!validChoice) {
+				System.out.println("No other player has 2 cards to give - sorry");
+				return;
+			}
+			
 			TextUserInterface UI = new TextUserInterface();
 			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
+			while(selectedPlayer.getColor() == player.getColor() || selectedPlayer.getPlayerCards().size() < 2) {
+				System.out.println("You cannot select yourself or a player with less than 2 cards");
+				selectedPlayer = UI.getPlayer(game.getPlayersMap());
+			}
+			
 			for(int i =0; i<2; i++){
-				System.out.println(selectedPlayer.getName() +" has to choose one of his cards to give away");
-				if(!player.addPlayerCard(UI.getCardChoice(selectedPlayer.getPlayerCards(),"choose a card to give away"))){
-					System.out.println("no more cards to give");
-					break;
-				}	
+				System.out.println("Important!!! Change palyers - " + selectedPlayer.getName() +" has to choose two of his cards to give away!!");
+				GreenPlayerCard chosenCard = UI.getCardChoice(selectedPlayer.getPlayerCards(), selectedPlayer.getName() + " choose a card to give away");
+				player.addPlayerCard(chosenCard);
+				selectedPlayer.removePlayerCard(chosenCard);
 			}
 		},
 		// Money

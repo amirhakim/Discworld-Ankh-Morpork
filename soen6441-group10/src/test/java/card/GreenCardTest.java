@@ -360,6 +360,62 @@ public class GreenCardTest {
 		assertEquals(player.getPlayerCards().size(), 1);
 		assertEquals(player2.getPlayerCards().size(), 1);
 		
+	}
+	
+	@Test
+	public void queenMollyTest() {
+		System.out.println("~~TESTING QUEEN MOLLY~~~");
+		
+		// Test if no player has cards to give
+		GreenPlayerCard.QUEEN_MOLLY.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 0);
+		
+		// Test that players cards increase by 2
+		// Test that other players cards derease by 2
+		for(int i=0;i<5;++i){
+			player2.addPlayerCard(game.getPlayerDeck().drawCard().get());
+		}
+		GreenPlayerCard.QUEEN_MOLLY.getText().accept(player, game);
+		// Even though 3 players, player must select player 2
+		assertEquals(player.getPlayerCards().size(), 2);
+		assertEquals(player2.getPlayerCards().size(), 3);
+		
+	}
+	
+	@Test
+	public void rincewindTest() {
+		System.out.println("~~~TESTING RINCEWIND~~~");
+		
+		// Test if player has no minions
+		GreenPlayerCard.RINCEWIND.getText().accept(player, game);
+		assertEquals(game.getAreasWithPlayerMinions(player).size(), 0);
+
+		
+		gameBoard.get(1).addMinion(player);
+		GreenPlayerCard.RINCEWIND.getText().accept(player, game);
+		// Test if player cannot player a minion if there is no trouble
+		assertEquals(game.getAreasWithPlayerMinions(player).size(), 1);
+		assertEquals(gameBoard.get(1).getMinionCountForPlayer(player), 1);
+		
+		gameBoard.get(1).addTroubleMarker();
+		//Test that player can move minion
+		GreenPlayerCard.RINCEWIND.getText().accept(player, game);
+		// assert area has lost minion
+		assertEquals(gameBoard.get(1).getMinionCountForPlayer(player), 0);
+		// assert player still has minion count
+		assertEquals(game.getAreasWithPlayerMinions(player).size(), 1);
+		// assert minion move to a neighbouring area
+		int count = 0;
+		for(BoardArea ba : game.getNeighbours(gameBoard.get(1)).values()) {
+			if(ba.getMinionCountForPlayer(player) == 1) {
+				count++;
+			}
+		}
+		assertEquals(count, 1);
+		
+		
+		
+		
 		
 		
 	}
