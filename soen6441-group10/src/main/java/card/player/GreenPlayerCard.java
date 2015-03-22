@@ -71,7 +71,7 @@ public enum GreenPlayerCard implements Card {
 			(player, game) -> {
 				//System.out.println("YOU CALLED HEX");
 				System.out.println("Playing text -> taking 3 cards from draw deck");
-				game.drawPlayerCard(player,3);			
+				game.addPlayerCard(player,3);			
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_A_BUILDING);		
@@ -316,7 +316,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				game.drawPlayerCard(player,4);
+				game.addPlayerCard(player,4);
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -332,7 +332,7 @@ public enum GreenPlayerCard implements Card {
 			 * Take four cards from the draw deck.
 			 */
 			(player, game) -> {
-				game.drawPlayerCard(player,4);
+				game.addPlayerCard(player,4);
 			},
 			new ArrayList<Symbol>() {{
 				
@@ -1054,4 +1054,5 @@ public enum GreenPlayerCard implements Card {
 	public Integer getID() {
 		return this.id;
 	}
+	
 }

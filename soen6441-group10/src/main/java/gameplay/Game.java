@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import util.Color;
+import util.Interrupt;
 import card.Deck;
 import card.city.AnkhMorporkArea;
 import card.personality.PersonalityCard;
@@ -19,6 +20,7 @@ import card.player.PlayerDeck;
 import card.random.RandomEventCard;
 import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
+import card.player.Symbol;
 
 /**
  * <b>This class represents the bulk of the actions available in the game.<br> It sets
@@ -53,6 +55,8 @@ public class Game {
 	
 	private DiscardPile discardPile;
 	
+	private Map<GreenPlayerCard, Color> interrupts;
+	
 	/**
 	 * <b>For most, if not all, use cases, we need to alter the state
 	 * of a board area based on its area code (which is the value after
@@ -79,6 +83,7 @@ public class Game {
 		status = GameStatus.UNINITIATED;
 		gameBoard = new HashMap<Integer, BoardArea>();
 		currentCardInPlay = null;
+		interrupts = new HashMap<GreenPlayerCard, Color>();
 	}
 
 	/**
@@ -151,7 +156,8 @@ public class Game {
 			// TODO: Need to exclude the "Hubert" and "Cosmos Lavish" brown-bordered
 			//		 player cards later when we do them 
 			for (int i = 0; i < Player.PLAYER_MAX_HAND_SIZE; i++) {
-				p.getValue().addPlayerCard(playerDeck.drawCard().get());
+			//	p.getValue().addPlayerCard(playerDeck.drawCard().get());
+				addPlayerCard(p.getValue());
 			}
 		}
 
@@ -241,7 +247,8 @@ public class Game {
 		Player actualPlayer = players.get(p.getColor());
 		while (hasPlayerCardsLeft() && 
 				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
-			actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+			//actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+			addPlayerCard(actualPlayer);
 		}
 	}
 
@@ -254,11 +261,15 @@ public class Game {
 	 * turn is finished). </b>
 	 * @param p the player whose hand size must be restored.
 	 */
-	public void drawPlayerCard(Player p , int i){
+	public void addPlayerCard(Player p , int i){
 		Player actualPlayer = players.get(p.getColor());
 		while(i>0){
 			if (hasPlayerCardsLeft()) {
-				actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+				GreenPlayerCard card = playerDeck.drawCard().get();
+				if(card.getSymbols().contains(Symbol.INTERRUPT)) {
+					addInterrupt(card, p);
+				}
+				actualPlayer.addPlayerCard(card);
 				i--;
 			} else {
 				System.out.println("Out of cards");
@@ -267,6 +278,10 @@ public class Game {
 		}
 	}
 	
+	
+	public void addPlayerCard(Player p) {
+		addPlayerCard(p, 1);
+	}
 	
 	/**
 	 * <b>Draws a player card.</b>
@@ -790,6 +805,10 @@ public class Game {
 			p.removePlayerCard(card);
 		}
 		discardPile.addCard(card);
+		// Remove interrupt listener
+		if(card.getSymbols().contains(Symbol.INTERRUPT)) {
+			removeInterrupt(card);
+		}
 	}
 	
 	public Map<Color, Player> getPlayersMap(){
@@ -802,6 +821,29 @@ public class Game {
 	 */
 	public Deck<GreenPlayerCard> getPlayerDeck() {
 		return this.playerDeck;
+	}
+
+	public void notifyInterrupt(Interrupt interrupt, Player affectedPlayer) {
+		if(interrupt == Interrupt.ASSASINATION) {
+			// PLayer cards that can affect assasination
+			// Gaspode && Fresh Start Club
+			Color playerColor = interrupts.get(GreenPlayerCard.GASPODE);
+			if(playerColor != null){
+				Player player = getPlayerOfColor(playerColor);
+				if(affectedPlayer.getColor() == player.getColor()) {
+					System.out.println("AN INTERRUPT CAN BE PLAYED");
+					System.out.println(player.getName() + " DO YOU WANT TO PLAYER GASPODE?");
+				}
+			}
+		}
+	}
+	
+	public void addInterrupt(GreenPlayerCard card, Player player) {
+		interrupts.put(card, player.getColor());
+	}
+	
+	public void removeInterrupt(GreenPlayerCard card) {
+		if(interrupts.get(card) != null) interrupts.remove(card);
 	}
 	
 	

@@ -24,6 +24,7 @@ public class SymbolTest {
 
 	Game game;
 	Player player;
+	Player player2;
 	Map<Integer, BoardArea> gameBoard;
 
 	@BeforeClass
@@ -41,6 +42,7 @@ public class SymbolTest {
 			fail("Exception caught");
 		}
 		player = game.getPlayerOfColor(Color.RED);
+		player2 = game.getPlayerOfColor(Color.YELLOW);
 		gameBoard = game.getGameBoard();
 //		game.init();
 	}
@@ -278,9 +280,28 @@ public class SymbolTest {
 	 */
 	@Test
 	public void randomEventTest() {
-		System.out.println("~~RANDOM EVENT TEST");
+		System.out.println("~~~RANDOM EVENT TEST~~~");
 		Symbol.RANDOM_EVENT.getGameAction().accept(player, game);
 		// No test really .. just make sure its called in IO
+	}
+	
+	
+	/**
+	 * Test Interrupt
+	 */
+	@Test
+	public void intteruptTest() {
+		System.out.println("~~INTERRUPT TEST~~~");
+		gameBoard.get(1).addDemon();
+		gameBoard.get(1).addTroubleMarker();
+		gameBoard.get(1).addMinion(player2);
+		
+		// Give player 2 all the cards
+		while(game.hasPlayerCardsLeft()) {
+			game.addPlayerCard(player2);
+		}
+		
+		Symbol.ASSASINATION.getGameAction().accept(player, game);
 	}
 	
 	@After

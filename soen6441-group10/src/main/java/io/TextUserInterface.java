@@ -523,7 +523,7 @@ public class TextUserInterface {
 	 * @param trouble
 	 * @param killer
 	 */
-	public void assinate(BoardArea trouble, Player killer, Game game) {
+	public Color assinate(BoardArea trouble, Player killer, Game game) {
 		scanner = new Scanner(System.in);
 		
 		// Display all assination options
@@ -541,6 +541,7 @@ public class TextUserInterface {
 	        System.out.println("\tType " + pair.getKey() + " for minion of player " + pair.getValue());
 	    }
 	    
+	    Color killedColor = null;
 	    String actionKill = null;
 	    boolean removed = false;
 	    while(!removed) {
@@ -564,6 +565,7 @@ public class TextUserInterface {
 	    				
 	    				trouble.removeMinion(losingMinion);
 	    				removed = true;
+	    				killedColor = c;
 	    			}
 	    		}catch(IllegalArgumentException e) {
 	    			continue;
@@ -571,6 +573,7 @@ public class TextUserInterface {
 	    		
 	    	}
 	    }
+	    return killedColor;
 	}
 
 	/**

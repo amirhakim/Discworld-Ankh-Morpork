@@ -166,6 +166,7 @@ public class BoardArea {
 		if (minions.get(p.getColor()) == null) {
 			return false;
 		}
+		
 		int numberOfMinions = minions.get(p.getColor());
 		minions.put(p.getColor(), numberOfMinions - 1);
 		p.increaseMinion();

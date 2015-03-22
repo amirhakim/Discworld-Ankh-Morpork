@@ -12,6 +12,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import util.Color;
+import util.Interrupt;
 import card.city.AnkhMorporkArea;
 import card.random.RandomEventCard;
 
@@ -160,6 +161,8 @@ public enum Symbol {
 	 * marker from the area.</b>
 	 */
 	ASSASINATION((player, game)->{
+		
+		
 		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas();
 		Map<Integer, BoardArea> troubleAreas2 = new HashMap<Integer, BoardArea>();
 		// Ensure there is a troll, demon or minion other than your own on the area
@@ -185,9 +188,20 @@ public enum Symbol {
 			}
 			
 		}
+		if(troubleAreas2.size() == 0) {
+			System.out.println("No areas to perform assainate");
+			return;
+		}
+		
 		TextUserInterface textUI = new TextUserInterface();
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas2, "Select area for assasinnation", "choice: ", true);
-		textUI.assinate(trouble, player, game);
+	
+		Color c  = textUI.assinate(trouble, player, game);
+
+		if(c != null) {
+			Player affectedPlayer = game.getPlayerOfColor(c);
+			game.notifyInterrupt(Interrupt.ASSASINATION, affectedPlayer);
+		}
 	}),
 	
 	
