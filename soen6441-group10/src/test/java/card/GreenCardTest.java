@@ -51,7 +51,7 @@ public class GreenCardTest {
 		gameBoard = game.getGameBoard();
 	}
 
-	//@Test
+	@Test
 	public void zorgoTest() {
 		System.out.println("~~~TESTING ZARGO~~~");
 		game.assignPersonality(player);
@@ -64,7 +64,7 @@ public class GreenCardTest {
 		
 	}
 
-	//@Test
+	@Test
 	public void historyMonksTest() {
 		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
@@ -86,7 +86,7 @@ public class GreenCardTest {
 		assertEquals(cardsAfterSize, cardsBeforeSize + 4);
 	}
 	
-	//@Test
+	@Test
 	public void hereNowTest() {
 
 		System.out.println("~~~TESTING NERE NOW~~~");
@@ -106,7 +106,7 @@ public class GreenCardTest {
 	 * Test size of player deck before and after
 	 * Test player hand size before and after
 	 */
-	//@Test
+	@Test
 	public void HexTest() {
 		
 		System.out.println("~~~TESTING HEX~~~");
@@ -131,7 +131,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void harrKingTest(){
 		
 		System.out.println("~~TESTING HARRY KING~~");
@@ -156,7 +156,7 @@ public class GreenCardTest {
 		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
 	}
 	
-	//@Test
+	@Test
 	public void operaHouseTest() {
 		System.out.println("~~TESTING THE_OPERA_HOUSE ~~");
 		
@@ -184,7 +184,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(),3);	
 	}
 	
-	//@Test
+	@Test
 	public void nobbyNobbTest() {
 		System.out.println("~~Testing NOBBY_NOBBS~~");
 		
@@ -211,7 +211,7 @@ public class GreenCardTest {
 		assertEquals(playersLessThan3, 1);
 	}
 	
-	//@Test
+	@Test
 	public void modoTest() {	
 		// Test discarding with 1+ cards
 		player.addPlayerCard(GreenPlayerCard.NOBBY_NOBBS);
