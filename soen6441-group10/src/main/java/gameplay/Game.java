@@ -256,11 +256,13 @@ public class Game {
 	 */
 	public void drawPlayerCard(Player p , int i){
 		Player actualPlayer = players.get(p.getColor());
-		if (hasPlayerCardsLeft() && 
-				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
-			while(i>0){
-			actualPlayer.addPlayerCard(playerDeck.drawCard().get());
-			i--;
+		while(i>0){
+			if (hasPlayerCardsLeft()) {
+				actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+				i--;
+			} else {
+				System.out.println("Out of cards");
+				break;
 			}
 		}
 	}

@@ -51,7 +51,7 @@ public class GreenCardTest {
 		gameBoard = game.getGameBoard();
 	}
 
-	@Test
+	//@Test
 	public void zorgoTest() {
 		System.out.println("~~~TESTING ZARGO~~~");
 		game.assignPersonality(player);
@@ -64,7 +64,7 @@ public class GreenCardTest {
 		
 	}
 
-	@Test
+	//@Test
 	public void historyMonksTest() {
 		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
@@ -86,7 +86,7 @@ public class GreenCardTest {
 		assertEquals(cardsAfterSize, cardsBeforeSize + 4);
 	}
 	
-	@Test
+	//@Test
 	public void hereNowTest() {
 
 		System.out.println("~~~TESTING NERE NOW~~~");
@@ -106,7 +106,7 @@ public class GreenCardTest {
 	 * Test size of player deck before and after
 	 * Test player hand size before and after
 	 */
-	@Test
+	//@Test
 	public void HexTest() {
 		
 		System.out.println("~~~TESTING HEX~~~");
@@ -131,7 +131,7 @@ public class GreenCardTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void harrKingTest(){
 		
 		System.out.println("~~TESTING HARRY KING~~");
@@ -156,7 +156,7 @@ public class GreenCardTest {
 		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
 	}
 	
-	@Test
+	//@Test
 	public void operaHouseTest() {
 		System.out.println("~~TESTING THE_OPERA_HOUSE ~~");
 		
@@ -184,7 +184,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(),3);	
 	}
 	
-	@Test
+	//@Test
 	public void nobbyNobbTest() {
 		System.out.println("~~Testing NOBBY_NOBBS~~");
 		
@@ -211,7 +211,7 @@ public class GreenCardTest {
 		assertEquals(playersLessThan3, 1);
 	}
 	
-//	@Test
+	//@Test
 	public void modoTest() {	
 		// Test discarding with 1+ cards
 		player.addPlayerCard(GreenPlayerCard.NOBBY_NOBBS);
@@ -231,7 +231,79 @@ public class GreenCardTest {
 		
 	}
 	
+//	@Test
+	public void librarianTest() {
+		System.out.println("~~TESTING LIBRARIAN~~~");
+		// Let give player a full hand
+		for(int i = 5; i>0; i--) {
+			player.addPlayerCard(game.getPlayerDeck().drawCard().get());
+		}
 		
+		GreenPlayerCard.LIBRARIAN.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 9);
+		
+		// Lets test removing all cards but 1 from the draw deck
+		Deck<GreenPlayerCard> pd = game.getPlayerDeck();
+		
+		while(pd.size() > 1) {
+			pd.drawCard();
+		}
+		
+		GreenPlayerCard.LIBRARIAN.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 10);	
+	}
+	
+	
+//	@Test
+	public void leonardOfQuirmTest() {
+		System.out.println("~~TESTING LEONARD OF QUIRM~~");
+
+		// Let give player a full hand
+		for(int i = 5; i>0; i--) {
+			player.addPlayerCard(game.getPlayerDeck().drawCard().get());
+		}
+		
+		GreenPlayerCard.LEONARD_OF_QUIRM.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 9);
+		
+		// Lets test removing all cards but 1 from the draw deck
+		Deck<GreenPlayerCard> pd = game.getPlayerDeck();
+		
+		while(pd.size() > 1) {
+			pd.drawCard();
+		}
+		
+		GreenPlayerCard.LEONARD_OF_QUIRM.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 10);
+		
+		
+	}
+	
+	@Test
+	public void shonkyShopTest() {
+		System.out.println("~~TESTING SHONKY_SHOP~~~");
+		
+		// Give the player two cards, SHONKY SHOP and one MODO
+		player.addPlayerCard(GreenPlayerCard.SHONKY_SHOP);
+		player.addPlayerCard(GreenPlayerCard.MODO);
+		
+		// The player MUST only remove MODO
+		GreenPlayerCard.SHONKY_SHOP.getText().accept(player, game);
+		
+		// Make sure players hand is size 1
+		assertEquals(player.getPlayerCards().size(), 1);
+		// Make sure players one card is SHONKY SHOP
+		for(GreenPlayerCard c: player.getPlayerCards()) {
+			assertEquals(c, GreenPlayerCard.SHONKY_SHOP);
+		}
+		
+		// Ensure the player now has a dollar
+		assertEquals(player.getMoney(), 1);
+		
+		
+		
+	}
+	
 		
 	
 	@After

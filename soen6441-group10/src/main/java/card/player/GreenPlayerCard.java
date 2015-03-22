@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -344,34 +343,41 @@ public enum GreenPlayerCard implements Card {
 			14
 	),
 	
+	
 	SHONKY_SHOP(
-		/*
+		/**
 		 * Discard as many cards as you wish and
 		 * take $1 for each one discarded.
 		 */
 		(player, game) -> {
 			boolean haveCards = true;
 			int discardedCount=0;
-			while (haveCards){
+			while (haveCards && player.getPlayerCards().size() > 1) {
 				TextUserInterface UI = new TextUserInterface();
 				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
 						"Choose a card to discard: ");
+				while(discardCard.getID() == 15) {
+					System.out.println("Cannot discard current card!");
+					discardCard = UI.getCardChoice(player.getPlayerCards(), 
+							"Choose a card to discard: ");
+				}
 				if(player.removePlayerCard(discardCard)) discardedCount ++;
-				else{
+				else {
 					System.out.println("can't remove any more cards");
 					break;
 				}
 				if (player.getHandSize()==0) haveCards=false;
 				else {
-					System.out.println("to stop removing cards type (x)");
-					Scanner scanner = new Scanner(System.in);
-					String action = scanner.nextLine();
-					if (action.equals("x")) haveCards=false;
-					scanner.close();
+					if(!UI.getUserYesOrNoChoice("Discard another card?")) {
+						haveCards = false;
+					}
 				}
 			}
-			// player gets $2 for each discarded card
-			player.increaseMoney(discardedCount*1);
+			if(player.getPlayerCards().size() == 1) {
+				System.out.println("No more cards to play");
+			}
+			// player gets $1 for each discarded card
+			player.increaseMoney(discardedCount);
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_A_BUILDING);	
