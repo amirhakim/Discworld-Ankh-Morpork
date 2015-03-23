@@ -600,9 +600,15 @@ public class TextUserInterface {
 	}
 	
 	public boolean getUserYesOrNoChoice(String msg) {
+		scanner = new Scanner(System.in);
 		System.out.println(msg + "(Y for \"yes\")");
 		System.out.print("> ");
 		return UserOption.YES.getOptionString().equalsIgnoreCase(scanner.nextLine());
+	}
+	
+	public boolean playInterrupt(Player player, GreenPlayerCard card) {
+		System.out.println("AN INTERRUPT CAN BE PLAYED");
+		return getUserYesOrNoChoice(player.getName() + " DO YOU WANT TO PLAY " + card + "?");
 	}
 
 }

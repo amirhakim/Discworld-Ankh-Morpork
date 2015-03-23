@@ -1,5 +1,8 @@
 package gameplay;
 
+import io.TextUserInterface;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -266,10 +269,7 @@ public class Game {
 		while(i>0){
 			if (hasPlayerCardsLeft()) {
 				GreenPlayerCard card = playerDeck.drawCard().get();
-				if(card.getSymbols().contains(Symbol.INTERRUPT)) {
-					addInterrupt(card, p);
-				}
-				actualPlayer.addPlayerCard(card);
+				addPlayerCard(actualPlayer, card);
 				i--;
 			} else {
 				System.out.println("Out of cards");
@@ -279,8 +279,15 @@ public class Game {
 	}
 	
 	
-	public void addPlayerCard(Player p) {
-		addPlayerCard(p, 1);
+	public void addPlayerCard(Player player, GreenPlayerCard card) {
+		if(card.getSymbols().contains(Symbol.INTERRUPT)) {
+			addInterrupt(card, player);
+		}
+		player.addPlayerCard(card);
+	}
+	
+	public void addPlayerCard(Player player){
+		addPlayerCard(player, 1);
 	}
 	
 	/**
@@ -407,6 +414,10 @@ public class Game {
 	 * @return Map of areas player CAN place a minion
 	 */
 	public Map<Integer, BoardArea> getMinionPlacementAreas(Player player) {
+		if(player.getMinionCount() == Player.TOTAL_MINIONS) {
+			return gameBoard;
+		}
+		
 		Map<Integer, BoardArea> possibleAreas = new HashMap<Integer, BoardArea>();
 
 		for (BoardArea ba : gameBoard.values()) {
@@ -823,19 +834,60 @@ public class Game {
 		return this.playerDeck;
 	}
 
-	public void notifyInterrupt(Interrupt interrupt, Player affectedPlayer) {
+	/**
+	 * 
+	 * @param interrupt
+	 * @param affectedPlayer
+	 * @param affectedArea
+	 * @return true if interrupt was played
+	 */
+	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, BoardArea affectedArea) {
+		boolean played = false;
+		GreenPlayerCard interruptCard = null;
+		TextUserInterface UI = new TextUserInterface();
 		if(interrupt == Interrupt.ASSASINATION) {
 			// PLayer cards that can affect assasination
 			// Gaspode && Fresh Start Club
-			Color playerColor = interrupts.get(GreenPlayerCard.GASPODE);
+			
+			// GASPODE
+			interruptCard = GreenPlayerCard.GASPODE;
+			Color playerColor = interrupts.get(interruptCard);
 			if(playerColor != null){
 				Player player = getPlayerOfColor(playerColor);
-				if(affectedPlayer.getColor() == player.getColor()) {
-					System.out.println("AN INTERRUPT CAN BE PLAYED");
-					System.out.println(player.getName() + " DO YOU WANT TO PLAYER GASPODE?");
+				if(affectedPlayer.getColor() == player.getColor()) { 
+					if(UI.playInterrupt(affectedPlayer, interruptCard)){
+						affectedArea.addMinion(affectedPlayer);
+						played = true;
+					}
 				}
 			}
+			
+			// FRESH STRT CLUB
+			interruptCard = GreenPlayerCard.THE_FRESH_START_CLUB;
+			playerColor = interrupts.get(interruptCard);
+			if(playerColor != null) {
+				Player player = getPlayerOfColor(playerColor);
+				if(affectedPlayer.getColor() == player.getColor()) { 	
+					if(UI.playInterrupt(affectedPlayer, interruptCard)){
+						// get Areas to place minion
+						Map<Integer, BoardArea> possibilities = getMinionPlacementAreas(affectedPlayer);
+						ArrayList<Integer> excludeList = new ArrayList<Integer>();
+						excludeList.add(affectedArea.getArea().getAreaCode());
+						BoardArea chosenArea = UI.getAreaChoice(possibilities, "Select area to replace assasinated minion.", 
+								"Choose area:", true, excludeList);
+						chosenArea.addMinion(affectedPlayer);
+						played = true;
+						
+					}
+				}
+				
+			}
+			
 		}
+		if(played) {
+			discardCard(interruptCard, affectedPlayer);
+		}
+		return played;
 	}
 	
 	public void addInterrupt(GreenPlayerCard card, Player player) {

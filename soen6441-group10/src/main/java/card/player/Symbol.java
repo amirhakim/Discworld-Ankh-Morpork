@@ -200,7 +200,7 @@ public enum Symbol {
 
 		if(c != null) {
 			Player affectedPlayer = game.getPlayerOfColor(c);
-			game.notifyInterrupt(Interrupt.ASSASINATION, affectedPlayer);
+			game.notifyInterrupt(Interrupt.ASSASINATION, affectedPlayer, trouble);
 		}
 	}),
 	

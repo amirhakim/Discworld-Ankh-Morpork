@@ -262,6 +262,7 @@ public class Player {
 		return playerCards.remove(card);
 	}
 	
+	
 	/**
 	 * <b>Adds the city area card corresponding to the given area 
 	 * to the player's hand.</b>

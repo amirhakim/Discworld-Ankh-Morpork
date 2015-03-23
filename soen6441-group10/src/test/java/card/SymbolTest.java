@@ -51,7 +51,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has no free minions
 	 */
-	@Test
+	//@Test
 	public void placeMinionNoMinionsTest() {
 
 		System.out.println("~~PLACE MINION NO MINIONS TEST~~");
@@ -73,7 +73,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has only free minions
 	 */
-	@Test
+	//@Test
 	public void placeMinionFullMinionsTest() {
 
 		System.out.println("~~PLACE MINION FULL MINIONS TEST~~");
@@ -90,7 +90,7 @@ public class SymbolTest {
 	 * Test PLACE_MINIONS symbol
 	 * Condition that payer has some free minions
 	 */
-	@Test
+	//@Test
 	public void placceMinionPartialMinionsTest() {
 
 		System.out.println("~~PLACE MINION PARTIAL MINIONS TEST~~");
@@ -108,7 +108,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has no free buildings to place
 	 */
-	@Test
+	//@Test
 	public void placeBuildingNoFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING NO BUILDINGS TEST~~");
@@ -136,7 +136,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has free buildings to place
 	 */
-	@Test
+	//@Test
 	public void placeBuildingFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING FREE BUILDINGS TEST~~");
@@ -159,7 +159,7 @@ public class SymbolTest {
 	 * your presented with the only area that doesn't
 	 * have a trouble marker
 	 */
-	@Test
+	//@Test
 	public void placeBuildingNoTroubleTest() {
 		
 		System.out.println("~~PLACE BUILDING NO TROUBLE TEST~~");
@@ -187,7 +187,7 @@ public class SymbolTest {
 	/**
 	 * Test that you cannot place a building if they have trouble markers
 	 */
-	@Test
+	//@Test
 	public void impossibleBuildingPlacementTest() {
 		player.increaseMoney(1000);
 		// Can not add building to build area with trouble
@@ -203,7 +203,7 @@ public class SymbolTest {
 	 * Test assination symbol
 	 * 
 	 */
-	@Test
+	//@Test
 	public void assinateTest(){
 		System.out.println("~~ASSINATE TEST~~");
 		
@@ -243,7 +243,7 @@ public class SymbolTest {
 	/**
 	 * Test Symbole.REMOVE_TROUBLE_MARKER
 	 */
-	@Test
+	//@Test
 	public void troubleMarkerTest() {
 		System.out.println("~~TROUBLE MARKER TEST~~");
 		// Add trouble marker to area
@@ -258,7 +258,7 @@ public class SymbolTest {
 	/**
 	 * Test TAKE_MONEY symbol
 	 */
-	@Test
+	//@Test
 	public void takeMoneyTest() {
 		System.out.println("~~TAKE MONEY TEST~~");	
 		Integer money = GreenPlayerCard.INIGO_SKIMMER.getMoney();
@@ -278,7 +278,7 @@ public class SymbolTest {
 	 * Test RANDOM EVENT symbol
 	 * 
 	 */
-	@Test
+	//@Test
 	public void randomEventTest() {
 		System.out.println("~~~RANDOM EVENT TEST~~~");
 		Symbol.RANDOM_EVENT.getGameAction().accept(player, game);
@@ -290,19 +290,62 @@ public class SymbolTest {
 	 * Test Interrupt
 	 */
 	@Test
-	public void intteruptTest() {
-		System.out.println("~~INTERRUPT TEST~~~");
-		gameBoard.get(1).addDemon();
+	public void intteruptGaspodeTest() {
+		System.out.println("~~INTERRUPT GASPODE TEST~~~");
 		gameBoard.get(1).addTroubleMarker();
 		gameBoard.get(1).addMinion(player2);
 		
-		// Give player 2 all the cards
-		while(game.hasPlayerCardsLeft()) {
-			game.addPlayerCard(player2);
-		}
+		// Give player 2 GASPODE
+		game.addPlayerCard(player2, GreenPlayerCard.GASPODE);
+		
 		
 		Symbol.ASSASINATION.getGameAction().accept(player, game);
+		// Check if assasination was played
+		if(player2.getPlayerCards().size() == 0) {
+			// Interrupt was called
+			// Assert he still has his minion on the board
+			assertEquals(gameBoard.get(1).getMinionCountForPlayer(player2), 1);
+		} else {
+			assertEquals(gameBoard.get(1).getMinionCountForPlayer(player2), 0);	
+		}
 	}
+	
+	@Test
+	public void interruptFreshStartTest(){
+		System.out.println("~~INTERRUPT FRESH START CLUB TEST~~~");
+		gameBoard.get(1).addTroubleMarker();
+		gameBoard.get(1).addMinion(player2);
+		
+		game.addPlayerCard(player2, GreenPlayerCard.THE_FRESH_START_CLUB);
+		
+		Symbol.ASSASINATION.getGameAction().accept(player, game);
+		
+		// Check if interrupt was played
+		if(player2.getPlayerCards().size() == 0) {
+			// It was played
+			assertEquals(gameBoard.get(1).getMinionCount(), 0);
+			// Make sure one area has the removed minion
+			int count = 0;
+			for(BoardArea ba : gameBoard.values()) {
+				if(ba.getMinionCount() == 1) {
+					count++;
+				}
+			}
+			assertEquals(count, 1);
+		} else {
+			// interrupt wasnt played, make sure the minion was killed and that was all
+			assertEquals(gameBoard.get(1).getMinionCount(), 0);
+			// Make sure one area has the removed minion
+			int count = 0;
+			for(BoardArea ba : gameBoard.values()) {
+				if(ba.getMinionCount() == 1) {
+					count++;
+				}
+			}
+			assertEquals(count, 0);
+		}
+		
+	};
 	
 	@After
 	public void tearDown() throws Exception {
