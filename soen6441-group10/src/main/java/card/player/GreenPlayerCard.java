@@ -862,9 +862,43 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>(){{
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_DUCKMAN: move a minion belonging to "
-			+ "another player from one area "
-			+ "to an adjacent area");
+			//System.out.println("NOT IMPLEMENTED: THE_DUCKMAN: move a minion belonging to "
+			//+ "another player from one area "
+			//+ "to an adjacent area");
+			
+		TextUserInterface UI = new TextUserInterface();
+		Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			
+		// Chose a valid player
+		Player choosenPlayer = UI.getPlayer(myPlayersMap);
+		while(choosenPlayer == player) {
+			System.out.println("You cannot choose yourself!");
+			choosenPlayer = UI.getPlayer(myPlayersMap);
+		}
+			
+		// Ensure player has minions
+		// if so remove it and place it on adjacent area
+		Map<Integer, BoardArea> minionAreas = game.getAreasWithPlayerMinions(choosenPlayer);
+		if(minionAreas.size() == 0) {
+			System.out.println("She/He has no minions to move");
+			return;
+		}
+						
+		// Get remove minion area
+		BoardArea removeArea = UI.getAreaChoice(minionAreas, "Choose area to remove her/his minion", "Choose area", true);
+		
+		// Get nighbouring areas
+		Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
+		ArrayList<Integer> excludeList = new ArrayList<Integer>();
+		excludeList.add(removeArea.getArea().getAreaCode());
+		
+		// get placement area
+		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+		
+		// Actually do the movement
+		removeArea.removeMinion(player);
+		chosenArea.addMinion(player);
+								
 		},
 		// Money
 		0,
