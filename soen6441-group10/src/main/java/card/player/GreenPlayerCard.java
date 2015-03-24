@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -732,7 +733,17 @@ public enum GreenPlayerCard implements Card {
 			 * Take $2, if possible, from
 			 * every other player.
 			 */
-			System.out.println("NOT IMPLEMENTED: YOU CALLED THE THIEVES GUILD TEXT");
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			myPlayersMap.remove(player.getColor());
+			for (Entry<Color, Player>  entry : myPlayersMap.entrySet())
+			{
+			   if(entry.getValue().getMoney()>=2) {
+				   entry.getValue().decreaseMoney(2);
+				   player.increaseMoney(2);
+				   System.out.println("Took $2 from "+entry.getValue().getName());
+			   }
+			   else continue;
+			}
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -748,8 +759,17 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: MR_BOGGIS: Take $2 if possible "
-			+ "from every other player");
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			myPlayersMap.remove(player.getColor());
+			for (Entry<Color, Player>  entry : myPlayersMap.entrySet())
+			{
+			   if(entry.getValue().getMoney()>=2) {
+				   entry.getValue().decreaseMoney(2);
+				   player.increaseMoney(2);
+				   System.out.println("Took $2 from "+entry.getValue().getName());
+			   }
+			   else continue;
+			}
 		},
 		// Money
 		0,
