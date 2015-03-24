@@ -621,7 +621,9 @@ public enum GreenPlayerCard implements Card {
 		 * They cannot get rid of this card.	
 		 */
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED DR WHITEFACE TEXT");
+//			TextUserInterface UI = new TextUserInterface();
+//			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
+//			selectedPlayer.addPlayerCard(DR_WHIEFACE);
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -657,7 +659,51 @@ public enum GreenPlayerCard implements Card {
 			 * one of your cards.  They must 
 			 * give you 2$ in return
 			 */
-			System.out.println("NOT IMPLEMENTED: YOU CALLED THE SEAMSTRESS GUILD TEXT");	
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap;
+			myPlayersMap = game.getPlayersMap();
+			
+			boolean validChoice = false;
+			// Ensure at least one player has 2$
+			for(Player p : myPlayersMap.values()) {
+				if(p.getMoney() > 1 && p.getColor() != player.getColor()) {
+					validChoice = true;
+					break;
+				}
+			}
+			if(!validChoice) {
+				System.out.println("No other player in game has 2$, sorry");
+				return;
+			}
+			
+			// Ensure player has cards to give
+			if(player.getPlayerCards().size() == 1) {
+				System.out.println("You have no other cards to give");
+				return;
+			}
+			
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+			while(choosenPlayer.getMoney() < 2) {
+				System.out.println("This player does not have 2$");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+
+			// Make selection, cannot get rid of this card
+			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			while(card.getID() == 17) {
+				System.out.println("Cannot choose current card in player");
+				card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			}
+			
+			player.removePlayerCard(card);
+			choosenPlayer.addPlayerCard(card);
+			choosenPlayer.decreaseMoney(2);
+			player.increaseMoney(2);
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
