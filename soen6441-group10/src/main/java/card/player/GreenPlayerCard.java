@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 import util.Color;
+import util.Interrupt;
 import card.Card;
 import card.city.AnkhMorporkArea;
 
@@ -110,6 +111,7 @@ public enum GreenPlayerCard implements Card {
 					Player chosenPlayer = textUI.getPlayer(playerMap);
 					chosenPlayer.decreaseMoney(3);
 					player.increaseMoney(3);
+					//game.notifyInterrupt(Interrupt.TAKE_MONEY, chosenPlayer, 3);
 					
 					
 				} else if(dieRoll == 1) {
@@ -251,6 +253,7 @@ public enum GreenPlayerCard implements Card {
 				}
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);
+					//game.notifyInterrupt(Interrupt.TAKE_MONEY, choosenPlayer, 3);
 				}
 				else{
 					System.out.println("That Player don't have $3, sorry action can't be completed");
@@ -463,6 +466,7 @@ public enum GreenPlayerCard implements Card {
 			choosenPlayer.addPlayerCard(card);
 			choosenPlayer.decreaseMoney(2);
 			player.increaseMoney(2);
+			//game.notifyInterrupt(Interrupt.CARD_FOR_MONEY, choosenPlayer, 2, card);
 				
 		},
 		// Money
@@ -570,6 +574,7 @@ public enum GreenPlayerCard implements Card {
 				GreenPlayerCard chosenCard = UI.getCardChoice(selectedPlayer.getPlayerCards(), selectedPlayer.getName() + " choose a card to give away");
 				player.addPlayerCard(chosenCard);
 				selectedPlayer.removePlayerCard(chosenCard);
+				//game.notifyInterrupt(Interrupt.REMOVE_CARD, selectedPlayer, 2);
 			}
 		},
 		// Money

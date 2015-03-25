@@ -306,6 +306,7 @@ public class SymbolTest {
 			// Assert he still has his minion on the board
 			assertEquals(gameBoard.get(1).getMinionCountForPlayer(player2), 1);
 		} else {
+			// interrupt was not called
 			assertEquals(gameBoard.get(1).getMinionCountForPlayer(player2), 0);	
 		}
 	}
@@ -346,6 +347,8 @@ public class SymbolTest {
 		}
 		
 	};
+	
+	
 	
 	@After
 	public void tearDown() throws Exception {

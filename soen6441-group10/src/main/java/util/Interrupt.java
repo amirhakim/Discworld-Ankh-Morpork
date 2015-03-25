@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Interrupt {
-	ASSASINATION(0);
+	ASSASINATION(0),TAKE_MONEY(1), CARD_FOR_MONEY(2), REMOVE_CARD(3)
+	
+	;
 	
 	private int interruptCode;
 	

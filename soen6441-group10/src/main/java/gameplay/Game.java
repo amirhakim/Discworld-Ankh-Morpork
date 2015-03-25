@@ -848,44 +848,46 @@ public class Game {
 		if(interrupt == Interrupt.ASSASINATION) {
 			// PLayer cards that can affect assasination
 			// Gaspode && Fresh Start Club
-			
-			// GASPODE
-			interruptCard = GreenPlayerCard.GASPODE;
-			Color playerColor = interrupts.get(interruptCard);
-			if(playerColor != null){
-				Player player = getPlayerOfColor(playerColor);
-				if(affectedPlayer.getColor() == player.getColor()) { 
-					if(UI.playInterrupt(affectedPlayer, interruptCard)){
-						affectedArea.addMinion(affectedPlayer);
-						played = true;
+			if(!played){
+				// GASPODE
+				interruptCard = GreenPlayerCard.GASPODE;
+				Color playerColor = interrupts.get(interruptCard);
+				if(playerColor != null){
+					Player player = getPlayerOfColor(playerColor);
+					if(affectedPlayer.getColor() == player.getColor()) { 
+						if(UI.playInterrupt(affectedPlayer, interruptCard)){
+							affectedArea.addMinion(affectedPlayer);
+							played = true;
+						}
 					}
 				}
 			}
-			
-			// FRESH STRT CLUB
-			interruptCard = GreenPlayerCard.THE_FRESH_START_CLUB;
-			playerColor = interrupts.get(interruptCard);
-			if(playerColor != null) {
-				Player player = getPlayerOfColor(playerColor);
-				if(affectedPlayer.getColor() == player.getColor()) { 	
-					if(UI.playInterrupt(affectedPlayer, interruptCard)){
-						// get Areas to place minion
-						Map<Integer, BoardArea> possibilities = getMinionPlacementAreas(affectedPlayer);
-						ArrayList<Integer> excludeList = new ArrayList<Integer>();
-						excludeList.add(affectedArea.getArea().getAreaCode());
-						BoardArea chosenArea = UI.getAreaChoice(possibilities, "Select area to replace assasinated minion.", 
+			if(!played) {
+				// FRESH STRT CLUB
+				interruptCard = GreenPlayerCard.THE_FRESH_START_CLUB;
+				Color playerColor = interrupts.get(interruptCard);
+				if(playerColor != null) {
+					Player player = getPlayerOfColor(playerColor);
+					if(affectedPlayer.getColor() == player.getColor()) { 	
+						if(UI.playInterrupt(affectedPlayer, interruptCard)){
+							// get Areas to place minion
+							Map<Integer, BoardArea> possibilities = getMinionPlacementAreas(affectedPlayer);
+							ArrayList<Integer> excludeList = new ArrayList<Integer>();
+							excludeList.add(affectedArea.getArea().getAreaCode());
+							BoardArea chosenArea = UI.getAreaChoice(possibilities, "Select area to replace assasinated minion.", 
 								"Choose area:", true, excludeList);
-						chosenArea.addMinion(affectedPlayer);
-						played = true;
+							chosenArea.addMinion(affectedPlayer);
+							played = true;
 						
+						}
 					}
-				}
 				
+				}
 			}
-			
 		}
 		if(played) {
 			discardCard(interruptCard, affectedPlayer);
+
 		}
 		return played;
 	}
