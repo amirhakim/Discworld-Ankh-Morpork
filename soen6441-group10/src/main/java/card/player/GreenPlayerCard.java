@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -626,7 +628,9 @@ public enum GreenPlayerCard implements Card {
 		 * They cannot get rid of this card.	
 		 */
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED DR WHITEFACE TEXT");
+//			TextUserInterface UI = new TextUserInterface();
+//			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
+//			selectedPlayer.addPlayerCard(DR_WHIEFACE);
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -662,7 +666,51 @@ public enum GreenPlayerCard implements Card {
 			 * one of your cards.  They must 
 			 * give you 2$ in return
 			 */
-			System.out.println("NOT IMPLEMENTED: YOU CALLED THE SEAMSTRESS GUILD TEXT");	
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap;
+			myPlayersMap = game.getPlayersMap();
+			
+			boolean validChoice = false;
+			// Ensure at least one player has 2$
+			for(Player p : myPlayersMap.values()) {
+				if(p.getMoney() > 1 && p.getColor() != player.getColor()) {
+					validChoice = true;
+					break;
+				}
+			}
+			if(!validChoice) {
+				System.out.println("No other player in game has 2$, sorry");
+				return;
+			}
+			
+			// Ensure player has cards to give
+			if(player.getPlayerCards().size() == 1) {
+				System.out.println("You have no other cards to give");
+				return;
+			}
+			
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+			while(choosenPlayer.getMoney() < 2) {
+				System.out.println("This player does not have 2$");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+
+			// Make selection, cannot get rid of this card
+			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			while(card.getID() == 17) {
+				System.out.println("Cannot choose current card in player");
+				card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			}
+			
+			player.removePlayerCard(card);
+			choosenPlayer.addPlayerCard(card);
+			choosenPlayer.decreaseMoney(2);
+			player.increaseMoney(2);
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -691,7 +739,17 @@ public enum GreenPlayerCard implements Card {
 			 * Take $2, if possible, from
 			 * every other player.
 			 */
-			System.out.println("NOT IMPLEMENTED: YOU CALLED THE THIEVES GUILD TEXT");
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			myPlayersMap.remove(player.getColor());
+			for (Entry<Color, Player>  entry : myPlayersMap.entrySet())
+			{
+			   if(entry.getValue().getMoney()>=2) {
+				   entry.getValue().decreaseMoney(2);
+				   player.increaseMoney(2);
+				   System.out.println("Took $2 from "+entry.getValue().getName());
+			   }
+			   else continue;
+			}
 		},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -707,8 +765,17 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: MR_BOGGIS: Take $2 if possible "
-			+ "from every other player");
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			myPlayersMap.remove(player.getColor());
+			for (Entry<Color, Player>  entry : myPlayersMap.entrySet())
+			{
+			   if(entry.getValue().getMoney()>=2) {
+				   entry.getValue().decreaseMoney(2);
+				   player.increaseMoney(2);
+				   System.out.println("Took $2 from "+entry.getValue().getName());
+			   }
+			   else continue;
+			}
 		},
 		// Money
 		0,
@@ -821,9 +888,43 @@ public enum GreenPlayerCard implements Card {
 		new ArrayList<Symbol>(){{
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_DUCKMAN: move a minion belonging to "
-			+ "another player from one area "
-			+ "to an adjacent area");
+			//System.out.println("NOT IMPLEMENTED: THE_DUCKMAN: move a minion belonging to "
+			//+ "another player from one area "
+			//+ "to an adjacent area");
+			
+		TextUserInterface UI = new TextUserInterface();
+		Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			
+		// Chose a valid player
+		Player choosenPlayer = UI.getPlayer(myPlayersMap);
+		while(choosenPlayer == player) {
+			System.out.println("You cannot choose yourself!");
+			choosenPlayer = UI.getPlayer(myPlayersMap);
+		}
+			
+		// Ensure player has minions
+		// if so remove it and place it on adjacent area
+		Map<Integer, BoardArea> minionAreas = game.getAreasWithPlayerMinions(choosenPlayer);
+		if(minionAreas.size() == 0) {
+			System.out.println("She/He has no minions to move");
+			return;
+		}
+						
+		// Get remove minion area
+		BoardArea removeArea = UI.getAreaChoice(minionAreas, "Choose area to remove her/his minion", "Choose area", true);
+		
+		// Get nighbouring areas
+		Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
+		ArrayList<Integer> excludeList = new ArrayList<Integer>();
+		excludeList.add(removeArea.getArea().getAreaCode());
+		
+		// get placement area
+		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+		
+		// Actually do the movement
+		removeArea.removeMinion(player);
+		chosenArea.addMinion(player);
+								
 		},
 		// Money
 		0,
@@ -843,17 +944,56 @@ public enum GreenPlayerCard implements Card {
 		37
 	),
 	
-	COMT_DIBBLER(
+	@SuppressWarnings("resource")
+	CMOT_DIBBLER(
 		new ArrayList<Symbol>(){{
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: COMT_DIBBLER: Roll the die. on the role of 7 or more"
-				+ "you take $4 from the bank. on a roll"
-				+ "of 1 you must pay $2 to the bank"
-				+ "or remove one of your minions from"
-				+ "the board, all other results have"
-				+ "no effect");
+			//System.out.println("NOT IMPLEMENTED: COMT_DIBBLER: Roll the die. on the role of 7 or more"
+			//	+ "you take $4 from the bank. on a roll"
+			//	+ "of 1 you must pay $2 to the bank"
+			//	+ "or remove one of your minions from"
+			//	+ "the board, all other results have"
+			//	+ "no effect");
+			
+			int dieRoll = Die.getDie().roll();
+			System.out.println("Dice rolled: " + dieRoll);
+
+			TextUserInterface textUI = new TextUserInterface();
+			if(dieRoll == 7) {				
+				game.givePlayerMoneyFromBank(player,4);							
+			} 
+			else if(dieRoll == 1) {
+				
+				Scanner scanner = new Scanner(System.in);
+				String optionChoice = null;
+				
+				System.out.println("\tYou have 2 options:");
+				System.out.println("\t1- Paying 2$ to the bank, enter 1");
+				System.out.println("\t2- Removing a minion, enter 2");
+				System.out.print("Choice: ");
+				optionChoice = scanner.nextLine();
+			
+				switch (optionChoice){
+				case "1":
+				{
+					game.giveBankMoneyFromPlayer(player,2);
+				}
+					break;			
+				case "2":
+				{
+					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
+					chosenArea.removeMinion(player);	
+				}
+					break;
+					
+				default: System.out.println("\tPlease enter your choice:");
+				    break;
+				}
+				}	
+			
+			System.out.println("No Action");
 		},
 		// Money
 		0,
@@ -965,9 +1105,44 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: FOUL_OLE_RON: move a minion belonging to"
-				+ "another player from one area"
-				+ "to an adjacent area");
+			//System.out.println("NOT IMPLEMENTED: FOUL_OLE_RON: move a minion belonging to"
+			//	+ "another player from one area"
+			//	+ "to an adjacent area");
+			
+			
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+				
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+				
+			// Ensure player has minions
+			// if so remove it and place it on adjacent area
+			Map<Integer, BoardArea> minionAreas = game.getAreasWithPlayerMinions(choosenPlayer);
+			if(minionAreas.size() == 0) {
+				System.out.println("She/He has no minions to move");
+				return;
+			}
+							
+			// Get remove minion area
+			BoardArea removeArea = UI.getAreaChoice(minionAreas, "Choose area to remove her/his minion", "Choose area", true);
+			
+			// Get nighbouring areas
+			Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
+			ArrayList<Integer> excludeList = new ArrayList<Integer>();
+			excludeList.add(removeArea.getArea().getAreaCode());
+			
+			// get placement area
+			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+			
+			// Actually do the movement
+			removeArea.removeMinion(player);
+			chosenArea.addMinion(player);		
+			
 		},
 		// Money
 		0,
