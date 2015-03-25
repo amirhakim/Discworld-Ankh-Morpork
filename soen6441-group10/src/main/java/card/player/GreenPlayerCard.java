@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -938,17 +939,56 @@ public enum GreenPlayerCard implements Card {
 		37
 	),
 	
-	COMT_DIBBLER(
+	@SuppressWarnings("resource")
+	CMOT_DIBBLER(
 		new ArrayList<Symbol>(){{
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: COMT_DIBBLER: Roll the die. on the role of 7 or more"
-				+ "you take $4 from the bank. on a roll"
-				+ "of 1 you must pay $2 to the bank"
-				+ "or remove one of your minions from"
-				+ "the board, all other results have"
-				+ "no effect");
+			//System.out.println("NOT IMPLEMENTED: COMT_DIBBLER: Roll the die. on the role of 7 or more"
+			//	+ "you take $4 from the bank. on a roll"
+			//	+ "of 1 you must pay $2 to the bank"
+			//	+ "or remove one of your minions from"
+			//	+ "the board, all other results have"
+			//	+ "no effect");
+			
+			int dieRoll = Die.getDie().roll();
+			System.out.println("Dice rolled: " + dieRoll);
+
+			TextUserInterface textUI = new TextUserInterface();
+			if(dieRoll == 7) {				
+				game.givePlayerMoneyFromBank(player,4);							
+			} 
+			else if(dieRoll == 1) {
+				
+				Scanner scanner = new Scanner(System.in);
+				String optionChoice = null;
+				
+				System.out.println("\tYou have 2 options:");
+				System.out.println("\t1- Paying 2$ to the bank, enter 1");
+				System.out.println("\t2- Removing a minion, enter 2");
+				System.out.print("Choice: ");
+				optionChoice = scanner.nextLine();
+			
+				switch (optionChoice){
+				case "1":
+				{
+					game.giveBankMoneyFromPlayer(player,2);
+				}
+					break;			
+				case "2":
+				{
+					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
+					chosenArea.removeMinion(player);	
+				}
+					break;
+					
+				default: System.out.println("\tPlease enter your choice:");
+				    break;
+				}
+				}	
+			
+			System.out.println("No Action");
 		},
 		// Money
 		0,
