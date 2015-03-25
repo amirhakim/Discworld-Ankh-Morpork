@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gameplay.BoardArea;
+import gameplay.Die;
 import gameplay.Game;
 import gameplay.Player;
 
@@ -51,7 +52,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has no free minions
 	 */
-	//@Test
+	@Test
 	public void placeMinionNoMinionsTest() {
 
 		System.out.println("~~PLACE MINION NO MINIONS TEST~~");
@@ -73,7 +74,7 @@ public class SymbolTest {
 	 * Test PLACE_MINION symbol
 	 * Condition that player has only free minions
 	 */
-	//@Test
+	@Test
 	public void placeMinionFullMinionsTest() {
 
 		System.out.println("~~PLACE MINION FULL MINIONS TEST~~");
@@ -90,7 +91,7 @@ public class SymbolTest {
 	 * Test PLACE_MINIONS symbol
 	 * Condition that payer has some free minions
 	 */
-	//@Test
+	@Test
 	public void placceMinionPartialMinionsTest() {
 
 		System.out.println("~~PLACE MINION PARTIAL MINIONS TEST~~");
@@ -108,7 +109,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has no free buildings to place
 	 */
-	//@Test
+	@Test
 	public void placeBuildingNoFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING NO BUILDINGS TEST~~");
@@ -136,7 +137,7 @@ public class SymbolTest {
 	/**
 	 * Test symbol place a building if player has free buildings to place
 	 */
-	//@Test
+	@Test
 	public void placeBuildingFreeBuildingsTest() {
 		
 		System.out.println("~~PLACE BUILDING FREE BUILDINGS TEST~~");
@@ -159,7 +160,7 @@ public class SymbolTest {
 	 * your presented with the only area that doesn't
 	 * have a trouble marker
 	 */
-	//@Test
+	@Test
 	public void placeBuildingNoTroubleTest() {
 		
 		System.out.println("~~PLACE BUILDING NO TROUBLE TEST~~");
@@ -187,7 +188,7 @@ public class SymbolTest {
 	/**
 	 * Test that you cannot place a building if they have trouble markers
 	 */
-	//@Test
+	@Test
 	public void impossibleBuildingPlacementTest() {
 		player.increaseMoney(1000);
 		// Can not add building to build area with trouble
@@ -203,7 +204,7 @@ public class SymbolTest {
 	 * Test assination symbol
 	 * 
 	 */
-	//@Test
+	@Test
 	public void assinateTest(){
 		System.out.println("~~ASSINATE TEST~~");
 		
@@ -243,7 +244,7 @@ public class SymbolTest {
 	/**
 	 * Test Symbole.REMOVE_TROUBLE_MARKER
 	 */
-	//@Test
+	@Test
 	public void troubleMarkerTest() {
 		System.out.println("~~TROUBLE MARKER TEST~~");
 		// Add trouble marker to area
@@ -258,7 +259,7 @@ public class SymbolTest {
 	/**
 	 * Test TAKE_MONEY symbol
 	 */
-	//@Test
+	@Test
 	public void takeMoneyTest() {
 		System.out.println("~~TAKE MONEY TEST~~");	
 		Integer money = GreenPlayerCard.INIGO_SKIMMER.getMoney();
@@ -278,7 +279,7 @@ public class SymbolTest {
 	 * Test RANDOM EVENT symbol
 	 * 
 	 */
-	//@Test
+	@Test
 	public void randomEventTest() {
 		System.out.println("~~~RANDOM EVENT TEST~~~");
 		Symbol.RANDOM_EVENT.getGameAction().accept(player, game);
@@ -347,6 +348,75 @@ public class SymbolTest {
 		}
 		
 	};
+	
+	@Test
+	public void interruptTakeMoneyTest() {
+		System.out.println("~~INTERRUPT CARDS THAT TAKE MONEY~~");
+		
+		// Cheat the dice roll
+		Die.getDie().setCheat(7);
+		
+		// give player2 a card that stops text action takes money
+		game.addPlayerCard(player2, GreenPlayerCard.WALLACE_SONKY);
+		// make sure players are well funded
+		player2.increaseMoney(10);
+		player.increaseMoney(10);
+		
+		//have player2 act out take money card
+		// choices are HERE_N_NOW, NOBBY_NOBBS
+		
+		GreenPlayerCard.HERE_N_NOW.getText().accept(player, game);
+		
+		// Check if player2 played the interrupt card
+		if(player2.getPlayerCards().size() == 0) {
+			// player 2 did player interrupt
+			// both players should still have 10$
+			assertEquals(player2.getMoney(), 10);
+			assertEquals(player.getMoney(), 10);
+		} else {
+			assertEquals(player2.getMoney(), 7);
+			assertEquals(player.getMoney(), 13);
+		}
+		
+		
+	}
+	
+	@Test
+	public void interruptCardForMoney() {
+		System.out.println("~~INTERRUPT CARD TAKE EXHCANGE MONEY FOR CARDS~~");
+		
+		// give player2 a card that stops text
+		game.addPlayerCard(player2, GreenPlayerCard.WALLACE_SONKY);
+		// make sure players are well funded
+		player2.increaseMoney(10);
+		player.increaseMoney(10);
+		//since player will give a card from player 2, lets give him a card to give
+		// since in real game, if player only has one card, he is playing rosie_palm, 
+		// so he needs two cards
+		game.addPlayerCard(player, GreenPlayerCard.HERE_N_NOW);
+		game.addPlayerCard(player, GreenPlayerCard.HEX);
+		
+		
+		GreenPlayerCard.ROSIE_PALM.getText().accept(player, game);
+		
+		// Check if player2 played the interrupt card
+		if(!player2.getPlayerCards().contains(GreenPlayerCard.WALLACE_SONKY)) {
+			//interrupt was played
+			//player should both have 10$
+			// player 2 should have 0 cards
+			// player should have his original 2 cards
+			assertEquals(player2.getMoney(), 10);
+			assertEquals(player.getMoney(), 10);
+			assertEquals(player.getPlayerCards().size(), 2);
+		} else {
+			assertEquals(player.getMoney(), 12);
+			assertEquals(player2.getMoney(), 8);
+			assertEquals(player.getPlayerCards().size(), 1);
+		}
+		
+		
+		
+	}
 	
 	
 	

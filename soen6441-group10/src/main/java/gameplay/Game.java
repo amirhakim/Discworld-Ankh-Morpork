@@ -842,54 +842,107 @@ public class Game {
 	 * @return true if interrupt was played
 	 */
 	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, BoardArea affectedArea) {
-		boolean played = false;
 		GreenPlayerCard interruptCard = null;
-		TextUserInterface UI = new TextUserInterface();
-		if(interrupt == Interrupt.ASSASINATION) {
-			// PLayer cards that can affect assasination
-			// Gaspode && Fresh Start Club
-			if(!played){
-				// GASPODE
-				interruptCard = GreenPlayerCard.GASPODE;
-				Color playerColor = interrupts.get(interruptCard);
-				if(playerColor != null){
-					Player player = getPlayerOfColor(playerColor);
-					if(affectedPlayer.getColor() == player.getColor()) { 
-						if(UI.playInterrupt(affectedPlayer, interruptCard)){
-							affectedArea.addMinion(affectedPlayer);
-							played = true;
-						}
-					}
-				}
-			}
-			if(!played) {
-				// FRESH STRT CLUB
-				interruptCard = GreenPlayerCard.THE_FRESH_START_CLUB;
-				Color playerColor = interrupts.get(interruptCard);
-				if(playerColor != null) {
-					Player player = getPlayerOfColor(playerColor);
-					if(affectedPlayer.getColor() == player.getColor()) { 	
-						if(UI.playInterrupt(affectedPlayer, interruptCard)){
-							// get Areas to place minion
-							Map<Integer, BoardArea> possibilities = getMinionPlacementAreas(affectedPlayer);
-							ArrayList<Integer> excludeList = new ArrayList<Integer>();
-							excludeList.add(affectedArea.getArea().getAreaCode());
-							BoardArea chosenArea = UI.getAreaChoice(possibilities, "Select area to replace assasinated minion.", 
-								"Choose area:", true, excludeList);
-							chosenArea.addMinion(affectedPlayer);
-							played = true;
-						
-						}
-					}
-				
-				}
-			}
+		
+		boolean willPlay = setUpNotify(GreenPlayerCard.GASPODE,
+				affectedPlayer, interrupt, Interrupt.ASSASINATION);
+		
+		if(willPlay) {
+			affectedArea.addMinion(affectedPlayer);
+			interruptCard = GreenPlayerCard.GASPODE;
 		}
-		if(played) {
+		
+		if(!willPlay) {
+			willPlay = setUpNotify(GreenPlayerCard.THE_FRESH_START_CLUB, 
+				affectedPlayer, interrupt, Interrupt.ASSASINATION);
+		}
+		
+		// Check if will play this card
+		// Important to check that interrupt card isn't already set
+		// if it is, we've already played a card
+		if(willPlay && interruptCard == null) {
+			// get Areas to place minion
+			Map<Integer, BoardArea> possibilities = getMinionPlacementAreas(affectedPlayer);
+			ArrayList<Integer> excludeList = new ArrayList<Integer>();
+			excludeList.add(affectedArea.getArea().getAreaCode());
+			TextUserInterface UI = new TextUserInterface();
+			BoardArea chosenArea = UI.getAreaChoice(possibilities, "Select area to replace assasinated minion.", 
+					"Choose area:", true, excludeList);
+			chosenArea.addMinion(affectedPlayer);
+			interruptCard = GreenPlayerCard.THE_FRESH_START_CLUB;
+		}
+		
+		if(willPlay) {
 			discardCard(interruptCard, affectedPlayer);
 
 		}
-		return played;
+		return willPlay;
+	}
+	
+	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, Player theif, Integer money) {
+		GreenPlayerCard interruptCard = null;
+		
+		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
+				affectedPlayer, interrupt, Interrupt.TAKE_MONEY);
+		
+		if(willPlay) {
+			// return money to affected player
+			theif.decreaseMoney(money);
+			affectedPlayer.increaseMoney(money);
+			interruptCard = GreenPlayerCard.WALLACE_SONKY;
+		}
+		
+		if(willPlay) {
+			discardCard(interruptCard, affectedPlayer);
+		}
+		return willPlay;
+	}
+	
+	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, Player theif, GreenPlayerCard card, Integer money) {
+		GreenPlayerCard interruptCard = null;
+		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY, 
+				affectedPlayer, interrupt, Interrupt.CARD_FOR_MONEY);
+		if(willPlay) {
+			theif.decreaseMoney(money);
+			affectedPlayer.increaseMoney(money);
+			theif.addPlayerCard(card);
+			affectedPlayer.removePlayerCard(card);
+			interruptCard = GreenPlayerCard.WALLACE_SONKY;
+		}
+		
+		
+		if(willPlay) {
+			discardCard(interruptCard, affectedPlayer);
+		}
+		return willPlay;
+	}
+	
+	
+	/**
+	 * Helper function to find out if interrupt will be played
+	 * @param card	Card that has interrupt symbol
+	 * @param affectedPlayer	Player that may be able to play interrupt card
+	 * @param interrupt			Interrupt that was signaled from elsewhere
+	 * @param searchInterrupt	Interrupt that if found allows some change to take place
+	 * @param played			If a previous interrupt has been played in this turn
+	 * @return
+	 */
+	public boolean setUpNotify(GreenPlayerCard card, Player affectedPlayer, 
+			Interrupt interrupt, Interrupt searchInterrupt){
+		
+		if(interrupt == searchInterrupt) {
+			Color playerColor = interrupts.get(card);
+			if(playerColor != null) {
+				Player player = getPlayerOfColor(playerColor);
+				if(affectedPlayer.getColor() == player.getColor()) {
+					TextUserInterface UI = new TextUserInterface();
+					if (UI.playInterrupt(affectedPlayer, card)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	public void addInterrupt(GreenPlayerCard card, Player player) {

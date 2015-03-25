@@ -111,7 +111,7 @@ public enum GreenPlayerCard implements Card {
 					Player chosenPlayer = textUI.getPlayer(playerMap);
 					chosenPlayer.decreaseMoney(3);
 					player.increaseMoney(3);
-					//game.notifyInterrupt(Interrupt.TAKE_MONEY, chosenPlayer, 3);
+					game.notifyInterrupt(Interrupt.TAKE_MONEY, chosenPlayer, player, 3);
 					
 					
 				} else if(dieRoll == 1) {
@@ -253,7 +253,7 @@ public enum GreenPlayerCard implements Card {
 				}
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);
-					//game.notifyInterrupt(Interrupt.TAKE_MONEY, choosenPlayer, 3);
+					game.notifyInterrupt(Interrupt.TAKE_MONEY, choosenPlayer, player, 3);
 				}
 				else{
 					System.out.println("That Player don't have $3, sorry action can't be completed");
@@ -466,7 +466,7 @@ public enum GreenPlayerCard implements Card {
 			choosenPlayer.addPlayerCard(card);
 			choosenPlayer.decreaseMoney(2);
 			player.increaseMoney(2);
-			//game.notifyInterrupt(Interrupt.CARD_FOR_MONEY, choosenPlayer, 2, card);
+			game.notifyInterrupt(Interrupt.CARD_FOR_MONEY, choosenPlayer, player, card, 2);
 				
 		},
 		// Money

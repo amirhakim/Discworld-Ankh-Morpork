@@ -9,6 +9,10 @@ public class Die {
 	private static Die instance = null;
 	
 	private Random randomGen = new Random();
+	
+	// Exists for sole point of testing
+	// Force die roll to return a certain value
+	private Integer cheat = null;
 
 	private Die() {}
 	
@@ -24,7 +28,12 @@ public class Die {
 	 * @return an integer in [1, 12].
 	 */
 	public int roll() {
+		if(cheat != null) return cheat;
 		return randomGen.nextInt(SIDES) + 1;
+	}
+	
+	public void setCheat(int cheat) {
+		this.cheat = cheat;
 	}
 	
 	/**
