@@ -28,8 +28,13 @@ public class Die {
 	 * @return an integer in [1, 12].
 	 */
 	public int roll() {
-		if(cheat != null) return cheat;
-		return randomGen.nextInt(SIDES) + 1;
+		if (cheat != null) {
+			return cheat;
+		}
+		
+		int result = randomGen.nextInt(SIDES) + 1;
+		System.out.println("Die roll: " + result);
+		return result;
 	}
 	
 	public void setCheat(int cheat) {
@@ -37,9 +42,9 @@ public class Die {
 	}
 	
 	/**
-	 * <b>Returns an integer between 0 (inclusive) and the given number of players 
+	 * Returns an integer between 0 (inclusive) and the given number of players 
 	 * (exclusive) which determines which player should play first (the result
-	 * is used as an index into an array.</b>
+	 * is used as an index into an array.
 	 * @param numberOfPlayers
 	 * @return an integer in [0, number of players).
 	 */

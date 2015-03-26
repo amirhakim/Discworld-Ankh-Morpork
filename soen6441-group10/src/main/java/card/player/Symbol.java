@@ -196,7 +196,7 @@ public enum Symbol {
 		TextUserInterface textUI = new TextUserInterface();
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas2, "Select area for assasinnation", "choice: ", true);
 	
-		Color c  = textUI.assinate(trouble, player, game);
+		Color c  = textUI.assassinatePiece(trouble, player, game);
 
 		if(c != null) {
 			Player affectedPlayer = game.getPlayerOfColor(c);

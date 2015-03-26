@@ -8,28 +8,36 @@ import io.TextUserInterface;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import util.Color;
 import card.Card;
 import card.city.AnkhMorporkArea;
 
 public enum RandomEventCard implements Card {
 	
 	DRAGON((game, player) -> {
+		System.out.println("Dragon! Die roll to determine the affected area...");
 		int areaAffected = Die.getDie().roll();
-		System.out.println("Dragon! Removing all pieces from area #" + areaAffected);
 		game.removeAllPiecesFromArea(areaAffected);
 	}),
 	
 	FLOOD((game, player) -> {
+		System.out.println("Flood! 2 die rolls to get the affected areas (river-adjacent only): ");
 		Die die = Die.getDie();
 		AnkhMorporkArea firstAreaAffected = AnkhMorporkArea.forCode(die.roll());
 		AnkhMorporkArea secondAreaAffected = AnkhMorporkArea.forCode(die.roll());
-		System.out.println("Flood! Flooding areas " + firstAreaAffected + ", " +
-				secondAreaAffected);
-		List<AnkhMorporkArea> adjacentToFirst = AnkhMorporkArea.getAdjacentAreas(firstAreaAffected);
-		List<AnkhMorporkArea> adjacentToSecond = AnkhMorporkArea.getAdjacentAreas(secondAreaAffected);
+		boolean isOneAreaOnlyAffected = (secondAreaAffected == firstAreaAffected);
 
-		TextUserInterface UI = new TextUserInterface();
-		// TODO: Finish this
+		List<AnkhMorporkArea> adjacentToFirst = AnkhMorporkArea.getAdjacentAreas(firstAreaAffected);
+		if (!isOneAreaOnlyAffected) {
+			adjacentToFirst.remove(secondAreaAffected); // can't move to another area affected
+		}
+		
+		moveMinionsBetweenAreas(firstAreaAffected, adjacentToFirst, game, player);
+
+		if (!isOneAreaOnlyAffected) {
+			List<AnkhMorporkArea> adjacentToSecond = AnkhMorporkArea.getAdjacentAreas(secondAreaAffected);
+			adjacentToSecond.remove(firstAreaAffected);
+		}
 	}),
 	
 	FIRE((game, player) -> {
@@ -89,11 +97,14 @@ public enum RandomEventCard implements Card {
 	}),
 	
 	MYSTERIOUS_MURDERS((game, player) -> {
+		System.out.println("Mysterious Murders: A demon will be placed in 4 areas.");
 		Die die = Die.getDie();
+		// TODO: Complete
 		System.out.println("TODO: Mysterious Murders");
 	}),
 	
 	DEMONS_FROM_THE_DUNGEON_DIMENSIONS((game, player) -> {
+		System.out.println("Demons from the Dungeon Dimensions: A demon will be placed in 4 areas.");
 		Die die = Die.getDie();
 		int[] areas = { die.roll(), die.roll(), die.roll(), die.roll() };
 		for (int area : areas) {
@@ -109,6 +120,22 @@ public enum RandomEventCard implements Card {
 	
 	public BiConsumer<Game, Player> getGameAction() {
 		return gameAction;
+	}
+	
+	private static void moveMinionsBetweenAreas(AnkhMorporkArea area, List<AnkhMorporkArea> adjacentAreas,
+			Game game, Player player) {
+		TextUserInterface UI = new TextUserInterface();
+		Color[] order = game.getPlayersFromCurrentPlayer();
+		for (Color c : order) {
+			if (game.hasMinionInArea(area, c)) {
+				Player p = game.getPlayerOfColor(c);
+				AnkhMorporkArea a = UI.getAreaChoice(adjacentAreas,
+						"Select an area to which your minion will be moved:",
+						">");
+				game.removeMinion(a.getAreaCode(), p);
+				game.addMinion(a.getAreaCode(), p);
+			}
+		}
 	}
 
 }

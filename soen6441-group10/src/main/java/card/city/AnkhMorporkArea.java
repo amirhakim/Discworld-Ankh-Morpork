@@ -228,6 +228,12 @@ public enum AnkhMorporkArea implements Card {
 		return areaAndAdjacent;
 	}
 	
+	public boolean isAdjacentToRiver() {
+		return this != THE_HIPPO &&
+				this != SMALL_GODS &&
+				 this != DRAGONS_LANDING;
+	}
+	
 	private static void payAndAddMinion(AnkhMorporkArea a, Player player, Game game) {
 		TextUserInterface UI = new TextUserInterface();
 		Map<Integer, BoardArea> gameBoard = game.getGameBoard();

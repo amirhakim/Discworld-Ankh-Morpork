@@ -107,8 +107,6 @@ public class TextUserInterface {
 		if (controller.newGame(numberOfPlayers, playerNames)) {
 			System.out.println("Game Started!");
 
-			controller.simulate();
-
 			String action = "";
 			while (!action.equals(UserOption.QUIT.getOptionString())) {
 				System.out
@@ -436,11 +434,8 @@ public class TextUserInterface {
 	 * @return
 	 */
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas, 
-		
 		String outputMsg, String inputMsg, ArrayList<Integer> excludeList) {
-
 		return getAreaChoice(availableAreas, outputMsg, inputMsg, false, excludeList);
-	
 	}
 	
 	
@@ -519,61 +514,64 @@ public class TextUserInterface {
 	
 	
 	/**
-	 * Remove a troll, demon or minion from a baordArea
+	 * Remove a troll, demon or minion from a boardArea
 	 * @param trouble
 	 * @param killer
 	 */
-	public Color assinate(BoardArea trouble, Player killer, Game game) {
+	public Color assassinatePiece(BoardArea trouble, Player killer, Game game) {
 		scanner = new Scanner(System.in);
-		
-		// Display all assination options
-	    if(trouble.getDemonCount() > 0) {
-	    	System.out.println("\tPress d for demon");
-	    }
-	    if(trouble.getTrollCount() > 0) {
-	    	System.out.println("\tPress t for troll");
-	    }
-	    // Display minions available for assination
+
+		// Display all assassination options
+		if (trouble.getDemonCount() > 0) {
+			System.out.println("\tPress d for demon");
+		}
+		if (trouble.getTrollCount() > 0) {
+			System.out.println("\tPress t for troll");
+		}
+		// Display minions available for assassination
 		Map<Color, Integer> troubleMinions = trouble.getMinions();
-		Iterator<Entry<Color, Integer>> it = troubleMinions.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry<Color, Integer> pair = it.next();
-	        System.out.println("\tType " + pair.getKey() + " for minion of player " + pair.getValue());
-	    }
-	    
-	    Color killedColor = null;
-	    String actionKill = null;
-	    boolean removed = false;
-	    while(!removed) {
-	    	System.out.print("Choice: ");
-	    	actionKill = scanner.nextLine();	
-	    
-	    	if(actionKill.equals("t") && trouble.getTrollCount() > 0){
-	    		trouble.removeTroll();
-	    		removed = true;
-	    	} else if(actionKill.equals("d") && trouble.getDemonCount() > 0) {
-	    		trouble.removeDemon();
-	    		removed = true;
-	    	} else {
-	    		try {
-	    			Color c =Color.valueOf(actionKill);
-	    			// Make sure minion being assinated is valid and isn't your own
-	    			Player losingMinion = game.getPlayerOfColor(c);
-	    			if(losingMinion != null &&
-	    					Color.valueOf(actionKill) != killer.getColor() &&
-	    					trouble.getMinionCountForPlayer(losingMinion) != 0) {
-	    				
-	    				trouble.removeMinion(losingMinion);
-	    				removed = true;
-	    				killedColor = c;
-	    			}
-	    		}catch(IllegalArgumentException e) {
-	    			continue;
-	    		}
-	    		
-	    	}
-	    }
-	    return killedColor;
+		Iterator<Entry<Color, Integer>> it = troubleMinions.entrySet()
+				.iterator();
+		while (it.hasNext()) {
+			Map.Entry<Color, Integer> pair = it.next();
+			System.out.println("\tType " + pair.getKey()
+					+ " for minion of player " + pair.getValue());
+		}
+
+		Color killedColor = null;
+		String actionKill = null;
+		boolean removed = false;
+		while (!removed) {
+			System.out.print("Choice: ");
+			actionKill = scanner.nextLine();
+
+			if (actionKill.equals("t") && trouble.getTrollCount() > 0) {
+				trouble.removeTroll();
+				removed = true;
+			} else if (actionKill.equals("d") && trouble.getDemonCount() > 0) {
+				trouble.removeDemon();
+				removed = true;
+			} else {
+				try {
+					Color c = Color.valueOf(actionKill);
+					// Make sure minion being assinated is valid and isn't your
+					// own
+					Player losingMinion = game.getPlayerOfColor(c);
+					if (losingMinion != null
+							&& Color.valueOf(actionKill) != killer.getColor()
+							&& trouble.getMinionCountForPlayer(losingMinion) != 0) {
+
+						trouble.removeMinion(losingMinion);
+						removed = true;
+						killedColor = c;
+					}
+				} catch (IllegalArgumentException e) {
+					continue;
+				}
+
+			}
+		}
+		return killedColor;
 	}
 
 	/**

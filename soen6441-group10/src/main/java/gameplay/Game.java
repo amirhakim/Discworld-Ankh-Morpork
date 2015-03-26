@@ -20,10 +20,10 @@ import card.personality.PersonalityDeck;
 import card.player.DiscardPile;
 import card.player.GreenPlayerCard;
 import card.player.PlayerDeck;
+import card.player.Symbol;
 import card.random.RandomEventCard;
 import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
-import card.player.Symbol;
 
 /**
  * <b>This class represents the bulk of the actions available in the game.<br> It sets
@@ -175,7 +175,6 @@ public class Game {
 		status = GameStatus.PLAYING;
 	}
 
-	
 	/**
 	 * <b>Deal a player a personality card from deck.</b>
 	 * @param p Player
@@ -237,6 +236,30 @@ public class Game {
 	 */
 	public Player getPlayerOfCurrentTurn() {
 		return players.get(playerTurnOrder[currentTurn]);
+	}
+	
+	/**
+	 * @return a shifted view of the players' order so that it starts
+	 * with the player whose turn it currently is. This is useful in cases
+	 * where, for example, a random event happens and each player has to 
+	 * perform an action in sequence. 
+	 * 
+	 * <p>For example, if the Blue player is playing
+	 * and the original order is Red -> Blue -> Green -> Yellow, the view returned is
+	 * Blue -> Green -> Yellow.</p>
+	 */
+	public Color[] getPlayersFromCurrentPlayer() {
+		Color[] shiftedPlayers = new Color[playerTurnOrder.length];
+		int i = 0;
+		for (int j = currentTurn; j < shiftedPlayers.length; j++) {
+			shiftedPlayers[i] = playerTurnOrder[j];
+			i++;
+		}
+		for (int j = 0; j < currentTurn; j++) {
+			shiftedPlayers[i] = playerTurnOrder[0];
+			i++;
+		}
+		return shiftedPlayers;
 	}
 	
 	/**
@@ -338,27 +361,6 @@ public class Game {
 	}
 
 	/**
-	 * <b>Each players turn has not been implemented so this actions A series of
-	 * potential game maneuvers.</b>
-	 */
-	void simulate() {
-		/*
-		 * areas.getCard("Small Gods").addTrouble();
-		 * areas.getCard("Nap Hill").incTrolls();
-		 * 
-		 * areas.getCard("The Hippo").addMinion(players[1]);
-		 * areas.getCard("The Hippo").addMinion(players[1]);
-		 * 
-		 * areas.getCard("Nap Hill").setBuilding(players[1]);
-		 * 
-		 * players[0].addPlayerCard(playerDeck.drawCard().get());
-		 * players[0].addPlayerCard(playerDeck.drawCard().get());
-		 * 
-		 * players[1].addPlayerCard(playerDeck.drawCard().get());
-		 */
-	}
-
-	/**
 	 * <b>Retrieves the total number of minions for the given player on the game
 	 * board.</b>
 	 * 
@@ -370,6 +372,13 @@ public class Game {
 		return gameBoard.values().stream()
 				.map(area -> area.getMinionCountForPlayer(player))
 				.reduce(0, (sumSoFar, next) -> sumSoFar + next);
+	}
+	
+	/**
+	 * @return true if the given player has a minion in the given area, false otherwise.
+	 */
+	public boolean hasMinionInArea(AnkhMorporkArea a, Color p) {
+		return gameBoard.get(a.getAreaCode()).getMinionCountForPlayer(getPlayerOfColor(p)) > 0;
 	}
 	
 	/**
@@ -435,7 +444,6 @@ public class Game {
 	public int getMinionCountForArea(AnkhMorporkArea a) {
 		return gameBoard.get(a.getAreaCode()).getMinionCount();
 	}
-	
 	
 	/**
 	 * 
@@ -633,6 +641,13 @@ public class Game {
 	}
 
 	/**
+	 * Adds a minion for the given player in the area with the given area code.
+	 */
+	public void addMinion(int areaID, Player player) {
+		gameBoard.get(areaID).addMinion(player);
+	}
+	
+	/**
 	 * <b>Remove one minion belonging to the given player from the area with the
 	 * given area ID.</b>
 	 * 
@@ -784,16 +799,16 @@ public class Game {
 	 */
 	public boolean drawDiscardCards(Player player, int numberOfCards) {
 
-		if(getDiscardPile().size() >= numberOfCards) {
-			while(numberOfCards > 0) {
-				player.addPlayerCard(discardPile.drawCard().get());		
+		if (getDiscardPile().size() >= numberOfCards) {
+			while (numberOfCards > 0) {
+				player.addPlayerCard(discardPile.drawCard().get());
 				numberOfCards--;
 			}
 			return true;
 		} else {
 			return false;
 		}
-		
+
 	}
 
 	/**
@@ -804,24 +819,21 @@ public class Game {
 		return discardPile;
 	}
 	
-
-	
-	
 	/**
 	 * <b>Discard card by adding it to the pile.</b>
 	 * @param card
 	 */
 	public void discardCard(GreenPlayerCard card, Player p) {
-		if(p != null) {
+		if (p != null) {
 			p.removePlayerCard(card);
 		}
 		discardPile.addCard(card);
 		// Remove interrupt listener
-		if(card.getSymbols().contains(Symbol.INTERRUPT)) {
+		if (card.getSymbols().contains(Symbol.INTERRUPT)) {
 			removeInterrupt(card);
 		}
 	}
-	
+
 	public Map<Color, Player> getPlayersMap(){
 		return this.players;
 	}
@@ -843,36 +855,37 @@ public class Game {
 	 */
 	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, BoardArea affectedArea) {
 		GreenPlayerCard interruptCard = null;
-		
-		boolean willPlay = setUpNotify(GreenPlayerCard.GASPODE,
-				affectedPlayer, interrupt, Interrupt.ASSASINATION);
-		
-		if(willPlay) {
+
+		boolean willPlay = setUpNotify(GreenPlayerCard.GASPODE, affectedPlayer,
+				interrupt, Interrupt.ASSASINATION);
+
+		if (willPlay) {
 			affectedArea.addMinion(affectedPlayer);
 			interruptCard = GreenPlayerCard.GASPODE;
 		}
-		
-		if(!willPlay) {
-			willPlay = setUpNotify(GreenPlayerCard.THE_FRESH_START_CLUB, 
-				affectedPlayer, interrupt, Interrupt.ASSASINATION);
+
+		if (!willPlay) {
+			willPlay = setUpNotify(GreenPlayerCard.THE_FRESH_START_CLUB,
+					affectedPlayer, interrupt, Interrupt.ASSASINATION);
 		}
-		
+
 		// Check if will play this card
 		// Important to check that interrupt card isn't already set
 		// if it is, we've already played a card
-		if(willPlay && interruptCard == null) {
+		if (willPlay && interruptCard == null) {
 			// get Areas to place minion
 			Map<Integer, BoardArea> possibilities = getMinionPlacementAreas(affectedPlayer);
 			ArrayList<Integer> excludeList = new ArrayList<Integer>();
 			excludeList.add(affectedArea.getArea().getAreaCode());
 			TextUserInterface UI = new TextUserInterface();
-			BoardArea chosenArea = UI.getAreaChoice(possibilities, "Select area to replace assasinated minion.", 
+			BoardArea chosenArea = UI.getAreaChoice(possibilities,
+					"Select area to replace assasinated minion.",
 					"Choose area:", true, excludeList);
 			chosenArea.addMinion(affectedPlayer);
 			interruptCard = GreenPlayerCard.THE_FRESH_START_CLUB;
 		}
-		
-		if(willPlay) {
+
+		if (willPlay) {
 			discardCard(interruptCard, affectedPlayer);
 
 		}
@@ -881,60 +894,65 @@ public class Game {
 	
 	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, Player theif, Integer money) {
 		GreenPlayerCard interruptCard = null;
-		
+
 		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
 				affectedPlayer, interrupt, Interrupt.TAKE_MONEY);
-		
-		if(willPlay) {
+
+		if (willPlay) {
 			// return money to affected player
 			theif.decreaseMoney(money);
 			affectedPlayer.increaseMoney(money);
 			interruptCard = GreenPlayerCard.WALLACE_SONKY;
 		}
-		
-		if(willPlay) {
+
+		if (willPlay) {
 			discardCard(interruptCard, affectedPlayer);
 		}
 		return willPlay;
 	}
-	
-	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, Player theif, GreenPlayerCard card, Integer money) {
+
+	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer,
+			Player theif, GreenPlayerCard card, Integer money) {
 		GreenPlayerCard interruptCard = null;
-		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY, 
+		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
 				affectedPlayer, interrupt, Interrupt.CARD_FOR_MONEY);
-		if(willPlay) {
+		if (willPlay) {
 			theif.decreaseMoney(money);
 			affectedPlayer.increaseMoney(money);
 			theif.addPlayerCard(card);
 			affectedPlayer.removePlayerCard(card);
 			interruptCard = GreenPlayerCard.WALLACE_SONKY;
 		}
-		
-		
-		if(willPlay) {
+
+		if (willPlay) {
 			discardCard(interruptCard, affectedPlayer);
 		}
 		return willPlay;
 	}
-	
-	
+
 	/**
 	 * Helper function to find out if interrupt will be played
-	 * @param card	Card that has interrupt symbol
-	 * @param affectedPlayer	Player that may be able to play interrupt card
-	 * @param interrupt			Interrupt that was signaled from elsewhere
-	 * @param searchInterrupt	Interrupt that if found allows some change to take place
-	 * @param played			If a previous interrupt has been played in this turn
+	 * 
+	 * @param card
+	 *            Card that has interrupt symbol
+	 * @param affectedPlayer
+	 *            Player that may be able to play interrupt card
+	 * @param interrupt
+	 *            Interrupt that was signaled from elsewhere
+	 * @param searchInterrupt
+	 *            Interrupt that if found allows some change to take place
+	 * @param played
+	 *            If a previous interrupt has been played in this turn
 	 * @return
 	 */
-	public boolean setUpNotify(GreenPlayerCard card, Player affectedPlayer, 
-			Interrupt interrupt, Interrupt searchInterrupt){
-		
-		if(interrupt == searchInterrupt) {
+	public boolean setUpNotify(GreenPlayerCard card, Player affectedPlayer,
+			Interrupt interrupt, Interrupt searchInterrupt) {
+
+		if (interrupt == searchInterrupt) {
 			Color playerColor = interrupts.get(card);
-			if(playerColor != null) {
+			if (playerColor != null) {
 				Player player = getPlayerOfColor(playerColor);
-				if(affectedPlayer.getColor() == player.getColor()) {
+				if (affectedPlayer.getColor() == player.getColor()) {
 					TextUserInterface UI = new TextUserInterface();
 					if (UI.playInterrupt(affectedPlayer, card)) {
 						return true;
@@ -944,14 +962,14 @@ public class Game {
 		}
 		return false;
 	}
-	
+
 	public void addInterrupt(GreenPlayerCard card, Player player) {
 		interrupts.put(card, player.getColor());
 	}
-	
+
 	public void removeInterrupt(GreenPlayerCard card) {
-		if(interrupts.get(card) != null) interrupts.remove(card);
+		if (interrupts.get(card) != null)
+			interrupts.remove(card);
 	}
-	
 	
 }

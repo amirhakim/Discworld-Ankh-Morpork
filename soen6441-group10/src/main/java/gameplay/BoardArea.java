@@ -144,6 +144,7 @@ public class BoardArea {
 	 *            the player
 	 */
 	public void addMinion(Player p) {
+		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0)) || demonCount > 0 || trollCount > 0;
 		Color playerColor = p.getColor();
 		p.decreaseMinion();
 		if (minions.get(playerColor) == null) {
@@ -199,8 +200,8 @@ public class BoardArea {
 	 * @return true if adding a troll succeeded, false otherwise.
 	 */
 	public boolean addTroll() {
+		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0)) || demonCount > 0 || trollCount > 0;
 		trollCount++;
-		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0));
 		return true;
 	}
 
@@ -223,8 +224,8 @@ public class BoardArea {
 	 * @return true if adding a demon succeeded, false otherwise.
 	 */
 	public boolean addDemon() {
+		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0)) || demonCount > 0 || trollCount > 0;
 		demonCount++;
-		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0));
 		return true;
 	}
 

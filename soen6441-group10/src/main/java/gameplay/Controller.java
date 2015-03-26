@@ -103,10 +103,6 @@ public class Controller {
 		return game.getPlayerOfColor(c);
 	}
 	
-	public void simulate() {
-		game.simulate();
-	}
-	
 	public Game getGame() {
 		return game;
 	}
