@@ -40,7 +40,12 @@ public class Player {
 	
 	private int buildings;
 	
+	private boolean haveWhiteFace = false;
+	
+	private boolean hasMrBent = false;
+	
 	private List<CityAreaCard> cityCards = new ArrayList<>();
+	
 	
 	/**
 	 * <b>This is the player's hand.<br> It is implemented as a set because we can
@@ -48,6 +53,7 @@ public class Player {
 	 * {@link GreenPlayerCard} enum).</b>
 	 */
 	private Set<GreenPlayerCard> playerCards = new HashSet<>();
+	private Set<GreenPlayerCard> unplayableCards = new HashSet<>();
 
 	public Player() {
 		this.money = 0;
@@ -90,6 +96,14 @@ public class Player {
 	 */
 	public String getName() {
 		return this.name;
+	}
+	
+	public Set<GreenPlayerCard> getUnplayableCards() {
+		return unplayableCards;
+	}
+	
+	public void addUnplayableCard(GreenPlayerCard card) {
+		unplayableCards.add(card);
 	}
 
 	/**
@@ -342,6 +356,22 @@ public class Player {
 		return balance;
 	}
 	
+	public boolean isHaveWhiteFace() {
+		return haveWhiteFace;
+	}
+
+	public void setHaveWhiteFace(boolean haveWhiteFace) {
+		this.haveWhiteFace = haveWhiteFace;
+	}
+	
+	public boolean isHasMrBent() {
+		return hasMrBent;
+	}
+
+	public void setHasMrBent(boolean hasMrBent) {
+		this.hasMrBent = hasMrBent;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -160,16 +160,27 @@ public class TextUserInterface {
 	private void playTurn(Player p) {
 		System.out.println(p.getName() + "'s turn!");
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
+		playCard(c,p);
+		controller.restorePlayerHand(p);
+	}
+	
+	public void playCard(GreenPlayerCard c, Player p) {
 		controller.getGame().setCurrentCardInPlay(c);
 		
 		// Determine which needs to be completed first (symbols or text)
 		System.out.println("Playing symbols");
 		if (c.isTextFirst()) {
-			playText(c, p);
+			// play text
+			// if text returns false, its because we gave away this card
+			boolean res = playText(c, p);
+			if(!res) {
+				controller.getGame().setCurrentCardInPlay(null);
+				return;
+			}
 			// Perform symbols
 			// If symbols return false
 			// Its because we've recursed into playig another card
-			boolean res = playSymbols(c, p);
+			res = playSymbols(c, p);
 			if(!res) return;
 		} else {
 			// Perform symbols
@@ -177,21 +188,27 @@ public class TextUserInterface {
 			// Its because we've recursed into playig another card
 			boolean res = playSymbols(c, p);
 			if(!res) return;
-			playText(c, p);
+			res = playText(c, p);
+			if(!res) {
+				controller.getGame().setCurrentCardInPlay(null);
+				return;
+			}
 		}
 		System.out.println("Done playing symbols");
 		
 		controller.getGame().discardCard(c, p);
 		controller.getGame().setCurrentCardInPlay(null);
-		controller.restorePlayerHand(p);
+		
 	}
+	
 	
 	/**
 	 * 
 	 * @param c GreenPlayerCard being played
 	 * @param p Player who's turn it is
+	 * @return boolean:	if card was given away through course of symbol play
 	 */
-	private void playText(GreenPlayerCard c, Player p) {
+	private boolean playText(GreenPlayerCard c, Player p) {
 		BiConsumer<Player, Game> textAction = c.getText();
 		if(textAction != null){
 			System.out.println("Do you want to perform scroll symbol? (yes/no)");
@@ -199,8 +216,21 @@ public class TextUserInterface {
 			String choice = scanner.nextLine();
 			if (UserOption.YES.name().equalsIgnoreCase(choice)) {
 				textAction.accept(p, controller.getGame());
+				
+				// Its possible, due to the evil ways of the text symbols
+				// that the card we are playing, is now given to another player
+				// ie the fools guild
+				// so we should check here to make sure the player still has this card
+				if(!p.getPlayerCards().contains(c)) {
+					// if player has given away this card, then we
+					// need to make sure that the card isnt discarded or symbols played
+					return false;
+				}
+				
+				
 			}
 		}
+		return true;
 			
 
 	}
@@ -241,6 +271,7 @@ public class TextUserInterface {
 		System.out.println(message);
 		int i = 1;
 		for (GreenPlayerCard c : cards) {
+			
 			System.out.println(i + ") " + c.name());
 			cardMap.put(i, c);
 			i++;

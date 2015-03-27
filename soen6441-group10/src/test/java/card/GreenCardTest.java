@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -71,10 +72,10 @@ public class GreenCardTest {
 	public void historyMonksTest() {
 		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
-		game.discardCard(GreenPlayerCard.INIGO_SKIMMER, null);
-		game.discardCard(GreenPlayerCard.HEX, null);
-		game.discardCard(GreenPlayerCard.HERE_N_NOW, null);
-		game.discardCard(GreenPlayerCard.HARRY_KING, null);
+		game.discardCard(GreenPlayerCard.INIGO_SKIMMER, player);
+		game.discardCard(GreenPlayerCard.HEX, player);
+		game.discardCard(GreenPlayerCard.HERE_N_NOW, player);
+		game.discardCard(GreenPlayerCard.HARRY_KING, player);
 		
 		int cardsBeforeSize = player.getPlayerCards().size();
 		DiscardPile pile = game.getDiscardPile();
@@ -413,12 +414,135 @@ public class GreenCardTest {
 		}
 		assertEquals(count, 1);
 		
+	}
+	
+	@Test
+	public void dyskTest() {
+		System.out.println("~~TESTING DYSK~~~");
+		
+		game.getBank().increaseBalance(100);
+		
+		// Assert player gets no money
+		GreenPlayerCard.THE_DYSK.getText().accept(player, game);
+		assertEquals(player.getMoney(), 0);
+		
+		BoardArea iog = gameBoard.get(AnkhMorporkArea.ISLE_OF_GODS.getAreaCode());
+		iog.addMinion(player2);
+		
+		GreenPlayerCard.THE_DYSK.getText().accept(player, game);
+		// Assert player now gets 1
+		assertEquals(player.getMoney(), 1);
+	}
+	
+	@Test
+	public void fireBrigadeTest() {
+		System.out.println("~~~TESTING FIRE BRIGADE~~~");
+		
+		// Test what happens if no player has 5 dollars or buildings
+		GreenPlayerCard.THE_FIRE_BRIGADE.getText().accept(player, game);
+		assertEquals(player2.getMoney(), 0);
+		assertEquals(player3.getMoney(), 0);
+		assertEquals(game.getBuildingAreas(player2).size(), 0);
+		assertEquals(game.getBuildingAreas(player3).size(), 0);
+		
+		// Test that if players have money and buildings
+		gameBoard.get(1).addBuildingForPlayer(player2);
+		gameBoard.get(2).addBuildingForPlayer(player3);
+		player2.increaseMoney(10);
+		player3.increaseMoney(10);
+		
+		GreenPlayerCard.THE_FIRE_BRIGADE.getText().accept(player, game);
+		
+		// Tricky, we dont know what actually got played, but we know that
+		// a player is either 5 bucks short ...  or one building less
+		// one of the players will have less money, OR less buildings
+		ArrayList<Boolean> list = new ArrayList<Boolean>();
+		list.add(gameBoard.get(1).getBuildingOwner() == Color.UNDEFINED);
+		list.add(gameBoard.get(2).getBuildingOwner() == Color.UNDEFINED);
+		list.add(player2.getMoney() == 5);
+		list.add(player3.getMoney() == 5);
+		
+		Boolean oneTrue = false;
+		// only one of the booleans should be true
+		for(Boolean b : list) {
+			if(b) {
+				if(oneTrue) {
+					fail("Only one boolean should be true");
+				}
+				oneTrue = true;
+				
+			}
+		}
+		assertEquals(oneTrue, true);
+	}
+	
+	@Test
+	public void drumkottTest() {
+		System.out.println("~~~DRUMKNOTT TEST~~~");
+		
+		// Give player only drumkott card
+		player.addPlayerCard(GreenPlayerCard.DRUMKNOTT);
+		GreenPlayerCard.DRUMKNOTT.getText().accept(player, game);
+		
+		//player should not have played any cards
+		assertEquals(player.getPlayerCards().size(), 1);
 		
 		
+		// Now lets give player 2 other cards and assure he plays them
+		player.addPlayerCard(GreenPlayerCard.SACHARISSA_CRIPSLOCK);
+		player.addPlayerCard(GreenPlayerCard.THE_OPERA_HOUSE);
 		
+		// TODO figure out how to test this properly
 		
+/*		assertEquals(player.getPlayerCards().size(), 3);
+		GreenPlayerCard.DRUMKNOTT.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 1);
+*/		
+	}
+	
+	@Test
+	public void theFoolsGuildTest() {
+		System.out.println("~~~THE FOOLS GUILD TEST~~~");
+		
+		// no player has any cards or money, so player gets to give his card
+		// to annother player
+		
+		// for testing reason we have to set currentCard
+		game.setCurrentCardInPlay(GreenPlayerCard.THE_FOOLS_GUILD);
+		GreenPlayerCard.THE_FOOLS_GUILD.getText().accept(player, game);
+		
+		//make sure one of the other players has the fools guild
+		
+		// check if plyer 2 has card
+		boolean player2HasCard = player2.getPlayerCards().contains(GreenPlayerCard.THE_FOOLS_GUILD);
+		// check if player 3 has card
+		boolean player3HasCard = player3.getPlayerCards().contains(GreenPlayerCard.THE_FOOLS_GUILD);
+		assertTrue(player2HasCard || player3HasCard);
+		
+		assertEquals(player.getPlayerCards().size(), 0);
+		
+		// now ensure player ccannot get rid of the card if he plays it
+		Player hasCardPlayer = null;
+		if(player2HasCard) {
+			hasCardPlayer = player2;
+		} else if(player3HasCard) {
+			hasCardPlayer = player3;
+		}
+		
+		// we need to test that card cannot be discarded
+		// to do this play a card that allows cards to be discarded
+		game.getBank().increaseBalance(100);
+		
+		hasCardPlayer.addPlayerCard(GreenPlayerCard.SHONKY_SHOP);
+		GreenPlayerCard.SHONKY_SHOP.getText().accept(hasCardPlayer, game);
+		// The player had to have tried to discard THE FOOLS GUILD
+		// lets ensure he couldnt do it
+		
+		assertEquals(hasCardPlayer.getPlayerCards().size(), 2);
 		
 	}
+	
+	
 	
 	@After
 	public void tearDown() throws Exception {
