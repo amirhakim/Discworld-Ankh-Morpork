@@ -42,12 +42,14 @@ public class Player {
 	
 	private List<CityAreaCard> cityCards = new ArrayList<>();
 	
+	
 	/**
 	 * <b>This is the player's hand.<br> It is implemented as a set because we can
 	 * invoke the cards' actions statically (since they are contained in the 
 	 * {@link GreenPlayerCard} enum).</b>
 	 */
 	private Set<GreenPlayerCard> playerCards = new HashSet<>();
+	private Set<GreenPlayerCard> unplayableCards = new HashSet<>();
 
 	public Player() {
 		this.money = 0;
@@ -90,6 +92,14 @@ public class Player {
 	 */
 	public String getName() {
 		return this.name;
+	}
+	
+	public Set<GreenPlayerCard> getUnplayableCards() {
+		return unplayableCards;
+	}
+	
+	public void addUnplayableCard(GreenPlayerCard card) {
+		unplayableCards.add(card);
 	}
 
 	/**

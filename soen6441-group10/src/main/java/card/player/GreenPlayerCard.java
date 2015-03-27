@@ -246,8 +246,6 @@ public enum GreenPlayerCard implements Card {
 				TextUserInterface UI = new TextUserInterface();
 				Map<Color,Player> myPlayersMap = game.getPlayersMap();
 				
-				
-				
 				Player choosenPlayer = UI.getPlayer(myPlayersMap);
 				while(choosenPlayer == player) {
 					System.out.println("You cannot choose yourself!");
@@ -366,7 +364,7 @@ public enum GreenPlayerCard implements Card {
 					discardCard = UI.getCardChoice(player.getPlayerCards(), 
 							"Choose a card to discard: ");
 				}
-				if(player.removePlayerCard(discardCard)) discardedCount ++;
+				if(game.discardCard(discardCard, player)) discardedCount ++;
 				else {
 					System.out.println("can't remove any more cards");
 					break;
@@ -871,12 +869,18 @@ public enum GreenPlayerCard implements Card {
 		34
 	),
 	
+	/** 
+	 * Earn 1 dollar for each minion in the isles of gods
+	 */
 	THE_DYSK(
 		new ArrayList<Symbol>(){{
 			add(Symbol.PLACE_A_BUILDING);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_DYSK: earn $1 for each minion in the Isle of Gods");
+			int minions = game.getMinionCountForArea(AnkhMorporkArea.ISLE_OF_GODS);
+			System.out.println("Giving " + minions + " to player");
+			player.increaseMoney(minions);
+			
 		},
 		// Money
 		0,
@@ -932,11 +936,29 @@ public enum GreenPlayerCard implements Card {
 		36
 	),
 	
+	/**
+	 * Play any two other cards from your hand
+	 */
 	DRUMKNOTT(
 		new ArrayList<Symbol>(){{
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: DRUMKNOTT: play any two other cards from your hand");
+
+			Set<GreenPlayerCard> playerCards = player.getPlayerCards();
+			if(playerCards.size() < 3) {
+				System.out.println("You do not have enough cards");
+			} else {
+				TextUserInterface UI = new TextUserInterface();
+
+				GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+				while(c.getID() == 37) {
+					System.out.println("You cannot play this card");
+					c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+					
+				}
+
+				UI.playCard(c, player);
+			}
 		},
 		// Money 
 		0,
@@ -991,7 +1013,7 @@ public enum GreenPlayerCard implements Card {
 				default: System.out.println("\tPlease enter your choice:");
 				    break;
 				}
-				}	
+			}	
 			
 			System.out.println("No Action");
 		},
@@ -1050,7 +1072,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: GROAT");
+			System.out.println("No Text on card");
 		},
 		// Money
 		0,
@@ -1064,7 +1086,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);				
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: GIMLETS_DWARF_DELICATESSEN");
+			System.out.println("No Text on Card");
 		},
 		// Money
 		3,
@@ -1077,8 +1099,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.INTERRUPT);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: GASPODE: stop a player from moving or"
-				+ "removing one of your minions");
+			// No need to implement .. this is an interrupt card, handled in game flow
+			
 		},
 		// Money
 		0,
@@ -1091,8 +1113,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.INTERRUPT);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_FRESH_START_CLUB: if you have a minion removed you can"
-				+ "place him in a different area");
+			// No need to implement .. this is an interrupt card, handled in game flow
 		},
 		// Money
 		0,
@@ -1150,16 +1171,55 @@ public enum GreenPlayerCard implements Card {
 		46
 	),
 	
+	/**
+	 * Select another player.  If they do not give you $5 then
+	 * place this card in front of them.  This card now counts towards
+	 * their hand size of five cards when they come to refil their hand.
+	 * They cannot get rid of this card
+	 */
 	THE_FOOLS_GUILD(
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_FOOLS_GUILD: Select another player. if they do not"
-				+ "give you $5 then place this card in front of them. this card now counts towards"
-				+ "their hand size of five cards when they"
-				+ "come to refill their hand. they cannot"
-				+ "get rid of this card");
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			
+			System.out.println("Choose a player to give you 5 dollars");
+			
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+			
+			boolean hasMoney = choosenPlayer.getMoney() > 5;
+			boolean wantsToGive = false;
+			if(!hasMoney) {
+				System.out.println("Damn, " + choosenPlayer.getName() + " doesn't have 5 dollars");
+			} else {
+				wantsToGive = UI.getUserYesOrNoChoice(choosenPlayer.getName() + " do you want to give " + player.getName() + 
+						" $5");
+				if(wantsToGive) {
+					choosenPlayer.decreaseMoney(5);
+					player.increaseMoney(5);
+				}
+			}
+			
+			// Ok, lets have some fun
+			// give this card to the player, make sure he cant get rid of it
+			if(!hasMoney || !wantsToGive) {
+				// Why do we use current card in play??? because we cant reference this enum
+				// since it isn't created
+				if(game.getCurrentCardInPlay().getID() != 47) {
+					//TODO throw error
+					System.out.println("ISSUE IN THE FOOLS GUILD");
+				}
+				game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
+				choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
+				game.removePlayerCard(game.getCurrentCardInPlay(), player);
+			}
 		},
 		// Money
 		0,
@@ -1167,13 +1227,61 @@ public enum GreenPlayerCard implements Card {
 		47
 	),
 	
+	/**
+	 * Choose a player, if he does not pay you 5$ then you can remove one of his buildings from the baord
+	 */
+	// TODO NEEDS INTERRUPT
 	THE_FIRE_BRIGADE(
 		new ArrayList<Symbol>(){{
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_FIRE_BRIGADE: choose a player. if he does not pay"
-				+ "you $5 then you can remove one of his buildings from the board");
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+			
+			System.out.println("Choose a player to give you 5 dollars");
+			
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+			
+			
+			boolean hasMoney = choosenPlayer.getMoney() > 5;
+			boolean wantsToGive = false;
+			if(!hasMoney) {
+				System.out.println("Damn, " + choosenPlayer.getName() + " doesn't have 5 dollars");
+			} else {
+				wantsToGive = UI.getUserYesOrNoChoice(choosenPlayer.getName() + " do you want to give " + player.getName() + 
+						" $5");
+				if(wantsToGive) {
+					choosenPlayer.decreaseMoney(5);
+					player.increaseMoney(5);
+				}
+			}
+			
+			if(!hasMoney || !wantsToGive) {
+				System.out.println("...ok ... " + player.getName() + " will choose a building to remove...");
+				Map<Integer, BoardArea> buildings = game.getBuildingAreas(choosenPlayer);
+				if(buildings.size() == 0) {
+					System.out.println("No buildings to be removed, sorry");
+				} else {
+					BoardArea chosenArea = UI.getAreaChoice(buildings, "Select an area: ", "Choice: ");
+					chosenArea.removeBuilding();
+				}
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			
 		},
 		// Money
 		0,

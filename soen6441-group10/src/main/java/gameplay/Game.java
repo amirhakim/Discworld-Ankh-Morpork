@@ -811,14 +811,29 @@ public class Game {
 	 * <b>Discard card by adding it to the pile.</b>
 	 * @param card
 	 */
-	public void discardCard(GreenPlayerCard card, Player p) {
-		if(p != null) {
-			p.removePlayerCard(card);
+	public boolean discardCard(GreenPlayerCard card, Player p) {
+		if(p.getUnplayableCards().contains(card)) {
+			return false;
 		}
+		removePlayerCard(card, p);
 		discardPile.addCard(card);
-		// Remove interrupt listener
-		if(card.getSymbols().contains(Symbol.INTERRUPT)) {
-			removeInterrupt(card);
+		return true;
+	}
+	
+	/**
+	 * Remove player card from hand
+	 * Similar to discarCard but doesnt add card to pile
+	 * Ideal for giving a card to another player
+	 * @param card
+	 * @param p
+	 */
+	public void removePlayerCard(GreenPlayerCard card, Player p) {
+		if(p != null) {
+			p.removePlayerCard(card);		
+			// Remove interrupt listener
+			if(card.getSymbols().contains(Symbol.INTERRUPT)) {
+				removeInterrupt(card);
+			}
 		}
 	}
 	
