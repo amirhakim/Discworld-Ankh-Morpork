@@ -448,7 +448,6 @@ public class TextUserInterface {
 	 */
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas, 
 		String outputMsg, String inputMsg) {
-
 		ArrayList<Integer> excludeList = new ArrayList<Integer>();
 		return getAreaChoice(availableAreas, outputMsg, inputMsg, false, excludeList);
 	}
@@ -464,10 +463,8 @@ public class TextUserInterface {
 	 */
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas,
 			String outputMsg, String inputMsg, boolean details) {
-		
 		ArrayList<Integer> excludeList = new ArrayList<Integer>();
 		return getAreaChoice(availableAreas, outputMsg, inputMsg, details, excludeList);
-		
 	}
 	
 	/**
@@ -602,6 +599,29 @@ public class TextUserInterface {
 		System.out.println(msg + "(Y for \"yes\")");
 		System.out.print("> ");
 		return UserOption.YES.getOptionString().equalsIgnoreCase(scanner.nextLine());
+	}
+	
+	public Color getMinionChoice(Map<Color, Integer> minionsInArea, String inputMsg, String promptMsg) {
+		System.out.println(inputMsg);
+		int i = 1;
+		Color[] playerColors = new Color[minionsInArea.keySet().size()];
+		for (Entry<Color, Integer> e : minionsInArea.entrySet()) {
+			System.out.println(i + ") " + e.getKey() + "(" + e.getValue() + " minions)"); 
+			i++;
+		}
+		
+		scanner = new Scanner(System.in);
+		System.out.print(promptMsg);
+
+		int minionColorChoice = scanner.nextInt();
+		scanner.nextLine();
+		while (minionColorChoice < 1 && minionColorChoice > playerColors.length) {
+			System.out.println("Invalid selection.\nMake a valid choice!");
+			minionColorChoice = scanner.nextInt();
+			scanner.nextLine();
+		}
+
+		return playerColors[minionColorChoice - 1];
 	}
 	
 	public boolean playInterrupt(Player player, GreenPlayerCard card) {

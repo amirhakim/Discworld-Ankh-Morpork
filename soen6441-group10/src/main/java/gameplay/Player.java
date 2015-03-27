@@ -267,16 +267,16 @@ public class Player {
 	 * <b>Adds the city area card corresponding to the given area 
 	 * to the player's hand.</b>
 	 */
-	public void addCityCard(AnkhMorporkArea a) {
-		cityCards.add(new CityAreaCard(a));
+	public boolean addCityCard(AnkhMorporkArea a) {
+		return cityCards.add(new CityAreaCard(a));
 	}
 	
 	/**
 	 * <b>Removes the city area card corresponding to the given area from the 
 	 * player's hand.</b>
 	 */
-	public void removeCityCard(AnkhMorporkArea a) {
-		cityCards.remove(new CityAreaCard(a));
+	public boolean removeCityCard(AnkhMorporkArea a) {
+		return cityCards.remove(new CityAreaCard(a));
 	}
 
 	/**

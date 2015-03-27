@@ -229,9 +229,7 @@ public enum AnkhMorporkArea implements Card {
 	}
 	
 	public boolean isAdjacentToRiver() {
-		return this != THE_HIPPO &&
-				this != SMALL_GODS &&
-				 this != DRAGONS_LANDING;
+		return this != THE_HIPPO && this != SMALL_GODS && this != DRAGONS_LANDING;
 	}
 	
 	private static void payAndAddMinion(AnkhMorporkArea a, Player player, Game game) {

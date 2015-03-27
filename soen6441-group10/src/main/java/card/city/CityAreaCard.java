@@ -37,7 +37,7 @@ public class CityAreaCard {
 	}
 	
 	/**
-	 * Resets this cards "played" state to "not-played".
+	 * Resets this cards "played" state to false.
 	 */
 	public void reset() {
 		hasBeenPlayed = false;
@@ -73,7 +73,8 @@ public class CityAreaCard {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("CityAreaCard [area=").append(area)
-				.append(", hasBeenPlayed=").append(hasBeenPlayed).append("]");
+				.append(", hasBeenPlayed=").append(hasBeenPlayed).append(", isPlayableMoreThanOnce= ")
+				.append(isPlayableMoreThanOnce()).append("]");
 		return builder.toString();
 	}
 

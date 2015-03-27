@@ -301,7 +301,6 @@ public class Game {
 		}
 	}
 	
-	
 	public void addPlayerCard(Player player, GreenPlayerCard card) {
 		if(card.getSymbols().contains(Symbol.INTERRUPT)) {
 			addInterrupt(card, player);
@@ -441,6 +440,15 @@ public class Game {
 		return possibleAreas;
 	}
 	
+	/**
+	 * @return a copy of the minions that exist in the given area. 
+	 */
+	public Optional<Map<Color, Integer>> getMinionsInArea(AnkhMorporkArea a) {
+		return gameBoard.get(a.getAreaCode()).getMinionCount() > 0 ?
+				Optional.of(new HashMap<>(gameBoard.get(a.getAreaCode()).getMinions())) 
+					: Optional.empty();
+	}
+
 	public int getMinionCountForArea(AnkhMorporkArea a) {
 		return gameBoard.get(a.getAreaCode()).getMinionCount();
 	}
@@ -547,27 +555,19 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Removes a building from the area with the given area ID.</b>
-	 * @param areaId
-	 * @return true if a building was removed, false otherwise.
-	 */
-	public boolean burnBuilding(int areaId) {
-		// TODO Implement this method
-		return true;
-	}
-	
-	/**
 	 * <b>Removes a building on the area with the given ID, if one exists and 
 	 * also removes the corresponding city card form the player's hand.</b>
 	 * 
 	 * @return true if the building was removed successfully in this area, false
 	 *         otherwise.
 	 */
-	public boolean removeBuilding(Player p, int areaId) {
+	public boolean removeBuilding(int areaId) {
 		BoardArea a = gameBoard.get(areaId);
-		if (a.removeBuilding()) {
-			getPlayerOfColor(a.getBuildingOwner()).increaseBuildings();
-			p.removeCityCard(a.getArea());
+		if (a.hasBuilding()) {
+			Player owner = getPlayerOfColor(a.getBuildingOwner());
+			a.removeBuilding();
+			owner.increaseBuildings();
+			owner.removeCityCard(a.getArea());
 			return true;
 		}
 		return false;
@@ -622,22 +622,27 @@ public class Game {
 				if (p.getMoney() - 2 >= 0) {
 					p.decreaseMoney(2);
 				} else {
-					removeBuilding(p, a.getArea().getAreaCode());
+					removeBuilding(a.getArea().getAreaCode());
 				}
 			}
 		}
 	}
 	
 	/**
-	 * <b>Disable the City Area Card corresponding to the passed areaID, if it is in
-	 * effect.<br> Also remove one minion from this area.</b>
+	 * Disable the City Area Card corresponding to the passed areaID, if it is in
+	 * effect.
 	 * 
-	 * @return true if the area card for the given area ID was in effect and got
-	 *         disabled, false otherwise.
+	 * @return Some(<player who owned the City Area Card if it was in effect>), None otherwise.
 	 */
-	public boolean disableAreaCard(int areaID) {
-		// TODO Implement this method
-		return false;
+	public Optional<Player> disableAreaCard(int areaID) {
+		BoardArea a = gameBoard.get(areaID);
+		AnkhMorporkArea area = AnkhMorporkArea.forCode(areaID);
+		if (a.hasBuilding()) {
+			Player owner = players.get(a.getBuildingOwner());
+			return (owner.removeCityCard(area)) ? 
+				Optional.of(owner) : Optional.empty();
+		}
+		return Optional.empty();
 	}
 
 	/**

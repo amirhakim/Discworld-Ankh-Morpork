@@ -62,6 +62,13 @@ public class BoardArea {
 	public AnkhMorporkArea getArea() {
 		return area;
 	}
+	
+	/**
+	 * @return true if there is a building in the area, false otherwise.
+	 */
+	public boolean hasBuilding() {
+		return buildingColor != Color.UNDEFINED;
+	}
 
 	/**
 	 * <b>This method checks to see the neighbour of the city area.</b>
@@ -169,7 +176,11 @@ public class BoardArea {
 		}
 		
 		int numberOfMinions = minions.get(p.getColor());
-		minions.put(p.getColor(), numberOfMinions - 1);
+		if (numberOfMinions > 1) {
+			minions.put(p.getColor(), numberOfMinions - 1);
+		} else {
+			minions.remove(p.getColor());
+		}
 		p.increaseMinion();
 		troubleMarker = false;
 		return true;

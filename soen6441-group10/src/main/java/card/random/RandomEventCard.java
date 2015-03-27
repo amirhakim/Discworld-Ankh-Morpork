@@ -6,6 +6,8 @@ import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import util.Color;
@@ -41,66 +43,92 @@ public enum RandomEventCard implements Card {
 	}),
 	
 	FIRE((game, player) -> {
+		System.out.println("Fire! Areas with buildings shall burn in succession: ");
 		Die die = Die.getDie();
 		int areaOnFire = die.roll();
-		int nextArea = areaOnFire;
-		while (AnkhMorporkArea.areAreasAdjacent(areaOnFire, nextArea) && 
-				game.burnBuilding(areaOnFire)) {
-			nextArea = die.roll();
-			// TODO Make fire expand
+		int previousAreaOnFire = areaOnFire;
+
+		// Recall that an area is considered to be adjacent to itself by condition
+		while (AnkhMorporkArea.areAreasAdjacent(areaOnFire, previousAreaOnFire) && 
+				game.removeBuilding(areaOnFire)) {
+			System.out.println("Burnt building in: " + AnkhMorporkArea.forCode(areaOnFire));
+			previousAreaOnFire = areaOnFire;
+			areaOnFire = die.roll();
 		}
 	}),
 	
 	FOG((game, player) -> {
+		System.out.println("Fog! Discard the top 5 cards from the draw pile.");
 		for (int i = 0; i < 5; i++) {
 			game.drawPlayerCard();
 		}
 	}),
 	
 	RIOTS((game, player) -> {
+		System.out.println("Riots! That shall be the end of the game my lords...");
 		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
 			game.getWinnersByPoints();
 		}
 	}),
 	
-	EXPLOSIONS((game, player) -> {
+	EXPLOSION((game, player) -> {
+		System.out.println("Explosions! Die roll to remove a building:");
 		int area = Die.getDie().roll();
-		game.removeBuilding(player, area);
+		game.removeBuilding(area);
 	}),
 	
 	EARTHQUAKE((game, player) -> {
+		System.out.println("Earthquake! Die roll to remove buildings from 1/2 areas:");
 		Die die = Die.getDie();
 		int firstArea = die.roll();
 		int secondArea = die.roll();
-		game.removeBuilding(player, firstArea);
-		game.removeBuilding(player, secondArea);
+		game.removeBuilding(firstArea);
+		if (secondArea != firstArea) {
+			game.removeBuilding(secondArea);
+		}
 	}),
 	
 	SUBSIDENCE((game, player) -> {
+		System.out.println("Subsidence! Pay up for your properties ladies and gentlemen...");
 		game.handleSubsidence();
 	}),
 	
 	BLOODY_STUPID_JOHNSON((game, player) -> {
+		System.out.println("Bloody Stupid Johnson! An area's card will be disabled, if it is in play");
 		int area = Die.getDie().roll();
-		game.disableAreaCard(area);
-		game.removeMinion(area, player);
+		Optional<Player> areaOwner = game.disableAreaCard(area);
+		if (areaOwner.isPresent()) {
+			System.out.println("City area card disabled. Removing a minion from there...");
+			game.removeMinion(area, areaOwner.get());
+		}
 	}),
 	
 	TROLLS((game, player) -> {
+		System.out.println("Trolls! They will be placed thrice:");
 		Die die = Die.getDie();
 		int[] areas = { die.roll(), die.roll(), die.roll() };
 		for (int area : areas) {
-			if (game.placeTroll(area)) {
-				game.addTroubleMarker(area);
-			}
+			game.placeTroll(area);
 		}
 	}),
 	
 	MYSTERIOUS_MURDERS((game, player) -> {
-		System.out.println("Mysterious Murders: A demon will be placed in 4 areas.");
+		System.out.println("Mysterious Murders: Each player must remove a minion from an area.");
 		Die die = Die.getDie();
-		// TODO: Complete
-		System.out.println("TODO: Mysterious Murders");
+		Color[] playerOrder = game.getPlayersFromCurrentPlayer();
+		TextUserInterface UI = new TextUserInterface();
+
+		for (Color c : playerOrder) {
+			AnkhMorporkArea a = AnkhMorporkArea.forCode(die.roll());
+			Optional<Map<Color, Integer>> minionsInArea = game.getMinionsInArea(a);
+			if (minionsInArea.isPresent()) {
+				Color minionToKill = UI.getMinionChoice(minionsInArea.get(), "The " + c + " player " +
+						" will choose a minion to kill in " + a + ".", "Choose a minion: ");
+				game.removeMinion(a.getAreaCode(), game.getPlayerOfColor(minionToKill));
+			} else {
+				System.out.println("There are no minions in " + a + ".");
+			}
+		}
 	}),
 	
 	DEMONS_FROM_THE_DUNGEON_DIMENSIONS((game, player) -> {
