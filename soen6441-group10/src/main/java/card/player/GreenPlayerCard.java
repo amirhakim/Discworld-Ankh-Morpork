@@ -785,10 +785,9 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: MR_BENT: place this card infront of you and "
-			+ "take $10 loan from the bank,"
-			+ " at the end of the game you must pay "
-			+ "back $12 or loose 15 points");
+			if(game.getBank().decreaseBalance(10)){
+				if (player.increaseMoney(10)) player.isHasMrBent();
+			}
 		},
 		// Money
 		0,
@@ -801,8 +800,19 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: Select one player, they must give you "
-			+ "two cards of their choice");
+			TextUserInterface UI = new TextUserInterface();
+			Map<Color,Player> myPlayersMap = game.getPlayersMap();
+				
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap);
+			while(choosenPlayer == player) {
+				System.out.println("You cannot choose yourself!");
+				choosenPlayer = UI.getPlayer(myPlayersMap);
+			}
+			for (int i=0;i<2;i++){
+				if(!(player.addPlayerCard(UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away"))))
+					System.out.println("Something went wrong, card was not give away");
+			}
 		},
 		// Money
 		0,
@@ -831,8 +841,24 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY: "
-				+ "each player must give you either $1 or one of their cards");
+			TextUserInterface UI = new TextUserInterface();
+			for(Player p: game.getPlayers()){
+				boolean choiceMade = false;
+				while(!choiceMade){
+					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")){
+						if(!(player.addPlayerCard(UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"))))
+							System.out.println("Something went wrong, card was not give away");
+						else choiceMade = true;
+					};
+					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")){
+						   if(p.getMoney()>=1) {
+							   if(p.decreaseMoney(1)&player.increaseMoney(1))
+							   System.out.println("Took $1 from "+p.getName());
+						   }
+						   else choiceMade = true;
+					};
+				}
+			}
 		},
 		// Money
 		0,

@@ -40,6 +40,10 @@ public class Player {
 	
 	private int buildings;
 	
+	private boolean haveWhiteFace = false;
+	
+	private boolean hasMrBent = false;
+	
 	private List<CityAreaCard> cityCards = new ArrayList<>();
 	
 	
@@ -352,6 +356,22 @@ public class Player {
 		return balance;
 	}
 	
+	public boolean isHaveWhiteFace() {
+		return haveWhiteFace;
+	}
+
+	public void setHaveWhiteFace(boolean haveWhiteFace) {
+		this.haveWhiteFace = haveWhiteFace;
+	}
+	
+	public boolean isHasMrBent() {
+		return hasMrBent;
+	}
+
+	public void setHasMrBent(boolean hasMrBent) {
+		this.hasMrBent = hasMrBent;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
