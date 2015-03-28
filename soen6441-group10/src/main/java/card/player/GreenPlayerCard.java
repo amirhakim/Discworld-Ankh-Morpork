@@ -702,8 +702,7 @@ public enum GreenPlayerCard implements Card {
 
 			if(UI.getUserYesOrNoChoice("do you want to give "+player.getName()+" $5? (other wise your card count will be reduced)")){
 				if(choosenPlayer.hasMoney(5)){
-					choosenPlayer.decreaseMoney(5);
-					player.increaseMoney(5);
+					if(choosenPlayer.decreaseMoney(5)) player.increaseMoney(5);
 				}
 			}
 			else choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
@@ -975,9 +974,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.REMOVE_TROUBLE_MARKER);
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: SERGANT_ANGUA");
-		},
+		(player, game) -> {},
 		// Money
 		0,
 		// ID
@@ -992,9 +989,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.TAKE_MONEY);
 			add(Symbol.PLACE_MINION);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_AGONY_AUNTS");
-		},
+		(player, game) -> {},
 		// Money
 		2,
 		// ID
@@ -1194,9 +1189,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.ASSASINATION);
 			add(Symbol.TAKE_MONEY);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: DR_CRUCES");
-		},
+		(player, game) -> {},
 		// Money
 		3,
 		// ID
@@ -1211,9 +1204,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.REMOVE_TROUBLE_MARKER);
 			add(Symbol.TAKE_MONEY);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: CAPTAIN_CARROT");
-		},
+		(player, game) -> {},
 		// Money
 		1,
 		// ID 
