@@ -11,4 +11,4 @@ import card.SymbolTest;
 @Suite.SuiteClasses({ SymbolTest.class, GreenCardTest.class })
 public class TestSuite {
 	// nothing
-}
+}	

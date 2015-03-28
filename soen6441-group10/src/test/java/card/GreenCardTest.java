@@ -583,11 +583,22 @@ public class GreenCardTest {
 		assertEquals(game.getAreasWithPlayerMinions(player2).size(),1);
 		assertEquals(gameBoard.get(1).getMinions().size(), 0);
 		
-		
-		
 	}
 	
-	
+	@Test
+	public void FoulOleRonTest() {
+		System.out.println("~~FOUL OLE RON TEST~~");
+		
+
+		GreenPlayerCard.FOUL_OLE_RON.getText().accept(player, game);
+		assertEquals(game.getAreasWithPlayerMinions(player2).size(),0);
+		
+		gameBoard.get(1).addMinion(player2);
+		GreenPlayerCard.FOUL_OLE_RON.getText().accept(player, game);
+		assertEquals(game.getAreasWithPlayerMinions(player2).size(),1);
+		assertEquals(gameBoard.get(1).getMinions().size(), 0);
+		
+	}	
 	
 	@After
 	public void tearDown() throws Exception {
