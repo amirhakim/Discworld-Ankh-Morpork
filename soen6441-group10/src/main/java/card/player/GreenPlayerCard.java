@@ -924,9 +924,25 @@ public enum GreenPlayerCard implements Card {
 			
 		TextUserInterface UI = new TextUserInterface();
 		Map<Color,Player> myPlayersMap = game.getPlayersMap();
-			
+		Map<Color, Player> playerWithMinion = new HashMap<Color, Player>();
+		
+		for(Player p : myPlayersMap.values()) {
+			if(p.getColor() == player.getColor()) continue;
+			if(game.getAreasWithPlayerMinions(p).size() == 0) continue;
+			else {
+				playerWithMinion.put(p.getColor(), p);
+			}
+		}
+		
+		if(playerWithMinion.size() == 0) {
+			System.out.println("No players have minions you can remove");
+			return;
+		}
+		
+		
 		// Chose a valid player
-		Player choosenPlayer = UI.getPlayer(myPlayersMap);
+		System.out.println("Choose player to remove minion from:");
+		Player choosenPlayer = UI.getPlayer(playerWithMinion);
 		while(choosenPlayer == player) {
 			System.out.println("You cannot choose yourself!");
 			choosenPlayer = UI.getPlayer(myPlayersMap);
@@ -952,8 +968,8 @@ public enum GreenPlayerCard implements Card {
 		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
 		
 		// Actually do the movement
-		removeArea.removeMinion(player);
-		chosenArea.addMinion(player);
+		removeArea.removeMinion(choosenPlayer);
+		chosenArea.addMinion(choosenPlayer);
 								
 		},
 		// Money
@@ -1009,7 +1025,8 @@ public enum GreenPlayerCard implements Card {
 			System.out.println("Dice rolled: " + dieRoll);
 
 			TextUserInterface textUI = new TextUserInterface();
-			if(dieRoll == 7) {				
+			if(dieRoll >= 7) {	
+				System.out.println("Giving 4$");
 				game.givePlayerMoneyFromBank(player,4);							
 			} 
 			else if(dieRoll == 1) {
@@ -1039,9 +1056,9 @@ public enum GreenPlayerCard implements Card {
 				default: System.out.println("\tPlease enter your choice:");
 				    break;
 				}
-			}	
-			
-			System.out.println("No Action");
+			} else {	
+				System.out.println("No Action");
+			}
 		},
 		// Money
 		0,

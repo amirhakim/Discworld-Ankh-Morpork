@@ -293,12 +293,15 @@ public class SymbolTest {
 	@Test
 	public void intteruptGaspodeTest() {
 		System.out.println("~~INTERRUPT GASPODE TEST~~~");
-		gameBoard.get(1).addTroubleMarker();
+		//gameBoard.get(1).addTroubleMarker();
+		
+		
+		
 		gameBoard.get(1).addMinion(player2);
+		gameBoard.get(1).addMinion(player);
 		
 		// Give player 2 GASPODE
 		game.addPlayerCard(player2, GreenPlayerCard.GASPODE);
-		
 		
 		Symbol.ASSASINATION.getGameAction().accept(player, game);
 		// Check if assasination was played
@@ -315,7 +318,7 @@ public class SymbolTest {
 	@Test
 	public void interruptFreshStartTest(){
 		System.out.println("~~INTERRUPT FRESH START CLUB TEST~~~");
-		gameBoard.get(1).addTroubleMarker();
+		gameBoard.get(1).addMinion(player);
 		gameBoard.get(1).addMinion(player2);
 		
 		game.addPlayerCard(player2, GreenPlayerCard.THE_FRESH_START_CLUB);
@@ -325,10 +328,11 @@ public class SymbolTest {
 		// Check if interrupt was played
 		if(player2.getPlayerCards().size() == 0) {
 			// It was played
-			assertEquals(gameBoard.get(1).getMinionCount(), 0);
+			assertEquals(gameBoard.get(1).getMinionCount(), 1);
 			// Make sure one area has the removed minion
 			int count = 0;
 			for(BoardArea ba : gameBoard.values()) {
+				if(ba == gameBoard.get(1)) continue;
 				if(ba.getMinionCount() == 1) {
 					count++;
 				}
