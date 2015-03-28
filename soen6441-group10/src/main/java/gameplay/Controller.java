@@ -26,6 +26,10 @@ public class Controller {
 		game = game_;
 	}
 	
+	public void setGame(Game game_){
+		game = game_;
+	}
+	
 	/**
 	 * <b>This method starts a new game - initialize all the required data structures etc.</b>
 	 * @param: numberOfPlayers required for game, humane players name

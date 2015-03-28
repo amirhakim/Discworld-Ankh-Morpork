@@ -193,7 +193,9 @@ public enum Symbol {
 			return;
 		}
 		
-		TextUserInterface textUI = new TextUserInterface();
+//		TextUserInterface textUI = new TextUserInterface();
+		TextUserInterface textUI = TextUserInterface.getUI();
+		
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas2, "Select area for assasinnation", "choice: ", true);
 	
 		Color c  = textUI.assassinatePiece(trouble, player, game);
@@ -211,7 +213,9 @@ public enum Symbol {
 	 */
 	REMOVE_TROUBLE_MARKER((player, game) ->{
 		Map<Integer, BoardArea> troubleAreas = game.getTroubleAreas();
-		TextUserInterface textUI = new TextUserInterface();
+		//TextUserInterface textUI = new TextUserInterface();
+		TextUserInterface textUI = TextUserInterface.getUI();
+		
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area to remove trouble", "Choice: ");
 		trouble.removeTroubleMarker();
 	}),

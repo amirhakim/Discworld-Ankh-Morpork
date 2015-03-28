@@ -17,6 +17,7 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 
 import util.Color;
+import util.Interrupt;
 import card.city.AnkhMorporkArea;
 import card.player.GreenPlayerCard;
 import card.player.Symbol;
@@ -34,6 +35,18 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
+	private static TextUserInterface instance;
+	
+	public static TextUserInterface getUI() {
+		if(instance == null) {
+			instance = new TextUserInterface();
+		} 
+		return instance;
+	}
+	
+	public void setGame(Game g) {
+		controller.setGame(g);
+	}
 	
 	/**
 	 * This method implements an interactive interface to:</br>
@@ -608,7 +621,7 @@ public class TextUserInterface {
 	 * @param excludePlayer do not let user return this player
 	 * @return chosen player
 	 */
-	public Player getPlayer(Map<Color, Player> playerMap) {
+	public Player getPlayer(Map<Color, Player> playerMap, ArrayList<Color> excludeList,  Boolean checkWallace) {
 		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<Color, Player> pair = it.next();
@@ -618,10 +631,18 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		String action = scanner.nextLine();
 		//TODO need to catch bad valueOf
-		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null) {
+		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null 
+				|| excludeList.contains(Color.valueOf(action))) {
 			System.out.println("Invalid selection.  Try again: ");
 			action = scanner.nextLine();
 		}
+		
+		boolean interrupted = false;
+		if(checkWallace) {
+			interrupted = controller.getGame().notifyInterrupt(Interrupt.SCROLL, playerMap.get(Color.valueOf(action)));
+			if(interrupted) return null;
+		}
+		
 		return playerMap.get(Color.valueOf(action));
 	}
 	

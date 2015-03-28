@@ -7,7 +7,6 @@ import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -97,24 +96,27 @@ public enum GreenPlayerCard implements Card {
 				int dieRoll = Die.getDie().roll();
 				System.out.println("Dice rolled: " + dieRoll);
 
-				TextUserInterface textUI = new TextUserInterface();
+				//TextUserInterface textUI = new TextUserInterface();
+				TextUserInterface textUI = TextUserInterface.getUI();
+				
 				if(dieRoll == 7) {
-					Collection<Player> players = game.getPlayers();
-					Map<Color, Player> playerMap = new HashMap<Color, Player>();
-					for(Player p : players) {
-						if(p.getColor() == player.getColor()) continue;
-						if(p.getMoney() < 3) continue;
-						playerMap.put(p.getColor(), p);
+					Map<Color, Player> players = game.getPlayersMap();
+					
+						
+					ArrayList<Color> excludeList = new ArrayList<Color>();
+					excludeList.add(player.getColor());
+					for(Player p: players.values()) {
+						if(p.getMoney() < 3) excludeList.add(p.getColor());
 					}
-					if(playerMap.size() == 0 ) {
-						System.out.println("All players are broke.");
+					
+					Player chosenPlayer = textUI.getPlayer(players, excludeList, true);
+					if(chosenPlayer == null) {
 						return;
 					}
-					Player chosenPlayer = textUI.getPlayer(playerMap);
+					
 					chosenPlayer.decreaseMoney(3);
 					player.increaseMoney(3);
-					game.notifyInterrupt(Interrupt.TAKE_MONEY, chosenPlayer, player, 3);
-					
+
 					
 				} else if(dieRoll == 1) {
 					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
@@ -144,7 +146,8 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_MINION);
 			}},
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
+//				TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 				
 				// Find out if player has cards to play
 				Set<GreenPlayerCard> playerCards = player.getPlayerCards();
@@ -243,18 +246,22 @@ public enum GreenPlayerCard implements Card {
 			 * Take $3 from a player of your choice.
 			 */
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
+//				TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 				Map<Color,Player> myPlayersMap = game.getPlayersMap();
 				
-				Player choosenPlayer = UI.getPlayer(myPlayersMap);
-				while(choosenPlayer == player) {
-					System.out.println("You cannot choose yourself!");
-					choosenPlayer = UI.getPlayer(myPlayersMap);
+				ArrayList<Color> excludeList = new ArrayList<Color>();
+				excludeList.add(player.getColor());
+				
+				
+				Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+				if(choosenPlayer == null) {
+					return;
 				}
+				
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);
-					game.notifyInterrupt(Interrupt.TAKE_MONEY, choosenPlayer, player, 3);
-				}
+		}
 				else{
 					System.out.println("That Player don't have $3, sorry action can't be completed");
 				}
@@ -273,7 +280,8 @@ public enum GreenPlayerCard implements Card {
 			 * Discard one card.
 			 */
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
+			//	TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 				Set<GreenPlayerCard> playerCards = player.getPlayerCards();
 				if(playerCards.size() == 1) {
 					System.out.println("Only have 1 card and thats modo, so can't discard one");
@@ -356,7 +364,9 @@ public enum GreenPlayerCard implements Card {
 			boolean haveCards = true;
 			int discardedCount=0;
 			while (haveCards && player.getPlayerCards().size() > 1) {
-				TextUserInterface UI = new TextUserInterface();
+			//	TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
+				
 				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
 						"Choose a card to discard: ");
 				while(discardCard.getID() == 15) {
@@ -421,7 +431,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);	
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap;
 			myPlayersMap = game.getPlayersMap();
 			
@@ -444,15 +455,18 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
-			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			for(Player p: myPlayersMap.values()) {
+				if(p.getMoney() < 2) {
+					excludeList.add(p.getColor());
+				}
 			}
-			while(choosenPlayer.getMoney() < 2) {
-				System.out.println("This player does not have 2$");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null) {
+				return;
 			}
 
 			// Make selection, cannot get rid of this card
@@ -466,7 +480,6 @@ public enum GreenPlayerCard implements Card {
 			choosenPlayer.addPlayerCard(card);
 			choosenPlayer.decreaseMoney(2);
 			player.increaseMoney(2);
-			game.notifyInterrupt(Interrupt.CARD_FOR_MONEY, choosenPlayer, player, card, 2);
 				
 		},
 		// Money
@@ -507,7 +520,9 @@ public enum GreenPlayerCard implements Card {
 			}
 			
 			// Get remove minion area
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
 			BoardArea removeArea = UI.getAreaChoice(troubleMinionAreas, "Choose area to remove minion", "Choose area", true);
 			// Get nighbouring areas
 			Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
@@ -562,11 +577,19 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
-			TextUserInterface UI = new TextUserInterface();
-			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
-			while(selectedPlayer.getColor() == player.getColor() || selectedPlayer.getPlayerCards().size() < 2) {
-				System.out.println("You cannot select yourself or a player with less than 2 cards");
-				selectedPlayer = UI.getPlayer(game.getPlayersMap());
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			for(Player p: game.getPlayersMap().values()) {
+				if(p.getPlayerCards().size() < 2){
+					excludeList.add(p.getColor());
+				}
+			}
+			Player selectedPlayer = UI.getPlayer(game.getPlayersMap(), excludeList, true);
+			if(selectedPlayer == null) {
+				return;
 			}
 			
 			for(int i =0; i<2; i++){
@@ -574,7 +597,6 @@ public enum GreenPlayerCard implements Card {
 				GreenPlayerCard chosenCard = UI.getCardChoice(selectedPlayer.getPlayerCards(), selectedPlayer.getName() + " choose a card to give away");
 				player.addPlayerCard(chosenCard);
 				selectedPlayer.removePlayerCard(chosenCard);
-				//game.notifyInterrupt(Interrupt.REMOVE_CARD, selectedPlayer, 2);
 			}
 		},
 		// Money
@@ -664,7 +686,9 @@ public enum GreenPlayerCard implements Card {
 			 * one of your cards.  They must 
 			 * give you 2$ in return
 			 */
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
 			Map<Color,Player> myPlayersMap;
 			myPlayersMap = game.getPlayersMap();
 			
@@ -687,17 +711,18 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			for(Player p: myPlayersMap.values()) {
+				if(p.getMoney() < 2) excludeList.add(p.getColor());
+			}
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null ){
+				return;
 			}
-			while(choosenPlayer.getMoney() < 2) {
-				System.out.println("This player does not have 2$");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
-			}
-
+			
 			// Make selection, cannot get rid of this card
 			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			while(card.getID() == 17) {
@@ -800,15 +825,20 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
 				
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null ) {
+				 return;
 			}
+			
 			for (int i=0;i<2;i++){
 				if(!(player.addPlayerCard(UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away"))))
 					System.out.println("Something went wrong, card was not give away");
@@ -841,7 +871,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			for(Player p: game.getPlayers()){
 				boolean choiceMade = false;
 				while(!choiceMade){
@@ -922,7 +953,8 @@ public enum GreenPlayerCard implements Card {
 			//+ "another player from one area "
 			//+ "to an adjacent area");
 			
-		TextUserInterface UI = new TextUserInterface();
+		//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 		Map<Color,Player> myPlayersMap = game.getPlayersMap();
 		Map<Color, Player> playerWithMinion = new HashMap<Color, Player>();
 		
@@ -940,12 +972,15 @@ public enum GreenPlayerCard implements Card {
 		}
 		
 		
+		ArrayList<Color> excludeList = new ArrayList<Color>();
+		excludeList.add(player.getColor());
+		
+		
 		// Chose a valid player
 		System.out.println("Choose player to remove minion from:");
-		Player choosenPlayer = UI.getPlayer(playerWithMinion);
-		while(choosenPlayer == player) {
-			System.out.println("You cannot choose yourself!");
-			choosenPlayer = UI.getPlayer(myPlayersMap);
+		Player choosenPlayer = UI.getPlayer(playerWithMinion, excludeList, true);
+		if(choosenPlayer == null) {
+			return;
 		}
 			
 		// Ensure player has minions
@@ -961,11 +996,11 @@ public enum GreenPlayerCard implements Card {
 		
 		// Get nighbouring areas
 		Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
-		ArrayList<Integer> excludeList = new ArrayList<Integer>();
-		excludeList.add(removeArea.getArea().getAreaCode());
+		ArrayList<Integer> excludeListArea = new ArrayList<Integer>();
+		excludeListArea.add(removeArea.getArea().getAreaCode());
 		
 		// get placement area
-		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeListArea);					
 		
 		// Actually do the movement
 		removeArea.removeMinion(choosenPlayer);
@@ -990,7 +1025,8 @@ public enum GreenPlayerCard implements Card {
 			if(playerCards.size() < 3) {
 				System.out.println("You do not have enough cards");
 			} else {
-				TextUserInterface UI = new TextUserInterface();
+				//TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 
 				GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
 				while(c.getID() == 37) {
@@ -1024,7 +1060,9 @@ public enum GreenPlayerCard implements Card {
 			int dieRoll = Die.getDie().roll();
 			System.out.println("Dice rolled: " + dieRoll);
 
-			TextUserInterface textUI = new TextUserInterface();
+//			TextUserInterface textUI = new TextUserInterface();
+			TextUserInterface textUI = TextUserInterface.getUI();
+			
 			if(dieRoll >= 7) {	
 				System.out.println("Giving 4$");
 				game.givePlayerMoneyFromBank(player,4);							
@@ -1173,7 +1211,8 @@ public enum GreenPlayerCard implements Card {
 			//	+ "another player from one area"
 			//	+ "to an adjacent area");
 
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
 			Map<Color, Player> playerWithMinion = new HashMap<Color, Player>();
 			
@@ -1191,14 +1230,18 @@ public enum GreenPlayerCard implements Card {
 			}
 			
 			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
+			
 			// Chose a valid player
 			System.out.println("Choose player to remove minion from:");
-			Player choosenPlayer = UI.getPlayer(playerWithMinion);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(playerWithMinion, excludeList, true);
+			
+			if(choosenPlayer == null) {
+				return;
 			}
-				
+			
 			// Ensure player has minions
 			// if so remove it and place it on adjacent area
 			Map<Integer, BoardArea> minionAreas = game.getAreasWithPlayerMinions(choosenPlayer);
@@ -1212,11 +1255,11 @@ public enum GreenPlayerCard implements Card {
 			
 			// Get nighbouring areas
 			Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
-			ArrayList<Integer> excludeList = new ArrayList<Integer>();
-			excludeList.add(removeArea.getArea().getAreaCode());
+			ArrayList<Integer> excludeListArea = new ArrayList<Integer>();
+			excludeListArea.add(removeArea.getArea().getAreaCode());
 			
 			// get placement area
-			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeListArea);					
 			
 			// Actually do the movement
 			removeArea.removeMinion(choosenPlayer);
@@ -1241,16 +1284,21 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
 			
 			System.out.println("Choose a player to give you 5 dollars");
 			
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null) {
+				return;
 			}
 			
 			boolean hasMoney = choosenPlayer.getMoney() > 5;
@@ -1295,16 +1343,21 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
 			
 			System.out.println("Choose a player to give you 5 dollars");
 			
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null) {
+				return;
 			}
 			
 			

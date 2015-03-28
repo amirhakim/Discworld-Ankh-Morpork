@@ -868,8 +868,9 @@ public class Game {
 		return this.playerDeck;
 	}
 
+	
 	/**
-	 * 
+	 * GASPODE && FRESH START
 	 * @param interrupt
 	 * @param affectedPlayer
 	 * @param affectedArea
@@ -914,41 +915,17 @@ public class Game {
 		return willPlay;
 	}
 	
-	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, Player theif, Integer money) {
-		GreenPlayerCard interruptCard = null;
-
-		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
-				affectedPlayer, interrupt, Interrupt.TAKE_MONEY);
-
-		if (willPlay) {
-			// return money to affected player
-			theif.decreaseMoney(money);
-			affectedPlayer.increaseMoney(money);
-			interruptCard = GreenPlayerCard.WALLACE_SONKY;
-		}
-
-		if (willPlay) {
-			discardCard(interruptCard, affectedPlayer);
-		}
-		return willPlay;
-	}
-
-	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer,
-			Player theif, GreenPlayerCard card, Integer money) {
+	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer) {
 		GreenPlayerCard interruptCard = null;
 		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
-				affectedPlayer, interrupt, Interrupt.CARD_FOR_MONEY);
-		if (willPlay) {
-			theif.decreaseMoney(money);
-			affectedPlayer.increaseMoney(money);
-			theif.addPlayerCard(card);
-			affectedPlayer.removePlayerCard(card);
+				affectedPlayer, interrupt, Interrupt.SCROLL);
+		if(willPlay) {
+			// Nothing to do here since this notify is done before the scroll gets played
+			// just remove card
 			interruptCard = GreenPlayerCard.WALLACE_SONKY;
-		}
-
-		if (willPlay) {
 			discardCard(interruptCard, affectedPlayer);
 		}
+
 		return willPlay;
 	}
 
@@ -992,6 +969,10 @@ public class Game {
 	public void removeInterrupt(GreenPlayerCard card) {
 		if (interrupts.get(card) != null)
 			interrupts.remove(card);
+	}
+	
+	public Map<GreenPlayerCard, Color> getInterrupts() {
+		return interrupts;
 	}
 	
 }

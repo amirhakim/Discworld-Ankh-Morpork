@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import io.TextUserInterface;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +55,8 @@ public class GreenCardTest {
 		player3 = game.getPlayerOfColor(Color.GREEN);
 		
 		gameBoard = game.getGameBoard();
+		TextUserInterface UI = TextUserInterface.getUI();
+		UI.setGame(game);
 	}
 
 	@Test
