@@ -270,11 +270,10 @@ public class Game {
 	 * @param p the player whose hand size must be restored.
 	 */
 	public void restorePlayerHand(Player p) {
-		Player actualPlayer = players.get(p.getColor());
 		while (hasPlayerCardsLeft() && 
-				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
+				p.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
 			//actualPlayer.addPlayerCard(playerDeck.drawCard().get());
-			addPlayerCard(actualPlayer);
+			addPlayerCard(p);
 		}
 	}
 
@@ -391,11 +390,19 @@ public class Game {
 	 * @return the total number of areas controlled by the given player.
 	 */
 	public int getNumberOfAreasControlled(Player player) {
-		return gameBoard
+		int count = 0;
+		for(BoardArea ba : gameBoard.values()) {
+			if(ba.isControlledBy(player)) count++;
+		}
+		return count;
+		
+		// Temporarily cmmented out functonality below as it doesn't seem to return correct value
+		/*return gameBoard
 				.values()
 				.stream()
 				.map(a -> a.isControlledBy(player) ? 1 : 0)
 				.reduce(0, (partialSum, areaContribution) -> partialSum + areaContribution);
+		*/
 	}
 	
 	/**
@@ -533,12 +540,13 @@ public class Game {
 	 * 
 	 * @return Map of all areas which have no buildings
 	 */
-	public Map<Integer, BoardArea> getBuildingFreeAreas() {
+	public Map<Integer, BoardArea> getBuildingFreeAreas(Player player) {
 		Map<Integer, BoardArea> freeAreas = new HashMap<Integer, BoardArea>();
 
 		for (BoardArea boardArea : gameBoard.values()) {
 			if (boardArea.getBuildingOwner() == Color.UNDEFINED &&
-					boardArea.hasTroubleMarker() == false) {
+					boardArea.hasTroubleMarker() == false &&
+					boardArea.getMinionCountForPlayer(player) != 0) {
 				freeAreas.put(boardArea.getArea().getAreaCode(), boardArea);
 			}
 		}

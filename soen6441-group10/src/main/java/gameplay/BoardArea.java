@@ -315,6 +315,7 @@ public class BoardArea {
 	 * @return the total number of areas controlled by the given player.
 	 */
 	public boolean isControlledBy(Player p) {
+		/*
 		int pieceCountForPlayer = getPieceCountForPlayer(p);
 		if (demonCount > 0 || pieceCountForPlayer == 0) {
 			return false;
@@ -325,6 +326,22 @@ public class BoardArea {
 		return (pieceCountForPlayer == (maxPiecesOwnedByPlayer.isPresent() ? maxPiecesOwnedByPlayer
 				.get() : 0))
 				&& pieceCountForPlayer > trollCount;
+		*/
+		
+		int playerPieces = getMinionCountForPlayer(p);
+		int otherPieces = getMinions().size();
+		boolean playerOwnsBuilding = getBuildingOwner() == p.getColor();
+		if(playerOwnsBuilding) {
+			playerPieces++;
+		} else if(getBuildingOwner() != Color.UNDEFINED) {
+			otherPieces++;
+		}
+		if(playerPieces > otherPieces/2) {
+			if(playerPieces > getTrollCount() && getDemonCount() == 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Player isControlled(Map<Color, Player> players) {

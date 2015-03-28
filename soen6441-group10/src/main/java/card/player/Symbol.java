@@ -125,7 +125,7 @@ public enum Symbol {
 			Map<Integer, BoardArea> playerAreas = game.getBuildingAreas(player);
 			BoardArea chosenRemoveArea = UI.getAreaChoice(playerAreas, "Choose Area to remove building from", "Choose Area: ");
 			// Choose Area to place building on
-			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas();
+			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas(player);
 			// Check that you can place a building
 			if(freeAreas.size() == 0) {
 				System.out.println("All areas have a building or a trouble marker.");
@@ -142,9 +142,9 @@ public enum Symbol {
 		} else {
 			// Player has free buildings too place
 			// Choose Area to place building on
-			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas();
+			Map<Integer, BoardArea> freeAreas = game.getBuildingFreeAreas(player);
 			if(freeAreas.size() == 0) {
-				System.out.println("All areas either has a building or a trouble marker.");
+				System.out.println("All areas either has a building or a trouble marker or you do not have areas with minions.");
 			} else {
 				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
 				game.addBuilding(player, chosenPlaceArea);
