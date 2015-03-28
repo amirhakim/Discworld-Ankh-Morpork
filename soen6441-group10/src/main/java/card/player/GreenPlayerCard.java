@@ -56,8 +56,13 @@ public enum GreenPlayerCard implements Card {
 			(player, game) -> {
 				System.out.println("Playing text -> getting four cards from discard pile");
 				DiscardPile pile = game.getDiscardPile();
+				if(pile.size() == 0) {
+					System.out.println("Discard pile is 0");
+					return;
+				}
 				pile.shuffle();
 				game.drawDiscardCards(player, 4);
+				System.out.println("Drew 4 cards from discard pile");
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);		
@@ -1102,16 +1107,16 @@ public enum GreenPlayerCard implements Card {
 				System.out.println("You do not have enough cards");
 			} else {
 				//TextUserInterface UI = new TextUserInterface();
-				TextUserInterface UI = TextUserInterface.getUI();
+				for(int i=0;i<2;++i){
+					TextUserInterface UI = TextUserInterface.getUI();
 
-				GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
-				while(c.getID() == 37) {
-					System.out.println("You cannot play this card");
-					c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
-					
+					GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+					while(c.getID() == 37) {
+						System.out.println("You cannot play this card");
+						c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+					}
+					UI.playCard(c, player);
 				}
-
-				UI.playCard(c, player);
 			}
 		},
 		// Money 
@@ -1415,9 +1420,14 @@ public enum GreenPlayerCard implements Card {
 					//TODO throw error
 					System.out.println("ISSUE IN THE FOOLS GUILD");
 				}
-				game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
-				choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
-				game.removePlayerCard(game.getCurrentCardInPlay(), player);
+				
+				// Give card to other player and say he cant get rid of it
+				// Unless currentPlayer got this card via this means
+				if(!player.getUnplayableCards().contains(game.getCurrentCardInPlay())){
+					game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
+					choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
+					game.removePlayerCard(game.getCurrentCardInPlay(), player);
+				}
 			}
 		},
 		// Money
