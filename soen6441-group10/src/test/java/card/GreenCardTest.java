@@ -59,7 +59,7 @@ public class GreenCardTest {
 		UI.setGame(game);
 	}
 
-	//@Test
+	@Test
 	public void zorgoTest() {
 		System.out.println("~~~TESTING ZARGO~~~");
 		game.assignPersonality(player);
@@ -72,7 +72,7 @@ public class GreenCardTest {
 		
 	}
 
-	//@Test
+	@Test
 	public void historyMonksTest() {
 		System.out.println("~~~TESTING HISTORY MONKS~~~");
 		// Set up some fake discard files
@@ -94,7 +94,7 @@ public class GreenCardTest {
 		assertEquals(cardsAfterSize, cardsBeforeSize + 4);
 	}
 	
-	//@Test
+	@Test
 	public void hereNowTest() {
 
 		System.out.println("~~~TESTING NERE NOW~~~");
@@ -114,7 +114,7 @@ public class GreenCardTest {
 	 * Test size of player deck before and after
 	 * Test player hand size before and after
 	 */
-	//@Test
+	@Test
 	public void HexTest() {
 		
 		System.out.println("~~~TESTING HEX~~~");
@@ -139,7 +139,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void harrKingTest(){
 		
 		System.out.println("~~TESTING HARRY KING~~");
@@ -164,7 +164,7 @@ public class GreenCardTest {
 		GreenPlayerCard.HARRY_KING.getText().accept(player, game);
 	}
 	
-	//@Test
+	@Test
 	public void operaHouseTest() {
 		System.out.println("~~TESTING THE_OPERA_HOUSE ~~");
 		
@@ -192,7 +192,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(),3);	
 	}
 	
-	//@Test
+	@Test
 	public void nobbyNobbTest() {
 		System.out.println("~~Testing NOBBY_NOBBS~~");
 		
@@ -219,7 +219,7 @@ public class GreenCardTest {
 		assertEquals(playersLessThan3, 1);
 	}
 	
-	//@Test
+	@Test
 	public void modoTest() {	
 		// Test discarding with 1+ cards
 		player.addPlayerCard(GreenPlayerCard.NOBBY_NOBBS);
@@ -239,7 +239,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void librarianTest() {
 		System.out.println("~~TESTING LIBRARIAN~~~");
 		// Let give player a full hand
@@ -262,7 +262,7 @@ public class GreenCardTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void leonardOfQuirmTest() {
 		System.out.println("~~TESTING LEONARD OF QUIRM~~");
 
@@ -287,7 +287,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void shonkyShopTest() {
 		System.out.println("~~TESTING SHONKY_SHOP~~~");
 		
@@ -309,7 +309,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(), 1);
 	}
 	
-	//@Test
+	@Test
 	public void sacharissaTest() {
 		System.out.println("~~TESTING SACHARISSA_CRIPSLOCK~~");
 	
@@ -334,7 +334,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(), 10);
 	}
 	
-	//@Test
+	@Test
 	public void rosiePalmTest() {
 		System.out.println("~~TESTING ROSIE_PALM~~~");
 		
@@ -367,7 +367,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void queenMollyTest() {
 		System.out.println("~~TESTING QUEEN MOLLY~~~");
 		
@@ -387,7 +387,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void rincewindTest() {
 		System.out.println("~~~TESTING RINCEWIND~~~");
 		
@@ -420,7 +420,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void dyskTest() {
 		System.out.println("~~TESTING DYSK~~~");
 		
@@ -438,7 +438,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(), 1);
 	}
 	
-	//@Test
+	@Test
 	public void fireBrigadeTest() {
 		System.out.println("~~~TESTING FIRE BRIGADE~~~");
 		
@@ -504,7 +504,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void theFoolsGuildTest() {
 		System.out.println("~~~THE FOOLS GUILD TEST~~~");
 		
@@ -546,7 +546,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void cmotDipplyerTest(){ 
 		System.out.println("~~CMOT DIPPLER TEST~~");
 		Die.getDie().setCheat(7);
@@ -573,7 +573,7 @@ public class GreenCardTest {
 	
 	}
 	
-	//@Test
+	@Test
 	public void duckmanTest() {
 		System.out.println("~~DUCKMAN TEST~~");
 		
@@ -588,7 +588,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void FoulOleRonTest() {
 		System.out.println("~~FOUL OLE RON TEST~~");
 		
@@ -602,6 +602,21 @@ public class GreenCardTest {
 		assertEquals(gameBoard.get(1).getMinions().size(), 0);
 		
 	}	
+	
+	@Test
+	public void cakeTest() {
+		System.out.println("~~~MRS CAKE TEST~~~");
+
+		// give one player a personality
+		game.assignPersonality(player);
+		
+		// ONLY VISUAL TEST HERE
+		GreenPlayerCard.MRS_CAKE.getText().accept(player, game);
+		
+		
+	}
+	
+	
 	
 	@After
 	public void tearDown() throws Exception {

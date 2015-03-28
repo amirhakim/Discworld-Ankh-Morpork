@@ -509,7 +509,6 @@ public class TextUserInterface {
 			System.out.println("Bank has " + controller.getGame().getBank().getBalance() + "$");
 			for(Player p : controller.getGame().getPlayersMap().values()) {
 				System.out.println(p.getName() + "(" + p.getColor() +") has " + p.getMoney() + "$");
-				System.out.println(controller.getGame().getNumberOfAreasControlled(p));
 			}
 
 			System.out.println("There are " + controller.getGame().getPlayerDeck().size() + " cards left to be played!");

@@ -19,6 +19,8 @@ import util.Color;
 import util.Interrupt;
 import card.Card;
 import card.city.AnkhMorporkArea;
+import card.personality.PersonalityCard;
+import card.personality.PersonalityDeck;
 
 
 @SuppressWarnings("serial")
@@ -952,12 +954,13 @@ public enum GreenPlayerCard implements Card {
 			TextUserInterface UI = TextUserInterface.getUI();
 			for(Player p: game.getPlayers()){
 				boolean choiceMade = false;
+				Set<GreenPlayerCard> playerCards = p.getPlayerCards();
 				while(!choiceMade){
-					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")){
-						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
+					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")) {
+						game.addPlayerCard(p,UI.getCardChoice(playerCards,"Choose a card to give away"));
 						choiceMade = true;
 					};
-					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")){
+					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")) {
 						   if(p.getMoney()>=1) {
 							   if(p.decreaseMoney(1)&player.increaseMoney(1))
 							   System.out.println("Took $1 from "+p.getName());
@@ -1233,15 +1236,25 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: MRS_CAKE: look at all but one of the"
-				+ "unused personality cards");
+			PersonalityDeck personalityDeck = game.getPersonalityDeck();
+			int visibleSize = personalityDeck.size() -1;
+			if (visibleSize < 0) {
+				System.out.println("Only one personality left in deck...");
+			} else {
+				int count = 0;
+				System.out.println("Showing " + (visibleSize + 1) + " unused personality cards...");
+				for(PersonalityCard card: personalityDeck.getDeck()) {
+					if(count >= visibleSize) break;
+					System.out.println(card);
+				}
+			}
 		},
 		// Money
 		2,
 		// ID
 		41,
 		// DESC
-		"SCROLL: LOOK AT ALL BUT ONE PERSONALITY CARDS"
+		"SCROLL: LOOK AT ALL BUT ONE UNUSED PERSONALITY CARDS"
 	),
 	
 	GROAT(
