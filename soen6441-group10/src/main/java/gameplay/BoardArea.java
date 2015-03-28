@@ -327,6 +327,22 @@ public class BoardArea {
 				&& pieceCountForPlayer > trollCount;
 	}
 	
+	public Player isControlled(Map<Color, Player> players) {
+		int count = 0;
+		Player control = null;
+		for(Player p: players.values()) {
+			if(isControlledBy(p)) {
+				control = p;
+				count++;
+			}
+		}
+		if(count != 1) {
+			return null;
+		} else {
+			return control;
+		}
+	}
+	
 	/**
 	 * <b>Counts the pieces owned by the given player.<br>
 	 * Pieces include minions and buildings.</b>

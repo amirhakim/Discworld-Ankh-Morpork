@@ -43,7 +43,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			2,
 			// ID
-			1
+			1,
+			// DESC
+			""
 	), 
 	
 	HISTORY_MONKS(
@@ -63,7 +65,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			2
+			2,
+			// DESC
+			"SCROLL: SHUFFLE DISCARD PILE AND DRAW FOUR CARDS RANDOMLY"
 	),
 	
 	HEX(
@@ -81,7 +85,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			3
+			3,
+			// DESC
+			"SCROLL: TAKE 3 CARDS FROM DRAW DECK"
 	),
 	
 	HERE_N_NOW(
@@ -99,7 +105,7 @@ public enum GreenPlayerCard implements Card {
 				//TextUserInterface textUI = new TextUserInterface();
 				TextUserInterface textUI = TextUserInterface.getUI();
 				
-				if(dieRoll == 7) {
+				if(dieRoll >= 7) {
 					Map<Color, Player> players = game.getPlayersMap();
 					
 						
@@ -134,7 +140,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			4
+			4,
+			// DESC
+			"SCROLL: ROLL DICE IF 7 OR MORE TAKE 3$ FROM PLAYER OF YOUR CHOICE. IF 1 REMOVE ONE OF YOUR MINIONS"
 	),
 	
 	HARRY_KING(
@@ -181,7 +189,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			5
+			5,
+			// DESC
+			"SCROLL: DISCARD CARDS AND TAKE 2$ FOR EACH DISCARDED CARD"
 	), 
 	
 	HARGAS_HOUSE_OF_RIBS(
@@ -193,7 +203,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			3,
 			// ID
-			6
+			6,
+			// DESC
+			""
 	),
 	
 	MR_GRYLE(
@@ -205,7 +217,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			1,
 			// ID
-			7
+			7,
+			// DESC
+			""
 	),
 	
 	THE_PEELED_NUTS(
@@ -216,7 +230,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			8
+			8,
+			// DESC
+			""
 	),
 	
 	THE_OPERA_HOUSE(
@@ -238,7 +254,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			9
+			9,
+			// DESC
+			"SCROLL: EARN 1$ FOR EACH MINION IN ISLE OF GODS"
 	),
 	
 	NOBBY_NOBBS(
@@ -272,7 +290,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			10
+			10,
+			// DESC
+			"SCROLL: TAKE 3$ FROM A PLAYER OF YOUR CHOICE"
 	),
 	
 	MODO(
@@ -307,7 +327,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			11
+			11,
+			// DESC
+			"SCROLL: DISCARD A CARD"
 	),
 	
 	THE_MENDED_DRUM(
@@ -319,7 +341,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			2,
 			// ID
-			12
+			12,
+			// DESC
+			""
 	),
 	
 	LIBRARIAN(
@@ -335,7 +359,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			13
+			13,
+			// DESC
+			"SCROLL: TAKE 4 CARDS FROM DRAW DECK"
 	),
 	
 	LEONARD_OF_QUIRM(
@@ -351,7 +377,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			14
+			14,
+			// DESC
+			"SCROLL: TAKE 4 CARDS FROM DRAW DECK"
 	),
 	
 	
@@ -398,7 +426,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		15
+		15,
+		// DESC
+		"SCROLL: DISCARD CARDS AND TAKE 1$ FOR EACH DISCARDED CARD"
 	),
 	
 	SACHARISSA_CRIPSLOCK(
@@ -419,7 +449,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		16
+		16,
+		// DESC
+		"SCROLL: EARN 1$ FOR EACH TROUBLE MARKER"
 	),
 	
 	ROSIE_PALM(
@@ -485,7 +517,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		17
+		17,
+		// DESC
+		"SCROLL: EXCAHNGE A CARD FOR 2$ FROM ANOTHER PLAYER"
 	),
 
 	RINCEWIND(
@@ -539,7 +573,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		18
+		18,
+		// DESC
+		"SCROLL: MOVE MINION IN TROUBLE AREA"
 	),
 	
 	THE_ROYAL_MINT(
@@ -551,7 +587,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		5,
 		// ID
-		19
+		19,
+		// DESC
+		""
 	),
 	
 	
@@ -602,7 +640,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		20
+		20,
+		// DESC
+		"SCROLL: ANOTHER PLAYER MUST GIVE YOU TWO CARDS"
 	),
 	
 	PINK_PUSSYCAT_CLUB(
@@ -614,7 +654,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		3,
 		// ID
-		21
+		21,
+		// DESC
+		""
 	),
 	
 	ZORGO_THE_RETRO_PHRENOLOGIST(
@@ -635,7 +677,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		22
+		22,
+		// DESC
+		"SCROLL: EXCHANGE PERSONALITY CCARD WITH ONE FROM DECK"
 			
 	),
 	
@@ -658,7 +702,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		23
+		23,
+		// DESC
+		"SCROLL: ANOTHER PLAYER MUST GIVE YOU 5$ OR TAKE THIS CARD AND NEVER DISCARD IT"
 			
 	),
 	
@@ -676,7 +722,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		24
+		24,
+		// DESC
+		"SCROLL: INTERRUPT A PLAYER PLAYING SCROLL"
 	),
 	
 	THE_SEAMSTRESS_GUILD(
@@ -741,7 +789,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		25
+		25,
+		// DESC
+		"SCROLL: EXCAHNGE YOUR CARD FOR ANOTHER PLAYERS 2$"
 	),
 	
 	MR_PIN_AND_MR_TULIP(
@@ -753,7 +803,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		1,
 		// ID
-		26
+		26,
+		// DESC
+		""
 	),
 	
 	THE_THIEVES_GUILD(
@@ -780,7 +832,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		27
+		27,
+		// DESC
+		"SCROLL: TAKE 2$ FROM EVERY OTHER PLAYER"
 			
 	),
 	MR_BOGGIS(
@@ -803,7 +857,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		28
+		28,
+		// DESC
+		"SCROLL: TAKE 2$ FROM EVERY OTHER PLAYER"
 	),
 	MR_BENT(
 		new ArrayList<Symbol>(){{
@@ -817,7 +873,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		29
+		29,
+		// DESC
+		"SCROLL: LOAD THIS CARD FOR 10$ MUST REPAY AT END OF GAME"
 	),
 	
 	THE_BEGGARS_GUILD(
@@ -847,7 +905,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		30
+		30,
+		// DESC
+		"SCROLL: ANOTHER PLAYER MUST GIVE YOU TWO OF THEIR CARDS"
 	),
 
 	THE_BANK_OF_ANKH_MORPORK(
@@ -863,7 +923,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		31
+		31,
+		// DESC
+		"SCROLL: TAKE 10$ LOAN FROM THE BANK, MAY PAY BACK AT END OF GAME"
 	),
 	
 	THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY(
@@ -894,7 +956,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		32
+		32,
+		// DESC
+		"SCROLL: EACH PLAYER MUST GIVE YOU 1$ OR ONE OF THEIR CARDS"
 	),
 	
 	SERGANT_ANGUA(
@@ -908,7 +972,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		33
+		33,
+		// DESC
+		""
 	),
 	
 	THE_AGONY_AUNTS(
@@ -923,7 +989,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		2,
 		// ID
-		34
+		34,
+		// DESC
+		""
 	),
 	
 	/** 
@@ -942,7 +1010,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		35
+		35,
+		// DESC
+		"SCROLL: EARN 1$ FOR EACH MINION IN ISLES OF GODS"
 	),
 	
 	THE_DUCKMAN(
@@ -1010,7 +1080,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		36
+		36,
+		// DESC
+		"SCROLL: MOVE ANOTHER PLAYER MINION"
 	),
 	
 	/**
@@ -1041,7 +1113,9 @@ public enum GreenPlayerCard implements Card {
 		// Money 
 		0,
 		// ID
-		37
+		37,
+		// DESC
+		"SCROLL: PLAY ANY TWO OTHER CARDS FROM HAND"
 	),
 	
 	@SuppressWarnings("resource")
@@ -1101,7 +1175,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		38
+		38,
+		// DESC
+		"SCROLL: DICE ROLL 7+ TAKE 4$ FROM BANK, DICE ROLL 1 PAY 2$ OR REMOVE YOUR MINION"
 	),
 	
 	DR_CRUCES(
@@ -1115,7 +1191,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		3,
 		// ID
-		39
+		39,
+		// DESC
+		""
 	),
 	
 	CAPTAIN_CARROT(
@@ -1130,7 +1208,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		1,
 		// ID 
-		40
+		40,
+		// DESC
+		""
 	),
 	
 	MRS_CAKE(
@@ -1145,7 +1225,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		2,
 		// ID
-		41
+		41,
+		// DESC
+		"SCROLL: LOOK AT ALL BUT ONE PERSONALITY CARDS"
 	),
 	
 	GROAT(
@@ -1158,7 +1240,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		42
+		42,
+		// DESC
+		""
 	),
 	
 	GIMLETS_DWARF_DELICATESSEN(
@@ -1172,7 +1256,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		3,
 		// ID
-		43
+		43,
+		// DESC
+		""
 	),
 	
 	GASPODE(
@@ -1186,7 +1272,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		44
+		44,
+		// DESC
+		"SCROLL: INTERRUPT PLAYER MOVING YOUR MINION"
 	),
 	
 	THE_FRESH_START_CLUB(
@@ -1199,7 +1287,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		45
+		45,
+		// DESC
+		""
 	),
 	
 	FOUL_OLE_RON(
@@ -1270,7 +1360,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		46
+		46,
+		// DESC
+		"SCROLL: MOVE A PLAYERS MINION"
 	),
 	
 	/**
@@ -1331,7 +1423,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		47
+		47,
+		// DESC
+		"SCROLL: 5$ FROM PLAYER OR FOREVER HAVE THIS CARD"
 	),
 	
 	/**
@@ -1366,8 +1460,10 @@ public enum GreenPlayerCard implements Card {
 			if(!hasMoney) {
 				System.out.println("Damn, " + choosenPlayer.getName() + " doesn't have 5 dollars");
 			} else {
+				System.out.println(choosenPlayer.getColor().getAnsi());
 				wantsToGive = UI.getUserYesOrNoChoice(choosenPlayer.getName() + " do you want to give " + player.getName() + 
 						" $5");
+				System.out.println(game.getPlayerOfCurrentTurn().getColor().getAnsi());
 				if(wantsToGive) {
 					choosenPlayer.decreaseMoney(5);
 					player.increaseMoney(5);
@@ -1398,7 +1494,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		48
+		48,	
+		// DESC
+		"SCROLL: 5$ FROM PLAYER OR REMOVE BUILDING"
 	)
 	;
 	
@@ -1412,25 +1510,27 @@ public enum GreenPlayerCard implements Card {
 	
 	private Integer id;
 	
+	private String desc;
 	
 	
-	
-	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text, Integer money, Integer id) {
+	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text, Integer money, Integer id, String desc) {
 		this.symbols = symbols;
 		this.text = text;
 		this.textFirst = false;
 		this.money = money;
 		this.id = id;
+		this.desc = desc;
 	}
 	
 	
 	
-	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols, Integer money, Integer id) {
+	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols, Integer money, Integer id, String desc) {
 		this.symbols = symbols;
 		this.text = text;
 		this.textFirst = true;
 		this.money = money;
 		this.id = id;
+		this.desc = desc;
 	}
 	
 
@@ -1455,4 +1555,27 @@ public enum GreenPlayerCard implements Card {
 		return this.id;
 	}
 	
+	public String getDesc() {
+		return this.desc;
+	}
+	
+	public String toString() {
+		String rtn =  name() + "\n";
+		if(textFirst) {
+			rtn += "\t" +getDesc() + "\n";
+		}
+		for(Symbol s: getSymbols()) {
+			rtn += "\t"+s + "\n";
+		}
+		if(!textFirst) {
+			rtn += "\t"+getDesc() + "\n";
+		}
+		rtn += "";
+	
+		return rtn;
+	}
+	
+	
+
+
 }

@@ -952,8 +952,10 @@ public class Game {
 			if (playerColor != null) {
 				Player player = getPlayerOfColor(playerColor);
 				if (affectedPlayer.getColor() == player.getColor()) {
-					TextUserInterface UI = new TextUserInterface();
+					TextUserInterface UI = TextUserInterface.getUI();
+					System.out.println(affectedPlayer.getColor().getAnsi());
 					if (UI.playInterrupt(affectedPlayer, card)) {
+						System.out.println(getPlayerOfCurrentTurn().getColor().getAnsi());	
 						return true;
 					}
 				}
