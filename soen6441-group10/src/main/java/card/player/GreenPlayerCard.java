@@ -692,9 +692,21 @@ public enum GreenPlayerCard implements Card {
 		 * They cannot get rid of this card.	
 		 */
 		(player, game) -> {
-//			TextUserInterface UI = new TextUserInterface();
-//			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
-//			selectedPlayer.addPlayerCard(DR_WHIEFACE);
+			TextUserInterface UI = TextUserInterface.getUI();
+			Map<Color,Player> myPlayersMap;
+			myPlayersMap = game.getPlayersMap();
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+
+			if(UI.getUserYesOrNoChoice("do you want to give "+player.getName()+" $5? (other wise your card count will be reduced)")){
+				if(choosenPlayer.hasMoney(5)){
+					choosenPlayer.decreaseMoney(5);
+					player.increaseMoney(5);
+				}
+			}
+			else choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -716,9 +728,7 @@ public enum GreenPlayerCard implements Card {
 		 * You cannot be affected by the text on a card 
 		 * played by another player
 		 */
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED WALLACE SONKY TEXT");			
-		},
+		(player, game) -> {},
 		// Money
 		0,
 		// ID
@@ -867,7 +877,8 @@ public enum GreenPlayerCard implements Card {
 		}},
 		(player, game) -> {
 			if(game.getBank().decreaseBalance(10)){
-				if (player.increaseMoney(10)) player.isHasMrBent();
+				game.givePlayerMoneyFromBank(player,10);
+				game.addPlayerCard(player,game.getCurrentCardInPlay());
 			}
 		},
 		// Money
@@ -883,11 +894,11 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			//TextUserInterface UI = new TextUserInterface();
+			//calling the singleton
 			TextUserInterface UI = TextUserInterface.getUI();
 			
+			//Get a list of player and exclude self from it
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
-				
 			ArrayList<Color> excludeList = new ArrayList<Color>();
 			excludeList.add(player.getColor());
 			
@@ -898,8 +909,9 @@ public enum GreenPlayerCard implements Card {
 			}
 			
 			for (int i=0;i<2;i++){
-				if(!(player.addPlayerCard(UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away"))))
-					System.out.println("Something went wrong, card was not give away");
+				GreenPlayerCard giveAwayCard = UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away");
+				game.removePlayerCard(giveAwayCard,choosenPlayer);
+				game.addPlayerCard(player,giveAwayCard);
 			}
 		},
 		// Money
@@ -915,10 +927,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_BANK_OF_ANKH_MORPORK: place this card infront of you and "
-				+ "take $10 loan from the bank,"
-				+ " at the end of the game you must pay "
-				+ "back $12 or loose 15 points");
+			game.givePlayerMoneyFromBank(player,10);
+			game.addPlayerCard(player,game.getCurrentCardInPlay());
 		},
 		// Money
 		0,
@@ -939,9 +949,8 @@ public enum GreenPlayerCard implements Card {
 				boolean choiceMade = false;
 				while(!choiceMade){
 					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")){
-						if(!(player.addPlayerCard(UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"))))
-							System.out.println("Something went wrong, card was not give away");
-						else choiceMade = true;
+						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
+						choiceMade = true;
 					};
 					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")){
 						   if(p.getMoney()>=1) {
@@ -1479,17 +1488,7 @@ public enum GreenPlayerCard implements Card {
 					BoardArea chosenArea = UI.getAreaChoice(buildings, "Select an area: ", "Choice: ");
 					chosenArea.removeBuilding();
 				}
-				
-				
-				
-				
 			}
-			
-			
-			
-			
-			
-			
 		},
 		// Money
 		0,
