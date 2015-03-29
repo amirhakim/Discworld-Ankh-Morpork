@@ -67,7 +67,7 @@ public enum RandomEventCard implements Card {
 	RIOTS((game, player) -> {
 		System.out.println("Riots! That shall be the end of the game my lords...");
 		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
-			game.getWinnersByPoints();
+			game.finishGameOnPoints(false);
 		}
 	}),
 	
