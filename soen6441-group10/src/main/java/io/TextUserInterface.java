@@ -17,6 +17,7 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 
 import util.Color;
+import util.Interrupt;
 import card.city.AnkhMorporkArea;
 import card.player.GreenPlayerCard;
 import card.player.Symbol;
@@ -34,6 +35,22 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
+
+	public static final String RESET = "\u001B[0m";
+	
+	
+	private static TextUserInterface instance;
+	
+	public static TextUserInterface getUI() {
+		if(instance == null) {
+			instance = new TextUserInterface();
+		} 
+		return instance;
+	}
+	
+	public void setGame(Game g) {
+		controller.setGame(g);
+	}
 	
 	/**
 	 * This method implements an interactive interface to:</br>
@@ -56,7 +73,7 @@ public class TextUserInterface {
 		// Main menu loop
 		while (!action.equals(UserOption.QUIT.getOptionString())) {
 			System.out
-					.println("\n Choose one of the following:\n"
+					.println("\nChoose one of the following:\n"
 							+ "1) n to start a new game\n"
 							+ "2) l to load a previously saved game\n"
 							+ "3) o for an overview of the current game's status\n"
@@ -126,6 +143,7 @@ public class TextUserInterface {
 						playTurn(controller.advanceToNextTurn());
 					} else {
 						System.out.println("The game has finished!");
+						printGameStatus();
 						break;
 					}
 				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
@@ -158,10 +176,14 @@ public class TextUserInterface {
 	 * @param p
 	 */
 	private void playTurn(Player p) {
-		System.out.println(p.getName() + "'s turn!");
+		System.out.println(p.getColor().getAnsi());
+		printBriefGameStatus();
+		System.out.println(p.getName() + "("+p.getColor()+") " + "'s turn!");
+		System.out.println(p.getPersonality() + ": " + p.getPersonality().getDesc());
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
 		playCard(c,p);
 		controller.restorePlayerHand(p);
+		System.out.println(RESET);
 	}
 	
 	public void playCard(GreenPlayerCard c, Player p) {
@@ -179,7 +201,7 @@ public class TextUserInterface {
 			}
 			// Perform symbols
 			// If symbols return false
-			// Its because we've recursed into playig another card
+			// Its because we've recursed into playing another card
 			res = playSymbols(c, p);
 			if(!res) return;
 		} else {
@@ -211,7 +233,7 @@ public class TextUserInterface {
 	private boolean playText(GreenPlayerCard c, Player p) {
 		BiConsumer<Player, Game> textAction = c.getText();
 		if(textAction != null){
-			System.out.println("Do you want to perform scroll symbol? (yes/no)");
+			System.out.println("Do you want to perform scroll ("+c.getDesc()+") symbol? (yes/no)");
 			System.out.print("> ");
 			String choice = scanner.nextLine();
 			if (UserOption.YES.name().equalsIgnoreCase(choice)) {
@@ -272,7 +294,9 @@ public class TextUserInterface {
 		int i = 1;
 		for (GreenPlayerCard c : cards) {
 			
-			System.out.println(i + ") " + c.name());
+			//System.out.print(i + ") " + c.name());
+			System.out.print(i + ") ");
+			System.out.print(c);
 			cardMap.put(i, c);
 			i++;
 		}
@@ -425,6 +449,7 @@ public class TextUserInterface {
 					+ Integer.toString(bank.getBalance()));
 			System.out.print(" Current turn is ");
 			System.out.println(controller.getPlayerOfCurrentTurn().getName());
+			System.out.print("There are " + controller.getGame().getPlayerDeck().size() + " cards left to be played!");
 			System.out.println(System.getProperty("line.separator"));
 
 		} else {
@@ -433,6 +458,72 @@ public class TextUserInterface {
 			System.out.println(System.getProperty("line.separator"));
 		}
 
+	}
+	
+	private void printBriefGameStatus() {
+
+		if (controller.gameExists()) {
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+					+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			System.out.println(String.format("%-20s%10s%30s%30s%30s%10s%20s", "Area",
+					"Buildings", "Minions", "Trolls", "Demons", "Trouble", "Controlled By"));
+
+			for (BoardArea a : controller.getBoard()) {
+				System.out.print(String.format("%-20s", a.getArea().name()));
+
+				Player p = controller.getPlayerForColor(a.getBuildingOwner());
+				if (p == null) {
+					System.out.print(String.format("%10s", "NONE"));
+				} else {
+					System.out.print(String.format("%10s", p.getName()));
+				}
+
+				Map<Color, Integer> minions = a.getMinions();
+				String minionsAll = UserOption.BACK.getOptionString();
+
+				for (Map.Entry<Color, Integer> entry : minions.entrySet()) {
+					Color color = entry.getKey();
+					Integer value = entry.getValue();
+					// TODO Change this once we put the players into a map
+					minionsAll += String.format("%5s%1s%1s%1s", controller
+							.getGame().getPlayerOfColor(color).getName(), "(",
+							String.valueOf(value), ")");
+				}
+				System.out.format("%30s", minionsAll);
+
+				System.out.format("%30s", String.valueOf(a.getTrollCount()));
+				System.out.format("%30s", String.valueOf(a.getDemonCount()));
+
+				System.out.format("%10s", a.hasTroubleMarker());
+				
+				Player control = a.isControlled(controller.getGame().getPlayersMap());
+				String controlStr = "";
+				if(control != null) {
+						controlStr = control.getName();
+				}
+				System.out.format("%20s", controlStr);
+				System.out.println();
+			}
+			System.out.println(System.getProperty("line.separator"));
+
+			System.out.println("Bank has " + controller.getGame().getBank().getBalance() + "$");
+			for(Player p : controller.getGame().getPlayersMap().values()) {
+				System.out.println(p.getName() + "(" + p.getColor() +") has " + p.getMoney() + "$");
+				System.out.println(controller.getGame().getNumberOfAreasControlled(p));
+			}
+
+			System.out.println("There are " + controller.getGame().getPlayerDeck().size() + " cards left to be played!");
+			
+
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+					+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			System.out.println(System.getProperty("line.separator"));
+
+		} else {
+			System.out.println(System.getProperty("line.separator"));
+			System.out.println(" No game started yet!");
+			System.out.println(System.getProperty("line.separator"));
+		}
 	}
 	
 	public AnkhMorporkArea getAreaChoice(Collection<AnkhMorporkArea> availableAreas, 
@@ -608,7 +699,7 @@ public class TextUserInterface {
 	 * @param excludePlayer do not let user return this player
 	 * @return chosen player
 	 */
-	public Player getPlayer(Map<Color, Player> playerMap) {
+	public Player getPlayer(Map<Color, Player> playerMap, ArrayList<Color> excludeList,  Boolean checkWallace) {
 		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<Color, Player> pair = it.next();
@@ -618,10 +709,18 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		String action = scanner.nextLine();
 		//TODO need to catch bad valueOf
-		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null) {
+		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null 
+				|| excludeList.contains(Color.valueOf(action))) {
 			System.out.println("Invalid selection.  Try again: ");
 			action = scanner.nextLine();
 		}
+		
+		boolean interrupted = false;
+		if(checkWallace) {
+			interrupted = controller.getGame().notifyInterrupt(Interrupt.SCROLL, playerMap.get(Color.valueOf(action)));
+			if(interrupted) return null;
+		}
+		
 		return playerMap.get(Color.valueOf(action));
 	}
 	

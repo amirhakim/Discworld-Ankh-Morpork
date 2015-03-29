@@ -270,11 +270,10 @@ public class Game {
 	 * @param p the player whose hand size must be restored.
 	 */
 	public void restorePlayerHand(Player p) {
-		Player actualPlayer = players.get(p.getColor());
 		while (hasPlayerCardsLeft() && 
-				actualPlayer.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
+				p.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
 			//actualPlayer.addPlayerCard(playerDeck.drawCard().get());
-			addPlayerCard(actualPlayer);
+			addPlayerCard(p);
 		}
 	}
 
@@ -391,11 +390,19 @@ public class Game {
 	 * @return the total number of areas controlled by the given player.
 	 */
 	public int getNumberOfAreasControlled(Player player) {
-		return gameBoard
+		int count = 0;
+		for(BoardArea ba : gameBoard.values()) {
+			if(ba.isControlledBy(player)) count++;
+		}
+		return count;
+		
+		// Temporarily cmmented out functonality below as it doesn't seem to return correct value
+		/*return gameBoard
 				.values()
 				.stream()
 				.map(a -> a.isControlledBy(player) ? 1 : 0)
 				.reduce(0, (partialSum, areaContribution) -> partialSum + areaContribution);
+		*/
 	}
 	
 	/**
@@ -533,12 +540,13 @@ public class Game {
 	 * 
 	 * @return Map of all areas which have no buildings
 	 */
-	public Map<Integer, BoardArea> getBuildingFreeAreas() {
+	public Map<Integer, BoardArea> getBuildingFreeAreas(Player player) {
 		Map<Integer, BoardArea> freeAreas = new HashMap<Integer, BoardArea>();
 
 		for (BoardArea boardArea : gameBoard.values()) {
 			if (boardArea.getBuildingOwner() == Color.UNDEFINED &&
-					boardArea.hasTroubleMarker() == false) {
+					boardArea.hasTroubleMarker() == false &&
+					boardArea.getMinionCountForPlayer(player) != 0) {
 				freeAreas.put(boardArea.getArea().getAreaCode(), boardArea);
 			}
 		}
@@ -868,8 +876,9 @@ public class Game {
 		return this.playerDeck;
 	}
 
+	
 	/**
-	 * 
+	 * GASPODE && FRESH START
 	 * @param interrupt
 	 * @param affectedPlayer
 	 * @param affectedArea
@@ -914,41 +923,17 @@ public class Game {
 		return willPlay;
 	}
 	
-	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer, Player theif, Integer money) {
-		GreenPlayerCard interruptCard = null;
-
-		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
-				affectedPlayer, interrupt, Interrupt.TAKE_MONEY);
-
-		if (willPlay) {
-			// return money to affected player
-			theif.decreaseMoney(money);
-			affectedPlayer.increaseMoney(money);
-			interruptCard = GreenPlayerCard.WALLACE_SONKY;
-		}
-
-		if (willPlay) {
-			discardCard(interruptCard, affectedPlayer);
-		}
-		return willPlay;
-	}
-
-	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer,
-			Player theif, GreenPlayerCard card, Integer money) {
+	public boolean notifyInterrupt(Interrupt interrupt, Player affectedPlayer) {
 		GreenPlayerCard interruptCard = null;
 		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
-				affectedPlayer, interrupt, Interrupt.CARD_FOR_MONEY);
-		if (willPlay) {
-			theif.decreaseMoney(money);
-			affectedPlayer.increaseMoney(money);
-			theif.addPlayerCard(card);
-			affectedPlayer.removePlayerCard(card);
+				affectedPlayer, interrupt, Interrupt.SCROLL);
+		if(willPlay) {
+			// Nothing to do here since this notify is done before the scroll gets played
+			// just remove card
 			interruptCard = GreenPlayerCard.WALLACE_SONKY;
-		}
-
-		if (willPlay) {
 			discardCard(interruptCard, affectedPlayer);
 		}
+
 		return willPlay;
 	}
 
@@ -975,8 +960,10 @@ public class Game {
 			if (playerColor != null) {
 				Player player = getPlayerOfColor(playerColor);
 				if (affectedPlayer.getColor() == player.getColor()) {
-					TextUserInterface UI = new TextUserInterface();
+					TextUserInterface UI = TextUserInterface.getUI();
+					System.out.println(affectedPlayer.getColor().getAnsi());
 					if (UI.playInterrupt(affectedPlayer, card)) {
+						System.out.println(getPlayerOfCurrentTurn().getColor().getAnsi());	
 						return true;
 					}
 				}
@@ -992,6 +979,10 @@ public class Game {
 	public void removeInterrupt(GreenPlayerCard card) {
 		if (interrupts.get(card) != null)
 			interrupts.remove(card);
+	}
+	
+	public Map<GreenPlayerCard, Color> getInterrupts() {
+		return interrupts;
 	}
 	
 }

@@ -5,9 +5,11 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gameplay.BoardArea;
+import gameplay.Controller;
 import gameplay.Die;
 import gameplay.Game;
 import gameplay.Player;
+import io.TextUserInterface;
 
 import java.util.Map;
 
@@ -45,6 +47,8 @@ public class SymbolTest {
 		player = game.getPlayerOfColor(Color.RED);
 		player2 = game.getPlayerOfColor(Color.YELLOW);
 		gameBoard = game.getGameBoard();
+		TextUserInterface UI = TextUserInterface.getUI();
+		UI.setGame(game);
 //		game.init();
 	}
 
@@ -293,12 +297,15 @@ public class SymbolTest {
 	@Test
 	public void intteruptGaspodeTest() {
 		System.out.println("~~INTERRUPT GASPODE TEST~~~");
-		gameBoard.get(1).addTroubleMarker();
+		//gameBoard.get(1).addTroubleMarker();
+		
+		
+		
 		gameBoard.get(1).addMinion(player2);
+		gameBoard.get(1).addMinion(player);
 		
 		// Give player 2 GASPODE
 		game.addPlayerCard(player2, GreenPlayerCard.GASPODE);
-		
 		
 		Symbol.ASSASINATION.getGameAction().accept(player, game);
 		// Check if assasination was played
@@ -312,10 +319,12 @@ public class SymbolTest {
 		}
 	}
 	
+	
+	
 	@Test
 	public void interruptFreshStartTest(){
 		System.out.println("~~INTERRUPT FRESH START CLUB TEST~~~");
-		gameBoard.get(1).addTroubleMarker();
+		gameBoard.get(1).addMinion(player);
 		gameBoard.get(1).addMinion(player2);
 		
 		game.addPlayerCard(player2, GreenPlayerCard.THE_FRESH_START_CLUB);
@@ -325,10 +334,11 @@ public class SymbolTest {
 		// Check if interrupt was played
 		if(player2.getPlayerCards().size() == 0) {
 			// It was played
-			assertEquals(gameBoard.get(1).getMinionCount(), 0);
+			assertEquals(gameBoard.get(1).getMinionCount(), 1);
 			// Make sure one area has the removed minion
 			int count = 0;
 			for(BoardArea ba : gameBoard.values()) {
+				if(ba == gameBoard.get(1)) continue;
 				if(ba.getMinionCount() == 1) {
 					count++;
 				}
@@ -350,71 +360,44 @@ public class SymbolTest {
 	};
 	
 	@Test
-	public void interruptTakeMoneyTest() {
-		System.out.println("~~INTERRUPT CARDS THAT TAKE MONEY~~");
+	public void testWallaceInterrupt() {
+		System.out.println("~~TESTING WALLACE INTERRUPT~~~");
 		
-		// Cheat the dice roll
-		Die.getDie().setCheat(7);
-		
-		// give player2 a card that stops text action takes money
+		// Giev player 1 wallace
 		game.addPlayerCard(player2, GreenPlayerCard.WALLACE_SONKY);
-		// make sure players are well funded
-		player2.increaseMoney(10);
-		player.increaseMoney(10);
 		
-		//have player2 act out take money card
-		// choices are HERE_N_NOW, NOBBY_NOBBS
-		
+		// Play out a card that can be interrupted
+		// Example is here n now
+		Die.getDie().setCheat(7);
+		player2.increaseMoney(100);
 		GreenPlayerCard.HERE_N_NOW.getText().accept(player, game);
 		
-		// Check if player2 played the interrupt card
-		if(player2.getPlayerCards().size() == 0) {
-			// player 2 did player interrupt
-			// both players should still have 10$
-			assertEquals(player2.getMoney(), 10);
-			assertEquals(player.getMoney(), 10);
+		boolean interruptPlayed = player2.getPlayerCards().size() == 0;
+		if(interruptPlayed) {
+			// HERE N NOW should not have taken affect
+			assertEquals(player2.getMoney(), 100);
 		} else {
-			assertEquals(player2.getMoney(), 7);
-			assertEquals(player.getMoney(), 13);
+			assertEquals(player2.getMoney(), 97);
 		}
-		
 		
 	}
 	
-	@Test
-	public void interruptCardForMoney() {
-		System.out.println("~~INTERRUPT CARD TAKE EXHCANGE MONEY FOR CARDS~~");
-		
-		// give player2 a card that stops text
+	@Test 
+	public void testWallaceInterrupt2() {
+		System.out.println("~~~SECOND TESTING WALLACE INTERRUPT~~~");
 		game.addPlayerCard(player2, GreenPlayerCard.WALLACE_SONKY);
-		// make sure players are well funded
-		player2.increaseMoney(10);
-		player.increaseMoney(10);
-		//since player will give a card from player 2, lets give him a card to give
-		// since in real game, if player only has one card, he is playing rosie_palm, 
-		// so he needs two cards
-		game.addPlayerCard(player, GreenPlayerCard.HERE_N_NOW);
-		game.addPlayerCard(player, GreenPlayerCard.HEX);
 		
-		
-		GreenPlayerCard.ROSIE_PALM.getText().accept(player, game);
-		
-		// Check if player2 played the interrupt card
-		if(!player2.getPlayerCards().contains(GreenPlayerCard.WALLACE_SONKY)) {
-			//interrupt was played
-			//player should both have 10$
-			// player 2 should have 0 cards
-			// player should have his original 2 cards
-			assertEquals(player2.getMoney(), 10);
-			assertEquals(player.getMoney(), 10);
-			assertEquals(player.getPlayerCards().size(), 2);
+		// We'll test interrupting FOUL_OLE_RON
+		// Put minion on board
+		gameBoard.get(1).addMinion(player2);
+		GreenPlayerCard.FOUL_OLE_RON.getText().accept(player, game);
+		boolean interruptPlayed = player2.getPlayerCards().size() == 0;
+		if(interruptPlayed) {
+			// HERE N NOW should not have taken affect
+			assertEquals(gameBoard.get(1).getMinions().size(), 1);
 		} else {
-			assertEquals(player.getMoney(), 12);
-			assertEquals(player2.getMoney(), 8);
-			assertEquals(player.getPlayerCards().size(), 1);
+			assertEquals(gameBoard.get(1).getMinions().size(), 0);
 		}
-		
-		
 		
 	}
 	

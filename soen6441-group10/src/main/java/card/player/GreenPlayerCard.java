@@ -7,7 +7,6 @@ import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -44,7 +43,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			2,
 			// ID
-			1
+			1,
+			// DESC
+			""
 	), 
 	
 	HISTORY_MONKS(
@@ -55,8 +56,13 @@ public enum GreenPlayerCard implements Card {
 			(player, game) -> {
 				System.out.println("Playing text -> getting four cards from discard pile");
 				DiscardPile pile = game.getDiscardPile();
+				if(pile.size() == 0) {
+					System.out.println("Discard pile is 0");
+					return;
+				}
 				pile.shuffle();
 				game.drawDiscardCards(player, 4);
+				System.out.println("Drew 4 cards from discard pile");
 			},
 			new ArrayList<Symbol>() {{
 				add(Symbol.PLACE_MINION);		
@@ -64,7 +70,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			2
+			2,
+			// DESC
+			"SCROLL: SHUFFLE DISCARD PILE AND DRAW FOUR CARDS RANDOMLY"
 	),
 	
 	HEX(
@@ -82,7 +90,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			3
+			3,
+			// DESC
+			"SCROLL: TAKE 3 CARDS FROM DRAW DECK"
 	),
 	
 	HERE_N_NOW(
@@ -97,24 +107,27 @@ public enum GreenPlayerCard implements Card {
 				int dieRoll = Die.getDie().roll();
 				System.out.println("Dice rolled: " + dieRoll);
 
-				TextUserInterface textUI = new TextUserInterface();
-				if(dieRoll == 7) {
-					Collection<Player> players = game.getPlayers();
-					Map<Color, Player> playerMap = new HashMap<Color, Player>();
-					for(Player p : players) {
-						if(p.getColor() == player.getColor()) continue;
-						if(p.getMoney() < 3) continue;
-						playerMap.put(p.getColor(), p);
+				//TextUserInterface textUI = new TextUserInterface();
+				TextUserInterface textUI = TextUserInterface.getUI();
+				
+				if(dieRoll >= 7) {
+					Map<Color, Player> players = game.getPlayersMap();
+					
+						
+					ArrayList<Color> excludeList = new ArrayList<Color>();
+					excludeList.add(player.getColor());
+					for(Player p: players.values()) {
+						if(p.getMoney() < 3) excludeList.add(p.getColor());
 					}
-					if(playerMap.size() == 0 ) {
-						System.out.println("All players are broke.");
+					
+					Player chosenPlayer = textUI.getPlayer(players, excludeList, true);
+					if(chosenPlayer == null) {
 						return;
 					}
-					Player chosenPlayer = textUI.getPlayer(playerMap);
+					
 					chosenPlayer.decreaseMoney(3);
 					player.increaseMoney(3);
-					game.notifyInterrupt(Interrupt.TAKE_MONEY, chosenPlayer, player, 3);
-					
+
 					
 				} else if(dieRoll == 1) {
 					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
@@ -132,7 +145,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			4
+			4,
+			// DESC
+			"SCROLL: ROLL DICE IF 7 OR MORE TAKE 3$ FROM PLAYER OF YOUR CHOICE. IF 1 REMOVE ONE OF YOUR MINIONS"
 	),
 	
 	HARRY_KING(
@@ -144,7 +159,8 @@ public enum GreenPlayerCard implements Card {
 				add(Symbol.PLACE_MINION);
 			}},
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
+//				TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 				
 				// Find out if player has cards to play
 				Set<GreenPlayerCard> playerCards = player.getPlayerCards();
@@ -178,7 +194,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			5
+			5,
+			// DESC
+			"SCROLL: DISCARD CARDS AND TAKE 2$ FOR EACH DISCARDED CARD"
 	), 
 	
 	HARGAS_HOUSE_OF_RIBS(
@@ -190,7 +208,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			3,
 			// ID
-			6
+			6,
+			// DESC
+			""
 	),
 	
 	MR_GRYLE(
@@ -202,7 +222,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			1,
 			// ID
-			7
+			7,
+			// DESC
+			""
 	),
 	
 	THE_PEELED_NUTS(
@@ -213,7 +235,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			8
+			8,
+			// DESC
+			""
 	),
 	
 	THE_OPERA_HOUSE(
@@ -235,7 +259,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			9
+			9,
+			// DESC
+			"SCROLL: EARN 1$ FOR EACH MINION IN ISLE OF GODS"
 	),
 	
 	NOBBY_NOBBS(
@@ -243,18 +269,22 @@ public enum GreenPlayerCard implements Card {
 			 * Take $3 from a player of your choice.
 			 */
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
+//				TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 				Map<Color,Player> myPlayersMap = game.getPlayersMap();
 				
-				Player choosenPlayer = UI.getPlayer(myPlayersMap);
-				while(choosenPlayer == player) {
-					System.out.println("You cannot choose yourself!");
-					choosenPlayer = UI.getPlayer(myPlayersMap);
+				ArrayList<Color> excludeList = new ArrayList<Color>();
+				excludeList.add(player.getColor());
+				
+				
+				Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+				if(choosenPlayer == null) {
+					return;
 				}
+				
 				if(choosenPlayer.decreaseMoney(3)){
 					player.increaseMoney(3);
-					game.notifyInterrupt(Interrupt.TAKE_MONEY, choosenPlayer, player, 3);
-				}
+		}
 				else{
 					System.out.println("That Player don't have $3, sorry action can't be completed");
 				}
@@ -265,7 +295,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			10
+			10,
+			// DESC
+			"SCROLL: TAKE 3$ FROM A PLAYER OF YOUR CHOICE"
 	),
 	
 	MODO(
@@ -273,7 +305,8 @@ public enum GreenPlayerCard implements Card {
 			 * Discard one card.
 			 */
 			(player, game) -> {
-				TextUserInterface UI = new TextUserInterface();
+			//	TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
 				Set<GreenPlayerCard> playerCards = player.getPlayerCards();
 				if(playerCards.size() == 1) {
 					System.out.println("Only have 1 card and thats modo, so can't discard one");
@@ -299,7 +332,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			11
+			11,
+			// DESC
+			"SCROLL: DISCARD A CARD"
 	),
 	
 	THE_MENDED_DRUM(
@@ -311,7 +346,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			2,
 			// ID
-			12
+			12,
+			// DESC
+			""
 	),
 	
 	LIBRARIAN(
@@ -327,7 +364,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			13
+			13,
+			// DESC
+			"SCROLL: TAKE 4 CARDS FROM DRAW DECK"
 	),
 	
 	LEONARD_OF_QUIRM(
@@ -343,7 +382,9 @@ public enum GreenPlayerCard implements Card {
 			// Money
 			0,
 			// ID
-			14
+			14,
+			// DESC
+			"SCROLL: TAKE 4 CARDS FROM DRAW DECK"
 	),
 	
 	
@@ -356,7 +397,9 @@ public enum GreenPlayerCard implements Card {
 			boolean haveCards = true;
 			int discardedCount=0;
 			while (haveCards && player.getPlayerCards().size() > 1) {
-				TextUserInterface UI = new TextUserInterface();
+			//	TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
+				
 				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
 						"Choose a card to discard: ");
 				while(discardCard.getID() == 15) {
@@ -388,7 +431,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		15
+		15,
+		// DESC
+		"SCROLL: DISCARD CARDS AND TAKE 1$ FOR EACH DISCARDED CARD"
 	),
 	
 	SACHARISSA_CRIPSLOCK(
@@ -409,7 +454,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		16
+		16,
+		// DESC
+		"SCROLL: EARN 1$ FOR EACH TROUBLE MARKER"
 	),
 	
 	ROSIE_PALM(
@@ -421,7 +468,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);	
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap;
 			myPlayersMap = game.getPlayersMap();
 			
@@ -444,15 +492,18 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
-			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			for(Player p: myPlayersMap.values()) {
+				if(p.getMoney() < 2) {
+					excludeList.add(p.getColor());
+				}
 			}
-			while(choosenPlayer.getMoney() < 2) {
-				System.out.println("This player does not have 2$");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null) {
+				return;
 			}
 
 			// Make selection, cannot get rid of this card
@@ -466,13 +517,14 @@ public enum GreenPlayerCard implements Card {
 			choosenPlayer.addPlayerCard(card);
 			choosenPlayer.decreaseMoney(2);
 			player.increaseMoney(2);
-			game.notifyInterrupt(Interrupt.CARD_FOR_MONEY, choosenPlayer, player, card, 2);
 				
 		},
 		// Money
 		0,
 		// ID
-		17
+		17,
+		// DESC
+		"SCROLL: EXCAHNGE A CARD FOR 2$ FROM ANOTHER PLAYER"
 	),
 
 	RINCEWIND(
@@ -507,7 +559,9 @@ public enum GreenPlayerCard implements Card {
 			}
 			
 			// Get remove minion area
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
 			BoardArea removeArea = UI.getAreaChoice(troubleMinionAreas, "Choose area to remove minion", "Choose area", true);
 			// Get nighbouring areas
 			Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
@@ -524,7 +578,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		18
+		18,
+		// DESC
+		"SCROLL: MOVE MINION IN TROUBLE AREA"
 	),
 	
 	THE_ROYAL_MINT(
@@ -536,7 +592,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		5,
 		// ID
-		19
+		19,
+		// DESC
+		""
 	),
 	
 	
@@ -562,11 +620,19 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
-			TextUserInterface UI = new TextUserInterface();
-			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
-			while(selectedPlayer.getColor() == player.getColor() || selectedPlayer.getPlayerCards().size() < 2) {
-				System.out.println("You cannot select yourself or a player with less than 2 cards");
-				selectedPlayer = UI.getPlayer(game.getPlayersMap());
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			for(Player p: game.getPlayersMap().values()) {
+				if(p.getPlayerCards().size() < 2){
+					excludeList.add(p.getColor());
+				}
+			}
+			Player selectedPlayer = UI.getPlayer(game.getPlayersMap(), excludeList, true);
+			if(selectedPlayer == null) {
+				return;
 			}
 			
 			for(int i =0; i<2; i++){
@@ -574,13 +640,14 @@ public enum GreenPlayerCard implements Card {
 				GreenPlayerCard chosenCard = UI.getCardChoice(selectedPlayer.getPlayerCards(), selectedPlayer.getName() + " choose a card to give away");
 				player.addPlayerCard(chosenCard);
 				selectedPlayer.removePlayerCard(chosenCard);
-				//game.notifyInterrupt(Interrupt.REMOVE_CARD, selectedPlayer, 2);
 			}
 		},
 		// Money
 		0,
 		// ID
-		20
+		20,
+		// DESC
+		"SCROLL: ANOTHER PLAYER MUST GIVE YOU TWO CARDS"
 	),
 	
 	PINK_PUSSYCAT_CLUB(
@@ -592,7 +659,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		3,
 		// ID
-		21
+		21,
+		// DESC
+		""
 	),
 	
 	ZORGO_THE_RETRO_PHRENOLOGIST(
@@ -613,7 +682,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		22
+		22,
+		// DESC
+		"SCROLL: EXCHANGE PERSONALITY CCARD WITH ONE FROM DECK"
 			
 	),
 	
@@ -626,9 +697,21 @@ public enum GreenPlayerCard implements Card {
 		 * They cannot get rid of this card.	
 		 */
 		(player, game) -> {
-//			TextUserInterface UI = new TextUserInterface();
-//			Player selectedPlayer = UI.getPlayer(game.getPlayersMap());
-//			selectedPlayer.addPlayerCard(DR_WHIEFACE);
+			TextUserInterface UI = TextUserInterface.getUI();
+			Map<Color,Player> myPlayersMap;
+			myPlayersMap = game.getPlayersMap();
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			// Chose a valid player
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+
+			if(UI.getUserYesOrNoChoice("do you want to give "+player.getName()+" $5? (other wise your card count will be reduced)")){
+				if(choosenPlayer.hasMoney(5)){
+					choosenPlayer.decreaseMoney(5);
+					player.increaseMoney(5);
+				}
+			}
+			else choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -636,7 +719,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		23
+		23,
+		// DESC
+		"SCROLL: ANOTHER PLAYER MUST GIVE YOU 5$ OR TAKE THIS CARD AND NEVER DISCARD IT"
 			
 	),
 	
@@ -648,13 +733,13 @@ public enum GreenPlayerCard implements Card {
 		 * You cannot be affected by the text on a card 
 		 * played by another player
 		 */
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: YOU CALLED WALLACE SONKY TEXT");			
-		},
+		(player, game) -> {},
 		// Money
 		0,
 		// ID
-		24
+		24,
+		// DESC
+		"SCROLL: INTERRUPT A PLAYER PLAYING SCROLL"
 	),
 	
 	THE_SEAMSTRESS_GUILD(
@@ -664,7 +749,9 @@ public enum GreenPlayerCard implements Card {
 			 * one of your cards.  They must 
 			 * give you 2$ in return
 			 */
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
+			
 			Map<Color,Player> myPlayersMap;
 			myPlayersMap = game.getPlayersMap();
 			
@@ -687,17 +774,18 @@ public enum GreenPlayerCard implements Card {
 				return;
 			}
 			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			for(Player p: myPlayersMap.values()) {
+				if(p.getMoney() < 2) excludeList.add(p.getColor());
+			}
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null ){
+				return;
 			}
-			while(choosenPlayer.getMoney() < 2) {
-				System.out.println("This player does not have 2$");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
-			}
-
+			
 			// Make selection, cannot get rid of this card
 			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			while(card.getID() == 17) {
@@ -716,7 +804,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		25
+		25,
+		// DESC
+		"SCROLL: EXCAHNGE YOUR CARD FOR ANOTHER PLAYERS 2$"
 	),
 	
 	MR_PIN_AND_MR_TULIP(
@@ -728,7 +818,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		1,
 		// ID
-		26
+		26,
+		// DESC
+		""
 	),
 	
 	THE_THIEVES_GUILD(
@@ -755,7 +847,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		27
+		27,
+		// DESC
+		"SCROLL: TAKE 2$ FROM EVERY OTHER PLAYER"
 			
 	),
 	MR_BOGGIS(
@@ -778,7 +872,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		28
+		28,
+		// DESC
+		"SCROLL: TAKE 2$ FROM EVERY OTHER PLAYER"
 	),
 	MR_BENT(
 		new ArrayList<Symbol>(){{
@@ -786,13 +882,16 @@ public enum GreenPlayerCard implements Card {
 		}},
 		(player, game) -> {
 			if(game.getBank().decreaseBalance(10)){
-				if (player.increaseMoney(10)) player.isHasMrBent();
+				game.givePlayerMoneyFromBank(player,10);
+				game.addPlayerCard(player,game.getCurrentCardInPlay());
 			}
 		},
 		// Money
 		0,
 		// ID
-		29
+		29,
+		// DESC
+		"SCROLL: LOAD THIS CARD FOR 10$ MUST REPAY AT END OF GAME"
 	),
 	
 	THE_BEGGARS_GUILD(
@@ -800,24 +899,32 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+			//calling the singleton
+			TextUserInterface UI = TextUserInterface.getUI();
+			
+			//Get a list of player and exclude self from it
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
-				
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null ) {
+				 return;
 			}
+			
 			for (int i=0;i<2;i++){
-				if(!(player.addPlayerCard(UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away"))))
-					System.out.println("Something went wrong, card was not give away");
+				GreenPlayerCard giveAwayCard = UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away");
+				game.removePlayerCard(giveAwayCard,choosenPlayer);
+				game.addPlayerCard(player,giveAwayCard);
 			}
 		},
 		// Money
 		0,
 		// ID
-		30
+		30,
+		// DESC
+		"SCROLL: ANOTHER PLAYER MUST GIVE YOU TWO OF THEIR CARDS"
 	),
 
 	THE_BANK_OF_ANKH_MORPORK(
@@ -825,15 +932,15 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_BANK_OF_ANKH_MORPORK: place this card infront of you and "
-				+ "take $10 loan from the bank,"
-				+ " at the end of the game you must pay "
-				+ "back $12 or loose 15 points");
+			game.givePlayerMoneyFromBank(player,10);
+			game.addPlayerCard(player,game.getCurrentCardInPlay());
 		},
 		// Money
 		0,
 		// ID
-		31
+		31,
+		// DESC
+		"SCROLL: TAKE 10$ LOAN FROM THE BANK, MAY PAY BACK AT END OF GAME"
 	),
 	
 	THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY(
@@ -841,14 +948,14 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+			//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			for(Player p: game.getPlayers()){
 				boolean choiceMade = false;
 				while(!choiceMade){
 					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")){
-						if(!(player.addPlayerCard(UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"))))
-							System.out.println("Something went wrong, card was not give away");
-						else choiceMade = true;
+						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
+						choiceMade = true;
 					};
 					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")){
 						   if(p.getMoney()>=1) {
@@ -863,7 +970,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		32
+		32,
+		// DESC
+		"SCROLL: EACH PLAYER MUST GIVE YOU 1$ OR ONE OF THEIR CARDS"
 	),
 	
 	SERGANT_ANGUA(
@@ -877,7 +986,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		33
+		33,
+		// DESC
+		""
 	),
 	
 	THE_AGONY_AUNTS(
@@ -892,7 +1003,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		2,
 		// ID
-		34
+		34,
+		// DESC
+		""
 	),
 	
 	/** 
@@ -911,7 +1024,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		35
+		35,
+		// DESC
+		"SCROLL: EARN 1$ FOR EACH MINION IN ISLES OF GODS"
 	),
 	
 	THE_DUCKMAN(
@@ -922,14 +1037,34 @@ public enum GreenPlayerCard implements Card {
 			//+ "another player from one area "
 			//+ "to an adjacent area");
 			
-		TextUserInterface UI = new TextUserInterface();
+		//TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 		Map<Color,Player> myPlayersMap = game.getPlayersMap();
-			
+		Map<Color, Player> playerWithMinion = new HashMap<Color, Player>();
+		
+		for(Player p : myPlayersMap.values()) {
+			if(p.getColor() == player.getColor()) continue;
+			if(game.getAreasWithPlayerMinions(p).size() == 0) continue;
+			else {
+				playerWithMinion.put(p.getColor(), p);
+			}
+		}
+		
+		if(playerWithMinion.size() == 0) {
+			System.out.println("No players have minions you can remove");
+			return;
+		}
+		
+		
+		ArrayList<Color> excludeList = new ArrayList<Color>();
+		excludeList.add(player.getColor());
+		
+		
 		// Chose a valid player
-		Player choosenPlayer = UI.getPlayer(myPlayersMap);
-		while(choosenPlayer == player) {
-			System.out.println("You cannot choose yourself!");
-			choosenPlayer = UI.getPlayer(myPlayersMap);
+		System.out.println("Choose player to remove minion from:");
+		Player choosenPlayer = UI.getPlayer(playerWithMinion, excludeList, true);
+		if(choosenPlayer == null) {
+			return;
 		}
 			
 		// Ensure player has minions
@@ -945,21 +1080,23 @@ public enum GreenPlayerCard implements Card {
 		
 		// Get nighbouring areas
 		Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
-		ArrayList<Integer> excludeList = new ArrayList<Integer>();
-		excludeList.add(removeArea.getArea().getAreaCode());
+		ArrayList<Integer> excludeListArea = new ArrayList<Integer>();
+		excludeListArea.add(removeArea.getArea().getAreaCode());
 		
 		// get placement area
-		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeListArea);					
 		
 		// Actually do the movement
-		removeArea.removeMinion(player);
-		chosenArea.addMinion(player);
+		removeArea.removeMinion(choosenPlayer);
+		chosenArea.addMinion(choosenPlayer);
 								
 		},
 		// Money
 		0,
 		// ID
-		36
+		36,
+		// DESC
+		"SCROLL: MOVE ANOTHER PLAYER MINION"
 	),
 	
 	/**
@@ -974,22 +1111,25 @@ public enum GreenPlayerCard implements Card {
 			if(playerCards.size() < 3) {
 				System.out.println("You do not have enough cards");
 			} else {
-				TextUserInterface UI = new TextUserInterface();
+				//TextUserInterface UI = new TextUserInterface();
+				for(int i=0;i<2;++i){
+					TextUserInterface UI = TextUserInterface.getUI();
 
-				GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
-				while(c.getID() == 37) {
-					System.out.println("You cannot play this card");
-					c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
-					
+					GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+					while(c.getID() == 37) {
+						System.out.println("You cannot play this card");
+						c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+					}
+					UI.playCard(c, player);
 				}
-
-				UI.playCard(c, player);
 			}
 		},
 		// Money 
 		0,
 		// ID
-		37
+		37,
+		// DESC
+		"SCROLL: PLAY ANY TWO OTHER CARDS FROM HAND"
 	),
 	
 	@SuppressWarnings("resource")
@@ -1008,8 +1148,11 @@ public enum GreenPlayerCard implements Card {
 			int dieRoll = Die.getDie().roll();
 			System.out.println("Dice rolled: " + dieRoll);
 
-			TextUserInterface textUI = new TextUserInterface();
-			if(dieRoll == 7) {				
+//			TextUserInterface textUI = new TextUserInterface();
+			TextUserInterface textUI = TextUserInterface.getUI();
+			
+			if(dieRoll >= 7) {	
+				System.out.println("Giving 4$");
 				game.givePlayerMoneyFromBank(player,4);							
 			} 
 			else if(dieRoll == 1) {
@@ -1039,14 +1182,16 @@ public enum GreenPlayerCard implements Card {
 				default: System.out.println("\tPlease enter your choice:");
 				    break;
 				}
-			}	
-			
-			System.out.println("No Action");
+			} else {	
+				System.out.println("No Action");
+			}
 		},
 		// Money
 		0,
 		// ID
-		38
+		38,
+		// DESC
+		"SCROLL: DICE ROLL 7+ TAKE 4$ FROM BANK, DICE ROLL 1 PAY 2$ OR REMOVE YOUR MINION"
 	),
 	
 	DR_CRUCES(
@@ -1060,7 +1205,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		3,
 		// ID
-		39
+		39,
+		// DESC
+		""
 	),
 	
 	CAPTAIN_CARROT(
@@ -1075,7 +1222,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		1,
 		// ID 
-		40
+		40,
+		// DESC
+		""
 	),
 	
 	MRS_CAKE(
@@ -1090,7 +1239,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		2,
 		// ID
-		41
+		41,
+		// DESC
+		"SCROLL: LOOK AT ALL BUT ONE PERSONALITY CARDS"
 	),
 	
 	GROAT(
@@ -1103,7 +1254,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		42
+		42,
+		// DESC
+		""
 	),
 	
 	GIMLETS_DWARF_DELICATESSEN(
@@ -1117,7 +1270,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		3,
 		// ID
-		43
+		43,
+		// DESC
+		""
 	),
 	
 	GASPODE(
@@ -1131,7 +1286,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		44
+		44,
+		// DESC
+		"SCROLL: INTERRUPT PLAYER MOVING YOUR MINION"
 	),
 	
 	THE_FRESH_START_CLUB(
@@ -1144,7 +1301,9 @@ public enum GreenPlayerCard implements Card {
 		// Money
 		0,
 		// ID
-		45
+		45,
+		// DESC
+		""
 	),
 	
 	FOUL_OLE_RON(
@@ -1155,18 +1314,38 @@ public enum GreenPlayerCard implements Card {
 			//System.out.println("NOT IMPLEMENTED: FOUL_OLE_RON: move a minion belonging to"
 			//	+ "another player from one area"
 			//	+ "to an adjacent area");
-			
-			
-			TextUserInterface UI = new TextUserInterface();
+
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
-				
-			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Map<Color, Player> playerWithMinion = new HashMap<Color, Player>();
+			
+			for(Player p : myPlayersMap.values()) {
+				if(p.getColor() == player.getColor()) continue;
+				if(game.getAreasWithPlayerMinions(p).size() == 0) continue;
+				else {
+					playerWithMinion.put(p.getColor(), p);
+				}
 			}
-				
+			
+			if(playerWithMinion.size() == 0) {
+				System.out.println("No players have minions you can remove");
+				return;
+			}
+			
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
+			
+			// Chose a valid player
+			System.out.println("Choose player to remove minion from:");
+			Player choosenPlayer = UI.getPlayer(playerWithMinion, excludeList, true);
+			
+			if(choosenPlayer == null) {
+				return;
+			}
+			
 			// Ensure player has minions
 			// if so remove it and place it on adjacent area
 			Map<Integer, BoardArea> minionAreas = game.getAreasWithPlayerMinions(choosenPlayer);
@@ -1180,21 +1359,24 @@ public enum GreenPlayerCard implements Card {
 			
 			// Get nighbouring areas
 			Map<Integer, BoardArea> neighbours = game.getNeighbours(removeArea);
-			ArrayList<Integer> excludeList = new ArrayList<Integer>();
-			excludeList.add(removeArea.getArea().getAreaCode());
+			ArrayList<Integer> excludeListArea = new ArrayList<Integer>();
+			excludeListArea.add(removeArea.getArea().getAreaCode());
 			
 			// get placement area
-			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);					
+			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeListArea);					
 			
 			// Actually do the movement
-			removeArea.removeMinion(player);
-			chosenArea.addMinion(player);		
+			removeArea.removeMinion(choosenPlayer);
+			chosenArea.addMinion(choosenPlayer);
+						
 			
 		},
 		// Money
 		0,
 		// ID
-		46
+		46,
+		// DESC
+		"SCROLL: MOVE A PLAYERS MINION"
 	),
 	
 	/**
@@ -1208,16 +1390,21 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_MINION);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
 			
 			System.out.println("Choose a player to give you 5 dollars");
 			
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null) {
+				return;
 			}
 			
 			boolean hasMoney = choosenPlayer.getMoney() > 5;
@@ -1242,15 +1429,22 @@ public enum GreenPlayerCard implements Card {
 					//TODO throw error
 					System.out.println("ISSUE IN THE FOOLS GUILD");
 				}
-				game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
-				choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
-				game.removePlayerCard(game.getCurrentCardInPlay(), player);
+				
+				// Give card to other player and say he cant get rid of it
+				// Unless currentPlayer got this card via this means
+				if(!player.getUnplayableCards().contains(game.getCurrentCardInPlay())){
+					game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
+					choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
+					game.removePlayerCard(game.getCurrentCardInPlay(), player);
+				}
 			}
 		},
 		// Money
 		0,
 		// ID
-		47
+		47,
+		// DESC
+		"SCROLL: 5$ FROM PLAYER OR FOREVER HAVE THIS CARD"
 	),
 	
 	/**
@@ -1262,16 +1456,21 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+//			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
 			
 			System.out.println("Choose a player to give you 5 dollars");
 			
+			
+			ArrayList<Color> excludeList = new ArrayList<Color>();
+			excludeList.add(player.getColor());
+			
+			
 			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap);
-			while(choosenPlayer == player) {
-				System.out.println("You cannot choose yourself!");
-				choosenPlayer = UI.getPlayer(myPlayersMap);
+			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+			if(choosenPlayer == null) {
+				return;
 			}
 			
 			
@@ -1280,8 +1479,10 @@ public enum GreenPlayerCard implements Card {
 			if(!hasMoney) {
 				System.out.println("Damn, " + choosenPlayer.getName() + " doesn't have 5 dollars");
 			} else {
+				System.out.println(choosenPlayer.getColor().getAnsi());
 				wantsToGive = UI.getUserYesOrNoChoice(choosenPlayer.getName() + " do you want to give " + player.getName() + 
 						" $5");
+				System.out.println(game.getPlayerOfCurrentTurn().getColor().getAnsi());
 				if(wantsToGive) {
 					choosenPlayer.decreaseMoney(5);
 					player.increaseMoney(5);
@@ -1297,22 +1498,14 @@ public enum GreenPlayerCard implements Card {
 					BoardArea chosenArea = UI.getAreaChoice(buildings, "Select an area: ", "Choice: ");
 					chosenArea.removeBuilding();
 				}
-				
-				
-				
-				
 			}
-			
-			
-			
-			
-			
-			
 		},
 		// Money
 		0,
 		// ID
-		48
+		48,	
+		// DESC
+		"SCROLL: 5$ FROM PLAYER OR REMOVE BUILDING"
 	)
 	;
 	
@@ -1326,25 +1519,27 @@ public enum GreenPlayerCard implements Card {
 	
 	private Integer id;
 	
+	private String desc;
 	
 	
-	
-	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text, Integer money, Integer id) {
+	GreenPlayerCard(List<Symbol> symbols, BiConsumer<Player, Game> text, Integer money, Integer id, String desc) {
 		this.symbols = symbols;
 		this.text = text;
 		this.textFirst = false;
 		this.money = money;
 		this.id = id;
+		this.desc = desc;
 	}
 	
 	
 	
-	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols, Integer money, Integer id) {
+	GreenPlayerCard(BiConsumer<Player, Game> text, List<Symbol> symbols, Integer money, Integer id, String desc) {
 		this.symbols = symbols;
 		this.text = text;
 		this.textFirst = true;
 		this.money = money;
 		this.id = id;
+		this.desc = desc;
 	}
 	
 
@@ -1369,4 +1564,27 @@ public enum GreenPlayerCard implements Card {
 		return this.id;
 	}
 	
+	public String getDesc() {
+		return this.desc;
+	}
+	
+	public String toString() {
+		String rtn =  name() + "\n";
+		if(textFirst) {
+			rtn += "\t" +getDesc() + "\n";
+		}
+		for(Symbol s: getSymbols()) {
+			rtn += "\t"+s + "\n";
+		}
+		if(!textFirst) {
+			rtn += "\t"+getDesc() + "\n";
+		}
+		rtn += "";
+	
+		return rtn;
+	}
+	
+	
+
+
 }

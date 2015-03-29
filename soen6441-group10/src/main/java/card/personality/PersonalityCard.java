@@ -20,26 +20,55 @@ import card.Card;
 public enum PersonalityCard implements Card {
 	
 	LORD_VETINARI((playerCount, player, game) ->  
-		game.getTotalMinionCountForPlayer(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount)
+		game.getTotalMinionCountForPlayer(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount),
+		// DESC
+		"WIN BY CONTROLLING 11 AREAS (2 PLAYERS), 10 AREAS (3 PLAYERS), 9 AREAS (4 PLAYERS)"
+		),
+	
+	LORD_SELACHII(WinningConditionHelper::hasWonByControlledAreas,
+	// DESC
+	"WIN BY CONTROLLING 7 AREAS (2 PLAYERS), 5 AREAS (3 PLAYERS), 4 AREAS (4 PLAYERS)"
 	),
+
 	
-	LORD_SELACHII(WinningConditionHelper::hasWonByControlledAreas),
+	LORD_RUST(WinningConditionHelper::hasWonByControlledAreas,
+	// DESC
+	"WIN BY CONTROLLING 7 AREAS (2 PLAYERS), 5 AREAS (3 PLAYERS), 4 AREAS (4 PLAYERS)"
+	),
+
 	
-	LORD_RUST(WinningConditionHelper::hasWonByControlledAreas),
+	LORD_DE_WORDE(WinningConditionHelper::hasWonByControlledAreas,
+	// DESC
+	"WIN BY CONTROLLING 7 AREAS (2 PLAYERS), 5 AREAS (3 PLAYERS), 4 AREAS (4 PLAYERS)"
+	),
+
 	
-	LORD_DE_WORDE(WinningConditionHelper::hasWonByControlledAreas),
+	DRAGON_KING_OF_ARMS((playerCount, player, game) -> game.getTotalNumberOfTroubleMarkers() == 8,
+	// DESC
+	"WIN BY 8+ TROUBLE MARKERS ON THE BOARD"
+	),
+
 	
-	DRAGON_KING_OF_ARMS((playerCount, player, game) -> game.getTotalNumberOfTroubleMarkers() == 8),
+	CHRYSOPRASE((playerCount, player, game) -> player.getTotalWorth() >= 50,
+	// DESC
+	"WIN BY ACCUMULATING 50$ (MONEY AND BUILDINGS AFTER LOANS)"
+	),
+
 	
-	CHRYSOPRASE((playerCount, player, game) -> player.getTotalWorth() >= 50),
-	
-	COMMANDER_VIMES((playerCount, player, game) -> !game.hasPlayerCardsLeft());
+	COMMANDER_VIMES((playerCount, player, game) -> !game.hasPlayerCardsLeft(),
+	// DESC
+	"WIN BY NO MORE PLAYER CARDS"
+	)
+
 	;
 	
 	private WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker;
 	
-	private PersonalityCard(WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker) {
+	private String desc;
+	
+	private PersonalityCard(WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker, String desc_) {
 		this.winningConditionChecker = winningConditionChecker;
+		this.desc = desc_;
 	}
 	
 	public WinningCondition<Integer, Player, Game, Boolean> getWinningConditionChecker() {
@@ -64,6 +93,10 @@ public enum PersonalityCard implements Card {
 					name());
 		}
 		return hasPlayerWon;
+	}
+	
+	public String getDesc() {
+		return desc;
 	}
 	
 	/**
