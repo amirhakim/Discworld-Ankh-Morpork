@@ -91,7 +91,6 @@ public enum PersonalityCard implements Card {
 	
 	/**
 	 * This can be used as an aid for lookups as needed by different personality cards.
-	 * @author gkentr
 	 */
 	private static class WinningConditionHelper {
 		

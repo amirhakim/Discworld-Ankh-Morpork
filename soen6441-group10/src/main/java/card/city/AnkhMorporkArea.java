@@ -19,41 +19,47 @@ import card.player.Symbol;
 
 
 /**
- * <b>An enumeration of all the areas available in the game. Each area is uniquely
- * identified by a number (which is visible on the physical game board).</b><br>
+ * An enumeration of all the areas available in the game. Each area is uniquely
+ * identified by a number (which is visible on the physical game board).<br>
  * 
- * <b>Note that this area implements the Card marker interface, because it serves as
+ * Note that this area implements the Card marker interface, because it serves as
  * the enumeration of all the City Area cards in the game while {@link CityAreaCard}
- * actually bears the state of the card (played or not, playable more than once etc.).</b>
+ * actually bears the state of the card (played or not, playable more than once etc.).
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0
  */
 public enum AnkhMorporkArea implements Card {
 
-	DOLLY_SISTERS(1, 6),
+	DOLLY_SISTERS(1, 6, "Once per turn you can pay $3 and place one of your minions "
+			+ "in Dolly Sisters or an adjacent area."),
 
-	UNREAL_ESTATE(2, 18),
+	UNREAL_ESTATE(2, 18, "Once per turn you can take a card and then discard a card."),
 
-	DRAGONS_LANDING(3, 12),
+	DRAGONS_LANDING(3, 12, "Once per turn you can take $2 from the bank."),
 
-	SMALL_GODS(4, 18),
+	SMALL_GODS(4, 18, "Whenever one of your pieces is affected by a random event, you"
+			+ "can pay $3 to ignore the effect ($3 for each piece)."),
 
-	THE_SCOURS(5, 6),
+	THE_SCOURS(5, 6, "Once per turn you can discard one card and take $2 from the bank."),
 
-	THE_HIPPO(6, 12),
+	THE_HIPPO(6, 12, "Once per turn you can take $2 from the bank."),
 
-	THE_SHADES(7, 6),
+	THE_SHADES(7, 6, "Once per turn your may place a trouble marker in or adjacent "
+			+ "to the Shades - there must be at least one minion in the area where "
+			+ "the marker is placed."),
 
-	DIMWELL(8, 6),
+	DIMWELL(8, 6, "Once per turn you can pay $3 and place one of your minions "
+			+ "in Dimwell or an adjacent area."),
 
-	LONGWALL(9, 12),
+	LONGWALL(9, 12, "Once per turn you can take $1 from the bank."),
 
-	ISLE_OF_GODS(10, 12),
+	ISLE_OF_GODS(10, 12, "Once per turn you can pay $2 and remove a trouble marker "
+			+ "from the board."),
 
-	SEVEN_SLEEPERS(11, 18),
+	SEVEN_SLEEPERS(11, 18, "Once per turn you can take $3 from the bank."),
 
-	NAP_HILL(12, 12);
+	NAP_HILL(12, 12, "Once per turn you can take $1 from the bank.");
 
 	private static final int MINION_COST = 3;
 	
@@ -84,7 +90,7 @@ public enum AnkhMorporkArea implements Card {
 			player.addPlayerCard(card.get());
 			
 			TextUserInterface UI = new TextUserInterface();
-			GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+			GreenPlayerCard discardCard = UI.getPlayerCardChoice(player.getPlayerCards(), 
 					"Choose a card to discard: ");
 			player.removePlayerCard(discardCard);
 		});
@@ -111,7 +117,7 @@ public enum AnkhMorporkArea implements Card {
 		cityCardFunctionMap.put(THE_SCOURS, (player, game) -> {
 			TextUserInterface UI = new TextUserInterface();
 			Collection<GreenPlayerCard> playerCards = player.getPlayerCards();
-			GreenPlayerCard discardCard = UI.getCardChoice(playerCards, "Choose a card to discard: ");
+			GreenPlayerCard discardCard = UI.getPlayerCardChoice(playerCards, "Choose a card to discard: ");
 			player.removePlayerCard(discardCard);
 			System.out.println(discardCard + " removed.");
 
@@ -187,10 +193,13 @@ public enum AnkhMorporkArea implements Card {
 	private final int areaCode;
 
 	private final int buildingCost;
+	
+	private final String cityCardDescription;
 
-	private AnkhMorporkArea(int code, int cost) {
+	private AnkhMorporkArea(int code, int cost, String cityCardDesc) {
 		areaCode = code;
 		buildingCost = cost;
+		cityCardDescription = cityCardDesc;
 	}
 
 	public int getAreaCode() {
@@ -201,11 +210,15 @@ public enum AnkhMorporkArea implements Card {
 		return buildingCost;
 	}
 	
+	public String getCityCardDescription() {
+		return cityCardDescription;
+	}
+	
 	public static AnkhMorporkArea forCode(int areaCode) {
 		return codeToAreaMap.get(areaCode);
 	}
 	
-	public static BiConsumer<Player, Game> forArea(AnkhMorporkArea a) {
+	public static BiConsumer<Player, Game> getAreaAction(AnkhMorporkArea a) {
 		return cityCardFunctionMap.get(a);
 	}
 
@@ -274,4 +287,9 @@ public enum AnkhMorporkArea implements Card {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return name() + " [code = " + areaCode + ", buildingCost = " + buildingCost 
+				+ ", cityCardAction = " + cityCardDescription + "]";
+	}
 }

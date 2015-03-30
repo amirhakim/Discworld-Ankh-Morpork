@@ -7,32 +7,29 @@ import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
 import util.Color;
-import util.Interrupt;
 import card.Card;
 import card.city.AnkhMorporkArea;
 
 
-@SuppressWarnings("serial")
 /**
- * <b>Enum for player cards
+ * Enum for player cards
  * Each ENUM will have a list of symbols available for that card
- * Some cards will also have text function (bottom of a card)</b>
+ * Some cards will also have text function (bottom of a card)
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0
  */
-
+@SuppressWarnings("serial")
 public enum GreenPlayerCard implements Card {
-
 
 	INIGO_SKIMMER(	
 			new ArrayList<Symbol>() {{
@@ -170,7 +167,7 @@ public enum GreenPlayerCard implements Card {
 				while(playerCards.size() > 1) {
 					GreenPlayerCard discardCard = null;
 					while(discardCard == null || discardCard.getID() == 5) {
-						discardCard = UI.getCardChoice(playerCards, 
+						discardCard = UI.getPlayerCardChoice(playerCards, 
 								"Choose a card to discard: ");
 						// Use game.discardCard instead of player.removePlayerCard
 						if(discardCard.getID() == 5) {
@@ -316,7 +313,7 @@ public enum GreenPlayerCard implements Card {
 				
 				GreenPlayerCard discardCard = null;
 				while(discardCard == null || discardCard.getID() == 11) {
-					discardCard = UI.getCardChoice(playerCards, 
+					discardCard = UI.getPlayerCardChoice(playerCards, 
 							"Choose a card to discard: ");
 					if(discardCard.getID() == 11) {
 						System.out.println("You are playing that card and it cannot be removed");
@@ -400,11 +397,11 @@ public enum GreenPlayerCard implements Card {
 			//	TextUserInterface UI = new TextUserInterface();
 				TextUserInterface UI = TextUserInterface.getUI();
 				
-				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+				GreenPlayerCard discardCard = UI.getPlayerCardChoice(player.getPlayerCards(), 
 						"Choose a card to discard: ");
 				while(discardCard.getID() == 15) {
 					System.out.println("Cannot discard current card!");
-					discardCard = UI.getCardChoice(player.getPlayerCards(), 
+					discardCard = UI.getPlayerCardChoice(player.getPlayerCards(), 
 							"Choose a card to discard: ");
 				}
 				if(game.discardCard(discardCard, player)) discardedCount ++;
@@ -507,10 +504,10 @@ public enum GreenPlayerCard implements Card {
 			}
 
 			// Make selection, cannot get rid of this card
-			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			GreenPlayerCard card = UI.getPlayerCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			while(card.getID() == 17) {
 				System.out.println("Cannot choose current card in player");
-				card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+				card = UI.getPlayerCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			}
 			
 			player.removePlayerCard(card);
@@ -637,7 +634,7 @@ public enum GreenPlayerCard implements Card {
 			
 			for(int i =0; i<2; i++){
 				System.out.println("Important!!! Change palyers - " + selectedPlayer.getName() +" has to choose two of his cards to give away!!");
-				GreenPlayerCard chosenCard = UI.getCardChoice(selectedPlayer.getPlayerCards(), selectedPlayer.getName() + " choose a card to give away");
+				GreenPlayerCard chosenCard = UI.getPlayerCardChoice(selectedPlayer.getPlayerCards(), selectedPlayer.getName() + " choose a card to give away");
 				player.addPlayerCard(chosenCard);
 				selectedPlayer.removePlayerCard(chosenCard);
 			}
@@ -787,10 +784,10 @@ public enum GreenPlayerCard implements Card {
 			}
 			
 			// Make selection, cannot get rid of this card
-			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+			GreenPlayerCard card = UI.getPlayerCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			while(card.getID() == 17) {
 				System.out.println("Cannot choose current card in player");
-				card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
+				card = UI.getPlayerCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			}
 			
 			player.removePlayerCard(card);
@@ -914,7 +911,7 @@ public enum GreenPlayerCard implements Card {
 			}
 			
 			for (int i=0;i<2;i++){
-				GreenPlayerCard giveAwayCard = UI.getCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away");
+				GreenPlayerCard giveAwayCard = UI.getPlayerCardChoice(choosenPlayer.getPlayerCards(),"Choose a card to give away");
 				game.removePlayerCard(giveAwayCard,choosenPlayer);
 				game.addPlayerCard(player,giveAwayCard);
 			}
@@ -954,7 +951,7 @@ public enum GreenPlayerCard implements Card {
 				boolean choiceMade = false;
 				while(!choiceMade){
 					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")){
-						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
+						game.addPlayerCard(p,UI.getPlayerCardChoice(p.getPlayerCards(),"Choose a card to give away"));
 						choiceMade = true;
 					};
 					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")){
@@ -1115,12 +1112,12 @@ public enum GreenPlayerCard implements Card {
 				for(int i=0;i<2;++i){
 					TextUserInterface UI = TextUserInterface.getUI();
 
-					GreenPlayerCard c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+					GreenPlayerCard c = UI.getPlayerCardChoice(player.getPlayerCards(), "Choose a card to play: ");
 					while(c.getID() == 37) {
 						System.out.println("You cannot play this card");
-						c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
+						c = UI.getPlayerCardChoice(player.getPlayerCards(), "Choose a card to play: ");
 					}
-					UI.playCard(c, player);
+					UI.playPlayerCard(c, player);
 				}
 			}
 		},
@@ -1568,6 +1565,7 @@ public enum GreenPlayerCard implements Card {
 		return this.desc;
 	}
 	
+	@Override
 	public String toString() {
 		String rtn =  name() + "\n";
 		if(textFirst) {

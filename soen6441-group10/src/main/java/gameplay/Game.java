@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import util.Color;
@@ -27,21 +28,15 @@ import card.random.RandomEventDeck;
 import error.InvalidGameStateException;
 
 /**
- * <b>This class represents the bulk of the actions available in the game.<br> It sets
+ * This class represents the bulk of the actions available in the game.<br> It sets
  * up the game, and provides a layer of access to the game components for the
- * controller.</b>
+ * controller.
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0
  */
 public class Game {
 
-	/**
-	 * Every time a player cannot pay back for a loan card, 12 points are deducted
-	 * from his/her final score.
-	 */
-	private static final int LOAN_PENALTY = 12;
-	
 	/**
 	 * Each minion on the board gives 5 points.
 	 */
@@ -62,22 +57,22 @@ public class Game {
 	private Map<GreenPlayerCard, Color> interrupts;
 	
 	/**
-	 * <b>For most, if not all, use cases, we need to alter the state
+	 * For most, if not all, use cases, we need to alter the state
 	 * of a board area based on its area code (which is the value after
 	 * rolling the die).<br> So it makes most sense to keep areas in an
-	 * Integer -> BoardArea map.</b>
+	 * Integer -> BoardArea map.
 	 */
 	private Map<Integer, BoardArea> gameBoard;
 
 	private RandomEventDeck randomEventDeck;
 
 	/**
-	 * <b>Identifies general game status, if it is initiated or not.</b>
+	 * Identifies general game status, if it is initiated or not.
 	 */
 	private GameStatus status;
 
 	/**
-	 * <b>Identifies whose turn it is, uses index in the player array.</b>
+	 * Identifies whose turn it is, uses index in the player array.
 	 */
 	private int currentTurn;
 
@@ -91,7 +86,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>This method sets up game. Game has not started, but the deck is set up.</b>
+	 * This method sets up game. Game has not started, but the deck is set up.
 	 * 
 	 * @param: numberOfPlayers how many people will be playing game
 	 * @param: playerNames array of what everybody's name is
@@ -134,7 +129,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>This method performs the necessary actions prior to the start of a new game.</b>
+	 * This method performs the necessary actions prior to the start of a new game.
 	 */
 	public void init() {
 		// Give each player their money, personality and initial minions.
@@ -177,7 +172,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>Deal a player a personality card from deck.</b>
+	 * Deal a player a personality card from deck.
 	 * @param p Player
 	 */
 	public void assignPersonality(Player p) {
@@ -194,14 +189,14 @@ public class Game {
 	}
 		
 	/**
-	 * <b>Similar to getBoard but returns areas with indexes.</b>
+	 * Similar to getBoard but returns areas with indexes.
 	 */
 	public Map<Integer, BoardArea> getGameBoard() {
 		return gameBoard;
 	}
 	
 	/**
-	 * <b>Get a collection of the game players.</b>
+	 * Get a collection of the game players.
 	 * 
 	 * @return the players in the game.
 	 */
@@ -210,7 +205,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Returns the player who has the given color.</b>
+	 * Returns the player who has the given color.
 	 * @param c
 	 * @return the player who has the given color.
 	 */
@@ -219,20 +214,19 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Moves the game forward by one turn and returns the player
-	 * whose turn it currently is.</b>
+	 * Moves the game forward by one turn and returns the player
+	 * whose turn it currently is.
 	 * @return the player whose turn it currently is.
 	 */
 	public Player advanceTurnToNextPlayer() {
 		int current = currentTurn;
-		//players.get(playerTurnOrder[current]).printTurn();
 		currentTurn =  ((current + 1) == playerTurnOrder.length) ?
 				0 : current + 1;
 		return getPlayerOfCurrentTurn();
 	}
 	
 	/**
-	 * <b>Get the player whose turn it currently is.</b>
+	 * Get the player whose turn it currently is.
 	 * @return the player whose turn it currently is.
 	 */
 	public Player getPlayerOfCurrentTurn() {
@@ -264,10 +258,10 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Brings the given player's hand size back to 5 if it is less than that.<br>
+	 * Brings the given player's hand size back to 5 if it is less than that.<br>
 	 * If no more player cards are available, the player's hand is left as it is
 	 * at the time when the cards are up (the game should end after the player's
-	 * turn is finished).</b>
+	 * turn is finished).
 	 * @param p the player whose hand size must be restored.
 	 */
 	public void restorePlayerHand(Player p) {
@@ -280,11 +274,11 @@ public class Game {
 
 	
 	/**
-	 * <b>Draws player cards.<br>
+	 * Draws player cards.<br>
 	 * Adds the given player's hand size (i) if it is less than five.<br>
 	 * If no more player cards are available, the player's hand is left as it is
 	 * at the time when the cards are up (the game should end after the player's
-	 * turn is finished). </b>
+	 * turn is finished). 
 	 * @param p the player whose hand size must be restored.
 	 */
 	public void addPlayerCard(Player p , int i){
@@ -313,7 +307,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Draws a player card.</b>
+	 * Draws a player card.
 	 * 
 	 * @return an object that contains either the player card drawn or
 	 *         nothing, if the deck is out of cards.
@@ -323,7 +317,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Draws a random event card.</b>
+	 * Draws a random event card.
 	 * 
 	 * @return an object that contains either the random event card drawn or
 	 *         nothing, if the deck is out of cards.
@@ -333,7 +327,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>Get the deck of personality cards.</b>
+	 * Get the deck of personality cards.
 	 * 
 	 * @return: deck of all personality cards
 	 */
@@ -342,7 +336,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>Get bank class used in the game.</b>
+	 * Get bank class used in the game.
 	 * 
 	 * @return the bank used in the game
 	 */
@@ -351,7 +345,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>Get current status of the game.</b>
+	 * Get current status of the game.
 	 * 
 	 * @return current status of the game
 	 */
@@ -360,8 +354,8 @@ public class Game {
 	}
 
 	/**
-	 * <b>Retrieves the total number of minions for the given player on the game
-	 * board.</b>
+	 * Retrieves the total number of minions for the given player on the game
+	 * board. Only areas that do not contain demons contribute towards that number.
 	 * 
 	 * @param player
 	 * @return the total numbers of minions for the given player on the game
@@ -369,7 +363,7 @@ public class Game {
 	 */
 	public int getTotalMinionCountForPlayer(Player player) {
 		return gameBoard.values().stream()
-				.map(area -> area.getMinionCountForPlayer(player))
+				.map(area -> (area.getDemonCount() == 0) ? area.getMinionCountForPlayer(player) : 0)
 				.reduce(0, (sumSoFar, next) -> sumSoFar + next);
 	}
 	
@@ -381,11 +375,11 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Returns the total number of areas controlled by the given player.<br>
+	 * Returns the total number of areas controlled by the given player.<br>
 	 * An area is controlled by a player if (s)he "has more playing pieces in it
 	 * than any single other player (a playing piece being a minion or a building)
 	 * and has more pieces than the total number of trolls in the area".<br> An area that
-	 * has at least one demon cannot be controlled.</b>
+	 * has at least one demon cannot be controlled.
 	 * 
 	 * @param player
 	 * @return the total number of areas controlled by the given player.
@@ -393,8 +387,9 @@ public class Game {
 	public int getNumberOfAreasControlled(Player player) {
 		int count = 0;
 		for (BoardArea ba : gameBoard.values()) {
-			if (ba.isControlledBy(player))
+			if (ba.isControlledBy(player)) {
 				count++;
+			}
 		}
 		return count;
 	}
@@ -482,7 +477,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Checks if the draw pile still has cards.</b>
+	 * Checks if the draw pile still has cards.
 	 * @return true if the size of the draw pile is non-zero, false othewise.
 	 */
 	public boolean hasPlayerCardsLeft() {
@@ -490,26 +485,42 @@ public class Game {
 	}
 
 	/**
-	 * <b>Removes all pieces from the area with the given number (see 
-	 * {@link BoardArea#clearAllPieces()}).</b>
+	 * Removes all pieces from the area with the given number (see 
+	 * {@link BoardArea#clearAllPieces()}).
 	 * @param areaId the area from which all pieces will be removed.
 	 */
 	public void removeAllPiecesFromArea(int areaId) {
-		gameBoard.get(areaId).clearAllPieces();
+		BoardArea a = gameBoard.get(areaId);
+		
+		// Do all the actions separately to give a chance to any player who
+		// has Small Gods to protect pieces/buildings:
+
+		// 1. Remove minions
+		for (Map.Entry<Color, Integer> e : a.getMinions().entrySet()) {
+			for (int i = 0; i < e.getValue(); i++) {
+				a.removeMinion(getPlayerOfColor(e.getKey()));
+			}
+		}
+		
+		// 2. Remove demons
+		for (int i = 0; i < a.getDemonCount(); i++) {
+			a.removeDemon();
+		}
+	
 	}
 	
 	/**
-	 * <b>Finds all buildings a player owns.</b>
+	 * Finds all buildings a player owns.
 	 * @param player
 	 * @return Map of boardAreas owned by the player
 	 */
 	public Map<Integer, BoardArea> getBuildingAreas(Player player) {
 		Map<Integer, BoardArea> buildingAreas = new HashMap<Integer, BoardArea>();
-		
-		for(BoardArea boardArea: gameBoard.values()) {
-			if(boardArea.getBuildingOwner() == player.getColor()) {
+
+		for (BoardArea boardArea : gameBoard.values()) {
+			if (boardArea.getBuildingOwner() == player.getColor()) {
 				buildingAreas.put(boardArea.getArea().getAreaCode(), boardArea);
-			}	
+			}
 		}
 		
 		return buildingAreas;	
@@ -521,9 +532,8 @@ public class Game {
 	 */
 	public Map<Integer, BoardArea> getTroubleAreas() {
 		Map<Integer, BoardArea> possibilities = new HashMap<Integer, BoardArea>();
-		
-		for(BoardArea boardArea : gameBoard.values()) {
-			if(boardArea.hasTroubleMarker()) {
+		for (BoardArea boardArea : gameBoard.values()) {
+			if (boardArea.hasTroubleMarker()) {
 				possibilities.put(boardArea.getArea().getAreaCode(), boardArea);
 			}
 		}
@@ -557,8 +567,8 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Removes a building on the area with the given ID, if one exists and 
-	 * also removes the corresponding city card form the player's hand.</b>
+	 * Removes a building on the area with the given ID, if one exists and 
+	 * also removes the corresponding city card form the player's hand.
 	 * 
 	 * @return true if the building was removed successfully in this area, false
 	 *         otherwise.
@@ -576,7 +586,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Completes a transaction by giving money to the given player from the game's bank.</b>
+	 * Completes a transaction by giving money to the given player from the game's bank.
 	 */
 	public void givePlayerMoneyFromBank(Player p, int amount) {
 		if (gameBank.decreaseBalance(amount)) {
@@ -585,8 +595,8 @@ public class Game {
 	}
 
 	/**
-	 * <b>Completes a transaction by taking money from the given player and storing it 
-	 * in the game's bank.</b>
+	 * Completes a transaction by taking money from the given player and storing it 
+	 * in the game's bank.
 	 */
 	public void giveBankMoneyFromPlayer(Player p, int amount) {
 		if (gameBank.decreaseBalance(amount)) {
@@ -613,16 +623,17 @@ public class Game {
 	
 	
 	/**
-	 * <b>All players must pay $2 for each building they have on the
+	 * All players must pay $2 for each building they have on the
 	 * board.<br> If they cannot pay for a building then it is removed
-	 * from the board. </b>
+	 * from the board. 
 	 */
 	public void handleSubsidence() {
+		final int BUILDING_COST = 2;
 		for (BoardArea a : gameBoard.values()) {
 			if (a.getBuildingOwner() != Color.UNDEFINED) {
 				Player p = players.get(a.getBuildingOwner());
-				if (p.getMoney() - 2 >= 0) {
-					p.decreaseMoney(2);
+				if (p.getMoney() - BUILDING_COST >= 0) {
+					giveBankMoneyFromPlayer(p, BUILDING_COST);
 				} else {
 					removeBuilding(a.getArea().getAreaCode());
 				}
@@ -631,18 +642,18 @@ public class Game {
 	}
 	
 	/**
-	 * Disable the City Area Card corresponding to the passed areaID, if it is in
-	 * effect.
-	 * 
-	 * @return Some(<player who owned the City Area Card if it was in effect>), None otherwise.
+	 * Sets the state of the city area card corresponding to the area with the given ID
+	 * if it is owned by any player.
+	 * @param areaID
+	 * @return the player who owns the city area card which got enabled/disabled , if any.
 	 */
-	public Optional<Player> disableAreaCard(int areaID) {
+	public Optional<Player> setCityAreaCardState(int areaID, 
+			BiFunction<Player, AnkhMorporkArea, Boolean> cardStateChanger) {
 		BoardArea a = gameBoard.get(areaID);
 		AnkhMorporkArea area = AnkhMorporkArea.forCode(areaID);
 		if (a.hasBuilding()) {
 			Player owner = players.get(a.getBuildingOwner());
-			return (owner.removeCityCard(area)) ? 
-				Optional.of(owner) : Optional.empty();
+			return cardStateChanger.apply(owner, area) ? Optional.of(owner) : Optional.empty();
 		}
 		return Optional.empty();
 	}
@@ -655,8 +666,8 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Remove one minion belonging to the given player from the area with the
-	 * given area ID.</b>
+	 * Remove one minion belonging to the given player from the area with the
+	 * given area ID.
 	 * 
 	 * @param areaID
 	 * @return true if a minion was removed, false otherwise.
@@ -666,7 +677,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b:Place a troll to the area with the given ID.</b>
+	 * <b:Place a troll to the area with the given ID.
 	 * 
 	 * @param areaID
 	 * @return true if the area where the troll was placed already contained a
@@ -677,17 +688,34 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Place a demon to the area witht the given ID.</b>
+	 * Place a demon to the area with the given ID. Also, the City Area card corresponding
+	 * to that area is disabled (it will only be enabled again if the demon is removed).
 	 * 
 	 * @param areaID
 	 * @return true if the demon was placed successfully, false otherwise.
 	 */
 	public boolean placeDemon(int areaID) {
-		return gameBoard.get(areaID).addDemon();
+		 setCityAreaCardState(areaID, (player, area) -> player.disableCityAreaCard(area));
+		 return gameBoard.get(areaID).addDemon();
 	}
 	
 	/**
-	 * <b>Add a trouble marker to the area with the given ID.</b>
+	 * Removes (i.e. assassinates :-) a demon from the area with the given area code.
+	 * If this was the last demon in the area, the corresponding city area card should
+	 * become active again (if it is owned by any player who has a building in that area).
+	 * @param areaID
+	 * @return true if the demon was removed successfully, false otherwise.
+	 */
+	public boolean removeDemon(int areaID) {
+		BoardArea affectedArea = gameBoard.get(areaID);
+		if (affectedArea.getDemonCount() == 1) {
+			setCityAreaCardState(areaID, (player, area) -> player.enableCityAreaCard(area));
+		}
+		return affectedArea.removeDemon();
+	}
+
+	/**
+	 * Add a trouble marker to the area with the given ID.
 	 * 
 	 * @param areaID
 	 * @return true if the trouble marker was added successfully, false
@@ -704,7 +732,11 @@ public class Game {
 	 * @return true if the game is over because the given player has won, false otherwise.
 	 */
 	public boolean hasPlayerWon(Player p) {
-		return p.getPersonality().hasWon(players.size(), p, this);
+		if (p.getPersonality().hasWon(players.size(), p, this)) {
+			status = GameStatus.FINISHED;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -716,6 +748,7 @@ public class Game {
 	 */
 	public List<Player> finishGameOnPoints(boolean checkForEmptyDeck) {
 		if (checkForEmptyDeck && hasPlayerCardsLeft()) {
+			// The game will continue
 			return Collections.emptyList();
 		}
 		status = GameStatus.FINISHED;
@@ -723,7 +756,7 @@ public class Game {
 	}
 
 	/**
-	 * <b>Figures out which player has won based on the total number of points:<br>
+	 * Figures out which player has won based on the total number of points:<br>
 	 * - Each minion on the board is worth five points. <br>
 	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
 	 *   is worth one point. <br>
@@ -732,7 +765,7 @@ public class Game {
 	 * - In the case of a tie the tied player with the highest monetary value City Area card is the winner. <br>
 	 * - If there is still a tie then the tied players shared the honours of a joint win.<br>
 	 * 
-	 * The game is declared finished after that.</b>
+	 * The game is declared finished after that.
 	 * 
 	 * @return the player(s) who won the game based on points.
 	 */
@@ -759,12 +792,12 @@ public class Game {
 	}
 
 	/**
-	 * <b>Retrieves the total number of points for the given player.<br>
+	 * Retrieves the total number of points for the given player.<br>
 	 * - Each minion on the board is worth five points. <br>
 	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
 	 *   is worth one point. <br>
 	 * - If you have the Mr. Bent card or the Bank card then you must pay back the amount noted on the card. <br>
-	 * - If you cannot do so then you lose fifteen points each. </b>
+	 * - If you cannot do so then you lose fifteen points for each such card. 
 	 * 
 	 * @return the number of points for the given player.
 	 */
@@ -778,9 +811,9 @@ public class Game {
 				.reduce(0, (s, areaPoints) -> s + areaPoints);
 		
 		
-		int playerMoneyMinusLoans = p.getMoney() - p.getLoanBalance();
+		int playerMoneyMinusLoans = p.getMoney() + p.getLoanBalance();
 		if (playerMoneyMinusLoans < 0) {
-			points -= LOAN_PENALTY
+			points -= Bank.LOAN_REPAY_AMOUNT
 					* ((Math.abs(playerMoneyMinusLoans) + Bank.LOAN_REPAY_AMOUNT)
 					/ Bank.LOAN_REPAY_AMOUNT);
 		}
@@ -819,7 +852,7 @@ public class Game {
 	}
 	
 	/**
-	 * <b>Discard card by adding it to the pile.</b>
+	 * Discard card by adding it to the pile.
 	 * 
 	 * @param card
 	 */
@@ -833,8 +866,10 @@ public class Game {
 	}
 
 	/**
-	 * Remove player card from hand Similar to discarCard but doesnt add card to
-	 * pile Ideal for giving a card to another player
+	 * Remove the given player card from the given player's hand. 
+	 * Similar to {@link #discardCard(GreenPlayerCard, Player)}
+	 * but doesn't add the card to the pile discard. 
+	 * Ideal for giving a card to another player.
 	 * 
 	 * @param card
 	 * @param p
@@ -970,4 +1005,24 @@ public class Game {
 		return interrupts;
 	}
 	
+	/**
+	 * Check if the player will protect a piece/building currently affected by 
+	 * an upstream random event.
+	 * @return true if the player is going to protect his/her piece, false otherwise.
+	 */
+	private boolean willProtectPiece(Player p) {
+		return new TextUserInterface().getUserYesOrNoChoice(p.getName() + "(" + p.getColor() 
+				+ ") has Small Gods. Pay $3 to protect a piece/building affected "
+				+ "by the ongoing random event?");
+	}
+	
+	/**
+	 * Completes a transaction to protect a piece belonging to the given player,
+	 * which is currently under the effect of a random event. The protection cost
+	 * is 3 Ankh-Morpork dollars.
+	 * @param p
+	 */
+	private void payToProtectPiece(Player p) {
+		giveBankMoneyFromPlayer(p, 3);
+	}
 }
