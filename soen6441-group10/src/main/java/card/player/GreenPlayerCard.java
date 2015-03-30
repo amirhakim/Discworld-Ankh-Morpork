@@ -877,10 +877,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			if(game.getBank().decreaseBalance(10)){
 				game.givePlayerMoneyFromBank(player,10);
-				game.addPlayerCard(player,game.getCurrentCardInPlay());
-			}
+				player.addUnplayableCard(game.getCurrentCardInPlay());
 		},
 		// Money
 		0,
@@ -929,7 +927,7 @@ public enum GreenPlayerCard implements Card {
 		}},
 		(player, game) -> {
 			game.givePlayerMoneyFromBank(player,10);
-			game.addPlayerCard(player,game.getCurrentCardInPlay());
+			player.addUnplayableCard(game.getCurrentCardInPlay());
 		},
 		// Money
 		0,
@@ -949,14 +947,15 @@ public enum GreenPlayerCard implements Card {
 			for(Player p: game.getPlayers()){
 				boolean choiceMade = false;
 				while(!choiceMade){
-					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")){
+					if(UI.getUserYesOrNoChoice(p.getName()+" do you want to give one of your cards? (otherwise you will pay $1)")){
 						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
 						choiceMade = true;
 					};
-					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")){
+					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card? (otherwise you have to give up one card)")){
 						   if(p.getMoney()>=1) {
 							   if(p.decreaseMoney(1)&player.increaseMoney(1))
 							   System.out.println("Took $1 from "+p.getName());
+							   choiceMade = true;
 						   }
 						   else choiceMade = true;
 					};
