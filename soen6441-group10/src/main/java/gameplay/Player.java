@@ -30,7 +30,7 @@ public class Player {
 	
 	public static final int PLAYER_MAX_HAND_SIZE = 5;
 	
-	private static final int PROTECTION_COST = 3;
+	public static final int PROTECTION_COST = 3;
 
 	private String name;
 

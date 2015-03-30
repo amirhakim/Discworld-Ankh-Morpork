@@ -452,7 +452,7 @@ public class Game {
 	/**
 	 * 
 	 * @param boardArea
-	 * @return Map of baordArea neighbouring to boardArea
+	 * @return Map of boardArea neighboring to boardArea
 	 */
 	public Map<Integer, BoardArea> getNeighbours(BoardArea boardArea) {
 		Map<Integer, BoardArea> neighbours = new HashMap<Integer, BoardArea>();
@@ -478,7 +478,7 @@ public class Game {
 	
 	/**
 	 * Checks if the draw pile still has cards.
-	 * @return true if the size of the draw pile is non-zero, false othewise.
+	 * @return true if the size of the draw pile is non-zero, false otherwise.
 	 */
 	public boolean hasPlayerCardsLeft() {
 		return playerDeck.size() > 0;
@@ -1030,6 +1030,6 @@ public class Game {
 	 * @param p
 	 */
 	private void payToProtectPiece(Player p) {
-		giveBankMoneyFromPlayer(p, 3);
+		giveBankMoneyFromPlayer(p, Player.PROTECTION_COST);
 	}
 }
