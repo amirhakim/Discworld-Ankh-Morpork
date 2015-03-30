@@ -29,4 +29,8 @@ public class PersonalityDeck extends Deck<PersonalityCard> {
 		super.shuffle();
 	}
 
+	public Stack<PersonalityCard> getDeck() {
+		return cards;
+	}
+	
 }

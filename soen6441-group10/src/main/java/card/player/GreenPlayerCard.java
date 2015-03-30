@@ -18,6 +18,8 @@ import java.util.function.BiConsumer;
 import util.Color;
 import card.Card;
 import card.city.AnkhMorporkArea;
+import card.personality.PersonalityCard;
+import card.personality.PersonalityDeck;
 
 
 /**
@@ -946,6 +948,7 @@ public enum GreenPlayerCard implements Card {
 			TextUserInterface UI = TextUserInterface.getUI();
 			for(Player p: game.getPlayers()){
 				boolean choiceMade = false;
+				Set<GreenPlayerCard> playerCards = p.getPlayerCards();
 				while(!choiceMade){
 					if(UI.getUserYesOrNoChoice(p.getName()+" do you want to give one of your cards? (otherwise you will pay $1)")){
 						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
@@ -1214,22 +1217,34 @@ public enum GreenPlayerCard implements Card {
 		""
 	),
 	
+	
 	MRS_CAKE(
 		new ArrayList<Symbol>(){{
 			add(Symbol.TAKE_MONEY);
 			add(Symbol.PLACE_A_BUILDING);
 		}},
 		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: MRS_CAKE: look at all but one of the"
-				+ "unused personality cards");
-		},
+/*			PersonalityDeck personalityDeck = game.getPersonalityDeck();
+			int visibleSize = personalityDeck.size() -1;
+			if (visibleSize < 0) {
+				System.out.println("Only one personality left in deck...");
+			} else {
+				int count = 0;
+				System.out.println("Showing " + (visibleSize + 1) + " unused personality cards...");
+				for(PersonalityCard card: personalityDeck.getDeck()) {
+					if(count >= visibleSize) break;
+					System.out.println(card);
+				}
+			}
+*/		},
 		// Money
 		2,
 		// ID
 		41,
 		// DESC
-		"SCROLL: LOOK AT ALL BUT ONE PERSONALITY CARDS"
+		"SCROLL: LOOK AT ALL BUT ONE UNUSED PERSONALITY CARDS"
 	),
+	
 	
 	GROAT(
 		new ArrayList<Symbol>() {{

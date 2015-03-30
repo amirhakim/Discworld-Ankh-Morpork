@@ -149,6 +149,7 @@ public class SymbolTest {
 		// Give player unlimited funds
 		player.increaseMoney(10000);
 		int previousPlayerBalance = player.getMoney();
+		gameBoard.get(1).addMinion(player);
 		
 		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
 		// Ensure that the players buildings have decreased
@@ -177,6 +178,7 @@ public class SymbolTest {
 			ba.addTroubleMarker();
 		}
 		gameBoard.get(1).removeTroubleMarker();
+		gameBoard.get(1).addMinion(player);
 		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
 		
 		// Ensure that the players buildings have decreased
