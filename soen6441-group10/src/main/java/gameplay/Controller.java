@@ -2,14 +2,15 @@
 package gameplay;
 
 import java.util.Collection;
+import java.util.List;
 
 import util.Color;
 import card.player.Symbol;
 import error.InvalidGameStateException;
 
 /**
- * <b> This class represents the Controller layer of MVC pattern.
- * It is used to interpret UI actions and calls the appropriate model like File IO and class Game. </b> 
+ * This class represents the Controller layer of MVC pattern.
+ * It is used to interpret UI actions and calls the appropriate model like File IO and class Game.  
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0
@@ -31,7 +32,7 @@ public class Controller {
 	}
 	
 	/**
-	 * <b>This method starts a new game - initialize all the required data structures etc.</b>
+	 * This method starts a new game - initialize all the required data structures etc.
 	 * @param: numberOfPlayers required for game, humane players name
 	 * @return true if the game was successfully initialized, false otherwise.
 	 */
@@ -48,8 +49,8 @@ public class Controller {
 	}
 	
 	/**
-	 * <b>Advances the turn to the next player and returns the player whose turn
-	 * it currently is.</b>
+	 * Advances the turn to the next player and returns the player whose turn
+	 * it currently is.
 	 * @return the player whose turn it currently is.
 	 */
 	public Player advanceToNextTurn() {
@@ -57,7 +58,7 @@ public class Controller {
 	}
 	
 	/**
-	 * <b>Gets the player whose turn it currently is.</b>
+	 * Gets the player whose turn it currently is.
 	 * @return the player whose turn it currently is.
 	 */
 	public Player getPlayerOfCurrentTurn() {
@@ -65,7 +66,7 @@ public class Controller {
 	}
 	
 	/**
-	 * <b>This method gets array of players in game.</b>
+	 * This method gets array of players in game.
 	 * @return the players in game
 	 */
 	public Collection<Player> getPlayers() {
@@ -77,7 +78,7 @@ public class Controller {
 	}
 	
 	/**
-	 * <b>This method gets bank class used in the game.</b>
+	 * This method gets bank class used in the game.
 	 * @return the bank used in the game
 	 */
 	public Bank getBank() {
@@ -85,7 +86,7 @@ public class Controller {
 	}
 	
 	/**
-	 * <b>This method checks to see if the game is playing.</b>
+	 * This method checks to see if the game is playing.
 	 * @return true if the game is playing
 	 */
 	public boolean gameExists() {
@@ -93,10 +94,10 @@ public class Controller {
 	}
 
 	/**
-	 * <b>Gets the game board in the form of a board area collection.<br> These
+	 * Gets the game board in the form of a board area collection.<br> These
 	 * board areas don't just contain the value of the underlying area 
 	 * (e.g. "Dolly Sisters") - they contain their state as well
-	 * (see {@link BoardArea}).</b>
+	 * (see {@link BoardArea}).
 	 * @return a collection of the game's board areas.
 	 */
 	public Collection<BoardArea> getBoard() {
@@ -111,6 +112,10 @@ public class Controller {
 		return game;
 	}
 	
+	public GameStatus getGameStatus() {
+		return game.getStatus();
+	}
+	
 	public void performSymbolAction(Player p, Symbol s) {
 		s.getGameAction().accept(p, game);
 	}
@@ -119,9 +124,15 @@ public class Controller {
 		game.restorePlayerHand(p);
 	}
 	
-	public boolean isGameOver()  {
-		return game.isOver();
+	public boolean hasPlayerWon(Player p) {
+		return game.hasPlayerWon(p);
 	}
 
+	/**
+	 * see {@link Game#finishGameOnPoints()}
+	 */
+	public List<Player> finishGameOnPoints(boolean checkForEmptyDeck) {
+		return game.finishGameOnPoints(checkForEmptyDeck);
+	}
 	
 }

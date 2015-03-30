@@ -21,45 +21,35 @@ public enum PersonalityCard implements Card {
 	
 	LORD_VETINARI((playerCount, player, game) ->  
 		game.getTotalMinionCountForPlayer(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount),
-		// DESC
 		"WIN BY CONTROLLING 11 AREAS (2 PLAYERS), 10 AREAS (3 PLAYERS), 9 AREAS (4 PLAYERS)"
-		),
+	),
 	
 	LORD_SELACHII(WinningConditionHelper::hasWonByControlledAreas,
-	// DESC
 	"WIN BY CONTROLLING 7 AREAS (2 PLAYERS), 5 AREAS (3 PLAYERS), 4 AREAS (4 PLAYERS)"
 	),
 
 	
 	LORD_RUST(WinningConditionHelper::hasWonByControlledAreas,
-	// DESC
 	"WIN BY CONTROLLING 7 AREAS (2 PLAYERS), 5 AREAS (3 PLAYERS), 4 AREAS (4 PLAYERS)"
 	),
 
 	
 	LORD_DE_WORDE(WinningConditionHelper::hasWonByControlledAreas,
-	// DESC
 	"WIN BY CONTROLLING 7 AREAS (2 PLAYERS), 5 AREAS (3 PLAYERS), 4 AREAS (4 PLAYERS)"
 	),
 
 	
 	DRAGON_KING_OF_ARMS((playerCount, player, game) -> game.getTotalNumberOfTroubleMarkers() == 8,
-	// DESC
 	"WIN BY 8+ TROUBLE MARKERS ON THE BOARD"
 	),
-
 	
 	CHRYSOPRASE((playerCount, player, game) -> player.getTotalWorth() >= 50,
-	// DESC
 	"WIN BY ACCUMULATING 50$ (MONEY AND BUILDINGS AFTER LOANS)"
 	),
 
-	
 	COMMANDER_VIMES((playerCount, player, game) -> !game.hasPlayerCardsLeft(),
-	// DESC
 	"WIN BY NO MORE PLAYER CARDS"
 	)
-
 	;
 	
 	private WinningCondition<Integer, Player, Game, Boolean> winningConditionChecker;
@@ -101,7 +91,6 @@ public enum PersonalityCard implements Card {
 	
 	/**
 	 * This can be used as an aid for lookups as needed by different personality cards.
-	 * @author gkentr
 	 */
 	private static class WinningConditionHelper {
 		

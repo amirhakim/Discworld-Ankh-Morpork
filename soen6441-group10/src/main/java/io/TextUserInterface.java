@@ -4,21 +4,27 @@ import gameplay.Bank;
 import gameplay.BoardArea;
 import gameplay.Controller;
 import gameplay.Game;
+import gameplay.GameStatus;
 import gameplay.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import util.Color;
 import util.Interrupt;
+import card.Card;
 import card.city.AnkhMorporkArea;
+import card.city.CityAreaCard;
+import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
 import card.player.Symbol;
 
@@ -35,9 +41,7 @@ public class TextUserInterface {
 	FileObject<Game> currentGameFileObj;
 	Scanner scanner;
 
-
 	public static final String RESET = "\u001B[0m";
-	
 	
 	private static TextUserInterface instance;
 	
@@ -139,9 +143,7 @@ public class TextUserInterface {
 				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
 				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
-					if (!controller.isGameOver()) {
-						playTurn(controller.advanceToNextTurn());
-					} else {
+					if (playTurn(controller.advanceToNextTurn(), true)) {
 						System.out.println("The game has finished!");
 						printGameStatus();
 						break;
@@ -153,8 +155,7 @@ public class TextUserInterface {
 					Optional<FileObject<Game>> gameWrap = loadGame();
 					if (gameWrap.isPresent()) {
 						currentGameFileObj = gameWrap.get();
-						controller = new Controller(
-								currentGameFileObj.getPOJO());
+						controller = new Controller(currentGameFileObj.getPOJO());
 					}
 				} else if (action.equals(UserOption.SAVE.getOptionString())) {
 					saveGame();
@@ -173,29 +174,95 @@ public class TextUserInterface {
 	 * if applicable), performing selectively the symbols on the card 
 	 * (except for Random Events, which are mandatory) and restoring the hand
 	 * back to 5 cards (if applicable).
-	 * @param p
+	 * @param p the player whose turn it currently is.
+	 * @param firstTime should be true if this is the first time a player has to choose
+	 * a card to play, false otherwise.
+	 * @return true if the game has finished either at the beginning or the end
+	 * of this turn, false otherwise.
 	 */
-	private void playTurn(Player p) {
+	private boolean playTurn(Player p, boolean firstTime) {
+		if (firstTime) {
+			p.resetCityAreaCards();
+		}
+
 		System.out.println(p.getColor().getAnsi());
 		printBriefGameStatus();
 		System.out.println(p.getName() + "("+p.getColor()+") " + "'s turn!");
 		System.out.println(p.getPersonality() + ": " + p.getPersonality().getDesc());
-		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
-		playCard(c,p);
-		controller.restorePlayerHand(p);
-		System.out.println(RESET);
+
+		// For all the players except Commander Vimes, check the winning conditions
+		// in the beginning
+		if (firstTime && controller.hasPlayerWon(p)) {
+			System.out.println(p + " has won the game!");
+			return true;
+		}
+
+		// This is dirty but it would take a lot more time to rewrite everything
+		// with proper variance... if it's even possible. At least the casts are safe.
+		Card c = getCardChoice(p.getPlayableCards(), "Choose a card to play: ");
+		if (c instanceof GreenPlayerCard) {
+			playPlayerCard((GreenPlayerCard) c, p);
+		} else if (c instanceof CityAreaCard) {
+			playCityAreaCard((CityAreaCard) c, p);
+		}
+		
+		// The following must only be performed if the game hasn't finished
+		// If the game has finished after the player has finished playing
+		// (that can only happen if the cards run out) then the following block
+		// should be executed once and only once.
+		if (controller.getGameStatus() != GameStatus.FINISHED) {
+			controller.restorePlayerHand(p);
+			// For Commander Vimes we only check the winning condition at the end
+			if ((p.getPersonality() == PersonalityCard.COMMANDER_VIMES && controller.hasPlayerWon(p))) {
+				System.out.println(PersonalityCard.COMMANDER_VIMES + " has won the game.");
+				return true;
+			}
+			
+			// If the deck was empty and nobody had Commander Vimes, the game will
+			// finish on points
+			List<Player> winners = controller.finishGameOnPoints(true);
+			if (!winners.isEmpty()) {
+				System.out.println("Game winners: " + winners);
+			}
+			
+			System.out.println(RESET);
+			return false;
+		}
+		
+		return true;
 	}
 	
-	public void playCard(GreenPlayerCard c, Player p) {
+	/**
+	 * Polls the player in turn to play a city area card (if he has any available).
+	 * If the player wishes so, a card will be played.
+	 */
+	public void playCityAreaCardIfDesired(Player p) {
+		List<CityAreaCard> playableCityAreaCards = 
+				p.getCityAreaCards()
+					.stream().filter(c -> (!c.isDisabled() && !c.hasBeenPlayed() && !c.isSmallGods()))
+					.collect(Collectors.toList());
+		if (!playableCityAreaCards.isEmpty() && getUserYesOrNoChoice("Do you want "
+				+ "to play a city area card in between another action?")) {
+			playCityAreaCard(getCardChoice(playableCityAreaCards, "Choose a city area card to play: "), p);
+		}
+	}
+	
+	public void playCityAreaCard(CityAreaCard c, Player p) {
+		System.out.println("Playing: " + c);
+		c.getCardAction().accept(p, controller.getGame());
+		c.setHasBeenPlayed(true);
+	}
+
+	public void playPlayerCard(GreenPlayerCard c, Player p) {
 		controller.getGame().setCurrentCardInPlay(c);
-		
+
 		// Determine which needs to be completed first (symbols or text)
 		System.out.println("Playing symbols");
 		if (c.isTextFirst()) {
 			// play text
 			// if text returns false, its because we gave away this card
 			boolean res = playText(c, p);
-			if(!res) {
+			if (!res) {
 				controller.getGame().setCurrentCardInPlay(null);
 				return;
 			}
@@ -203,24 +270,27 @@ public class TextUserInterface {
 			// If symbols return false
 			// Its because we've recursed into playing another card
 			res = playSymbols(c, p);
-			if(!res) return;
+			if (!res) {
+				return;
+			}
 		} else {
 			// Perform symbols
 			// If symbols return false
 			// Its because we've recursed into playig another card
 			boolean res = playSymbols(c, p);
-			if(!res) return;
+			if (!res) {
+				return;
+			}
 			res = playText(c, p);
-			if(!res) {
+			if (!res) {
 				controller.getGame().setCurrentCardInPlay(null);
 				return;
 			}
 		}
 		System.out.println("Done playing symbols");
-		
+
 		controller.getGame().discardCard(c, p);
 		controller.getGame().setCurrentCardInPlay(null);
-		
 	}
 	
 	
@@ -232,29 +302,31 @@ public class TextUserInterface {
 	 */
 	private boolean playText(GreenPlayerCard c, Player p) {
 		BiConsumer<Player, Game> textAction = c.getText();
-		if(textAction != null){
-			System.out.println("Do you want to perform scroll ("+c.getDesc()+") symbol? (yes/no)");
+		if (textAction != null) {
+			playCityAreaCardIfDesired(p);
+			System.out.println("Do you want to perform the scroll (" + c.getDesc()
+					+ ") symbol? (yes/no)");
 			System.out.print("> ");
 			String choice = scanner.nextLine();
 			if (UserOption.YES.name().equalsIgnoreCase(choice)) {
 				textAction.accept(p, controller.getGame());
-				
+
 				// Its possible, due to the evil ways of the text symbols
 				// that the card we are playing, is now given to another player
 				// ie the fools guild
-				// so we should check here to make sure the player still has this card
-				if(!p.getPlayerCards().contains(c)) {
+				// so we should check here to make sure the player still has
+				// this card
+				if (!p.getPlayerCards().contains(c)) {
 					// if player has given away this card, then we
-					// need to make sure that the card isnt discarded or symbols played
+					// need to make sure that the card isnt discarded or symbols
+					// played
 					return false;
 				}
-				
-				
+
 			}
 		}
-		return true;
-			
 
+		return true;
 	}
 	
 	/**
@@ -265,15 +337,17 @@ public class TextUserInterface {
 	private boolean playSymbols(GreenPlayerCard c, Player p) {
 		// Perform the symbols on the cards selectively
 		for (Symbol s : c.getSymbols()) {
+			playCityAreaCardIfDesired(p);
 			// Only Random Events are mandatory
 			if (s != Symbol.RANDOM_EVENT) {
-				System.out.println("Do you want to perform " + s + "? (yes/no)");
+				System.out
+						.println("Do you want to perform " + s + "? (yes/no)");
 				System.out.print("> ");
 				String choice = scanner.nextLine();
 				if (UserOption.YES.name().equalsIgnoreCase(choice)) {
-					if(s == Symbol.PLAY_ANOTHER_CARD) {
+					if (s == Symbol.PLAY_ANOTHER_CARD) {
 						controller.getGame().discardCard(c, p);
-						playTurn(p);
+						playTurn(p, false);
 						return false;
 					}
 					controller.performSymbolAction(p, s);
@@ -288,13 +362,17 @@ public class TextUserInterface {
 	}
 	
 	
-	public GreenPlayerCard getCardChoice(Collection<GreenPlayerCard> cards, String message) {
-		Map<Integer, GreenPlayerCard> cardMap = new HashMap<>();
+	/**
+	 * Get either a player card or city area card to play.
+	 * @param cards
+	 * @param message
+	 * @return the card selected by the player.
+	 */
+	public <C extends Card> C getCardChoice(Collection<C> cards, String message) {
+		Map<Integer, C> cardMap = new HashMap<>();
 		System.out.println(message);
 		int i = 1;
-		for (GreenPlayerCard c : cards) {
-			
-			//System.out.print(i + ") " + c.name());
+		for (C c : cards) {
 			System.out.print(i + ") ");
 			System.out.print(c);
 			cardMap.put(i, c);
@@ -304,8 +382,14 @@ public class TextUserInterface {
 		// TODO Won't bother now with bound checks, will do it later
 		int action = scanner.nextInt();
 		scanner.nextLine();
-		return cardMap.get(action);
+		return cardMap.get(action);	
 	}
+
+//	private Optional<CityAreaCard> getCityAreaCardChoice(Collection<CityAreaCard> cards, String msg) {
+//		if (getUserYesOrNoChoice("Do you wish to play a City Area card at this point?")) {
+//			System.out.printl
+//		}
+//	}
 
 	/**
 	 * This method saves the game providing that the user enters a new file name or load the previous game.
@@ -527,7 +611,6 @@ public class TextUserInterface {
 	
 	public AnkhMorporkArea getAreaChoice(Collection<AnkhMorporkArea> availableAreas, 
 			String outputMsg, String inputMsg) {
-
 		System.out.println(outputMsg);
 		for (AnkhMorporkArea a : availableAreas) {
 			System.out.println(a.getAreaCode() + ": " + a); 
@@ -598,23 +681,23 @@ public class TextUserInterface {
 	 * @return
 	 */
 	public BoardArea getAreaChoice(Map<Integer, BoardArea> availableAreas,
-			String outputMsg, String inputMsg, boolean details, ArrayList<Integer> excludeList) {
-		
-		
+			String outputMsg, String inputMsg, boolean details,
+			ArrayList<Integer> excludeList) {
 		System.out.println(outputMsg);
-		for(BoardArea a: availableAreas.values()) {
-			if(excludeList.contains(a.getArea().getAreaCode())) {
+		for (BoardArea a : availableAreas.values()) {
+			if (excludeList.contains(a.getArea().getAreaCode())) {
 				continue;
 			}
 			System.out.println(a.getArea().getAreaCode() + ": " + a.getArea());
 
-			if(details) {
+			if (details) {
 				System.out.println("\tWith " + a.getDemonCount() + " demons");
 				System.out.println("\tWith " + a.getTrollCount() + " trolls");
-			
+
 				Map<Color, Integer> minions = a.getMinions();
 				for (Map.Entry<Color, Integer> entry : minions.entrySet()) {
-					System.out.println("\tWith " + entry.getValue() + " from player " + entry.getKey());
+					System.out.println("\tWith " + entry.getValue()
+							+ " from player " + entry.getKey());
 				}
 			}
 		}
@@ -622,7 +705,7 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		int action = scanner.nextInt();
 		scanner.nextLine();
-		while(availableAreas.get(action) == null) {
+		while (availableAreas.get(action) == null) {
 			System.out.print("Invalid selection: " + inputMsg);
 			action = scanner.nextInt();
 			scanner.nextLine();
@@ -667,7 +750,7 @@ public class TextUserInterface {
 				trouble.removeTroll();
 				removed = true;
 			} else if (actionKill.equals("d") && trouble.getDemonCount() > 0) {
-				trouble.removeDemon();
+				game.removeDemon(trouble.getArea().getAreaCode());
 				removed = true;
 			} else {
 				try {

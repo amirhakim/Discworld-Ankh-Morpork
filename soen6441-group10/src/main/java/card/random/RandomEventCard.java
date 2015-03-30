@@ -67,7 +67,7 @@ public enum RandomEventCard implements Card {
 	RIOTS((game, player) -> {
 		System.out.println("Riots! That shall be the end of the game my lords...");
 		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
-			game.getWinnersByPoints();
+			game.finishGameOnPoints(false);
 		}
 	}),
 	
@@ -94,12 +94,14 @@ public enum RandomEventCard implements Card {
 	}),
 	
 	BLOODY_STUPID_JOHNSON((game, player) -> {
-		System.out.println("Bloody Stupid Johnson! An area's card will be disabled, if it is in play");
-		int area = Die.getDie().roll();
-		Optional<Player> areaOwner = game.disableAreaCard(area);
+		System.out.println("Bloody Stupid Johnson! An area's card will be disabled "
+				+ "if it is in play and a minion will be removed from the same area.");
+		int areaID = Die.getDie().roll();
+		Optional<Player> areaOwner = game.setCityAreaCardState(areaID, 
+				(p, area) -> p.disableCityAreaCard(area));
 		if (areaOwner.isPresent()) {
 			System.out.println("City area card disabled. Removing a minion from there...");
-			game.removeMinion(area, areaOwner.get());
+			game.removeMinion(areaID, areaOwner.get());
 		}
 	}),
 	
@@ -132,7 +134,8 @@ public enum RandomEventCard implements Card {
 	}),
 	
 	DEMONS_FROM_THE_DUNGEON_DIMENSIONS((game, player) -> {
-		System.out.println("Demons from the Dungeon Dimensions: A demon will be placed in 4 areas.");
+		System.out.println("Demons from the Dungeon Dimensions: A demon will be placed "
+				+ "4 times in an area.");
 		Die die = Die.getDie();
 		int[] areas = { die.roll(), die.roll(), die.roll(), die.roll() };
 		for (int area : areas) {
@@ -160,7 +163,7 @@ public enum RandomEventCard implements Card {
 				AnkhMorporkArea a = UI.getAreaChoice(adjacentAreas,
 						"Select an area to which your minion will be moved:",
 						">");
-				game.removeMinion(a.getAreaCode(), p);
+				game.removeMinion(area.getAreaCode(), p);
 				game.addMinion(a.getAreaCode(), p);
 			}
 		}
