@@ -55,9 +55,9 @@ public class PlayerTest {
 	 */
 	public void minionBoundryCheck() {
 		
-		assertTrue("The number of minions passed the lower boundry!", player.decreaseMinion());
+		assertTrue("The number of minions passed the lower boundry!", player.decreaseMinions());
 		assertEquals("Not equals!", player.getMinionCount(),11);
-		assertTrue("The number of minions passed the upper boundry!", player.increaseMinion());
+		assertTrue("The number of minions passed the upper boundry!", player.increaseMinions());
 
 	}
 	

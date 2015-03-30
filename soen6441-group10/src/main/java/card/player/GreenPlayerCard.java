@@ -7,32 +7,29 @@ import gameplay.Player;
 import io.TextUserInterface;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
 import util.Color;
-import util.Interrupt;
 import card.Card;
 import card.city.AnkhMorporkArea;
 
 
-@SuppressWarnings("serial")
 /**
- * <b>Enum for player cards
+ * Enum for player cards
  * Each ENUM will have a list of symbols available for that card
- * Some cards will also have text function (bottom of a card)</b>
+ * Some cards will also have text function (bottom of a card)
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0
  */
-
+@SuppressWarnings("serial")
 public enum GreenPlayerCard implements Card {
-
 
 	INIGO_SKIMMER(	
 			new ArrayList<Symbol>() {{
@@ -1115,7 +1112,7 @@ public enum GreenPlayerCard implements Card {
 						System.out.println("You cannot play this card");
 						c = UI.getCardChoice(player.getPlayerCards(), "Choose a card to play: ");
 					}
-					UI.playCard(c, player);
+					UI.playPlayerCard(c, player);
 				}
 			}
 		},
@@ -1559,6 +1556,7 @@ public enum GreenPlayerCard implements Card {
 		return this.desc;
 	}
 	
+	@Override
 	public String toString() {
 		String rtn =  name() + "\n";
 		if(textFirst) {

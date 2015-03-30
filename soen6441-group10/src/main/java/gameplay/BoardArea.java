@@ -150,9 +150,10 @@ public class BoardArea {
 	 *            the player
 	 */
 	public void addMinion(Player p) {
-		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0)) || demonCount > 0 || trollCount > 0;
+		troubleMarker = 
+				(minions.values().stream().anyMatch(c -> c > 0)) || demonCount > 0 || trollCount > 0;
 		Color playerColor = p.getColor();
-		p.decreaseMinion();
+		p.decreaseMinions();
 		if (minions.get(playerColor) == null) {
 			minions.put(playerColor, 1);
 		} else {
@@ -180,7 +181,7 @@ public class BoardArea {
 		} else {
 			minions.remove(p.getColor());
 		}
-		p.increaseMinion();
+		p.increaseMinions();
 		troubleMarker = false;
 		return true;
 	}
@@ -230,11 +231,13 @@ public class BoardArea {
 	/**
 	 * Increments the number of demons on the area.<br>
 	 * Demons are regarded as minions so they will affect trouble in the area.
+	 * If a player has a building in the area, the corresponding city area card 
+	 * should have been disabled.
 	 * 
 	 * @return true if adding a demon succeeded, false otherwise.
 	 */
 	public boolean addDemon() {
-		troubleMarker = (minions.values().stream().anyMatch(c -> c > 0)) || demonCount > 0 || trollCount > 0;
+		troubleMarker = true;
 		demonCount++;
 		return true;
 	}
@@ -242,6 +245,7 @@ public class BoardArea {
 	/**
 	 * Decrements the number of demons on the area.<br>
 	 * Demons are regarded as minions so they will affect trouble in the area.
+	 * Also 
 	 * 
 	 * @return true if removing a demon succeeded, false otherwise.
 	 */
@@ -252,8 +256,7 @@ public class BoardArea {
 	}
 
 	/**
-	 * This method adds trouble markers to the city area in case there has not
-	 * been any before.
+	 * Adds trouble markers to the city area in case there were not any before.
 	 * 
 	 * @return true if it a trouble marker was added successfully.
 	 */
@@ -267,36 +270,32 @@ public class BoardArea {
 	}
 	
 	/**
-	 * This method removes a trouble marker.<br>
-	 * Returns true if there was previously a trouble marker on area.
+	 * Removes a trouble marker.
+	 * @return true if there was previously a trouble marker on area, false
+	 * otherwise.
 	 */
 	public boolean removeTroubleMarker() {
-		if(hasTroubleMarker()){
+		if (hasTroubleMarker()) {
 			troubleMarker = false;
 			return true;
 		} else {
 			troubleMarker = false;
 			return false;
 		}
-		
 	}
 	
 
 	/**
-	 * Retrieves the cost of placing a building in the area.
-	 * 
-	 * @return the cost of building on the area.
+	 * @return the cost of placing a building on the area.
 	 */
 	public int getBuildingCost() {
 		return area.getBuildingCost();
 	}
 	
 	/**
-	 * Removes all the pieces from this area (minions, trouble marker, building).<br>
-	 * From what I understand these are not handed back to the players.
+	 * Removes all the pieces from this area (minions, trouble marker, building).
 	 */
 	public void clearAllPieces() {
-		minions.clear();
 		demonCount = 0;
 		trollCount = 0;
 		troubleMarker = false;
@@ -307,7 +306,7 @@ public class BoardArea {
 	 * Determines whether this board area is controlled by the given player.<br>
 	 * An area is controlled by a player if (s)he "has more playing pieces in it
 	 * than any single other player (a playing piece being a minion or a building)
-	 * and has more pieces than the total number of trolls in the area".<br> An area that
+	 * and has more pieces than the total number of trolls in the area". An area that
 	 * has at least one demon cannot be controlled.
 	 * 
 	 * @param player
@@ -330,6 +329,9 @@ public class BoardArea {
 		return false;
 	}
 	
+	/**
+	 * @return the player who controls this area, if any.
+	 */
 	public Player isControlled(Map<Color, Player> players) {
 		int count = 0;
 		Player control = null;
@@ -346,6 +348,10 @@ public class BoardArea {
 		}
 	}
 	
+	/**
+	 * @return the tota number of minions present in the area (demons and trolls
+	 * are not included).
+	 */
 	public int getMinionCount() {
 		return minions
 				.values()
