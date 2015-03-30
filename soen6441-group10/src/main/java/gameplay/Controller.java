@@ -2,6 +2,7 @@
 package gameplay;
 
 import java.util.Collection;
+import java.util.List;
 
 import util.Color;
 import card.player.Symbol;
@@ -119,9 +120,15 @@ public class Controller {
 		game.restorePlayerHand(p);
 	}
 	
-	public boolean isGameOver()  {
-		return game.isOver();
+	public boolean hasPlayerWon(Player p) {
+		return false;
 	}
 
+	/**
+	 * see {@link Game#finishGameOnPoints()}
+	 */
+	public List<Player> finishGameOnPoints(boolean checkForEmptyDeck) {
+		return game.finishGameOnPoints(checkForEmptyDeck);
+	}
 	
 }

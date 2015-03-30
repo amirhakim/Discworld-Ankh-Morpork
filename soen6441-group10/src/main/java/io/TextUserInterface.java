@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import java.util.function.BiConsumer;
 import util.Color;
 import util.Interrupt;
 import card.city.AnkhMorporkArea;
+import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
 import card.player.Symbol;
 
@@ -139,9 +141,7 @@ public class TextUserInterface {
 				if (action.equals(UserOption.EXIT.getOptionString())) {
 					return;
 				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
-					if (!controller.isGameOver()) {
-						playTurn(controller.advanceToNextTurn());
-					} else {
+					if (playTurn(controller.advanceToNextTurn())) {
 						System.out.println("The game has finished!");
 						printGameStatus();
 						break;
@@ -174,16 +174,41 @@ public class TextUserInterface {
 	 * (except for Random Events, which are mandatory) and restoring the hand
 	 * back to 5 cards (if applicable).
 	 * @param p
+	 * @return true if the game has finished either at the beginning or the end
+	 * of this turn, false otherwise.
 	 */
-	private void playTurn(Player p) {
+	private boolean playTurn(Player p) {
 		System.out.println(p.getColor().getAnsi());
 		printBriefGameStatus();
 		System.out.println(p.getName() + "("+p.getColor()+") " + "'s turn!");
 		System.out.println(p.getPersonality() + ": " + p.getPersonality().getDesc());
+
+		// For all the players except Commander Vimes, check the winning conditions
+		// in the beginning
+		if (controller.hasPlayerWon(p)) {
+			System.out.println(p + " has won the game!");
+			return true;
+		}
+
 		GreenPlayerCard c = getCardChoice(p.getPlayerCards(), "Choose a card to play: ");
 		playCard(c,p);
 		controller.restorePlayerHand(p);
+		
+		// For Commander Vimes we only check the winning condition at the end
+		if ((p.getPersonality() == PersonalityCard.COMMANDER_VIMES && controller.hasPlayerWon(p))) {
+			System.out.println(PersonalityCard.COMMANDER_VIMES + " has won the game.");
+			return true;
+		}
+		
+		// If the deck was empty and nobody had Commander Vimes, the game will
+		// finish on points
+		List<Player> winners = controller.finishGameOnPoints(true);
+		if (!winners.isEmpty()) {
+			System.out.println("Game winners: " + winners);
+		}
+
 		System.out.println(RESET);
+		return false;
 	}
 	
 	public void playCard(GreenPlayerCard c, Player p) {

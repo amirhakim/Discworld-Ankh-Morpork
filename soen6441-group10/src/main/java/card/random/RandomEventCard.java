@@ -67,7 +67,7 @@ public enum RandomEventCard implements Card {
 	RIOTS((game, player) -> {
 		System.out.println("Riots! That shall be the end of the game my lords...");
 		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
-			game.getWinnersByPoints();
+			game.finishGameOnPoints(false);
 		}
 	}),
 	
@@ -160,7 +160,7 @@ public enum RandomEventCard implements Card {
 				AnkhMorporkArea a = UI.getAreaChoice(adjacentAreas,
 						"Select an area to which your minion will be moved:",
 						">");
-				game.removeMinion(a.getAreaCode(), p);
+				game.removeMinion(area.getAreaCode(), p);
 				game.addMinion(a.getAreaCode(), p);
 			}
 		}

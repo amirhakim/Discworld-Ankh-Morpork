@@ -4,6 +4,7 @@ import io.TextUserInterface;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +37,13 @@ import error.InvalidGameStateException;
 public class Game {
 
 	/**
-	 * <b>Every time a player cannot pay back for a loan card, 15 points are deducted
-	 * from his/her final score.</b>
+	 * Every time a player cannot pay back for a loan card, 12 points are deducted
+	 * from his/her final score.
 	 */
-	private static final int LOAN_PENALTY = 15;
+	private static final int LOAN_PENALTY = 12;
 	
 	/**
-	 * <b>Each minion on the board gives 5 points.</b>
+	 * Each minion on the board gives 5 points.
 	 */
 	private static final int MINION_POINTS = 5;
 
@@ -391,18 +392,11 @@ public class Game {
 	 */
 	public int getNumberOfAreasControlled(Player player) {
 		int count = 0;
-		for(BoardArea ba : gameBoard.values()) {
-			if(ba.isControlledBy(player)) count++;
+		for (BoardArea ba : gameBoard.values()) {
+			if (ba.isControlledBy(player))
+				count++;
 		}
 		return count;
-		
-		// Temporarily cmmented out functonality below as it doesn't seem to return correct value
-		/*return gameBoard
-				.values()
-				.stream()
-				.map(a -> a.isControlledBy(player) ? 1 : 0)
-				.reduce(0, (partialSum, areaContribution) -> partialSum + areaContribution);
-		*/
 	}
 	
 	/**
@@ -704,6 +698,31 @@ public class Game {
 	}
 
 	/**
+	 * Checks if the game is over due to a player having won by meeting the conditions
+	 * indicated on his/her Personality card.
+	 * @param p the player whose winning condition will be checked 
+	 * @return true if the game is over because the given player has won, false otherwise.
+	 */
+	public boolean hasPlayerWon(Player p) {
+		return p.getPersonality().hasWon(players.size(), p, this);
+	}
+	
+	/**
+	 * Finishes the game on points either due to not having any player cards left
+	 * on the draw pile or because of Riots.
+	 * @param checkForEmptyDeck
+	 * @return a list containing one or multiple winners. If there are still cards
+	 * on the draw pile, an empty list is returned.
+	 */
+	public List<Player> finishGameOnPoints(boolean checkForEmptyDeck) {
+		if (checkForEmptyDeck && hasPlayerCardsLeft()) {
+			return Collections.emptyList();
+		}
+		status = GameStatus.FINISHED;
+		return getWinnersByPoints();
+	}
+
+	/**
 	 * <b>Figures out which player has won based on the total number of points:<br>
 	 * - Each minion on the board is worth five points. <br>
 	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
@@ -722,57 +741,23 @@ public class Game {
 				players.values().stream().collect(Collectors.groupingBy(p -> getPlayerPoints(p)));
 		int maxPoints = pointsToPlayers.keySet().stream().max((a, b) -> a - b).get();
 		if (pointsToPlayers.get(maxPoints).size() == 1) {
+			System.out.println("The game has a winner with " + maxPoints + " points.");
 			return pointsToPlayers.get(maxPoints);
 		}
 			
-		Map<Integer, List<Player>> moneyToPlayers =
+		// Tie break: Check the highest-value building card owned
+		Map<Integer, List<Player>> highestBuildingsToPlayers =
 				players.values().stream().collect(Collectors.groupingBy(p -> p.getMoney()));
-		int maxMoney = moneyToPlayers.keySet().stream().max((a, b) -> a - b).get();
-		return moneyToPlayers.get(maxMoney);
-	}
-
-	/**
-	 * <b>Checks if the game is over either due to not having any player cards left
-	 * on the draw pile or a player having won by meeting the conditions
-	 * indicated on his/her Personality card.</b>
-	 * 
-	 * @return true if the game is over, false otherwise.
-	 */
-	public boolean isOver() {
-		if (status == GameStatus.FINISHED) {
-			return true;
+		int highestBuildingValue = highestBuildingsToPlayers.keySet().stream().max((a, b) -> a - b).get();
+		if (highestBuildingsToPlayers.get(highestBuildingValue).size() == 1) {
+			System.out.println("The game has one winner with a building of value $" + highestBuildingValue + ".");
+		} else {
+			System.out.println("There are multiple winners to the game (same $, highest building value).");
 		}
 
-		boolean hasPlayerCardsLeft = hasPlayerCardsLeft();
-		boolean hasAnyPlayerWon = hasAnyPlayerWon();
-		boolean isOver = !hasPlayerCardsLeft || hasAnyPlayerWon;
-		
-		if (!hasPlayerCardsLeft && !hasAnyPlayerWon) {
-			// Nobody had Commander Vimes so end the game on points.
-			getWinnersByPoints();
-		}
-
-		if (isOver) {
-			status = GameStatus.FINISHED;
-		}
-
-		return isOver;
+		return highestBuildingsToPlayers.get(highestBuildingValue);
 	}
 
-	/**
-	 * <b>Checks the personality cards of all the players to find out whether
-	 * someone has won the game.</b>
-	 * 
-	 * @return true if someone has won the game, false otherwise.
-	 */
-	private boolean hasAnyPlayerWon() {
-		return players
-				.values()
-				.stream()
-				.anyMatch(
-						p -> p.getPersonality().hasWon(players.size(), p, this));
-	}
-	
 	/**
 	 * <b>Retrieves the total number of points for the given player.<br>
 	 * - Each minion on the board is worth five points. <br>
