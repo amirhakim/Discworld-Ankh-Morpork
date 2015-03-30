@@ -494,17 +494,24 @@ public class Game {
 		
 		// Do all the actions separately to give a chance to any player who
 		// has Small Gods to protect pieces/buildings:
+		// Remove minions, demons, trolls and buildings in succession
 
-		// 1. Remove minions
 		for (Map.Entry<Color, Integer> e : a.getMinions().entrySet()) {
 			for (int i = 0; i < e.getValue(); i++) {
 				a.removeMinion(getPlayerOfColor(e.getKey()));
 			}
 		}
 		
-		// 2. Remove demons
 		for (int i = 0; i < a.getDemonCount(); i++) {
 			a.removeDemon();
+		}
+		
+		for (int i = 0; i < a.getTrollCount(); i++) {
+			a.removeTroll();
+		}
+		
+		if (a.hasBuilding()) {
+			a.removeBuilding();
 		}
 	
 	}
