@@ -21,7 +21,7 @@ public enum PersonalityCard implements Card {
 	
 	LORD_VETINARI((playerCount, player, game) ->  
 		game.getTotalMinionCountForPlayer(player) >= WinningConditionHelper.getMinimumRequiredMinions(playerCount),
-		"WIN BY CONTROLLING 11 AREAS (2 PLAYERS), 10 AREAS (3 PLAYERS), 9 AREAS (4 PLAYERS)"
+		"WIN BY HAVING MINIONS IN 11 AREAS (2 PLAYERS), 10 AREAS (3 PLAYERS), 9 AREAS (4 PLAYERS)"
 	),
 	
 	LORD_SELACHII(WinningConditionHelper::hasWonByControlledAreas,

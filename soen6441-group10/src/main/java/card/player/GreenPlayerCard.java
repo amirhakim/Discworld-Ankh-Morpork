@@ -1227,13 +1227,14 @@ public enum GreenPlayerCard implements Card {
 		""
 	),
 	
+	
 	MRS_CAKE(
 		new ArrayList<Symbol>(){{
 			add(Symbol.TAKE_MONEY);
 			add(Symbol.PLACE_A_BUILDING);
 		}},
 		(player, game) -> {
-			PersonalityDeck personalityDeck = game.getPersonalityDeck();
+/*			PersonalityDeck personalityDeck = game.getPersonalityDeck();
 			int visibleSize = personalityDeck.size() -1;
 			if (visibleSize < 0) {
 				System.out.println("Only one personality left in deck...");
@@ -1245,7 +1246,7 @@ public enum GreenPlayerCard implements Card {
 					System.out.println(card);
 				}
 			}
-		},
+*/		},
 		// Money
 		2,
 		// ID
@@ -1253,6 +1254,7 @@ public enum GreenPlayerCard implements Card {
 		// DESC
 		"SCROLL: LOOK AT ALL BUT ONE UNUSED PERSONALITY CARDS"
 	),
+	
 	
 	GROAT(
 		new ArrayList<Symbol>() {{

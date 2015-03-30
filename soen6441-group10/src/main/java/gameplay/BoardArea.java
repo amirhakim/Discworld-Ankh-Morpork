@@ -36,6 +36,7 @@ public class BoardArea {
 
 	private int trollCount;
 
+	
 	/**
 	 * This constructor is invoked to create objects from the class Area.
 	 */
