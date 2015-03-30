@@ -1,6 +1,5 @@
 package gameplay;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +43,7 @@ public class Player {
 	
 	private int buildings;
 
-	private List<CityAreaCard> cityCards = new ArrayList<>();
+	private Set<CityAreaCard> cityCards = new HashSet<>();
 	
 	
 	/**
@@ -278,7 +277,8 @@ public class Player {
 	
 	/**
 	 * Adds the city area card corresponding to the given area 
-	 * to the player's hand.
+	 * to the player's hand. The card cannot be used until the next
+	 * round, unless it is Small Gods.
 	 */
 	public boolean addCityCard(AnkhMorporkArea a) {
 		return cityCards.add(new CityAreaCard(a));
@@ -318,13 +318,12 @@ public class Player {
 		return true;
 	}
 
-	/**
-	 * Get the set of the player's cards.
-	 * 
-	 * @return the player's cards
-	 */
 	public Set<GreenPlayerCard> getPlayerCards() {
 		return playerCards;
+	}
+	
+	public Set<CityAreaCard> getCityAreaCards() {
+		return cityCards;
 	}
 
 	/**

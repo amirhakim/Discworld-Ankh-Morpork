@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import util.Color;
 import util.Interrupt;
@@ -180,6 +181,10 @@ public class TextUserInterface {
 	 * of this turn, false otherwise.
 	 */
 	private boolean playTurn(Player p, boolean firstTime) {
+		if (firstTime) {
+			p.resetCityAreaCards();
+		}
+
 		System.out.println(p.getColor().getAnsi());
 		printBriefGameStatus();
 		System.out.println(p.getName() + "("+p.getColor()+") " + "'s turn!");
@@ -193,7 +198,7 @@ public class TextUserInterface {
 		}
 
 		// This is dirty but it would take a lot more time to rewrite everything
-		// with proper variance
+		// with proper variance... if it's even possible. At least the casts are safe.
 		Card c = getCardChoice(p.getPlayableCards(), "Choose a card to play: ");
 		if (c instanceof GreenPlayerCard) {
 			playPlayerCard((GreenPlayerCard) c, p);
@@ -225,7 +230,21 @@ public class TextUserInterface {
 		}
 		
 		return true;
-		
+	}
+	
+	/**
+	 * Polls the player in turn to play a city area card (if he has any available).
+	 * If the player wishes so, a card will be played.
+	 */
+	public void playCityAreaCardIfDesired(Player p) {
+		List<CityAreaCard> playableCityAreaCards = 
+				p.getCityAreaCards()
+					.stream().filter(c -> (!c.isDisabled() && !c.hasBeenPlayed() && !c.isSmallGods()))
+					.collect(Collectors.toList());
+		if (!playableCityAreaCards.isEmpty() && getUserYesOrNoChoice("Do you want "
+				+ "to play a city area card in between another action?")) {
+			playCityAreaCard(getCardChoice(playableCityAreaCards, "Choose a city area card to play: "), p);
+		}
 	}
 	
 	public void playCityAreaCard(CityAreaCard c, Player p) {
@@ -284,6 +303,7 @@ public class TextUserInterface {
 	private boolean playText(GreenPlayerCard c, Player p) {
 		BiConsumer<Player, Game> textAction = c.getText();
 		if (textAction != null) {
+			playCityAreaCardIfDesired(p);
 			System.out.println("Do you want to perform the scroll (" + c.getDesc()
 					+ ") symbol? (yes/no)");
 			System.out.print("> ");
@@ -317,6 +337,7 @@ public class TextUserInterface {
 	private boolean playSymbols(GreenPlayerCard c, Player p) {
 		// Perform the symbols on the cards selectively
 		for (Symbol s : c.getSymbols()) {
+			playCityAreaCardIfDesired(p);
 			// Only Random Events are mandatory
 			if (s != Symbol.RANDOM_EVENT) {
 				System.out
@@ -342,21 +363,16 @@ public class TextUserInterface {
 	
 	
 	/**
-	 * Get either a player card or city area card to play. This is identical to
-	 * {@link #getPlayerCardChoice(Collection, String)} but it can return either
-	 * a standard Green Player card or a City Area card. It would be too much trouble
-	 * to change the other method to return either type because a lot of classes
-	 * use it already for Green Player cards exclusively (they are already too 
-	 * dependent on the return type).
+	 * Get either a player card or city area card to play.
 	 * @param cards
 	 * @param message
 	 * @return the card selected by the player.
 	 */
-	public Card getCardChoice(Collection<? extends Card> cards, String message) {
-		Map<Integer, Card> cardMap = new HashMap<>();
+	public <C extends Card> C getCardChoice(Collection<C> cards, String message) {
+		Map<Integer, C> cardMap = new HashMap<>();
 		System.out.println(message);
 		int i = 1;
-		for (Card c : cards) {
+		for (C c : cards) {
 			System.out.print(i + ") ");
 			System.out.print(c);
 			cardMap.put(i, c);
@@ -369,22 +385,11 @@ public class TextUserInterface {
 		return cardMap.get(action);	
 	}
 
-	public GreenPlayerCard getPlayerCardChoice(Collection<GreenPlayerCard> cards, String message) {
-		Map<Integer, GreenPlayerCard> cardMap = new HashMap<>();
-		System.out.println(message);
-		int i = 1;
-		for (GreenPlayerCard c : cards) {
-			System.out.print(i + ") ");
-			System.out.print(c);
-			cardMap.put(i, c);
-			i++;
-		}
-		scanner = new Scanner(System.in);
-		// TODO Won't bother now with bound checks, will do it later
-		int action = scanner.nextInt();
-		scanner.nextLine();
-		return cardMap.get(action);
-	}
+//	private Optional<CityAreaCard> getCityAreaCardChoice(Collection<CityAreaCard> cards, String msg) {
+//		if (getUserYesOrNoChoice("Do you wish to play a City Area card at this point?")) {
+//			System.out.printl
+//		}
+//	}
 
 	/**
 	 * This method saves the game providing that the user enters a new file name or load the previous game.

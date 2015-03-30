@@ -90,7 +90,7 @@ public enum AnkhMorporkArea implements Card {
 			player.addPlayerCard(card.get());
 			
 			TextUserInterface UI = new TextUserInterface();
-			GreenPlayerCard discardCard = UI.getPlayerCardChoice(player.getPlayerCards(), 
+			GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
 					"Choose a card to discard: ");
 			player.removePlayerCard(discardCard);
 		});
@@ -117,7 +117,7 @@ public enum AnkhMorporkArea implements Card {
 		cityCardFunctionMap.put(THE_SCOURS, (player, game) -> {
 			TextUserInterface UI = new TextUserInterface();
 			Collection<GreenPlayerCard> playerCards = player.getPlayerCards();
-			GreenPlayerCard discardCard = UI.getPlayerCardChoice(playerCards, "Choose a card to discard: ");
+			GreenPlayerCard discardCard = UI.getCardChoice(playerCards, "Choose a card to discard: ");
 			player.removePlayerCard(discardCard);
 			System.out.println(discardCard + " removed.");
 
