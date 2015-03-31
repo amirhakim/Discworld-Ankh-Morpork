@@ -704,8 +704,7 @@ public enum GreenPlayerCard implements Card {
 
 			if(UI.getUserYesOrNoChoice("do you want to give "+player.getName()+" $5? (other wise your card count will be reduced)")){
 				if(choosenPlayer.hasMoney(5)){
-					choosenPlayer.decreaseMoney(5);
-					player.increaseMoney(5);
+					if(choosenPlayer.decreaseMoney(5)) player.increaseMoney(5);
 				}
 			}
 			else choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
@@ -878,10 +877,8 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
 		(player, game) -> {
-			if(game.getBank().decreaseBalance(10)){
 				game.givePlayerMoneyFromBank(player,10);
-				game.addPlayerCard(player,game.getCurrentCardInPlay());
-			}
+				player.addUnplayableCard(game.getCurrentCardInPlay());
 		},
 		// Money
 		0,
@@ -930,7 +927,7 @@ public enum GreenPlayerCard implements Card {
 		}},
 		(player, game) -> {
 			game.givePlayerMoneyFromBank(player,10);
-			game.addPlayerCard(player,game.getCurrentCardInPlay());
+			player.addUnplayableCard(game.getCurrentCardInPlay());
 		},
 		// Money
 		0,
@@ -951,14 +948,15 @@ public enum GreenPlayerCard implements Card {
 				boolean choiceMade = false;
 				Set<GreenPlayerCard> playerCards = p.getPlayerCards();
 				while(!choiceMade){
-					if(UI.getUserYesOrNoChoice("do you want to give one of your cards?")) {
-						game.addPlayerCard(p,UI.getCardChoice(playerCards,"Choose a card to give away"));
+					if(UI.getUserYesOrNoChoice(p.getName()+" do you want to give one of your cards? (otherwise you will pay $1)")){
+						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
 						choiceMade = true;
 					};
-					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card?")) {
+					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card? (otherwise you have to give up one card)")){
 						   if(p.getMoney()>=1) {
 							   if(p.decreaseMoney(1)&player.increaseMoney(1))
 							   System.out.println("Took $1 from "+p.getName());
+							   choiceMade = true;
 						   }
 						   else choiceMade = true;
 					};
@@ -978,9 +976,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.REMOVE_TROUBLE_MARKER);
 			add(Symbol.PLAY_ANOTHER_CARD);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: SERGANT_ANGUA");
-		},
+		(player, game) -> {},
 		// Money
 		0,
 		// ID
@@ -995,9 +991,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.TAKE_MONEY);
 			add(Symbol.PLACE_MINION);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: THE_AGONY_AUNTS");
-		},
+		(player, game) -> {},
 		// Money
 		2,
 		// ID
@@ -1197,9 +1191,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.ASSASINATION);
 			add(Symbol.TAKE_MONEY);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: DR_CRUCES");
-		},
+		(player, game) -> {},
 		// Money
 		3,
 		// ID
@@ -1214,9 +1206,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.REMOVE_TROUBLE_MARKER);
 			add(Symbol.TAKE_MONEY);
 		}},
-		(player, game) -> {
-			System.out.println("NOT IMPLEMENTED: CAPTAIN_CARROT");
-		},
+		(player, game) -> {},
 		// Money
 		1,
 		// ID 

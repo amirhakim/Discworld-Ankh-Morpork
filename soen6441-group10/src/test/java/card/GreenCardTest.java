@@ -480,7 +480,7 @@ public class GreenCardTest {
 		assertEquals(oneTrue, true);
 	}
 	
-	@Test
+	//@Test
 	public void drumkottTest() {
 		System.out.println("~~~DRUMKNOTT TEST~~~");
 		
@@ -603,6 +603,167 @@ public class GreenCardTest {
 		
 	}	
 	
+	//@Test
+	public void mrBoggisTest() {
+		System.out.println("~~MR BOGGIS TEST~~");
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),0);
+		}
+		for (Player p : game.getPlayers()){
+			p.increaseMoney(10);
+		}
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),10);
+		}
+		GreenPlayerCard.MR_BOGGIS.getText().accept(player, game);
+		game.setCurrentCardInPlay(GreenPlayerCard.MR_BOGGIS);
+		assertEquals(player.getMoney(),14);
+		assertEquals(player2.getMoney(),8);
+		assertEquals(player3.getMoney(),8);
+	}
+	
+	@Test
+	public void mrBentTest() {
+		System.out.println("~~MR BENT TEST~~");
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),0);
+		}
+		GreenPlayerCard.MR_BENT.getText().accept(player, game);
+		game.setCurrentCardInPlay(GreenPlayerCard.MR_BENT);
+		assertEquals(player.getMoney(),10);
+		assertEquals(player2.getMoney(),0);
+		assertEquals(player3.getMoney(),0);
+		assertTrue(player.getUnplayableCards().size()==1);
+	}
+	
+	//@Test
+	public void theBeggarsGuildTest() {
+		System.out.println("~~TESTING THE BEGGARS GUILD~~~");
+		
+		// Test if no player has cards to give
+		GreenPlayerCard.THE_BEGGARS_GUILD.getText().accept(player, game);
+		assertEquals(player.getPlayerCards().size(), 0);
+		
+		// Test that players cards increase by 2
+		// Test that other players cards derease by 2
+		for(int i=0;i<5;++i){
+			player2.addPlayerCard(game.getPlayerDeck().drawCard().get());
+		}
+		GreenPlayerCard.THE_BEGGARS_GUILD.getText().accept(player, game);
+		// Even though 3 players, player must select player 2
+		assertEquals(player.getPlayerCards().size(), 2);
+		assertEquals(player2.getPlayerCards().size(), 3);
+		
+	}
+	
+	//@Test
+	public void theBankOfAnkhMorporkTest() {
+		System.out.println("~~THE BANK OF ANKH_MORPORK TEST~~");
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),0);
+		}
+		GreenPlayerCard.THE_BANK_OF_ANKH_MORPORK.getText().accept(player, game);
+		game.setCurrentCardInPlay(GreenPlayerCard.THE_BANK_OF_ANKH_MORPORK);
+		assertEquals(player.getMoney(),10);
+		assertEquals(player2.getMoney(),0);
+		assertEquals(player3.getMoney(),0);
+		assertTrue(!player.getUnplayableCards().isEmpty());
+	}
+	
+	//@Test
+	public void theAnkhMorporkSunshineDragonSanctuaryTest() {
+		System.out.println("~~THE ANKH_MORPORK SUNSHINE DRANGON SANCTUARY TEST~~");
+		for (Player p : game.getPlayers()){
+			p.increaseMoney(10);
+			for(int i=0;i<5;++i){
+				p.addPlayerCard(game.getPlayerDeck().drawCard().get());
+			}
+		}
+		GreenPlayerCard.THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY.getText().accept(player, game);
+		game.setCurrentCardInPlay(GreenPlayerCard.THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY);
+		assertTrue(player2.getMoney()==9 || player2.getHandSize()==4);
+		assertTrue(player3.getMoney()==9 || player2.getHandSize()==4);
+	}
+	
+	//@Test
+	public void drWhiteFaceTest(){
+		System.out.println("~~DR WHITE FACE TEST~~");
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),0);
+		}
+		for (Player p : game.getPlayers()){
+			for(int i=0;i<5;++i){
+				p.addPlayerCard(game.getPlayerDeck().drawCard().get());
+			}
+		}
+		GreenPlayerCard.DR_WHIEFACE.getText().accept(player, game);
+		game.setCurrentCardInPlay(GreenPlayerCard.DR_WHIEFACE);
+		assertTrue(player2.getUnplayableCards().size()==1 || player3.getUnplayableCards().size()==1);
+		assertTrue(player2.getMoney()==5 || player3.getMoney()==5);
+
+	}
+	
+	//@Test
+	public void wallaceSonky(){
+		System.out.println("~~WALLACE SONKY TEST~~");
+		
+	}
+	
+	//@Test
+	public void theSeamstressesGuildTest(){
+		System.out.println("~~THE SEAMSTRESSES GUILD TEST~~");
+		
+		// Test if no player has more than 2$
+		GreenPlayerCard.THE_SEAMSTRESS_GUILD.getText().accept(player, game);
+		assertEquals(player.getMoney(), 0);
+		
+		// Given 2 players, and you only have the rosie card
+		// Ensure that no card is chosen
+		player2.increaseMoney(5);
+		player.addPlayerCard(GreenPlayerCard.THE_SEAMSTRESS_GUILD);
+
+		GreenPlayerCard.THE_SEAMSTRESS_GUILD.getText().accept(player, game);
+		assertEquals(player.getMoney(), 0);
+		assertEquals(player2.getMoney(), 5);
+		
+		// Given three players and only 1 with >2$, choose that player
+		// Ensure that player card count increases and money decreases
+		// Ensure your card count decreases and your money increases
+		player3.increaseMoney(1);
+		player.addPlayerCard(game.getPlayerDeck().drawCard().get());
+
+
+		GreenPlayerCard.THE_SEAMSTRESS_GUILD.getText().accept(player, game);
+		
+		assertEquals(player.getMoney(), 2);
+		assertEquals(player2.getMoney(), 3);
+		assertEquals(player.getPlayerCards().size(), 1);
+		assertEquals(player2.getPlayerCards().size(), 1);
+	}
+	
+	//@Test
+	public void mrPinMrTulipTest(){
+		System.out.println("~~MR PIN & MR TULIP TEST~~");
+	}
+	
+	//@Test
+	public void theTheivesGuildTest(){
+		System.out.println("~~THE THIEVES GUILD TEST~~");
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),0);
+		}
+		for (Player p : game.getPlayers()){
+			p.increaseMoney(10);
+		}
+		for (Player p : game.getPlayers()){
+			assertEquals(p.getMoney(),10);
+		}
+		GreenPlayerCard.MR_BOGGIS.getText().accept(player, game);
+		game.setCurrentCardInPlay(GreenPlayerCard.MR_BOGGIS);
+		assertEquals(player.getMoney(),14);
+		assertEquals(player2.getMoney(),8);
+		assertEquals(player3.getMoney(),8);
+	}
 	@Test
 	public void cakeTest() {
 		System.out.println("~~~MRS CAKE TEST~~~");
