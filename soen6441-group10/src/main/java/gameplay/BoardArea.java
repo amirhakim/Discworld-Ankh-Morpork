@@ -2,6 +2,7 @@ package gameplay;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import util.Color;
 import card.city.AnkhMorporkArea;
@@ -307,7 +308,8 @@ public class BoardArea {
 	public boolean isControlledBy(Player p) {
 		boolean playerOwnsBuilding = (getBuildingOwner() == p.getColor());
 		int playerPieces = getMinionCountForPlayer(p) + (playerOwnsBuilding ? 1 : 0);
-		int maxPiecesOwnedByAnyOtherPlayer = minions.values().stream().max(Integer::compare).get() 
+		Optional<Integer> maxOtherMinions = minions.values().stream().max(Integer::compare);
+		int maxPiecesOwnedByAnyOtherPlayer = (maxOtherMinions.isPresent() ? maxOtherMinions.get() : 0)
 				+ ((hasBuilding() && !playerOwnsBuilding) ? 1 : 0);
 		return (playerPieces > maxPiecesOwnedByAnyOtherPlayer 
 				&& playerPieces > getTrollCount() && getDemonCount() == 0);
