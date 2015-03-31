@@ -306,12 +306,14 @@ public class BoardArea {
 	 * @return true if this area is controlled by the given player, false otherwise.
 	 */
 	public boolean isControlledBy(Player p) {
-		boolean playerOwnsBuilding = (getBuildingOwner() == p.getColor());
-		int playerPieces = getMinionCountForPlayer(p) + (playerOwnsBuilding ? 1 : 0);
-		Optional<Integer> maxOtherMinions = minions.values().stream().max(Integer::compare);
-		int maxPiecesOwnedByAnyOtherPlayer = (maxOtherMinions.isPresent() ? maxOtherMinions.get() : 0)
-				+ ((hasBuilding() && !playerOwnsBuilding) ? 1 : 0);
-		return (playerPieces > maxPiecesOwnedByAnyOtherPlayer 
+		int playerPieces = getMinionCountForPlayer(p) + 
+				(getBuildingOwner() == p.getColor() ? 1 : 0);
+		Optional<Integer> maxPiecesOwnedByAnyOtherPlayer = minions.entrySet().stream()
+				.filter(e -> e.getKey() != p.getColor())
+				.map(e -> e.getValue() + (getBuildingOwner() == e.getKey() ? 1 : 0))
+				.max(Integer::compare);
+		return (playerPieces > (maxPiecesOwnedByAnyOtherPlayer.isPresent() ? 
+					maxPiecesOwnedByAnyOtherPlayer.get() : 0) 
 				&& playerPieces > getTrollCount() && getDemonCount() == 0);
 	}
 	
