@@ -419,7 +419,7 @@ public class Player {
 	 * @return true if the player owns Small Gods and can pay to protect 
 	 * a piece (has money and this city area card is active), false otherwise.
 	 */
-	public boolean canProtectPiece() {
+	public boolean canProtectPieces() {
 		return (cityCards.stream().anyMatch(c -> (c.isSmallGods() && !c.isDisabled())
 				&& money >= PROTECTION_COST)); 
 	}

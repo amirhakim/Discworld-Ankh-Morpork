@@ -492,27 +492,26 @@ public class Game {
 	public void removeAllPiecesFromArea(int areaId) {
 		BoardArea a = gameBoard.get(areaId);
 		
-		// Do all the actions separately to give a chance to any player who
-		// has Small Gods to protect pieces/buildings:
+		// Do all the actions separately and using methods from this class
+		// (i.e. not those of the board area) to give a chance to any player who
+		// has Small Gods to protect his minions/buildings:
 		// Remove minions, demons, trolls and buildings in succession
 
 		for (Map.Entry<Color, Integer> e : a.getMinions().entrySet()) {
 			for (int i = 0; i < e.getValue(); i++) {
-				a.removeMinion(getPlayerOfColor(e.getKey()));
+				removeMinion(areaId, getPlayerOfColor(e.getKey()));
 			}
 		}
 		
 		for (int i = 0; i < a.getDemonCount(); i++) {
-			a.removeDemon();
+			removeDemon(areaId);
 		}
 		
 		for (int i = 0; i < a.getTrollCount(); i++) {
 			a.removeTroll();
 		}
 		
-		if (a.hasBuilding()) {
-			a.removeBuilding();
-		}
+		removeBuilding(areaId);
 	
 	}
 	
@@ -584,6 +583,11 @@ public class Game {
 		BoardArea a = gameBoard.get(areaId);
 		if (a.hasBuilding()) {
 			Player owner = getPlayerOfColor(a.getBuildingOwner());
+			if (owner.canProtectPieces() && willProtectPiece(owner)) {
+				payToProtectPiece(owner);
+				System.out.println("Building protected.");
+				return false;
+			}
 			a.removeBuilding();
 			owner.increaseBuildings();
 			owner.removeCityCard(a.getArea());
@@ -680,7 +684,16 @@ public class Game {
 	 * @return true if a minion was removed, false otherwise.
 	 */
 	public boolean removeMinion(int areaID, Player player) {
-		return gameBoard.get(areaID).removeMinion(player);
+		BoardArea affectedArea = gameBoard.get(areaID);
+		if (affectedArea.getMinionCountForPlayer(player) > 0) {
+			if (player.canProtectPieces() && willProtectPiece(player)) {
+				payToProtectPiece(player);
+				System.out.println("Minion saved.");
+				return false;
+			}
+			affectedArea.removeMinion(player);
+		}
+		return false;
 	}
 	
 	/**
@@ -702,8 +715,18 @@ public class Game {
 	 * @return true if the demon was placed successfully, false otherwise.
 	 */
 	public boolean placeDemon(int areaID) {
-		 setCityAreaCardState(areaID, (player, area) -> player.disableCityAreaCard(area));
-		 return gameBoard.get(areaID).addDemon();
+		// Check if the building owner can protect his building
+		BoardArea boardArea = gameBoard.get(areaID);
+		if (boardArea.hasBuilding()) {
+			Player buildingOwner = players.get(boardArea.getBuildingOwner());
+			if (buildingOwner.canProtectPieces() && willProtectPiece(buildingOwner)) {
+				payToProtectPiece(buildingOwner);
+				System.out.println("Area protected by demon.");
+				return false;
+			}
+		}
+		setCityAreaCardState(areaID, (player, area) -> player.disableCityAreaCard(area));
+		return gameBoard.get(areaID).addDemon();
 	}
 	
 	/**
@@ -779,7 +802,7 @@ public class Game {
 	public List<Player> getWinnersByPoints() {
 		Map<Integer, List<Player>> pointsToPlayers =
 				players.values().stream().collect(Collectors.groupingBy(p -> getPlayerPoints(p)));
-		int maxPoints = pointsToPlayers.keySet().stream().max((a, b) -> a - b).get();
+		int maxPoints = pointsToPlayers.keySet().stream().max(Integer::compare).get();
 		if (pointsToPlayers.get(maxPoints).size() == 1) {
 			System.out.println("The game has a winner with " + maxPoints + " points.");
 			return pointsToPlayers.get(maxPoints);
@@ -788,7 +811,7 @@ public class Game {
 		// Tie break: Check the highest-value building card owned
 		Map<Integer, List<Player>> highestBuildingsToPlayers =
 				players.values().stream().collect(Collectors.groupingBy(p -> p.getMoney()));
-		int highestBuildingValue = highestBuildingsToPlayers.keySet().stream().max((a, b) -> a - b).get();
+		int highestBuildingValue = highestBuildingsToPlayers.keySet().stream().max(Integer::compare).get();
 		if (highestBuildingsToPlayers.get(highestBuildingValue).size() == 1) {
 			System.out.println("The game has one winner with a building of value $" + highestBuildingValue + ".");
 		} else {
@@ -1020,7 +1043,7 @@ public class Game {
 	private boolean willProtectPiece(Player p) {
 		return new TextUserInterface().getUserYesOrNoChoice(p.getName() + "(" + p.getColor() 
 				+ ") has Small Gods. Pay $3 to protect a piece/building affected "
-				+ "by the ongoing random event?");
+				+ "by the ongoing event?");
 	}
 	
 	/**

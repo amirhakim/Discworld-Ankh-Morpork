@@ -172,7 +172,7 @@ public class BoardArea {
 	 *            the player
 	 */
 	public boolean removeMinion(Player p) {
-		if (minions.get(p.getColor()) == null) {
+		if (minions.getOrDefault(p.getColor(), 0) == 0) {
 			return false;
 		}
 		
@@ -182,6 +182,7 @@ public class BoardArea {
 		} else {
 			minions.remove(p.getColor());
 		}
+
 		p.increaseMinions();
 		troubleMarker = false;
 		return true;
@@ -294,16 +295,6 @@ public class BoardArea {
 	}
 	
 	/**
-	 * Removes all the pieces from this area (minions, trouble marker, building).
-	 */
-	public void clearAllPieces() {
-		demonCount = 0;
-		trollCount = 0;
-		troubleMarker = false;
-		buildingColor = Color.UNDEFINED;
-	}
-
-	/**
 	 * Determines whether this board area is controlled by the given player.<br>
 	 * An area is controlled by a player if (s)he "has more playing pieces in it
 	 * than any single other player (a playing piece being a minion or a building)
@@ -314,20 +305,12 @@ public class BoardArea {
 	 * @return true if this area is controlled by the given player, false otherwise.
 	 */
 	public boolean isControlledBy(Player p) {
-		int playerPieces = getMinionCountForPlayer(p);
-		int otherPieces = getMinions().size();
-		boolean playerOwnsBuilding = getBuildingOwner() == p.getColor();
-		if (playerOwnsBuilding) {
-			playerPieces++;
-		} else if (getBuildingOwner() != Color.UNDEFINED) {
-			otherPieces++;
-		}
-		if (playerPieces > otherPieces / 2) {
-			if (playerPieces > getTrollCount() && getDemonCount() == 0) {
-				return true;
-			}
-		}
-		return false;
+		boolean playerOwnsBuilding = (getBuildingOwner() == p.getColor());
+		int playerPieces = getMinionCountForPlayer(p) + (playerOwnsBuilding ? 1 : 0);
+		int maxPiecesOwnedByAnyOtherPlayer = minions.values().stream().max(Integer::compare).get() 
+				+ ((hasBuilding() && !playerOwnsBuilding) ? 1 : 0);
+		return (playerPieces > maxPiecesOwnedByAnyOtherPlayer 
+				&& playerPieces > getTrollCount() && getDemonCount() == 0);
 	}
 	
 	/**
@@ -350,7 +333,7 @@ public class BoardArea {
 	}
 	
 	/**
-	 * @return the tota number of minions present in the area (demons and trolls
+	 * @return the total number of minions present in the area (demons and trolls
 	 * are not included).
 	 */
 	public int getMinionCount() {

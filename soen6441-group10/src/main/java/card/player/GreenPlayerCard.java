@@ -18,8 +18,6 @@ import java.util.function.BiConsumer;
 import util.Color;
 import card.Card;
 import card.city.AnkhMorporkArea;
-import card.personality.PersonalityCard;
-import card.personality.PersonalityDeck;
 
 
 /**
