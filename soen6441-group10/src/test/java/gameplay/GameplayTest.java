@@ -133,8 +133,19 @@ public class GameplayTest {
 	
 	@Test
 	public void demonTest() {
+		// Demons affect trouble the same way as minions...so adding a demon, means adding trouble
+		assertFalse(gameBoard.get(1).hasTroubleMarker());
+		gameBoard.get(1).addDemon();
+		assertTrue(gameBoard.get(1).hasTroubleMarker());		
+		gameBoard.get(1).removeDemon();
+		assertFalse(gameBoard.get(1).hasTroubleMarker());
 		
+		// ensure assasination kills demon
+		gameBoard.get(1).addDemon();
+		Symbol.ASSASINATION.getGameAction().accept(player, game);
+		assertTrue(gameBoard.get(1).getDemonCount() == 0);
 		
+	
 	}
 	
 	@Test

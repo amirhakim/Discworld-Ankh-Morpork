@@ -386,10 +386,11 @@ public class Player {
 	 */
 	public int getLoanBalance() {
 		int balance = 0;
-		if (playerCards.contains(GreenPlayerCard.MR_BENT)) {
+		// If player has PLAYED this card it is loaned
+		if (unplayableCards.contains(GreenPlayerCard.MR_BENT)) {
 			balance -= Bank.LOAN_REPAY_AMOUNT;
 		}
-		if (playerCards.contains(GreenPlayerCard.THE_BANK_OF_ANKH_MORPORK)) {
+		if (unplayableCards.contains(GreenPlayerCard.THE_BANK_OF_ANKH_MORPORK)) {
 			balance -= Bank.LOAN_REPAY_AMOUNT;
 		}
 		return balance;

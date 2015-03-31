@@ -184,6 +184,7 @@ public class Game {
 		p.setPersonality(popped.get());
 	}
 	
+	
 	public Collection<BoardArea> getBoard() {
 		return gameBoard.values();
 	}
