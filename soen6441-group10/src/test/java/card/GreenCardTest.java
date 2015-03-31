@@ -104,8 +104,9 @@ public class GreenCardTest {
 		player.increaseMoney(10);
 		Player playerTwo = game.getPlayerOfColor(Color.YELLOW);
 		playerTwo.increaseMoney(10);
-		gameBoard.get(1).addMinion(player);
-	
+	//	gameBoard.get(1).addMinion(player);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
+		
 		GreenPlayerCard.HERE_N_NOW.getText().accept(player, game);
 	}
 	
@@ -178,9 +179,12 @@ public class GreenCardTest {
 			}
 		}
 		// add 3 minions to isles
-		isles.addMinion(player);
-		isles.addMinion(player);
-		isles.addMinion(player);
+		//isles.addMinion(player);
+		game.addMinion(isles.getArea().getAreaCode(), player);
+		//isles.addMinion(player);
+		game.addMinion(isles.getArea().getAreaCode(), player);
+//		isles.addMinion(player);
+		game.addMinion(isles.getArea().getAreaCode(), player);
 		
 		GreenPlayerCard.THE_OPERA_HOUSE.getText().accept(player, game);
 		// Assert that the player now has 3 dollars
@@ -431,7 +435,7 @@ public class GreenCardTest {
 		assertEquals(player.getMoney(), 0);
 		
 		BoardArea iog = gameBoard.get(AnkhMorporkArea.ISLE_OF_GODS.getAreaCode());
-		iog.addMinion(player2);
+		//iog.addMinion(player2);
 		
 		GreenPlayerCard.THE_DYSK.getText().accept(player, game);
 		// Assert player now gets 1
@@ -480,7 +484,7 @@ public class GreenCardTest {
 		assertEquals(oneTrue, true);
 	}
 	
-	//@Test
+	@Test
 	public void drumkottTest() {
 		System.out.println("~~~DRUMKNOTT TEST~~~");
 		
@@ -603,7 +607,7 @@ public class GreenCardTest {
 		
 	}	
 	
-	//@Test
+	@Test
 	public void mrBoggisTest() {
 		System.out.println("~~MR BOGGIS TEST~~");
 		for (Player p : game.getPlayers()){
@@ -636,7 +640,7 @@ public class GreenCardTest {
 		assertTrue(player.getUnplayableCards().size()==1);
 	}
 	
-	//@Test
+	@Test
 	public void theBeggarsGuildTest() {
 		System.out.println("~~TESTING THE BEGGARS GUILD~~~");
 		
@@ -656,7 +660,7 @@ public class GreenCardTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void theBankOfAnkhMorporkTest() {
 		System.out.println("~~THE BANK OF ANKH_MORPORK TEST~~");
 		for (Player p : game.getPlayers()){
@@ -670,7 +674,7 @@ public class GreenCardTest {
 		assertTrue(!player.getUnplayableCards().isEmpty());
 	}
 	
-	//@Test
+	@Test
 	public void theAnkhMorporkSunshineDragonSanctuaryTest() {
 		System.out.println("~~THE ANKH_MORPORK SUNSHINE DRANGON SANCTUARY TEST~~");
 		for (Player p : game.getPlayers()){
@@ -685,7 +689,7 @@ public class GreenCardTest {
 		assertTrue(player3.getMoney()==9 || player2.getHandSize()==4);
 	}
 	
-	//@Test
+	@Test
 	public void drWhiteFaceTest(){
 		System.out.println("~~DR WHITE FACE TEST~~");
 		for (Player p : game.getPlayers()){
@@ -703,13 +707,13 @@ public class GreenCardTest {
 
 	}
 	
-	//@Test
+	@Test
 	public void wallaceSonky(){
 		System.out.println("~~WALLACE SONKY TEST~~");
 		
 	}
 	
-	//@Test
+	@Test
 	public void theSeamstressesGuildTest(){
 		System.out.println("~~THE SEAMSTRESSES GUILD TEST~~");
 		
@@ -741,12 +745,12 @@ public class GreenCardTest {
 		assertEquals(player2.getPlayerCards().size(), 1);
 	}
 	
-	//@Test
+	@Test
 	public void mrPinMrTulipTest(){
 		System.out.println("~~MR PIN & MR TULIP TEST~~");
 	}
 	
-	//@Test
+	@Test
 	public void theTheivesGuildTest(){
 		System.out.println("~~THE THIEVES GUILD TEST~~");
 		for (Player p : game.getPlayers()){

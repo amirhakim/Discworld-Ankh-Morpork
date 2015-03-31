@@ -18,6 +18,8 @@ import java.util.function.BiConsumer;
 import util.Color;
 import card.Card;
 import card.city.AnkhMorporkArea;
+import card.personality.PersonalityCard;
+import card.personality.PersonalityDeck;
 
 
 /**
@@ -128,7 +130,8 @@ public enum GreenPlayerCard implements Card {
 					
 				} else if(dieRoll == 1) {
 					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
-					chosenArea.removeMinion(player);
+					//chosenArea.removeMinion(player);
+					game.removeMinion(chosenArea.getArea().getAreaCode(), player);
 				} else {
 					System.out.println("No Action");
 				}
@@ -568,8 +571,10 @@ public enum GreenPlayerCard implements Card {
 			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeList);
 			
 			// Actually do the movement
-			removeArea.removeMinion(player);
-			chosenArea.addMinion(player);
+			//removeArea.removeMinion(player);
+			game.removeMinion(removeArea.getArea().getAreaCode(), player);
+			//chosenArea.addMinion(player);
+			game.addMinion(chosenArea.getArea().getAreaCode(), player);
 			
 		},
 		// Money
@@ -946,7 +951,6 @@ public enum GreenPlayerCard implements Card {
 			TextUserInterface UI = TextUserInterface.getUI();
 			for(Player p: game.getPlayers()){
 				boolean choiceMade = false;
-				Set<GreenPlayerCard> playerCards = p.getPlayerCards();
 				while(!choiceMade){
 					if(UI.getUserYesOrNoChoice(p.getName()+" do you want to give one of your cards? (otherwise you will pay $1)")){
 						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
@@ -1079,9 +1083,11 @@ public enum GreenPlayerCard implements Card {
 		BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeListArea);					
 		
 		// Actually do the movement
-		removeArea.removeMinion(choosenPlayer);
-		chosenArea.addMinion(choosenPlayer);
-								
+		//removeArea.removeMinion(choosenPlayer);
+		game.removeMinion(removeArea.getArea().getAreaCode(), choosenPlayer);
+//		chosenArea.addMinion(choosenPlayer);
+		game.addMinion(chosenArea.getArea().getAreaCode(), choosenPlayer);
+		
 		},
 		// Money
 		0,
@@ -1167,7 +1173,8 @@ public enum GreenPlayerCard implements Card {
 				case "2":
 				{
 					BoardArea chosenArea = textUI.getAreaChoice(game.getAreasWithPlayerMinions(player), "Choose area to remove minion", "Choose: ");
-					chosenArea.removeMinion(player);	
+					//chosenArea.removeMinion(player);	
+					game.removeMinion(chosenArea.getArea().getAreaCode(), player);
 				}
 					break;
 					
@@ -1222,7 +1229,7 @@ public enum GreenPlayerCard implements Card {
 			add(Symbol.PLACE_A_BUILDING);
 		}},
 		(player, game) -> {
-/*			PersonalityDeck personalityDeck = game.getPersonalityDeck();
+			PersonalityDeck personalityDeck = game.getPersonalityDeck();
 			int visibleSize = personalityDeck.size() -1;
 			if (visibleSize < 0) {
 				System.out.println("Only one personality left in deck...");
@@ -1234,7 +1241,7 @@ public enum GreenPlayerCard implements Card {
 					System.out.println(card);
 				}
 			}
-*/		},
+		},
 		// Money
 		2,
 		// ID
@@ -1366,9 +1373,10 @@ public enum GreenPlayerCard implements Card {
 			BoardArea chosenArea = UI.getAreaChoice(neighbours, "Choose area to place minion", "Choose area", true, excludeListArea);					
 			
 			// Actually do the movement
-			removeArea.removeMinion(choosenPlayer);
-			chosenArea.addMinion(choosenPlayer);
-						
+			//removeArea.removeMinion(choosenPlayer);
+			game.removeMinion(removeArea.getArea().getAreaCode(), choosenPlayer);
+			//chosenArea.addMinion(choosenPlayer);
+			game.addMinion(chosenArea.getArea().getAreaCode(), choosenPlayer);			
 			
 		},
 		// Money
@@ -1496,7 +1504,8 @@ public enum GreenPlayerCard implements Card {
 					System.out.println("No buildings to be removed, sorry");
 				} else {
 					BoardArea chosenArea = UI.getAreaChoice(buildings, "Select an area: ", "Choice: ");
-					chosenArea.removeBuilding();
+				//	chosenArea.removeBuilding();
+					game.removeBuilding(chosenArea.getArea().getAreaCode());
 				}
 			}
 		},
