@@ -40,7 +40,7 @@ public enum Symbol {
 	 * minion in any area. </b>
 	*/
 	PLACE_MINION((player, game)->{
-		TextUserInterface UI = new TextUserInterface();
+		TextUserInterface UI = TextUserInterface.getUI();
 		// Get players minion count
 		int availableMinions = player.getMinionCount();
 
@@ -51,7 +51,8 @@ public enum Symbol {
 								.collect(Collectors.toList()),
 						"All minions available. Select area to place minion",
 						"Choose Area: ");
-				gameBoard.get(chosenArea.getAreaCode()).addMinion(player);
+				game.addMinion(chosenArea.getAreaCode(), player);
+//				gameBoard.get(chosenArea.getAreaCode()).addMinion(player);
 
 		} else if (availableMinions == 0) {
 
@@ -62,8 +63,9 @@ public enum Symbol {
 							.collect(Collectors.toList()),
 					"All minions in play. Select area to remove minion",
 					"Choose Area: ");
-			subGameBoard.get(chosenArea.getAreaCode()).removeMinion(player);
-
+//			subGameBoard.get(chosenArea.getAreaCode()).removeMinion(player);
+			game.removeMinion(chosenArea.getAreaCode(), player);
+			
 			// Get areas that player CAN player on
 			Map<Integer, BoardArea> possibilities = game
 					.getMinionPlacementAreas(player);
@@ -79,8 +81,10 @@ public enum Symbol {
 			BoardArea placeArea = UI.getAreaChoice(possibilities, "Select area to place removed minion",
 					"Choose Area: ", true, excludeList);
 			
-			gameBoard.get(placeArea.getArea().getAreaCode()).addMinion(player);
-
+			//gameBoard.get(placeArea.getArea().getAreaCode()).addMinion(player);
+			game.addMinion(placeArea.getArea().getAreaCode(), player);
+			
+			
 		} else {
 
 			Map<Integer, BoardArea> possibilities = game.getMinionPlacementAreas(player);
@@ -91,7 +95,8 @@ public enum Symbol {
 									.collect(Collectors.toList()),
 							"Unused minions available. Select area to palce new minion",
 							"Choose Area: ");
-			possibilities.get(chosenArea.getAreaCode()).addMinion(player);	
+//			possibilities.get(chosenArea.getAreaCode()).addMinion(player);	
+			game.addMinion(chosenArea.getAreaCode(), player);
 		}
 		
 	}),
@@ -131,7 +136,8 @@ public enum Symbol {
 				System.out.println("All areas have a building or a trouble marker.");
 			} else {
 				//Do the building removal and placement
-				chosenRemoveArea.removeBuilding();
+		//		chosenRemoveArea.removeBuilding();
+				game.removeBuilding(chosenRemoveArea.getArea().getAreaCode());
 		//		freeAreas.remove(chosenRemoveArea);	
 				ArrayList<Integer> excludeList = new ArrayList<Integer>();
 				excludeList.add(chosenRemoveArea.getArea().getAreaCode());
@@ -217,7 +223,8 @@ public enum Symbol {
 		TextUserInterface textUI = TextUserInterface.getUI();
 		
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas, "Select area to remove trouble", "Choice: ");
-		trouble.removeTroubleMarker();
+		//trouble.removeTroubleMarker();
+		game.removeTroubleMarker(trouble.getArea().getAreaCode());
 	}),
 	
 	

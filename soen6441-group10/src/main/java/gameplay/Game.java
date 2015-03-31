@@ -709,6 +709,16 @@ public class Game {
 	}
 	
 	/**
+	 * <b:Remove a troll to the area with the given ID.
+	 * 
+	 * @param areaID
+	 * @return true if successfully remove troll
+	 */
+	public boolean removeTroll(int areaID) {
+		return gameBoard.get(areaID).addTroll();
+	}
+	
+	/**
 	 * Place a demon to the area with the given ID. Also, the City Area card corresponding
 	 * to that area is disabled (it will only be enabled again if the demon is removed).
 	 * 
@@ -754,6 +764,17 @@ public class Game {
 	 */
 	public boolean addTroubleMarker(int areaID) {
 		return gameBoard.get(areaID).addTroubleMarker();
+	}
+	
+	/**
+	 * Remove a trouble marker to the area with the given ID.
+	 * 
+	 * @param areaID
+	 * @return true if the trouble marker was removed successfully, false
+	 *         otherwise.
+	 */
+	public boolean removeTroubleMarker(int areaID) {
+		return gameBoard.get(areaID).removeTroubleMarker();
 	}
 
 	/**

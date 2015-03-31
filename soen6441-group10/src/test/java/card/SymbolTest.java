@@ -65,7 +65,8 @@ public class SymbolTest {
 		// Fill up an area so player has no minions
 		BoardArea secondArea = gameBoard.get(1);
 		while (player.getMinionCount() != 0) {
-			secondArea.addMinion(player);
+			//secondArea.addMinion(player);
+			game.addMinion(secondArea.getArea().getAreaCode(), player);
 		}
 		int secondAreaMinionsBefore = secondArea.getMinionCountForPlayer(player);
 		placeMinionSymbol.getGameAction().accept(player, game);
@@ -104,7 +105,8 @@ public class SymbolTest {
 
 		// Take away some of the players minions
 		BoardArea area = gameBoard.get(1);
-		area.addMinion(player);
+		//area.addMinion(player);
+		game.addMinion(area.getArea().getAreaCode(), player);		
 		assertEquals(player.getMinionCount(), Player.TOTAL_MINIONS - 1);
 		placeMinionTest.getGameAction().accept(player, game);
 		assertEquals(player.getMinionCount(), Player.TOTAL_MINIONS - 2);
@@ -149,7 +151,8 @@ public class SymbolTest {
 		// Give player unlimited funds
 		player.increaseMoney(10000);
 		int previousPlayerBalance = player.getMoney();
-		gameBoard.get(1).addMinion(player);
+		//gameBoard.get(1).addMinion(player);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
 		
 		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
 		// Ensure that the players buildings have decreased
@@ -177,8 +180,10 @@ public class SymbolTest {
 		for(BoardArea ba : gameBoard.values()) {
 			ba.addTroubleMarker();
 		}
-		gameBoard.get(1).removeTroubleMarker();
-		gameBoard.get(1).addMinion(player);
+		//gameBoard.get(1).removeTroubleMarker();
+		game.removeTroubleMarker(gameBoard.get(1).getArea().getAreaCode());
+		//gameBoard.get(1).addMinion(player);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
 		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
 		
 		// Ensure that the players buildings have decreased
@@ -199,7 +204,8 @@ public class SymbolTest {
 		player.increaseMoney(1000);
 		// Can not add building to build area with trouble
 		for(BoardArea ba : gameBoard.values()) {
-			ba.addTroubleMarker();
+			//ba.addTroubleMarker();
+			game.addTroubleMarker(ba.getArea().getAreaCode());
 		}
 		int buildingCount = player.getBuildings();
 		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
@@ -217,13 +223,17 @@ public class SymbolTest {
 		BoardArea area = gameBoard.get(1);
 		
 		// Set up troubled areas
-		area.addTroubleMarker();
+		//area.addTroubleMarker();
+		game.addTroubleMarker(area.getArea().getAreaCode());
+		
 		// Set up a minion to kill
 		Player player2 = game.getPlayerOfColor(Color.YELLOW);
-		area.addMinion(player2);
-		area.addTroll();
-		area.addDemon();
-		
+//		area.addMinion(player2);
+		game.addMinion(area.getArea().getAreaCode(), player2);
+	//	area.addTroll();
+		game.placeTroll(area.getArea().getAreaCode());
+//		area.addDemon();
+		game.placeDemon(area.getArea().getAreaCode());
 		
 		// Get count of pieces before
 		int trolls = area.getTrollCount();
@@ -255,7 +265,8 @@ public class SymbolTest {
 		System.out.println("~~TROUBLE MARKER TEST~~");
 		// Add trouble marker to area
 		BoardArea area = gameBoard.get(1);
-		area.addTroubleMarker();
+//		area.addTroubleMarker();
+		game.addTroubleMarker(area.getArea().getAreaCode());
 		boolean hasTroubleBefore = area.hasTroubleMarker();
 		Symbol.REMOVE_TROUBLE_MARKER.getGameAction().accept(player, game);
 		assertNotEquals(hasTroubleBefore, area.hasTroubleMarker());
@@ -303,9 +314,10 @@ public class SymbolTest {
 		
 		
 		
-		gameBoard.get(1).addMinion(player2);
-		gameBoard.get(1).addMinion(player);
-		
+//		gameBoard.get(1).addMinion(player2);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player2);
+//		gameBoard.get(1).addMinion(player);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
 		// Give player 2 GASPODE
 		game.addPlayerCard(player2, GreenPlayerCard.GASPODE);
 		
@@ -391,7 +403,8 @@ public class SymbolTest {
 		
 		// We'll test interrupting FOUL_OLE_RON
 		// Put minion on board
-		gameBoard.get(1).addMinion(player2);
+//		gameBoard.get(1).addMinion(player2);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player2);
 		GreenPlayerCard.FOUL_OLE_RON.getText().accept(player, game);
 		boolean interruptPlayed = player2.getPlayerCards().size() == 0;
 		if(interruptPlayed) {
