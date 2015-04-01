@@ -1,6 +1,7 @@
 package card;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import gameplay.BoardArea;
 import gameplay.Die;
 import gameplay.Game;
@@ -13,12 +14,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import card.city.AnkhMorporkArea;
-import card.personality.PersonalityCard;
-import card.player.GreenPlayerCard;
-import card.random.RandomEventCard;
 import util.Color;
 import card.city.AnkhMorporkArea;
+import card.random.RandomEventCard;
 
 public class AnkhMorporkAreaTest {
 
@@ -52,11 +50,11 @@ public class AnkhMorporkAreaTest {
 	}
 	
 	/**
-	 * Test the neighbour rereival
+	 * Test the neighbour retrieval
 	 * Expecting DOLLY SISTERS, DRAGONS LANDING, UNREAL ESTATE, NAP HILL
 	 */
 	@Test
-	public void neighbourTest() {
+	public void testNeighbours() {
 		for (AnkhMorporkArea a : AnkhMorporkArea
 				.getAdjacentAreas(AnkhMorporkArea.DOLLY_SISTERS)) {
 			System.out.println(a);
@@ -69,26 +67,28 @@ public class AnkhMorporkAreaTest {
 		}
 	}
 	
-	//@Test
-	public void dollySistersTest() {
+	@Test
+	public void testDollySisters() {
 		System.out.println("~~~TESTING DOLLY SISTERS~~~");
-	/* TODO	
-		// No area should have minion placed because player cant afford it
-		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.DOLLY_SISTERS).accept(player, game);
-		BoardArea ds = gameBoard.get(AnkhMorporkArea.DOLLY_SISTERS.getAreaCode());
-		for(BoardArea ba : game.getNeighbours(ds).values()) {
+
+		// No area should have minion placed because player can't afford it
+		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.DOLLY_SISTERS).accept(
+				player, game);
+		BoardArea ds = gameBoard.get(AnkhMorporkArea.DOLLY_SISTERS
+				.getAreaCode());
+		for (BoardArea ba : game.getNeighbours(ds).values()) {
 			System.out.println(ba.getArea());
 			assertEquals(ba.getMinionCount(), 0);
 		}
+
 		// Now player can afford it
 		player.increaseMoney(3);
-		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.DOLLY_SISTERS).accept(player, game);
-	*/	
-		
+		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.DOLLY_SISTERS).accept(
+				player, game);
 	}
 	
-	//@Test
-	public void unrealEstateTest() {
+	@Test
+	public void testUnrealEstate() {
 		System.out.println("~~~TESTING UNREAL ESTATE TEST~~~");
 		
 		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.UNREAL_ESTATE).accept(player, game);
@@ -97,16 +97,15 @@ public class AnkhMorporkAreaTest {
 		assertEquals(player.getPlayerCards().size(), 0);	
 	}
 	
-	//@Test
-	public void dragonsLandingTest() {
+	@Test
+	public void testDragonsLanding() {
 		System.out.println("~~~DRAGONS LANDING TEST~~~");
 		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.DRAGONS_LANDING).accept(player, game);
-//		assertEquals(player.getMoney(), 2);
-		
+		assertEquals(player.getMoney(), 2);
 	}
 	
 	@Test
-	public void smallGodTest() {
+	public void testSmallGods() {
 		System.out.println("~~~SMALL GODS TEST~~~");
 		
 		// Give player small gods
@@ -114,12 +113,8 @@ public class AnkhMorporkAreaTest {
 		Die.getDie().setCheat(1);
 		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
 		RandomEventCard.DRAGON.getGameAction().accept(game, player);
-		
-		
 	}
-	
-	
-	
+
 }
 	
 	

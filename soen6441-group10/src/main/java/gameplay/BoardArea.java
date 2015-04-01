@@ -115,7 +115,6 @@ public class BoardArea {
 
 		buildingColor = p.getColor();
 		
-		// TODO move this to game.addBuilding()
 		p.decreaseBuilding();
 		return true;
 	}

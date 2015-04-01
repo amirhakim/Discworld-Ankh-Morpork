@@ -19,8 +19,8 @@ public enum RandomEventCard implements Card {
 	DRAGON((game, player) -> {
 		System.out.println("Dragon! Die roll to determine the affected area...");
 		int areaAffected = Die.getDie().roll();
-		System.out.println("Rolled a " + areaAffected + " removing trouble and buildsings from " + 
-				game.getGameBoard().get(areaAffected).getArea().name());
+		System.out.println("Rolled a " + areaAffected + ": removing trouble and buildsings from " + 
+				game.getGameBoard().get(areaAffected).getArea().name() + "...");
 		game.removeAllPiecesFromArea(areaAffected);
 	}),
 	

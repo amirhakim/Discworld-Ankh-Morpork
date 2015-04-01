@@ -246,7 +246,7 @@ public class Player {
 	 *         incremented).
 	 */
 	public boolean increaseBuildings() {
-		if ((this.buildings + 1) < TOTAL_BUILDINGS) {
+		if ((this.buildings + 1) <= TOTAL_BUILDINGS) {
 			this.buildings = this.buildings + 1;
 			return true;
 		} else {
@@ -310,12 +310,12 @@ public class Player {
 	}
 	
 	public boolean enableCityAreaCard(AnkhMorporkArea a) {
-		List<CityAreaCard> cardToDisable = 
+		List<CityAreaCard> cardToEnable = 
 				cityCards.stream().filter(c -> c.getArea() == a).collect(Collectors.toList());
-		if (cardToDisable.size() != 1) {
-			throw new IllegalStateException("Impossible state at disableCityAreaCard!");
+		if (cardToEnable.size() != 1) {
+			throw new IllegalStateException("Impossible state at enableCityAreaCard!");
 		}
-		cardToDisable.get(0).setDisabled(false);
+		cardToEnable.get(0).setDisabled(false);
 		return true;
 	}
 
