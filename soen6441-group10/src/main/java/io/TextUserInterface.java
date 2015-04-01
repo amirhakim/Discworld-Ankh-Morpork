@@ -612,6 +612,7 @@ public class TextUserInterface {
 	public AnkhMorporkArea getAreaChoice(Collection<AnkhMorporkArea> availableAreas, 
 			String outputMsg, String inputMsg) {
 		System.out.println(outputMsg);
+				
 		for (AnkhMorporkArea a : availableAreas) {
 			System.out.println(a.getAreaCode() + ": " + a); 
 		}

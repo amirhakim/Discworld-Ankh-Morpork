@@ -246,7 +246,7 @@ public enum AnkhMorporkArea implements Card {
 	}
 	
 	private static void payAndAddMinion(AnkhMorporkArea a, Player player, Game game) {
-		TextUserInterface UI = new TextUserInterface();
+		TextUserInterface UI = TextUserInterface.getUI();
 		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
 
 		if (player.decreaseMoney(MINION_COST)) {
