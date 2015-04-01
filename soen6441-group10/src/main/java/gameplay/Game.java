@@ -625,8 +625,8 @@ public class Game {
 	 * @return true if adding building was success
 	 */
 	public boolean addBuilding(Player player, BoardArea boardArea) {
-		if (boardArea.addBuildingForPlayer(player)
-				&& giveBankMoneyFromPlayer(player, boardArea.getBuildingCost())) {
+		if (giveBankMoneyFromPlayer(player, boardArea.getBuildingCost())
+				&& boardArea.addBuildingForPlayer(player)) {
 			player.addCityCard(boardArea.getArea());
 			return true;
 		}
