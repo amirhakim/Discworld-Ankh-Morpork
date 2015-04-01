@@ -9,9 +9,9 @@ import java.util.Map;
 import card.Card;
 
 /**
- * <b>An enumeration of the Personality Cards available in the game, which also
+ * An enumeration of the Personality Cards available in the game, which also
  * contains functionality for checking the winning conditions of each of them, 
- * encoded in functions.</b>
+ * encoded in functions.
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0

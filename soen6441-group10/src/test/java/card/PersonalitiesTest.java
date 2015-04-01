@@ -288,7 +288,6 @@ public class PersonalitiesTest {
 			
 			// THIS FAILS TODO fix 	
 			assertTrue(game.hasPlayerWon(player));
-			
 	 }
 	 
 	 /**

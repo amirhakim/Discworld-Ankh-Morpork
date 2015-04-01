@@ -81,9 +81,9 @@ public class Game {
 
 	public Game() {
 		status = GameStatus.UNINITIATED;
-		gameBoard = new HashMap<Integer, BoardArea>();
+		gameBoard = new HashMap<>();
 		currentCardInPlay = null;
-		interrupts = new HashMap<GreenPlayerCard, Color>();
+		interrupts = new HashMap<>();
 	}
 
 	/**
@@ -844,8 +844,9 @@ public class Game {
 	/**
 	 * Retrieves the total number of points for the given player.<br>
 	 * - Each minion on the board is worth five points. <br>
-	 * - Each building is worth a number of points equal to its monetary cost. Each $1 in hand
-	 *   is worth one point. <br>
+	 * - Each building is worth a number of points equal to its monetary cost unless
+	 *   there is a demon in the area. 
+	 * - Each $1 in hand is worth one point. <br>
 	 * - If you have the Mr. Bent card or the Bank card then you must pay back the amount noted on the card. <br>
 	 * - If you cannot do so then you lose fifteen points for each such card. 
 	 * 
@@ -855,9 +856,9 @@ public class Game {
 		int points = gameBoard
 				.values()
 				.stream()
-				.map(area -> (area.getMinionCountForPlayer(p) * MINION_POINTS + (area
-						.getBuildingOwner() == p.getColor() ? area
-						.getBuildingCost() : 0)))
+				.map(area -> (area.getMinionCountForPlayer(p) * MINION_POINTS + 
+						((area.getBuildingOwner() == p.getColor() &&
+						area.getDemonCount() == 0) ? area.getBuildingCost() : 0)))
 				.reduce(0, (s, areaPoints) -> s + areaPoints);
 		
 		
