@@ -1,28 +1,25 @@
 package card;
 
-import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gameplay.BoardArea;
 import gameplay.Game;
 import gameplay.Player;
 import io.TextUserInterface;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import util.Color;
 import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
-import util.Color;
 
 public class PersonalitiesTest {
-
-	
 
 	Game game;
 	Player player;
@@ -270,7 +267,7 @@ public class PersonalitiesTest {
 			
 			// test with buildings now ... 
 			// rest money
-			player.decreaseMoney(74);
+			player.decreaseMoney(54);
 			// empty unplayable cards
 			for(GreenPlayerCard c : player.getUnplayableCards()) {
 				player.getPlayableCards().remove(c);
@@ -290,7 +287,7 @@ public class PersonalitiesTest {
 			// 6 + 18 + 12 + 18$ = 54 ... he should win
 			
 			// THIS FAILS TODO fix 	
-//			assertTrue(game.hasPlayerWon(player));
+			assertTrue(game.hasPlayerWon(player));
 			
 	 }
 	 
