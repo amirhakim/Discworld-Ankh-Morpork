@@ -690,7 +690,7 @@ public enum GreenPlayerCard implements Card {
 			
 	),
 	
-	DR_WHIEFACE(
+	DR_WHITEFACE(
 		/*
 		 * Select another player, if they do not want
 		 * to give you $5 then place this card in front
@@ -707,12 +707,19 @@ public enum GreenPlayerCard implements Card {
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 
+			boolean paid = false;
 			if(UI.getUserYesOrNoChoice("do you want to give "+player.getName()+" $5? (other wise your card count will be reduced)")){
 				if(choosenPlayer.hasMoney(5)){
 					if(choosenPlayer.decreaseMoney(5)) player.increaseMoney(5);
+					paid = true;
+				} else {
+					System.out.println("Sorry that player does not have 5$");
 				}
 			}
-			else choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
+			if(!paid) {
+				System.out.println("Giving DR WHITEFACE to " + choosenPlayer.getName());
+				choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
+			}
 		}, 
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
@@ -906,6 +913,11 @@ public enum GreenPlayerCard implements Card {
 			ArrayList<Color> excludeList = new ArrayList<Color>();
 			excludeList.add(player.getColor());
 			
+			for(Player p: myPlayersMap.values()) {
+				if(p.getPlayerCards().size() < 2){
+					excludeList.add(p.getColor());
+				}
+			}
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 			if(choosenPlayer == null ) {
@@ -950,20 +962,24 @@ public enum GreenPlayerCard implements Card {
 			//TextUserInterface UI = new TextUserInterface();
 			TextUserInterface UI = TextUserInterface.getUI();
 			for(Player p: game.getPlayers()){
+				// Don't ask current player playing
+				if(p.getColor() == player.getColor()) continue;
 				boolean choiceMade = false;
 				while(!choiceMade){
 					if(UI.getUserYesOrNoChoice(p.getName()+" do you want to give one of your cards? (otherwise you will pay $1)")){
 						game.addPlayerCard(p,UI.getCardChoice(p.getPlayerCards(),"Choose a card to give away"));
 						choiceMade = true;
 					};
-					if(UI.getUserYesOrNoChoice("do you want to give $1 instead of a card? (otherwise you have to give up one card)")){
-						   if(p.getMoney()>=1) {
-							   if(p.decreaseMoney(1)&player.increaseMoney(1))
-							   System.out.println("Took $1 from "+p.getName());
-							   choiceMade = true;
-						   }
-						   else choiceMade = true;
-					};
+					if(!choiceMade) {
+						if(UI.getUserYesOrNoChoice(p.getName() + "do you want to give $1 instead of a card? (otherwise you have to give up one card)")){
+							if(p.getMoney()>=1) {
+								if(p.decreaseMoney(1)&player.increaseMoney(1))
+									System.out.println("Took $1 from "+p.getName());
+									choiceMade = true;
+								}
+							else choiceMade = true;
+						};
+					}
 				}
 			}
 		},

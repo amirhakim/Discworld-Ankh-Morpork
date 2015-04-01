@@ -436,6 +436,7 @@ public class GreenCardTest {
 		
 		BoardArea iog = gameBoard.get(AnkhMorporkArea.ISLE_OF_GODS.getAreaCode());
 		//iog.addMinion(player2);
+		game.addMinion(iog.getArea().getAreaCode(), player2);
 		
 		GreenPlayerCard.THE_DYSK.getText().accept(player, game);
 		// Assert player now gets 1
@@ -683,10 +684,16 @@ public class GreenCardTest {
 				p.addPlayerCard(game.getPlayerDeck().drawCard().get());
 			}
 		}
-		GreenPlayerCard.THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY.getText().accept(player, game);
+		
 		game.setCurrentCardInPlay(GreenPlayerCard.THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY);
-		assertTrue(player2.getMoney()==9 || player2.getHandSize()==4);
-		assertTrue(player3.getMoney()==9 || player2.getHandSize()==4);
+		GreenPlayerCard.THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY.getText().accept(player, game);
+		
+		if(player2.getMoney() == 9){
+			assertTrue(player2.getHandSize()==5);
+		}
+		if(player3.getMoney() == 9) {
+			assertTrue(player2.getHandSize() == 5);
+		}
 	}
 	
 	@Test
@@ -700,11 +707,24 @@ public class GreenCardTest {
 				p.addPlayerCard(game.getPlayerDeck().drawCard().get());
 			}
 		}
-		GreenPlayerCard.DR_WHIEFACE.getText().accept(player, game);
-		game.setCurrentCardInPlay(GreenPlayerCard.DR_WHIEFACE);
-		assertTrue(player2.getUnplayableCards().size()==1 || player3.getUnplayableCards().size()==1);
-		assertTrue(player2.getMoney()==5 || player3.getMoney()==5);
-
+		game.setCurrentCardInPlay(GreenPlayerCard.DR_WHITEFACE);
+		GreenPlayerCard.DR_WHITEFACE.getText().accept(player, game);
+		if(player2.getUnplayableCards().size() != 1){
+			assert(player3.getUnplayableCards().size() == 1);
+			game.discardCard(GreenPlayerCard.DR_WHITEFACE, player3);
+			assert(player3.getUnplayableCards().size() == 1);
+			assert(player3.getPlayerCards().contains(GreenPlayerCard.DR_WHITEFACE));
+		} else if(player3.getUnplayableCards().size() != 1) {
+			assert(player2.getUnplayableCards().size() == 1);
+			game.discardCard(GreenPlayerCard.DR_WHITEFACE, player2);
+			assert(player2.getUnplayableCards().size() == 1);
+			assert(player2.getPlayerCards().contains(GreenPlayerCard.DR_WHITEFACE));
+		}
+		
+		assertTrue(player.getMoney()==0);
+		assertTrue(player2.getMoney()==0);
+		assertTrue(player3.getMoney()==0);
+		
 	}
 	
 	@Test

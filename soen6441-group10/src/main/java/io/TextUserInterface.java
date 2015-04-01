@@ -782,6 +782,18 @@ public class TextUserInterface {
 	 * @return chosen player
 	 */
 	public Player getPlayer(Map<Color, Player> playerMap, ArrayList<Color> excludeList,  Boolean checkWallace) {
+		boolean noValidChoice = true;
+		for(Player p : controller.getGame().getPlayersMap().values()) {
+			if(!excludeList.contains(p.getColor())) {
+				noValidChoice = false;
+			}
+		}
+		
+		if(noValidChoice) {
+			System.out.println("Sorry, but no player can be chosen");
+			return null;
+		}
+		
 		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<Color, Player> pair = it.next();
