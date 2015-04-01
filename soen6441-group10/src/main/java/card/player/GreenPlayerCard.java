@@ -698,29 +698,56 @@ public enum GreenPlayerCard implements Card {
 		 * of five cards and when they come to refil their hand. 
 		 * They cannot get rid of this card.	
 		 */
-		(player, game) -> {
-			TextUserInterface UI = TextUserInterface.getUI();
-			Map<Color,Player> myPlayersMap;
-			myPlayersMap = game.getPlayersMap();
-			ArrayList<Color> excludeList = new ArrayList<Color>();
-			excludeList.add(player.getColor());
-			// Chose a valid player
-			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
-
-			boolean paid = false;
-			if(UI.getUserYesOrNoChoice("do you want to give "+player.getName()+" $5? (other wise your card count will be reduced)")){
-				if(choosenPlayer.hasMoney(5)){
-					if(choosenPlayer.decreaseMoney(5)) player.increaseMoney(5);
-					paid = true;
-				} else {
-					System.out.println("Sorry that player does not have 5$");
+			(player, game) -> {
+//				TextUserInterface UI = new TextUserInterface();
+				TextUserInterface UI = TextUserInterface.getUI();
+				Map<Color,Player> myPlayersMap = game.getPlayersMap();
+				
+				System.out.println("Choose a player to give you 5 dollars");
+				
+				
+				ArrayList<Color> excludeList = new ArrayList<Color>();
+				excludeList.add(player.getColor());
+				
+				
+				// Chose a valid player
+				Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
+				if(choosenPlayer == null) {
+					return;
 				}
-			}
-			if(!paid) {
-				System.out.println("Giving DR WHITEFACE to " + choosenPlayer.getName());
-				choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
-			}
-		}, 
+				
+				boolean hasMoney = choosenPlayer.getMoney() > 5;
+				boolean wantsToGive = false;
+				if(!hasMoney) {
+					System.out.println("Damn, " + choosenPlayer.getName() + " doesn't have 5 dollars");
+				} else {
+					wantsToGive = UI.getUserYesOrNoChoice(choosenPlayer.getName() + " do you want to give " + player.getName() + 
+							" $5");
+					if(wantsToGive) {
+						choosenPlayer.decreaseMoney(5);
+						player.increaseMoney(5);
+					}
+				}
+				
+				// Ok, lets have some fun
+				// give this card to the player, make sure he cant get rid of it
+				if(!hasMoney || !wantsToGive) {
+					// Why do we use current card in play??? because we cant reference this enum
+					// since it isn't created
+					if(game.getCurrentCardInPlay().getID() != 47) {
+						//TODO throw error
+						System.out.println("ISSUE IN THE FOOLS GUILD");
+					}
+					
+					// Give card to other player and say he cant get rid of it
+					// Unless currentPlayer got this card via this means
+					if(!player.getUnplayableCards().contains(game.getCurrentCardInPlay())){
+						game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
+						choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
+						game.removePlayerCard(game.getCurrentCardInPlay(), player);
+					}
+				}
+			},
 		new ArrayList<Symbol>() {{
 			add(Symbol.PLACE_MINION);
 		}},
