@@ -230,7 +230,7 @@ public enum AnkhMorporkArea implements Card {
 	
 	public static List<AnkhMorporkArea> getAreaAndAdjacentAreas(AnkhMorporkArea a) {
 		return codeToAreaMap.keySet().stream().filter(i -> (ADJACENCY_MATRIX[a.getAreaCode() - 1][i - 1] == 1))
-				.map(i -> AnkhMorporkArea.forCode(i + 1)).collect(Collectors.toList());
+				.map(i -> AnkhMorporkArea.forCode(i)).collect(Collectors.toList());
 	}
 	
 	public static List<AnkhMorporkArea> getAdjacentAreas(AnkhMorporkArea a) {

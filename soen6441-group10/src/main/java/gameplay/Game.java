@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import util.Color;
@@ -457,23 +458,16 @@ public class Game {
 	 * @return Map of boardArea neighboring to boardArea
 	 */
 	public Map<Integer, BoardArea> getNeighbours(BoardArea boardArea) {
-		Map<Integer, BoardArea> neighbours = new HashMap<Integer, BoardArea>();
-		for (BoardArea otherBoardArea : gameBoard.values()) {
-			if (boardArea.isNeighboringWith(otherBoardArea)) {
-				neighbours.put(otherBoardArea.getArea().getAreaCode(),
-						otherBoardArea);
-			}
-		}
-		return neighbours;
+		return gameBoard.values().stream()
+				.filter(a -> boardArea.isNeighboringWith(a))
+				.collect(Collectors.toMap(a -> a.getArea().getAreaCode(), Function.identity()));
 	}
 	
 	/**
 	 * @return the total number of trouble markers currently placed on the board.
 	 */
 	public int getTotalNumberOfTroubleMarkers() {
-		return gameBoard
-				.values()
-				.stream()
+		return gameBoard.values().stream()
 				.map(area -> area.hasTroubleMarker() ? 1 : 0)
 				.reduce(0, (partialSum, current) -> partialSum + current);
 	}
@@ -600,21 +594,27 @@ public class Game {
 	
 	/**
 	 * Completes a transaction by giving money to the given player from the game's bank.
+	 * @return true if the transaction was completed successfully, false otherwise.
 	 */
-	public void givePlayerMoneyFromBank(Player p, int amount) {
+	public boolean givePlayerMoneyFromBank(Player p, int amount) {
 		if (gameBank.decreaseBalance(amount)) {
 			p.increaseMoney(amount);
+			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * Completes a transaction by taking money from the given player and storing it 
 	 * in the game's bank.
+	 * @return true if the transaction was completed successfully, false otherwise.
 	 */
-	public void giveBankMoneyFromPlayer(Player p, int amount) {
+	public boolean giveBankMoneyFromPlayer(Player p, int amount) {
 		if (gameBank.decreaseBalance(amount)) {
 			p.increaseMoney(amount);
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -624,12 +624,10 @@ public class Game {
 	 * @return true if adding building was success
 	 */
 	public boolean addBuilding(Player player, BoardArea boardArea) {
-		if (boardArea.addBuildingForPlayer(player)) {
-			if (player.decreaseMoney(boardArea.getBuildingCost())) {
-				getBank().increaseBalance(boardArea.getBuildingCost());
-				player.addCityCard(boardArea.getArea());
-				return true;
-			}
+		if (boardArea.addBuildingForPlayer(player)
+				&& giveBankMoneyFromPlayer(player, boardArea.getBuildingCost())) {
+			player.addCityCard(boardArea.getArea());
+			return true;
 		}
 		return false;
 	}

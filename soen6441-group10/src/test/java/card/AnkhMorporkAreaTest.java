@@ -1,18 +1,12 @@
 package card;
 
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import gameplay.BoardArea;
 import gameplay.Die;
 import gameplay.Game;
 import gameplay.Player;
 import io.TextUserInterface;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -24,10 +18,9 @@ import card.personality.PersonalityCard;
 import card.player.GreenPlayerCard;
 import card.random.RandomEventCard;
 import util.Color;
+import card.city.AnkhMorporkArea;
 
-public class AnkMorporkAreaTest {
-
-	
+public class AnkhMorporkAreaTest {
 
 	Game game;
 	Player player;
@@ -64,16 +57,16 @@ public class AnkMorporkAreaTest {
 	 */
 	//@Test
 	public void neighbourTest() {
-		for(AnkhMorporkArea a: AnkhMorporkArea.getAdjacentAreas(AnkhMorporkArea.DOLLY_SISTERS)) {
+		for (AnkhMorporkArea a : AnkhMorporkArea
+				.getAdjacentAreas(AnkhMorporkArea.DOLLY_SISTERS)) {
 			System.out.println(a);
 		}
 		
 		System.out.println("~~~~~~~~~~");
 		BoardArea ds = gameBoard.get(AnkhMorporkArea.DOLLY_SISTERS.getAreaCode());
-		for(BoardArea ba : game.getNeighbours(ds).values()) { 
+		for (BoardArea ba : game.getNeighbours(ds).values()) {
 			System.out.println(ba.getArea());
 		}
-		
 	}
 	
 	//@Test

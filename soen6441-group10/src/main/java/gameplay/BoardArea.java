@@ -349,4 +349,9 @@ public class BoardArea {
 						(partialSum, contribution) -> partialSum + contribution);
 	}
 
+	@Override
+	public String toString() {
+		return "[" + area.name() + ", minions:" + minions + ", demons: " + demonCount + ", trolls: " + trollCount 
+				+ ", building: " + (buildingColor == Color.UNDEFINED ? "none" : buildingColor) + "]";
+	}
 }
