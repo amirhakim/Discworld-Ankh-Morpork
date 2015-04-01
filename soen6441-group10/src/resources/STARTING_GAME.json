@@ -12,12 +12,12 @@
       "buildings": 5,
       "cityCards": ["DIMWELL"],
       "playerCards": [
-      	"CAPTAINS_CARROT",
-      	"FRESH_START_CLUB",
-      	"MR_PIN_&_MR_TULIP",
-      	"SHONKY_SHOP",
-      	"THE_PEALED_NUTS",
-      	"THE_THIEVES_GUILD"
+      	"CAPTAIN_CARROT",
+		"MR_PIN_AND_MR_TULIP",
+		"SHONKY_SHOP",
+		"THE_PEELED_NUTS",
+		"THE_THIEVES_GUILD",
+		"THE_FRESH_START_CLUB"
       ],
       "unplayableCards": []
     },
@@ -35,10 +35,10 @@
       ],
       "playerCards": [
       	"INIGO_SKIMMER",
-      	"MODO",
-      	"QUEEN_MOLLY",
-      	"THE_DUCKMAN",
-      	"THE_DYSK"
+		"MODO",
+		"QUEEN_MOLLY",
+    	"THE_DUCKMAN",
+    	"THE_DYSK"
       ],
       "unplayableCards": []
     },
@@ -49,16 +49,14 @@
       "money": 17,
       "minions": 8,
       "buildings":63,
-      "cityCards": [
-      	
-      ],
+      "cityCards": [],
       "playerCards": [
-        "DR_CRUCES",
-        "FOUL_OLE_RON",
-        "MR_BOGGIS",
-        "MRS_CAKE",
-        "SERGEANT_ANGUA"	
-        ],
+      	"DR_CRUCES",
+		"FOUL_OLE_RON",
+    	"MR_BOGGIS",
+		"MRS_CAKE",
+		"SERGANT_ANGUA"
+      ],
       "unplayableCards": []
     },
     "BLUE": {
@@ -69,15 +67,15 @@
       "minions": 3,
       "buildings": 5,
       "cityCards": [
-      	"THE_HIPPO",
+      	"THE_HIPPO"
       ],
       "playerCards": [
       	"GASPODE",
-      	"MR_GYLE",
-      	"RINCEWIND",
-      	"SACHARISSA_CRIPSLOCK",
-      	"THE_OPERA_HOUSE",
-      	"ZORGO_THE_RETRO_PHRENOLOGIST",
+		"MR_GRYLE",
+		"RINCEWIND",
+		"SACHARISSA_CRIPSLOCK",
+		"THE_OPERA_HOUSE",
+		"ZORGO_THE_RETRO_PHRENOLOGIST"
       ],
       "unplayableCards": []
     }
@@ -92,29 +90,51 @@
     "cards": [
     	"LORD_SELACHII",
     	"LORD_RUST",
-    	"COMMANDER_VIMES",
+    	"COMMANDER_VIMES"
     ]
   },
   "playerDeck": {
     "cards": [
+    	"HISTORY_MONKS",
+    	"HEX",
+    	"HERE_N_NOW",
+    	"HARRY_KING",
+    	"HARGAS_HOUSE_OF_RIBS",
+    	"NOBBY_NOBBS",
+    	"THE_MENDED_DRUM",
+    	"LIBRARIAN",
+    	"LEONARD_OF_QUIRM",
+    	"ROSIE_PALM",
+    	"THE_ROYAL_MINT",
+    	"PINK_PUSSYCAT_CLUB",
+    	"DR_WHITEFACE",
+    	"WALLACE_SONKY",
+    	"THE_SEAMSTRESS_GUILD",
+    	"MR_BENT",
+    	"THE_BEGGARS_GUILD",
+    	"THE_BANK_OF_ANKH_MORPORK",
+    	"THE_ANKH_MORPORK_SUNSHINE_DRAGON_SANCTUARY",
+    	"THE_AGONY_AUNTS",
+    	"DRUMKNOTT",
+    	"CMOT_DIBBLER",
+    	"GROAT",
+    	"GIMLETS_DWARF_DELICATESSEN",
+    	"THE_FOOLS_GUILD",
+    	"THE_FIRE_BRIGADE"
     ]
   },
   "discardPile": {
-    "cards": [
-      "GASPODE",
-      "THE_SEAMSTRESS_GUILD",
-      "ZORGO_THE_RETRO_PHRENOLOGIST",
-      "HARGAS_HOUSE_OF_RIBS",
-      "THE_ROYAL_MINT"
-    ]
+    "cards": []
   },
-  "interrupts": {},
+  "interrupts": {"RED": "THE_FRESH_START_CLUB", "BLUE": "GASPODE"},
   "gameBoard": {
     "1": {
       "area": "DOLLY_SISTERS",
       "minions": {
         "RED": 1,
-        "YELLOW": 1
+        "YELLOW": 1,
+        "GREEN": 1,
+        "BLUE": 1
       },
       "troubleMarker": true,
       "buildingColor": "UNDEFINED",
@@ -123,7 +143,7 @@
     },
     "2": {
       "area": "UNREAL_ESTATE",
-      "minions": {},
+      "minions": {"RED": 1},
       "troubleMarker": false,
       "buildingColor": "UNDEFINED",
       "demonCount": 0,
@@ -131,8 +151,10 @@
     },
     "3": {
       "area": "DRAGONS_LANDING",
-      "minions": {},
-      "troubleMarker": false,
+      "minions": {
+      	"RED":2
+      },
+      "troubleMarker": true,
       "buildingColor": "UNDEFINED",
       "demonCount": 0,
       "trollCount": 0
@@ -148,52 +170,58 @@
     "5": {
       "area": "THE_SCOURS",
       "minions": {
-        "RED": 2,
-        "YELLOW": 1
+        "YELLOW": 1,
+        "BLUE": 3
       },
       "troubleMarker": true,
-      "buildingColor": "UNDEFINED",
-      "demonCount": 0,
+      "buildingColor": "YELLOW",
+      "demonCount": 1,
       "trollCount": 0
     },
     "6": {
       "area": "THE_HIPPO",
-      "minions": {},
+      "minions": {"BLUE": 1},
       "troubleMarker": false,
-      "buildingColor": "UNDEFINED",
+      "buildingColor": "BLUE",
       "demonCount": 0,
-      "trollCount": 0
+      "trollCount": 1
     },
     "7": {
       "area": "THE_SHADES",
       "minions": {
-        "RED": 1,
-        "YELLOW": 1
+        "YELLOW": 1,
+        "BLUE": 1
       },
       "troubleMarker": true,
-      "buildingColor": "UNDEFINED",
+      "buildingColor": "YELLOW",
       "demonCount": 0,
       "trollCount": 0
     },
     "8": {
       "area": "DIMWELL",
-      "minions": {},
+      "minions": {
+      	"RED": 1,
+      	"GREEN": 1
+     	},
       "troubleMarker": false,
-      "buildingColor": "UNDEFINED",
+      "buildingColor": "RED",
       "demonCount": 0,
       "trollCount": 0
     },
     "9": {
       "area": "LONGWALL",
-      "minions": {},
-      "troubleMarker": false,
+      "minions": {
+      	"GREEN": 1,
+      	"BLUE": 2
+      },
+      "troubleMarker": true,
       "buildingColor": "UNDEFINED",
       "demonCount": 0,
       "trollCount": 0
     },
     "10": {
       "area": "ISLE_OF_GODS",
-      "minions": {},
+      "minions": {"RED":1},
       "troubleMarker": false,
       "buildingColor": "UNDEFINED",
       "demonCount": 0,
@@ -201,21 +229,26 @@
     },
     "11": {
       "area": "SEVEN_SLEEPERS",
-      "minions": {},
-      "troubleMarker": false,
-      "buildingColor": "UNDEFINED",
+      "minions": {
+      	"RED":1,
+      	"YELLOW":1,
+      	"GREEN":1
+      },
+      "troubleMarker": true,
+      "buildingColor": "YELLOW",
       "demonCount": 0,
       "trollCount": 0
     },
     "12": {
       "area": "NAP_HILL",
       "minions": {
-        "RED": 1
+        "RED": 1,
+        "BLUE": 1
       },
       "troubleMarker": false,
       "buildingColor": "UNDEFINED",
       "demonCount": 0,
-      "trollCount": 0
+      "trollCount": 1
     }
   },
   "randomEventDeck": {
