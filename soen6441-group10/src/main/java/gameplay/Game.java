@@ -610,11 +610,18 @@ public class Game {
 	 * @return true if the transaction was completed successfully, false otherwise.
 	 */
 	public boolean giveBankMoneyFromPlayer(Player p, int amount) {
-		if (gameBank.decreaseBalance(amount)) {
-			p.increaseMoney(amount);
+//		if (gameBank.decreaseBalance(amount)) {
+//			p.increaseMoney(amount);
+//			return true;
+//		}
+//		return false;
+		if(p.decreaseMoney(amount)) {
+			gameBank.increaseBalance(amount); 
 			return true;
+		} else  {
+			return false;
 		}
-		return false;
+	
 	}
 
 	/**

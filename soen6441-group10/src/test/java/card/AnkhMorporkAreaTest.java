@@ -1,6 +1,6 @@
 package card;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import gameplay.BoardArea;
 import gameplay.Die;
 import gameplay.Game;
@@ -55,7 +55,7 @@ public class AnkhMorporkAreaTest {
 	 * Test the neighbour rereival
 	 * Expecting DOLLY SISTERS, DRAGONS LANDING, UNREAL ESTATE, NAP HILL
 	 */
-	//@Test
+	@Test
 	public void neighbourTest() {
 		for (AnkhMorporkArea a : AnkhMorporkArea
 				.getAdjacentAreas(AnkhMorporkArea.DOLLY_SISTERS)) {
@@ -94,7 +94,7 @@ public class AnkhMorporkAreaTest {
 		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.UNREAL_ESTATE).accept(player, game);
 		// Player should have got a card, and lost a card....bringing his card count
 		// back to 0
-		assertTrue(player.getPlayerCards().size() == 0);	
+		assertEquals(player.getPlayerCards().size(), 0);	
 	}
 	
 	//@Test
