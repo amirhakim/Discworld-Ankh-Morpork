@@ -82,27 +82,25 @@ public enum AnkhMorporkArea implements Card {
 		// 2. UNREAL ESTATE
 		cityCardFunctionMap.put(UNREAL_ESTATE, (player, game) -> {
 			// Draw one card and then discard one card
-			Optional<GreenPlayerCard> card = game.drawPlayerCard();
-			if (!card.isPresent()) { 
-				// The deck is out of cards - the game should have ended already
-				return;
-			}
-			player.addPlayerCard(card.get());
-			
-			TextUserInterface UI = new TextUserInterface();
-			GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
+			if(game.addPlayerCard(player)) {
+				System.out.println("Added new player card");
+				TextUserInterface UI = TextUserInterface.getUI();
+				GreenPlayerCard discardCard = UI.getCardChoice(player.getPlayerCards(), 
 					"Choose a card to discard: ");
-			player.removePlayerCard(discardCard);
+				game.discardCard(discardCard, player);
+				System.out.println("Discarded player card");
+			}
 		});
 		
 		// 3. DRAGON'S LANDING
 		cityCardFunctionMap.put(DRAGONS_LANDING, (player, game) -> {
+			System.out.println("Giving player 2$");
 			game.givePlayerMoneyFromBank(player, 2);
 		});
 		
 		// 4. SMALL GODS
 		cityCardFunctionMap.put(SMALL_GODS, (player, game) -> {
-			TextUserInterface UI = new TextUserInterface();
+			TextUserInterface UI = TextUserInterface.getUI();
 			boolean protect = UI.getUserYesOrNoChoice("Protect your piece/building using \"Small Gods\"?" +
 					"(Cost: $3)?");
 			if (protect && player.decreaseMoney(3)) {
