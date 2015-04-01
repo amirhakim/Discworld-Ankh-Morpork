@@ -270,6 +270,7 @@ public class Game {
 		while (hasPlayerCardsLeft() && 
 				p.getHandSize() < Player.PLAYER_MAX_HAND_SIZE) {
 			//actualPlayer.addPlayerCard(playerDeck.drawCard().get());
+
 			addPlayerCard(p);
 		}
 	}
@@ -283,18 +284,18 @@ public class Game {
 	 * turn is finished). 
 	 * @param p the player whose hand size must be restored.
 	 */
-	public void addPlayerCard(Player p , int i){
-		Player actualPlayer = players.get(p.getColor());
+	public boolean addPlayerCard(Player p , int i){
 		while(i>0){
 			if (hasPlayerCardsLeft()) {
 				GreenPlayerCard card = playerDeck.drawCard().get();
-				addPlayerCard(actualPlayer, card);
+				addPlayerCard(p, card);
 				i--;
 			} else {
 				System.out.println("Out of cards");
-				break;
+				return false;
 			}
 		}
+		return true;
 	}
 	
 	public void addPlayerCard(Player player, GreenPlayerCard card) {
@@ -304,13 +305,13 @@ public class Game {
 		player.addPlayerCard(card);
 	}
 	
-	public void addPlayerCard(Player player){
-		addPlayerCard(player, 1);
+	public boolean addPlayerCard(Player player){
+		return addPlayerCard(player, 1);
 	}
 	
 	/**
 	 * Draws a player card.
-	 * 
+	 * DO NOT USE!  SEE ADD PLAYER CARD ABOVE
 	 * @return an object that contains either the player card drawn or
 	 *         nothing, if the deck is out of cards.
 	 */	
@@ -609,11 +610,18 @@ public class Game {
 	 * @return true if the transaction was completed successfully, false otherwise.
 	 */
 	public boolean giveBankMoneyFromPlayer(Player p, int amount) {
-		if (gameBank.decreaseBalance(amount)) {
-			p.increaseMoney(amount);
+//		if (gameBank.decreaseBalance(amount)) {
+//			p.increaseMoney(amount);
+//			return true;
+//		}
+//		return false;
+		if(p.decreaseMoney(amount)) {
+			gameBank.increaseBalance(amount); 
 			return true;
+		} else  {
+			return false;
 		}
-		return false;
+	
 	}
 
 	/**

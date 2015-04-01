@@ -1604,6 +1604,11 @@ public enum GreenPlayerCard implements Card {
 		return this.text;
 	}
 	
+	public boolean hasScroll() {
+		if(this.desc.isEmpty()) return false;
+		else return true;
+	}
+	
 	public boolean isTextFirst() {
 		return this.textFirst;
 	}
@@ -1623,13 +1628,13 @@ public enum GreenPlayerCard implements Card {
 	@Override
 	public String toString() {
 		String rtn =  name() + "\n";
-		if(textFirst) {
+		if(textFirst && hasScroll()) {
 			rtn += "\t" +getDesc() + "\n";
 		}
 		for(Symbol s: getSymbols()) {
-			rtn += "\t"+s + "\n";
+			rtn += "\t"+ s + "\n";
 		}
-		if(!textFirst) {
+		if(!textFirst && hasScroll()) {
 			rtn += "\t"+getDesc() + "\n";
 		}
 		rtn += "";

@@ -281,8 +281,9 @@ public class PersonalitiesTest {
 			// 6 + 18 $
 			assertFalse(game.hasPlayerWon(player));
 			game.addBuilding(player, gameBoard.get(3));
-			// 6 + 18 + 12$
+			// 6 + 18 + 12$ = 36
 			assertFalse(game.hasPlayerWon(player));
+			player.increaseMoney(18);
 			game.addBuilding(player, gameBoard.get(4));
 			// 6 + 18 + 12 + 18$ = 54 ... he should win
 			

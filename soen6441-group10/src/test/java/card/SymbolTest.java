@@ -120,21 +120,20 @@ public class SymbolTest {
 		
 		System.out.println("~~PLACE BUILDING NO BUILDINGS TEST~~");
 		
-		// Remove all of players buildings
 		int i = 1;
 		player.increaseMoney(10000);
-		int previousPlayerBalance = player.getMoney();
 		while(player.getBuildings() != 0) {
 			game.addBuilding(player, gameBoard.get(i));
 			i++;
 		}
-		
+		int previousPlayerBalance = player.getMoney();
+		assertEquals(player.getBuildings(), 0);
 		Symbol.PLACE_A_BUILDING.getGameAction().accept(player, game);
 		
 		// Ensure player has not lost any buildings
 		assertEquals(player.getBuildings(), 0);
 		// Ensure building cost something
-		assertTrue(player.getMoney() < previousPlayerBalance);
+		assertEquals(player.getMoney(), previousPlayerBalance);
 		
 		
 		

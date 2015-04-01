@@ -1,7 +1,8 @@
 package card;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import gameplay.BoardArea;
+import gameplay.Die;
 import gameplay.Game;
 import gameplay.Player;
 import io.TextUserInterface;
@@ -12,6 +13,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import card.city.AnkhMorporkArea;
+import card.personality.PersonalityCard;
+import card.player.GreenPlayerCard;
+import card.random.RandomEventCard;
 import util.Color;
 import card.city.AnkhMorporkArea;
 
@@ -64,7 +69,7 @@ public class AnkhMorporkAreaTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void dollySistersTest() {
 		System.out.println("~~~TESTING DOLLY SISTERS~~~");
 	/* TODO	
@@ -82,6 +87,36 @@ public class AnkhMorporkAreaTest {
 		
 	}
 	
+	//@Test
+	public void unrealEstateTest() {
+		System.out.println("~~~TESTING UNREAL ESTATE TEST~~~");
+		
+		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.UNREAL_ESTATE).accept(player, game);
+		// Player should have got a card, and lost a card....bringing his card count
+		// back to 0
+		assertEquals(player.getPlayerCards().size(), 0);	
+	}
+	
+	//@Test
+	public void dragonsLandingTest() {
+		System.out.println("~~~DRAGONS LANDING TEST~~~");
+		AnkhMorporkArea.getAreaAction(AnkhMorporkArea.DRAGONS_LANDING).accept(player, game);
+//		assertEquals(player.getMoney(), 2);
+		
+	}
+	
+	@Test
+	public void smallGodTest() {
+		System.out.println("~~~SMALL GODS TEST~~~");
+		
+		// Give player small gods
+		player.addCityCard(gameBoard.get(4).getArea());
+		Die.getDie().setCheat(1);
+		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
+		RandomEventCard.DRAGON.getGameAction().accept(game, player);
+		
+		
+	}
 	
 	
 	

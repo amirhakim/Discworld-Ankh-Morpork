@@ -456,4 +456,8 @@ public class Player {
 		return "Player[ name=" + name + ", color=" + color + " ]";
 	}
 
+	public String getAbbr() {
+		return color.getAbbr();
+	}
+
 }

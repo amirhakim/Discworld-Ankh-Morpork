@@ -782,12 +782,17 @@ public class GreenCardTest {
 		for (Player p : game.getPlayers()){
 			assertEquals(p.getMoney(),10);
 		}
-		GreenPlayerCard.MR_BOGGIS.getText().accept(player, game);
-		game.setCurrentCardInPlay(GreenPlayerCard.MR_BOGGIS);
+		game.setCurrentCardInPlay(GreenPlayerCard.THE_THIEVES_GUILD);
+		GreenPlayerCard.THE_THIEVES_GUILD.getText().accept(player, game);
 		assertEquals(player.getMoney(),14);
 		assertEquals(player2.getMoney(),8);
 		assertEquals(player3.getMoney(),8);
+	
 	}
+	
+	
+	
+	
 	@Test
 	public void cakeTest() {
 		System.out.println("~~~MRS CAKE TEST~~~");

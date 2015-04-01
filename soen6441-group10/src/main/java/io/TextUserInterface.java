@@ -570,7 +570,7 @@ public class TextUserInterface {
 					Integer value = entry.getValue();
 					// TODO Change this once we put the players into a map
 					minionsAll += String.format("%5s%1s%1s%1s", controller
-							.getGame().getPlayerOfColor(color).getName(), "(",
+							.getGame().getPlayerOfColor(color).getAbbr(), "(",
 							String.valueOf(value), ")");
 				}
 				System.out.format("%30s", minionsAll);
