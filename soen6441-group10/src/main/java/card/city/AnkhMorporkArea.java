@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -100,15 +99,8 @@ public enum AnkhMorporkArea implements Card {
 		
 		// 4. SMALL GODS
 		cityCardFunctionMap.put(SMALL_GODS, (player, game) -> {
-			TextUserInterface UI = TextUserInterface.getUI();
-			boolean protect = UI.getUserYesOrNoChoice("Protect your piece/building using \"Small Gods\"?" +
-					"(Cost: $3)?");
-			if (protect && player.decreaseMoney(3)) {
-				game.getBank().increaseBalance(3);
-				System.out.println("Piece/building protected.");
-			} else {
-				System.out.println("Not enough money to protect your piece/building.");
-			}
+			throw new IllegalStateException("The course of events caused by playing "
+					+ "Small Gods is implemented in the Game class, you should not be here");
 		});
 		
 		// 5. THE SCOURS
@@ -118,13 +110,16 @@ public enum AnkhMorporkArea implements Card {
 			GreenPlayerCard discardCard = UI.getCardChoice(playerCards, "Choose a card to discard: ");
 			player.removePlayerCard(discardCard);
 			System.out.println(discardCard + " removed.");
-
-			game.givePlayerMoneyFromBank(player, 2);
+			if (game.givePlayerMoneyFromBank(player, 2)) {
+				System.out.println("Given $2 to " + player.getName() + "(" + player.getColor() + ").");
+			}
 		});
 		
 		// 6. THE HIPPO
 		cityCardFunctionMap.put(THE_HIPPO, (player, game) -> {
-			game.givePlayerMoneyFromBank(player, 2);
+			if (game.givePlayerMoneyFromBank(player, 2)) {
+				System.out.println("Given $2 to " + player.getName() + "(" + player.getColor() + ").");
+			}
 		});
 		
 		// 7. THE SHADES
@@ -150,7 +145,9 @@ public enum AnkhMorporkArea implements Card {
 		
 		// 9. LONGWALL
 		cityCardFunctionMap.put(LONGWALL, (player, game) -> {
-			game.givePlayerMoneyFromBank(player, 1);
+			if (game.givePlayerMoneyFromBank(player, 1)) {
+				System.out.println("Given $1 to " + player.getName() + "(" + player.getColor() + ").");
+			}
 		});
 		
 		// 10. ISLE OF GODS
@@ -164,12 +161,16 @@ public enum AnkhMorporkArea implements Card {
 		
 		// 11. SEVEN SLEEPERS
 		cityCardFunctionMap.put(DRAGONS_LANDING, (player, game) -> {
-			game.givePlayerMoneyFromBank(player, 3);
+			if (game.givePlayerMoneyFromBank(player, 3)) {
+				System.out.println("Given $3 to " + player.getName() + "(" + player.getColor() + ").");
+			}
 		});
 		
 		// 12. NAP HILL
 		cityCardFunctionMap.put(LONGWALL, (player, game) -> {
-			game.givePlayerMoneyFromBank(player, 1);
+			if (game.givePlayerMoneyFromBank(player, 1)) {
+				System.out.println("Given $1 to " + player.getName() + "(" + player.getColor() + ").");
+			}
 		});
 	}
 
@@ -247,7 +248,7 @@ public enum AnkhMorporkArea implements Card {
 		TextUserInterface UI = TextUserInterface.getUI();
 		Map<Integer, BoardArea> gameBoard = game.getGameBoard();
 
-		if (player.decreaseMoney(MINION_COST)) {
+		if (game.giveBankMoneyFromPlayer(player, MINION_COST)) {
 
 			int availableMinions = player.getMinionCount();
 			List<AnkhMorporkArea> dollySistersAndNeighbors = 
