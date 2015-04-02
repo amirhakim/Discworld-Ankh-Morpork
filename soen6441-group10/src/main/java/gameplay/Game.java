@@ -473,6 +473,13 @@ public class Game {
 	}
 	
 	/**
+	 * @return true if the area with the given ID has a trouble marker, false otherwise.
+	 */
+	public boolean hasTroubleMarker(int areaID) {
+		return gameBoard.get(areaID).hasTroubleMarker();
+	}
+	
+	/**
 	 * Checks if the draw pile still has cards.
 	 * @return true if the size of the draw pile is non-zero, false otherwise.
 	 */
@@ -1104,4 +1111,5 @@ public class Game {
 		playerDeck.shuffle();
 		randomEventDeck.shuffle();
 	}
+
 }

@@ -128,14 +128,18 @@ public enum AnkhMorporkArea implements Card {
 			Collection<AnkhMorporkArea> shadesAndAdjacentWithMinions = 
 					getAreaAndAdjacentAreas(THE_SHADES)
 						.stream()
-						.filter(a -> game.getMinionCountForArea(a) > 0)
+						.filter(a -> game.getMinionCountForArea(a) > 0 && !game.hasTroubleMarker(a.getAreaCode()))
 						.collect(Collectors.toList());
-			AnkhMorporkArea area = 
+			if (!shadesAndAdjacentWithMinions.isEmpty()) {
+				AnkhMorporkArea area = 
 					UI.getAreaChoice(shadesAndAdjacentWithMinions, "Place a trouble marker in "
-							+ "an area already containing at least one minion.",
+							+ "an area already containing at least one minion (and no trouble marker :-).",
 							"Choose an area: ");
-			game.addTroubleMarker(area.getAreaCode()); 
-			System.out.println("Troublemarker added.");
+				game.addTroubleMarker(area.getAreaCode()); 
+				System.out.println("Troublemarker added.");
+			} else {
+				System.out.println("No areas available!");
+			}
 		});
 		
 		// 8. DIMWELL
@@ -160,14 +164,14 @@ public enum AnkhMorporkArea implements Card {
 		});
 		
 		// 11. SEVEN SLEEPERS
-		cityCardFunctionMap.put(DRAGONS_LANDING, (player, game) -> {
+		cityCardFunctionMap.put(SEVEN_SLEEPERS, (player, game) -> {
 			if (game.givePlayerMoneyFromBank(player, 3)) {
 				System.out.println("Given $3 to " + player.getName() + "(" + player.getColor() + ").");
 			}
 		});
 		
 		// 12. NAP HILL
-		cityCardFunctionMap.put(LONGWALL, (player, game) -> {
+		cityCardFunctionMap.put(NAP_HILL, (player, game) -> {
 			if (game.givePlayerMoneyFromBank(player, 1)) {
 				System.out.println("Given $1 to " + player.getName() + "(" + player.getColor() + ").");
 			}
