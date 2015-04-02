@@ -10,6 +10,7 @@ import gameplay.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class TextUserInterface {
 			System.out
 					.println("\nChoose one of the following:\n"
 							+ "1) n to start a new game\n"
-							+ "2) l to load a previously saved game\n"
+						//	+ "2) l to load a previously saved game\n"
 							+ "3) o for an overview of the current game's status\n"
 							+ "4) s to save the current game\n"
 							+ "5) q to quit the game\n");
@@ -301,6 +302,7 @@ public class TextUserInterface {
 	 * @return boolean:	if card was given away through course of symbol play
 	 */
 	private boolean playText(GreenPlayerCard c, Player p) {
+		if(!c.hasScroll()) return true;
 		BiConsumer<Player, Game> textAction = c.getText();
 		if (textAction != null) {
 			playCityAreaCardIfDesired(p);
@@ -380,9 +382,17 @@ public class TextUserInterface {
 		}
 		scanner = new Scanner(System.in);
 		// TODO Won't bother now with bound checks, will do it later
-		int action = scanner.nextInt();
-		scanner.nextLine();
-		return cardMap.get(action);	
+		while(true) {
+			try {
+				int action = scanner.nextInt();
+				scanner.nextLine();
+				return cardMap.get(action);	
+			} catch(InputMismatchException e) {
+				System.out.println("Enter a number.");
+				scanner.next();
+				continue;
+			}
+		}
 	}
 
 //	private Optional<CityAreaCard> getCityAreaCardChoice(Collection<CityAreaCard> cards, String msg) {
@@ -489,7 +499,7 @@ public class TextUserInterface {
 					Integer value = entry.getValue();
 					// TODO Change this once we put the players into a map
 					minionsAll += String.format("%5s%1s%1s%1s", controller
-							.getGame().getPlayerOfColor(color).getName(), "(",
+							.getGame().getPlayerOfColor(color).getAbbr(), "(",
 							String.valueOf(value), ")");
 				}
 				System.out.format("%30s", minionsAll);
@@ -704,6 +714,7 @@ public class TextUserInterface {
 		}
 		System.out.print(inputMsg);
 		scanner = new Scanner(System.in);
+		
 		int action = scanner.nextInt();
 		scanner.nextLine();
 		while (availableAreas.get(action) == null) {
@@ -806,7 +817,7 @@ public class TextUserInterface {
 		//TODO need to catch bad valueOf
 		while(Color.valueOf(action) == null || playerMap.get(Color.valueOf(action)) == null 
 				|| excludeList.contains(Color.valueOf(action))) {
-			System.out.println("Invalid selection.  Try again: ");
+			System.out.println("Invalid selection.  Make sure you entered the color correctly, you're not selecting yourself.\nAnd that the player you are selecting is a valid choice.\nTry again: ");
 			action = scanner.nextLine();
 		}
 		

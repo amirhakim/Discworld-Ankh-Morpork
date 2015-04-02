@@ -104,7 +104,6 @@ public enum GreenPlayerCard implements Card {
 			 */
 			(player, game) -> {
 				int dieRoll = Die.getDie().roll();
-				System.out.println("Dice rolled: " + dieRoll);
 
 				//TextUserInterface textUI = new TextUserInterface();
 				TextUserInterface textUI = TextUserInterface.getUI();
@@ -721,8 +720,11 @@ public enum GreenPlayerCard implements Card {
 				if(!hasMoney) {
 					System.out.println("Damn, " + choosenPlayer.getName() + " doesn't have 5 dollars");
 				} else {
+					System.out.println(choosenPlayer.getColor().getAnsi());
 					wantsToGive = UI.getUserYesOrNoChoice(choosenPlayer.getName() + " do you want to give " + player.getName() + 
 							" $5");
+
+					System.out.println(player.getColor().getAnsi());
 					if(wantsToGive) {
 						choosenPlayer.decreaseMoney(5);
 						player.increaseMoney(5);
@@ -865,9 +867,9 @@ public enum GreenPlayerCard implements Card {
 			 * every other player.
 			 */
 			Map<Color,Player> myPlayersMap = game.getPlayersMap();
-			myPlayersMap.remove(player.getColor());
 			for (Entry<Color, Player>  entry : myPlayersMap.entrySet())
 			{
+				if(entry.getValue().getColor() == player.getColor()) continue;
 			   if(entry.getValue().getMoney()>=2) {
 				   entry.getValue().decreaseMoney(2);
 				   player.increaseMoney(2);
