@@ -5,9 +5,11 @@ import static org.junit.Assert.fail;
 import gameplay.BoardArea;
 import gameplay.Die;
 import gameplay.Game;
+import gameplay.GameStatus;
 import gameplay.Player;
 import io.TextUserInterface;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -106,4 +108,33 @@ public class RandomEventTest {
 		RandomEventCard.FIRE.getGameAction().accept(game, player1);
 		assertTrue(game.getBoard().stream().anyMatch(a -> a.getBuildingOwner() == Color.UNDEFINED));
 	}
+	
+	@Test
+	public void testFog() {
+		RandomEventCard.FOG.getGameAction().accept(game, player1);
+		// Nothing to do here, just display the drawn cards on stdout.
+	}
+	
+	@Test
+	public void testRiots() {
+		// Give players money to affect their points
+		player1.increaseMoney(100);
+		player2.increaseMoney(99);
+		player3.increaseMoney(98);
+		
+		// Add trouble markers everywhere to ensure riots happen
+		for (BoardArea a : gameBoard.values()) {
+			a.addTroubleMarker();
+		}
+
+		// Start the riots
+		RandomEventCard.RIOTS.getGameAction().accept(game, player1);
+		assertTrue(game.getStatus() == GameStatus.FINISHED);
+		List<Player> winners = game.getWinnersByPoints();
+		assertTrue(winners.size() == 1 && winners.contains(player1));
+		player2.increaseMoney(1);
+		winners = game.getWinnersByPoints();
+		assertTrue(winners.size() == 2);
+	}
+
 }

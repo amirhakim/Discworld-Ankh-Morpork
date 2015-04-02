@@ -864,12 +864,15 @@ public class Game {
 				.reduce(0, (s, areaPoints) -> s + areaPoints);
 		
 		
-		int playerMoneyMinusLoans = p.getMoney() + p.getLoanBalance();
-		if (playerMoneyMinusLoans < 0) {
-			points -= Bank.LOAN_REPAY_AMOUNT
-					* ((Math.abs(playerMoneyMinusLoans) + Bank.LOAN_REPAY_AMOUNT)
-					/ Bank.LOAN_REPAY_AMOUNT);
+		int loanBalance = p.getLoanBalance(); // caution: this is non-positive!
+		int playerMoney = p.getMoney();
+		if (loanBalance != 0) {
+			points -= ((playerMoney + loanBalance) < 0) ?
+				Bank.LOAN_PENALTY * ((Math.abs(loanBalance) / Bank.LOAN_REPAY_AMOUNT)) :
+					Math.abs(loanBalance);
 		}
+					
+		points += playerMoney;
 		
 		return points;
 	}

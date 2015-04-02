@@ -13,6 +13,7 @@ import java.util.function.BiConsumer;
 import util.Color;
 import card.Card;
 import card.city.AnkhMorporkArea;
+import card.player.GreenPlayerCard;
 
 public enum RandomEventCard implements Card {
 	
@@ -69,14 +70,20 @@ public enum RandomEventCard implements Card {
 	FOG((game, player) -> {
 		System.out.println("Fog! Discard the top 5 cards from the draw pile.");
 		for (int i = 0; i < 5; i++) {
-			game.drawPlayerCard();
+			Optional<GreenPlayerCard> topGreenDeckCard = game.drawPlayerCard();
+			if (topGreenDeckCard.isPresent()) {
+				System.out.println(topGreenDeckCard.get().name() + " was drawn.");
+			}
 		}
 	}),
 	
 	RIOTS((game, player) -> {
-		System.out.println("Riots! That shall be the end of the game my lords...");
 		if (game.getTotalNumberOfTroubleMarkers() >= 8) {
+			System.out.println("Riots! That shall be the end of the game my lords...");
 			game.finishGameOnPoints(false);
+		} else {
+			System.out.println("Riots were ineffective since there were less "
+					+ "than 8 trouble markers on the board.");
 		}
 	}),
 	
