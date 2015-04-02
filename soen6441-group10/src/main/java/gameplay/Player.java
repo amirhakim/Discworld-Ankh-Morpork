@@ -397,16 +397,6 @@ public class Player {
 		}
 		return balance;
 	}
-
-	/**
-	 * @return this player's net worth (cash plus the monetary cost of each 
-	 * owned building - loans taken out * $12
-	 */
-	public int getTotalWorth() {
-		return money
-				+ cityCards.stream().map(c -> c.getBuildingCost())
-						.reduce(0, (sum, cur) -> sum + cur) + getLoanBalance();
-	}
 	
 	/**
 	 * If the player has the Small Gods (s)he can protect pieces and buildings:

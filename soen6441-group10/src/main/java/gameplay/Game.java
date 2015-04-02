@@ -473,6 +473,13 @@ public class Game {
 	}
 	
 	/**
+	 * @return true if the area with the given ID has a trouble marker, false otherwise.
+	 */
+	public boolean hasTroubleMarker(int areaID) {
+		return gameBoard.get(areaID).hasTroubleMarker();
+	}
+	
+	/**
 	 * Checks if the draw pile still has cards.
 	 * @return true if the size of the draw pile is non-zero, false otherwise.
 	 */
@@ -881,6 +888,18 @@ public class Game {
 		
 		return points;
 	}
+	
+	/**
+	 * @return the given player's net worth (cash plus the monetary cost of each 
+	 * owned building in demon-free areas - loans taken out * $12)
+	 */
+	public int getPlayerNetWorth(Player p) {
+		return p.getMoney()
+				+ gameBoard.values().stream()
+					.map(a -> (a.getDemonCount() == 0 && a.getBuildingOwner() == p.getColor()) ? 
+							a.getBuildingCost() : 0)
+					.reduce(0, (sum, cur) -> sum + cur) + p.getLoanBalance();
+	}
 
 	/**
 	 * 
@@ -1008,8 +1027,9 @@ public class Game {
 		GreenPlayerCard interruptCard = null;
 		boolean willPlay = setUpNotify(GreenPlayerCard.WALLACE_SONKY,
 				affectedPlayer, interrupt, Interrupt.SCROLL);
-		if(willPlay) {
-			// Nothing to do here since this notify is done before the scroll gets played
+		if (willPlay) {
+			// Nothing to do here since this notify is done before the scroll
+			// gets played
 			// just remove card
 			interruptCard = GreenPlayerCard.WALLACE_SONKY;
 			discardCard(interruptCard, affectedPlayer);
@@ -1086,4 +1106,10 @@ public class Game {
 	private void payToProtectPiece(Player p) {
 		giveBankMoneyFromPlayer(p, Player.PROTECTION_COST);
 	}
+
+	public void shuffleDecks() {
+		playerDeck.shuffle();
+		randomEventDeck.shuffle();
+	}
+
 }

@@ -274,7 +274,6 @@
   },
   "randomEventDeck": {
     "cards": [
-      "TROLLS",
       "SUBSIDENCE",
       "FLOOD",
       "RIOTS",
@@ -283,7 +282,6 @@
       "EARTHQUAKE",
       "FOG",
       "DRAGON",
-      "DEMONS_FROM_THE_DUNGEON_DIMENSIONS",
       "FIRE",
       "EXPLOSION"
     ]

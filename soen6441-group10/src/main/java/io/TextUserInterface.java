@@ -94,6 +94,7 @@ public class TextUserInterface {
 				if (gameWrap.isPresent()) {
 					currentGameFileObj = gameWrap.get();
 					controller = new Controller(currentGameFileObj.getPOJO());
+					controller.shuffleDecks();
 					continueGame();
 				}
 			}else if (action.equals(UserOption.GAME_STATUS.getOptionString())) {
@@ -208,6 +209,7 @@ public class TextUserInterface {
 			playPlayerCard((GreenPlayerCard) c, p);
 		} else if (c instanceof CityAreaCard) {
 			playCityAreaCard((CityAreaCard) c, p);
+			playTurn(p, false);
 		}
 		
 		// The following must only be performed if the game hasn't finished
@@ -240,14 +242,17 @@ public class TextUserInterface {
 	 * Polls the player in turn to play a city area card (if he has any available).
 	 * If the player wishes so, a card will be played.
 	 */
-	public void playCityAreaCardIfDesired(Player p) {
+	public void playCityAreaCardBetweenSymbols(Player p) {
 		List<CityAreaCard> playableCityAreaCards = 
 				p.getCityAreaCards()
 					.stream().filter(c -> (!c.isDisabled() && !c.hasBeenPlayed() && !c.isSmallGods()))
 					.collect(Collectors.toList());
-		if (!playableCityAreaCards.isEmpty() && getUserYesOrNoChoice("Do you want "
+		// So that (s)he can play multiple city area cards between symbols
+		while (!playableCityAreaCards.isEmpty() && getUserYesOrNoChoice("Do you want "
 				+ "to play a city area card in between another action?")) {
-			playCityAreaCard(getCardChoice(playableCityAreaCards, "Choose a city area card to play: "), p);
+			CityAreaCard cardToPlay = getCardChoice(playableCityAreaCards, "Choose a city area card to play: ");
+			playCityAreaCard(cardToPlay, p);
+			playableCityAreaCards.remove(cardToPlay);
 		}
 	}
 	
@@ -308,7 +313,7 @@ public class TextUserInterface {
 		if(!c.hasScroll()) return true;
 		BiConsumer<Player, Game> textAction = c.getText();
 		if (textAction != null) {
-			playCityAreaCardIfDesired(p);
+			playCityAreaCardBetweenSymbols(p);
 			System.out.println("Do you want to perform the scroll (" + c.getDesc()
 					+ ") symbol? (yes/no)");
 			System.out.print("> ");
@@ -342,7 +347,7 @@ public class TextUserInterface {
 	private boolean playSymbols(GreenPlayerCard c, Player p) {
 		// Perform the symbols on the cards selectively
 		for (Symbol s : c.getSymbols()) {
-			playCityAreaCardIfDesired(p);
+			playCityAreaCardBetweenSymbols(p);
 			// Only Random Events are mandatory
 			if (s != Symbol.RANDOM_EVENT) {
 				System.out
@@ -384,7 +389,7 @@ public class TextUserInterface {
 		int i = 1;
 		for (C c : cards) {
 			System.out.print(i + ") ");
-			System.out.print(c);
+			System.out.println(c);
 			cardMap.put(i, c);
 			i++;
 		}
