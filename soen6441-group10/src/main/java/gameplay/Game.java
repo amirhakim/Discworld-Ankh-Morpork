@@ -642,12 +642,16 @@ public class Game {
 	public void handleSubsidence() {
 		final int BUILDING_COST = 2;
 		for (BoardArea a : gameBoard.values()) {
+			AnkhMorporkArea area = a.getArea();
 			if (a.getBuildingOwner() != Color.UNDEFINED) {
 				Player p = players.get(a.getBuildingOwner());
-				if (p.getMoney() - BUILDING_COST >= 0) {
-					giveBankMoneyFromPlayer(p, BUILDING_COST);
+				if (giveBankMoneyFromPlayer(p, BUILDING_COST)) {
+					System.out.println(p.getName() + " (" + p.getColor() + ") " +
+							"paying $" + BUILDING_COST + " for " + area.name() + "...");
 				} else {
-					removeBuilding(a.getArea().getAreaCode());
+					removeBuilding(area.getAreaCode());
+					System.out.println("Building removed for " + p.getName() + "(" +
+							p.getColor() + " at " + area.name() + ".");
 				}
 			}
 		}
@@ -845,7 +849,8 @@ public class Game {
 
 	/**
 	 * Retrieves the total number of points for the given player.<br>
-	 * - Each minion on the board is worth five points. <br>
+	 * - Each minion on the board (on areas which are not occupied by demons) 
+	 * 	 is worth five points.<br>
 	 * - Each building is worth a number of points equal to its monetary cost unless
 	 *   there is a demon in the area. 
 	 * - Each $1 in hand is worth one point. <br>
@@ -858,18 +863,21 @@ public class Game {
 		int points = gameBoard
 				.values()
 				.stream()
-				.map(area -> (area.getMinionCountForPlayer(p) * MINION_POINTS + 
+				.map(area -> (area.getDemonCount() == 0 ? (area.getMinionCountForPlayer(p) * MINION_POINTS) : 0) + 
 						((area.getBuildingOwner() == p.getColor() &&
-						area.getDemonCount() == 0) ? area.getBuildingCost() : 0)))
+						area.getDemonCount() == 0) ? area.getBuildingCost() : 0))
 				.reduce(0, (s, areaPoints) -> s + areaPoints);
 		
 		
-		int playerMoneyMinusLoans = p.getMoney() + p.getLoanBalance();
-		if (playerMoneyMinusLoans < 0) {
-			points -= Bank.LOAN_REPAY_AMOUNT
-					* ((Math.abs(playerMoneyMinusLoans) + Bank.LOAN_REPAY_AMOUNT)
-					/ Bank.LOAN_REPAY_AMOUNT);
+		int loanBalance = p.getLoanBalance(); // caution: this is non-positive!
+		int playerMoney = p.getMoney();
+		if (loanBalance != 0) {
+			points -= ((playerMoney + loanBalance) < 0) ?
+				Bank.LOAN_PENALTY * ((Math.abs(loanBalance) / Bank.LOAN_REPAY_AMOUNT)) :
+					Math.abs(loanBalance);
 		}
+					
+		points += playerMoney;
 		
 		return points;
 	}

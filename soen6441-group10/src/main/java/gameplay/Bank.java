@@ -1,8 +1,8 @@
 package gameplay;
 
 /**
- * <b> This class represents the bank of game.</br>
- * It shows how much money is available in the bank by the method getBalance().</b>
+ *  This class represents the bank of game.</br>
+ * It shows how much money is available in the bank by the method getBalance().
  * 
  * @author Team 10 - SOEN6441
  * @version 2.0
@@ -10,20 +10,20 @@ package gameplay;
 public class Bank {
 
 	/**
-	 * <b>"Mr. Bent" and "The Bank of Ankh Morpork" allow you to borrow $10.</b>
+	 * "Mr. Bent" and "The Bank of Ankh Morpork" allow you to borrow $10.
 	 */
 	public static final int LOAN_AMOUNT = 10;
 
 	/**
-	 * <b>At the end of the game, for each "loan card", you have to pay back $12.</b>
+	 * At the end of the game, for each "loan card", you have to pay back $12.
 	 */
 	public static final int LOAN_REPAY_AMOUNT = 12;
 	
-	/* Add these items in later builds */
-//	private int numSilver;
-//	private int numGold;
-//	final private int silverValue = 1;
-//	final private int goldValue = 5;
+	/**
+	 * The penalty that a player pays (in points) if (s)he cannot pay back a loan at the
+	 * end of the game.
+	 */
+	public static final int LOAN_PENALTY = 15;
 	
 	private int amount;
 	
@@ -31,7 +31,7 @@ public class Bank {
 	 *It sets up silver and gold numbers. 
 	 */
 	/**
-	 * <b>This constructor is invoked to create objects from the class Bank.</b>
+	 * This constructor is invoked to create objects from the class Bank.
 	 */
 	public Bank() {
 	//	this.numSilver = 35;
@@ -40,7 +40,7 @@ public class Bank {
 	}
 		
 	/**
-	 * <b>This method gets amount remaining in the bank.</b>
+	 * This method gets amount remaining in the bank.
 	 * @return The balance
 	 */
 	public int getBalance() {
@@ -48,7 +48,7 @@ public class Bank {
 	}
 	
 	/**
-	 * <b>This method decreases the balance of Bank.</b>
+	 * This method decreases the balance of Bank.
 	 * @param amount the amount
 	 */
 	public boolean decreaseBalance(int amount) {
@@ -61,7 +61,7 @@ public class Bank {
 	}
 	
 	/**
-	 * <b>This method increases the balance of Bank.</b>
+	 * This method increases the balance of Bank.
 	 * @param amount the amount
 	 */
 	public void increaseBalance(int amount) {

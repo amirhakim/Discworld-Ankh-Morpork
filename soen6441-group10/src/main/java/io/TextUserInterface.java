@@ -874,7 +874,8 @@ public class TextUserInterface {
 		int i = 1;
 		Color[] playerColors = new Color[minionsInArea.keySet().size()];
 		for (Entry<Color, Integer> e : minionsInArea.entrySet()) {
-			System.out.println(i + ") " + e.getKey() + "(" + e.getValue() + " minions)"); 
+			playerColors[i - 1] = e.getKey();
+			System.out.println(i + ") " + e.getKey() + " (" + e.getValue() + " minions)"); 
 			i++;
 		}
 		
