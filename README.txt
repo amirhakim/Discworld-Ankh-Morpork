@@ -67,6 +67,7 @@ INSTALL
 If you don't have it search for it in the Eclipse Marketplace (Help -> Eclipse Marketplace, find it there and install it)
 3. Import the project into Eclipse: File -> Import -> (General -> Existing Projects into Workspace)
 or (Maven -> Existing Maven Projects)
+4. For console colors install Ansi plugin for eclipse, Help -> Eclipse Market Place -> search for ansi
 
 JAVADOCS
 -------------------------------------------
