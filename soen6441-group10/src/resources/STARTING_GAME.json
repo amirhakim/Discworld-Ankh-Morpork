@@ -10,7 +10,12 @@
       "money": 15,
       "minions": 4,
       "buildings": 5,
-      "cityCards": ["DIMWELL"],
+      "cityCards": [
+      	{
+          "area": "DIMWELL",
+          "hasBeenPlayed": true,
+          "isDisabled": false
+      }],
       "playerCards": [
       	"CAPTAIN_CARROT",
 		"MR_PIN_AND_MR_TULIP",
@@ -29,9 +34,21 @@
       "minions": 8,
       "buildings": 3,
       "cityCards": [
-      	"THE_SCOURS",
-      	"THE_SHADES",
-      	"SEVEN_SLEEPERS"
+      {
+          "area": "THE_SCOURS",
+          "hasBeenPlayed": true,
+          "isDisabled": false
+      },
+      {
+          "area": "THE_SHADES",
+          "hasBeenPlayed": true,
+          "isDisabled": false
+      },
+      {
+          "area": "SEVEN_SLEEPERS",
+          "hasBeenPlayed": true,
+          "isDisabled": false
+      }
       ],
       "playerCards": [
       	"INIGO_SKIMMER",
@@ -67,7 +84,11 @@
       "minions": 3,
       "buildings": 5,
       "cityCards": [
-      	"THE_HIPPO"
+      {
+          "area": "THE_HIPPO",
+          "hasBeenPlayed": true,
+          "isDisabled": false
+      }
       ],
       "playerCards": [
       	"GASPODE",

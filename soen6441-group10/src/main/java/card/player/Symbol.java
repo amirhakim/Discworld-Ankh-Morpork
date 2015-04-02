@@ -143,6 +143,7 @@ public enum Symbol {
 				excludeList.add(chosenRemoveArea.getArea().getAreaCode());
 				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ", excludeList);
 				game.addBuilding(player, chosenPlaceArea);
+				System.out.println("Building added.");
 				
 			}
 		} else {
@@ -154,6 +155,7 @@ public enum Symbol {
 			} else {
 				BoardArea chosenPlaceArea = UI.getAreaChoice(freeAreas, "Choose Area to place building on", "Choose Area: ");
 				game.addBuilding(player, chosenPlaceArea);
+				System.out.println("Building added.");
 			}
 		}
 	}),
@@ -205,6 +207,7 @@ public enum Symbol {
 		BoardArea trouble = textUI.getAreaChoice(troubleAreas2, "Select area for assasinnation", "choice: ", true);
 	
 		Color c  = textUI.assassinatePiece(trouble, player, game);
+		System.out.println("Assasination took place");
 
 		if(c != null) {
 			Player affectedPlayer = game.getPlayerOfColor(c);
