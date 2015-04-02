@@ -64,5 +64,25 @@ public class RandomEventTest {
 	
 	@Test
 	public void testFlood() {
+		// Add minions to DollySisters
+		final int DOLLY_SISTERS_CODE = 1;
+		final int UNREAL_ESTATE_CODE = 2;
+		final int DRAGONS_LANDING_CODE = 3;
+		final int NAP_HILL_CODE = 12;
+
+		BoardArea dollySisters = gameBoard.get(DOLLY_SISTERS_CODE);
+		game.addMinion(DOLLY_SISTERS_CODE, player1);
+		game.addMinion(DOLLY_SISTERS_CODE, player2);
+		game.addMinion(DOLLY_SISTERS_CODE, player3);
+		
+		// Hit Dolly Sisters with a flood
+		// Note: Make player 1 move his minion to Dragon's Landing, 
+		// player 2 to Unreal Estate and player 3 to Nap Hill
+		Die.getDie().setCheat(1);
+		RandomEventCard.FLOOD.getGameAction().accept(game, player1);
+		assertTrue(dollySisters.getMinionCount() == 0);
+		assertTrue(gameBoard.get(UNREAL_ESTATE_CODE).getMinionCount() == 1);
+		assertTrue(gameBoard.get(DRAGONS_LANDING_CODE).getMinionCount() == 1);
+		assertTrue(gameBoard.get(NAP_HILL_CODE).getMinionCount() == 1);
 	}
 }

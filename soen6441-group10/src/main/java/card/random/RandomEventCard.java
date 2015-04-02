@@ -30,6 +30,8 @@ public enum RandomEventCard implements Card {
 		AnkhMorporkArea firstAreaAffected = AnkhMorporkArea.forCode(die.roll());
 		AnkhMorporkArea secondAreaAffected = AnkhMorporkArea.forCode(die.roll());
 		boolean isOneAreaOnlyAffected = (secondAreaAffected == firstAreaAffected);
+		System.out.println("Affected area(s):" + firstAreaAffected + 
+				((isOneAreaOnlyAffected) ? "" : secondAreaAffected));
 
 		List<AnkhMorporkArea> adjacentToFirst = AnkhMorporkArea.getAdjacentAreas(firstAreaAffected);
 		if (!isOneAreaOnlyAffected) {
@@ -41,7 +43,9 @@ public enum RandomEventCard implements Card {
 		if (!isOneAreaOnlyAffected) {
 			List<AnkhMorporkArea> adjacentToSecond = AnkhMorporkArea.getAdjacentAreas(secondAreaAffected);
 			adjacentToSecond.remove(firstAreaAffected);
+			moveMinionsBetweenAreas(secondAreaAffected, adjacentToSecond, game, player);
 		}
+		
 	}),
 	
 	FIRE((game, player) -> {
