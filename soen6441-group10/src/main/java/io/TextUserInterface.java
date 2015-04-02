@@ -887,15 +887,22 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		System.out.print(promptMsg);
 
-		int minionColorChoice = scanner.nextInt();
-		scanner.nextLine();
-		while (minionColorChoice < 1 && minionColorChoice > playerColors.length) {
-			System.out.println("Invalid selection.\nMake a valid choice!");
-			minionColorChoice = scanner.nextInt();
-			scanner.nextLine();
+		while(true) {
+			try{
+				int minionColorChoice = scanner.nextInt();
+				scanner.nextLine();
+				while (minionColorChoice < 1 && minionColorChoice > playerColors.length) {
+					System.out.println("Invalid selection.\nMake a valid choice!");
+					minionColorChoice = scanner.nextInt();
+					scanner.nextLine();
+				}
+				return playerColors[minionColorChoice - 1];
+			} catch(InputMismatchException e) {
+				System.out.println("Invalid selection.");
+				scanner.next();
+				continue;
+			}
 		}
-
-		return playerColors[minionColorChoice - 1];
 	}
 	
 	public boolean playInterrupt(Player player, GreenPlayerCard card) {

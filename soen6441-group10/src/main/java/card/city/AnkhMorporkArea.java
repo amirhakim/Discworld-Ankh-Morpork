@@ -262,7 +262,7 @@ public enum AnkhMorporkArea implements Card {
 				AnkhMorporkArea chosenArea = UI.getAreaChoice(dollySistersAndNeighbors, 
 						"All minions available. Select area to place minion",
 						"Choose Area: ");
-				gameBoard.get(chosenArea).addMinion(player);
+				gameBoard.get(chosenArea.getAreaCode()).addMinion(player);
 			} else if (availableMinions == 0) {
 
 				// Get the areas where the player has minions
