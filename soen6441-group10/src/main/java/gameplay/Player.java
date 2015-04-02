@@ -153,6 +153,8 @@ public class Player {
 	 */
 	public boolean decreaseMoney(int amount) {
 		if (this.money - amount < 0) {
+			System.out.println(name + " cannot afford to pay $" + amount + 
+					" (has $" + money + ")!");
 			return false;
 		} else {
 			this.money = this.money - amount;

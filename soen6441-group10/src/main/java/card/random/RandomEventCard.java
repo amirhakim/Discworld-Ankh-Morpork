@@ -90,7 +90,9 @@ public enum RandomEventCard implements Card {
 	EXPLOSION((game, player) -> {
 		System.out.println("Explosions! Die roll to remove a building:");
 		int area = Die.getDie().roll();
-		game.removeBuilding(area);
+		if (game.removeBuilding(area)) {
+			System.out.println("Building removed from " + AnkhMorporkArea.forCode(area).name() + ".");
+		}
 	}),
 	
 	EARTHQUAKE((game, player) -> {
@@ -98,14 +100,17 @@ public enum RandomEventCard implements Card {
 		Die die = Die.getDie();
 		int firstArea = die.roll();
 		int secondArea = die.roll();
-		game.removeBuilding(firstArea);
-		if (secondArea != firstArea) {
-			game.removeBuilding(secondArea);
+		if (game.removeBuilding(firstArea)) {
+			System.out.println("Building removed from " + AnkhMorporkArea.forCode(firstArea).name() + ".");
+		}
+		if (secondArea != firstArea && game.removeBuilding(secondArea)) {
+			System.out.println("Building removed from " + AnkhMorporkArea.forCode(secondArea).name() + ".");
 		}
 	}),
 	
 	SUBSIDENCE((game, player) -> {
-		System.out.println("Subsidence! Pay up for your properties ladies and gentlemen...");
+		System.out.println("Subsidence: Each player will pay $2 for every building "
+				+ "owned on the board, otherwise the building will be removed.");
 		game.handleSubsidence();
 	}),
 	
@@ -116,8 +121,11 @@ public enum RandomEventCard implements Card {
 		Optional<Player> areaOwner = game.setCityAreaCardState(areaID, 
 				(p, area) -> p.disableCityAreaCard(area));
 		if (areaOwner.isPresent()) {
-			System.out.println("City area card disabled. Removing a minion from there...");
-			game.removeMinion(areaID, areaOwner.get());
+			System.out.println("City area card disabled for " + AnkhMorporkArea.forCode(areaID).name() 
+					+ ". Removing a minion from there...");
+			if (game.removeMinion(areaID, areaOwner.get())) {
+				System.out.println("Minion removed.");
+			}
 		}
 	}),
 	
@@ -126,12 +134,15 @@ public enum RandomEventCard implements Card {
 		Die die = Die.getDie();
 		int[] areas = { die.roll(), die.roll(), die.roll() };
 		for (int area : areas) {
-			game.placeTroll(area);
+			if (game.placeTroll(area)) {
+				System.out.println("Troll placed at " + AnkhMorporkArea.forCode(area).name());
+			}
 		}
 	}),
 	
 	MYSTERIOUS_MURDERS((game, player) -> {
-		System.out.println("Mysterious Murders: Each player must remove a minion from an area.");
+		System.out.println("Mysterious Murders: Each player must remove a minion "
+				+ "from an area (if it has any) in succession.");
 		Die die = Die.getDie();
 		Color[] playerOrder = game.getPlayersFromCurrentPlayer();
 		TextUserInterface UI = new TextUserInterface();
@@ -141,8 +152,10 @@ public enum RandomEventCard implements Card {
 			Optional<Map<Color, Integer>> minionsInArea = game.getMinionsInArea(a);
 			if (minionsInArea.isPresent()) {
 				Color minionToKill = UI.getMinionChoice(minionsInArea.get(), "The " + c + " player " +
-						" will choose a minion to kill in " + a + ".", "Choose a minion: ");
-				game.removeMinion(a.getAreaCode(), game.getPlayerOfColor(minionToKill));
+						"will choose a minion to kill in " + a.name() + ".", "Choose a minion: ");
+				if (game.removeMinion(a.getAreaCode(), game.getPlayerOfColor(minionToKill))) {
+					System.out.println(minionToKill + " minion killed in " + a.name());
+				}
 			} else {
 				System.out.println("There are no minions in " + a + ".");
 			}
@@ -151,11 +164,14 @@ public enum RandomEventCard implements Card {
 	
 	DEMONS_FROM_THE_DUNGEON_DIMENSIONS((game, player) -> {
 		System.out.println("Demons from the Dungeon Dimensions: A demon will be placed "
-				+ "4 times in an area.");
+				+ "4 times in the area rolled. A troublemarker will be added to each "
+				+ "of these areas (if one doesn't exist there already).");
 		Die die = Die.getDie();
 		int[] areas = { die.roll(), die.roll(), die.roll(), die.roll() };
 		for (int area : areas) {
-			game.placeDemon(area);
+			if (game.placeDemon(area)) {
+				System.out.println("Demon placed in " + AnkhMorporkArea.forCode(area).name() + ".");
+			}
 		}
 	});
 	

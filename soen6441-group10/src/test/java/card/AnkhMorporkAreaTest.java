@@ -112,6 +112,7 @@ public class AnkhMorporkAreaTest {
 		player.addCityCard(gameBoard.get(4).getArea());
 		Die.getDie().setCheat(1);
 		game.addMinion(gameBoard.get(1).getArea().getAreaCode(), player);
+
 		RandomEventCard.DRAGON.getGameAction().accept(game, player);
 	}
 

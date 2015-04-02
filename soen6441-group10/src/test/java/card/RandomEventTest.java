@@ -11,6 +11,7 @@ import io.TextUserInterface;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -135,6 +136,64 @@ public class RandomEventTest {
 		player2.increaseMoney(1);
 		winners = game.getWinnersByPoints();
 		assertTrue(winners.size() == 2);
+	}
+	
+	@Test
+	public void testExplosion() {
+		// Add a building to Dolly Sisters and hit it with an Explosion
+		// to make sure the fire spread is tested at some point ;-)
+		BoardArea dollySisters = gameBoard.get(1);
+		player1.increaseMoney(50);
+		game.addBuilding(player1, gameBoard.get(1));
+		assertTrue(dollySisters.getBuildingOwner() == player1.getColor());
+		Die.getDie().setCheat(1);
+		RandomEventCard.EXPLOSION.getGameAction().accept(game, player1);
+		assertTrue(dollySisters.getBuildingOwner() == Color.UNDEFINED);
+	}
+
+	@Test
+	public void testMysteriousMurders() {
+		// Add minions to the whole board
+		for (Entry<Integer, BoardArea> a : gameBoard.entrySet()) {
+			int i = a.getKey();
+			game.addMinion(i, player1);
+			if (i % 2 == 0) {
+				game.addMinion(i, player2);
+			}
+			if (i % 3 == 0 || i % 4 == 0) {
+				game.addMinion(i, player3);
+			}
+		}
+		
+		// Run mysterious murders for each player
+		// This test depends on the die rolls
+		RandomEventCard.MYSTERIOUS_MURDERS.getGameAction().accept(game, player1);
+	}
+	
+	@Test
+	public void testDemonsFromTheDungeonDimensions() {
+		// Just run the random event on a board with no demons and
+		// check that there are 4 demons on the board as well as 4 trouble markers
+		RandomEventCard.DEMONS_FROM_THE_DUNGEON_DIMENSIONS.getGameAction().accept(game, player1);
+		assertTrue(game.getBoard().stream().map(a -> a.getDemonCount()).reduce(0, (p, e) -> p + e) == 4);
+		assertTrue(game.getBoard().stream().allMatch(a -> (a.getDemonCount() > 0 && a.hasTroubleMarker()
+				|| a.getDemonCount() == 0 && !a.hasTroubleMarker())));
+	}
+	
+	@Test
+	public void testSubsidence() {
+		player1.increaseMoney(8);
+		player2.increaseMoney(34);
+		player3.increaseMoney(19);
+		game.addBuilding(player1, gameBoard.get(1));
+		game.addBuilding(player2, gameBoard.get(3));
+		game.addBuilding(player2, gameBoard.get(4));
+		game.addBuilding(player3, gameBoard.get(2));
+		RandomEventCard.SUBSIDENCE.getGameAction().accept(game, player1);
+		assertTrue(player1.getMoney() == 0);
+		assertTrue(player2.getMoney() == 0);
+		assertTrue(player3.getMoney() == 1);
+		assertTrue(gameBoard.get(2).getBuildingOwner() == Color.UNDEFINED);
 	}
 
 }
