@@ -80,10 +80,9 @@ public class TextUserInterface {
 			System.out
 					.println("\nChoose one of the following:\n"
 							+ "1) n to start a new game\n"
-						//	+ "2) l to load a previously saved game\n"
+							+ "2) l to load a previously saved game\n"
 							+ "3) o for an overview of the current game's status\n"
-							+ "4) s to save the current game\n"
-							+ "5) q to quit the game\n");
+							+ "4) q to quit the game\n");
 			System.out.print("> ");
 			action = scanner.nextLine();
 
@@ -95,12 +94,11 @@ public class TextUserInterface {
 				if (gameWrap.isPresent()) {
 					currentGameFileObj = gameWrap.get();
 					controller = new Controller(currentGameFileObj.getPOJO());
+					continueGame();
 				}
-			} else if (action.equals(UserOption.GAME_STATUS.getOptionString())) {
+			}else if (action.equals(UserOption.GAME_STATUS.getOptionString())) {
 				printGameStatus();
-			} else if (action.equals(UserOption.SAVE.getOptionString())) {
-				saveGame();
-			}
+			} 
 
 		}
 		
@@ -127,45 +125,50 @@ public class TextUserInterface {
 		}
 
 		if (controller.newGame(numberOfPlayers, playerNames)) {
-			System.out.println("Game Started!");
-
-			String action = "";
-			while (!action.equals(UserOption.QUIT.getOptionString())) {
-				System.out
-						.println("\nChoose one of the following:\n"
-								+ "1) t to move to the next turn\n"
-								+ "2) l to load a previously saved game\n"
-								+ "3) o for the game's overview\n"
-								+ "4) s to save the current game\n"
-								+ "5) e to exit and go back to the main menu");
-				System.out.print("> ");
-				action = scanner.nextLine();
-
-				if (action.equals(UserOption.EXIT.getOptionString())) {
-					return;
-				} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
-					if (playTurn(controller.advanceToNextTurn(), true)) {
-						System.out.println("The game has finished!");
-						printGameStatus();
-						break;
-					}
-				} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
-					printGameStatus();
-				} else if (action.equals(UserOption.LOAD.getOptionString())) {
-					// Hold on to that reference to save later
-					Optional<FileObject<Game>> gameWrap = loadGame();
-					if (gameWrap.isPresent()) {
-						currentGameFileObj = gameWrap.get();
-						controller = new Controller(currentGameFileObj.getPOJO());
-					}
-				} else if (action.equals(UserOption.SAVE.getOptionString())) {
-					saveGame();
-				} 
-			}
-
+			continueGame();
 		} else {
 			// Too many or too few players in game.
 			System.out.println("Sorry, only 2 to 4 players can play this game!");
+		}
+
+	}
+	
+	private void continueGame() {
+
+		System.out.println("Game Started!");
+
+		String action = "";
+		while (!action.equals(UserOption.QUIT.getOptionString())) {
+			System.out
+					.println("\nChoose one of the following:\n"
+							+ "1) t to move to the next turn\n"
+							+ "2) l to load a previously saved game\n"
+							+ "3) o for the game's overview\n"
+							+ "4) s to save the current game\n"
+							+ "5) e to exit and go back to the main menu");
+			System.out.print("> ");
+			action = scanner.nextLine();
+
+			if (action.equals(UserOption.EXIT.getOptionString())) {
+				return;
+			} else if (action.equals(UserOption.NEXT_TURN.getOptionString())) {
+				if (playTurn(controller.advanceToNextTurn(), true)) {
+					System.out.println("The game has finished!");
+					printGameStatus();
+					break;
+				}
+			} else if (action.equalsIgnoreCase(UserOption.GAME_STATUS.getOptionString())) {
+				printGameStatus();
+			} else if (action.equals(UserOption.LOAD.getOptionString())) {
+				// Hold on to that reference to save later
+				Optional<FileObject<Game>> gameWrap = loadGame();
+				if (gameWrap.isPresent()) {
+					currentGameFileObj = gameWrap.get();
+					controller = new Controller(currentGameFileObj.getPOJO());
+				}
+			} else if (action.equals(UserOption.SAVE.getOptionString())) {
+				saveGame();
+			} 
 		}
 
 	}
@@ -353,6 +356,11 @@ public class TextUserInterface {
 						return false;
 					}
 					controller.performSymbolAction(p, s);
+					if(s == Symbol.INTERRUPT) {
+						// Symbol is an interrupt -> return false so text doesnt play
+						return false;
+					}
+					
 				}
 			} else {
 				System.out.println("Random Event Symbol, must play...");
@@ -386,6 +394,10 @@ public class TextUserInterface {
 			try {
 				int action = scanner.nextInt();
 				scanner.nextLine();
+				if(cardMap.get(action) == null) {
+					System.out.println("Invalid choice.");
+					continue;
+				}
 				return cardMap.get(action);	
 			} catch(InputMismatchException e) {
 				System.out.println("Enter a number.");
@@ -630,15 +642,22 @@ public class TextUserInterface {
 		scanner = new Scanner(System.in);
 		System.out.print(inputMsg);
 
-		int action = scanner.nextInt();
-		scanner.nextLine();
-		while (AnkhMorporkArea.forCode(action) == null ) {
-			System.out.println("Invalid selection.  "  + inputMsg);
-			action = scanner.nextInt();
-			scanner.nextLine();
+		while(true){
+			try {
+				int action = scanner.nextInt();
+				scanner.nextLine();
+				while (AnkhMorporkArea.forCode(action) == null || !availableAreas.contains(AnkhMorporkArea.forCode(action))) {
+					System.out.println("Invalid selection.  "  + inputMsg);
+					action = scanner.nextInt();
+					scanner.nextLine();
+				}
+				return AnkhMorporkArea.forCode(action);
+			} catch(InputMismatchException e) {
+				System.out.println("Please pick a numbner.");
+				scanner.next();
+				continue;
+			}
 		}
-
-		return AnkhMorporkArea.forCode(action);
 	}
 	
 	/**
@@ -715,14 +734,22 @@ public class TextUserInterface {
 		System.out.print(inputMsg);
 		scanner = new Scanner(System.in);
 		
-		int action = scanner.nextInt();
-		scanner.nextLine();
-		while (availableAreas.get(action) == null) {
-			System.out.print("Invalid selection: " + inputMsg);
-			action = scanner.nextInt();
-			scanner.nextLine();
+		while(true) {
+			try {
+				int action = scanner.nextInt();
+				scanner.nextLine();
+				while (availableAreas.get(action) == null) {
+					System.out.print("Invalid selection: " + inputMsg);
+					action = scanner.nextInt();
+					scanner.nextLine();
+				}
+				return availableAreas.get(action);
+			} catch(InputMismatchException e) {
+				System.out.println("Please enter a number.");
+				scanner.next();
+				continue;
+			}
 		}
-		return availableAreas.get(action);
 	}
 	
 	
@@ -747,6 +774,8 @@ public class TextUserInterface {
 				.iterator();
 		while (it.hasNext()) {
 			Map.Entry<Color, Integer> pair = it.next();
+			// Cannot kill yourself
+			if(pair.getKey() == killer.getColor()) continue;
 			System.out.println("\tType " + pair.getKey()
 					+ " for minion of player " + pair.getValue());
 		}
@@ -809,6 +838,7 @@ public class TextUserInterface {
 		Iterator<Entry<Color, Player>> it = playerMap.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<Color, Player> pair = it.next();
+	        if(excludeList.contains(pair.getValue().getColor())) continue;
 			System.out.println(pair.getKey() + ": " + pair.getValue().getName());
 		}
 		System.out.println("Type color of player: ");
@@ -824,7 +854,9 @@ public class TextUserInterface {
 		boolean interrupted = false;
 		if(checkWallace) {
 			interrupted = controller.getGame().notifyInterrupt(Interrupt.SCROLL, playerMap.get(Color.valueOf(action)));
-			if(interrupted) return null;
+			if(interrupted) {
+				return null;
+			}
 		}
 		
 		return playerMap.get(Color.valueOf(action));

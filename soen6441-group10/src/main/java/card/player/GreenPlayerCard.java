@@ -120,6 +120,9 @@ public enum GreenPlayerCard implements Card {
 					
 					Player chosenPlayer = textUI.getPlayer(players, excludeList, true);
 					if(chosenPlayer == null) {
+						// Make sure we turn the console back to the players color
+						System.out.println(player.getColor().getAnsi());
+						
 						return;
 					}
 					
@@ -278,6 +281,9 @@ public enum GreenPlayerCard implements Card {
 				
 				Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 				if(choosenPlayer == null) {
+					// Make sure we turn the console back to the players color
+					System.out.println(player.getColor().getAnsi());
+					
 					return;
 				}
 				
@@ -501,7 +507,9 @@ public enum GreenPlayerCard implements Card {
 			
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
-			if(choosenPlayer == null) {
+			if(choosenPlayer == null) {// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
+				
 				return;
 			}
 
@@ -633,6 +641,9 @@ public enum GreenPlayerCard implements Card {
 			}
 			Player selectedPlayer = UI.getPlayer(game.getPlayersMap(), excludeList, true);
 			if(selectedPlayer == null) {
+				// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
+				
 				return;
 			}
 			
@@ -712,6 +723,9 @@ public enum GreenPlayerCard implements Card {
 				// Chose a valid player
 				Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 				if(choosenPlayer == null) {
+					// Make sure we turn the console back to the players color
+					System.out.println(player.getColor().getAnsi());
+					
 					return;
 				}
 				
@@ -728,6 +742,7 @@ public enum GreenPlayerCard implements Card {
 					if(wantsToGive) {
 						choosenPlayer.decreaseMoney(5);
 						player.increaseMoney(5);
+						System.out.println("Money transfered");
 					}
 				}
 				
@@ -736,9 +751,9 @@ public enum GreenPlayerCard implements Card {
 				if(!hasMoney || !wantsToGive) {
 					// Why do we use current card in play??? because we cant reference this enum
 					// since it isn't created
-					if(game.getCurrentCardInPlay().getID() != 47) {
+					if(game.getCurrentCardInPlay().getID() != 23) {
 						//TODO throw error
-						System.out.println("ISSUE IN THE FOOLS GUILD");
+						System.out.println("ISSUE IN WHITEFACE");
 					}
 					
 					// Give card to other player and say he cant get rid of it
@@ -747,6 +762,7 @@ public enum GreenPlayerCard implements Card {
 						game.addPlayerCard(choosenPlayer, game.getCurrentCardInPlay());
 						choosenPlayer.addUnplayableCard(game.getCurrentCardInPlay());
 						game.removePlayerCard(game.getCurrentCardInPlay(), player);
+						System.out.println("Card has been given to " + choosenPlayer.getName());
 					}
 				}
 			},
@@ -820,12 +836,15 @@ public enum GreenPlayerCard implements Card {
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 			if(choosenPlayer == null ){
+				// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
+				
 				return;
 			}
 			
 			// Make selection, cannot get rid of this card
 			GreenPlayerCard card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
-			while(card.getID() == 17) {
+			while(card.getID() == 25) {
 				System.out.println("Cannot choose current card in player");
 				card = UI.getCardChoice(player.getPlayerCards(),"choose a card to give to the choosen player");
 			}
@@ -950,6 +969,9 @@ public enum GreenPlayerCard implements Card {
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 			if(choosenPlayer == null ) {
+				// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
+				
 				 return;
 			}
 			
@@ -1105,6 +1127,9 @@ public enum GreenPlayerCard implements Card {
 		System.out.println("Choose player to remove minion from:");
 		Player choosenPlayer = UI.getPlayer(playerWithMinion, excludeList, true);
 		if(choosenPlayer == null) {
+			// Make sure we turn the console back to the players color
+			System.out.println(player.getColor().getAnsi());
+			
 			return;
 		}
 			
@@ -1333,7 +1358,6 @@ public enum GreenPlayerCard implements Card {
 		}},
 		(player, game) -> {
 			// No need to implement .. this is an interrupt card, handled in game flow
-			
 		},
 		// Money
 		0,
@@ -1395,6 +1419,8 @@ public enum GreenPlayerCard implements Card {
 			Player choosenPlayer = UI.getPlayer(playerWithMinion, excludeList, true);
 			
 			if(choosenPlayer == null) {
+				// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
 				return;
 			}
 			
@@ -1457,6 +1483,9 @@ public enum GreenPlayerCard implements Card {
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 			if(choosenPlayer == null) {
+				// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
+				
 				return;
 			}
 			
@@ -1523,6 +1552,9 @@ public enum GreenPlayerCard implements Card {
 			// Chose a valid player
 			Player choosenPlayer = UI.getPlayer(myPlayersMap, excludeList, true);
 			if(choosenPlayer == null) {
+				// Make sure we turn the console back to the players color
+				System.out.println(player.getColor().getAnsi());
+				
 				return;
 			}
 			

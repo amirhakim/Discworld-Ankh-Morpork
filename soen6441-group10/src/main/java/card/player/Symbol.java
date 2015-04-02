@@ -291,7 +291,7 @@ public enum Symbol {
 	 * card retrospectively.</b>
 	 */
 	INTERRUPT((player, game) -> {
-		System.out.println("YOU CALLED INTERRUPT");
+		System.out.println("You played an interrupt ... interrupts usually play them selves");
 	})
 	
     ;
