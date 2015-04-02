@@ -43,7 +43,7 @@ public enum PersonalityCard implements Card {
 	"WIN BY 8+ TROUBLE MARKERS ON THE BOARD"
 	),
 	
-	CHRYSOPRASE((playerCount, player, game) -> player.getTotalWorth() >= 50,
+	CHRYSOPRASE((playerCount, player, game) -> game.getPlayerNetWorth(player) >= 50,
 	"WIN BY ACCUMULATING 50$ (MONEY AND BUILDINGS AFTER LOANS)"
 	),
 

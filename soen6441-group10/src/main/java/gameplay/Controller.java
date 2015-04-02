@@ -134,5 +134,12 @@ public class Controller {
 	public List<Player> finishGameOnPoints(boolean checkForEmptyDeck) {
 		return game.finishGameOnPoints(checkForEmptyDeck);
 	}
+
+	/**
+	 * Shuffles the game decks if necessary, prior to the start of a new game.
+	 */
+	public void shuffleDecks() {
+		game.shuffleDecks();
+	}
 	
 }
