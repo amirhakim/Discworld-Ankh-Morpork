@@ -49,7 +49,8 @@ public enum RandomEventCard implements Card {
 	}),
 	
 	FIRE((game, player) -> {
-		System.out.println("Fire! Areas with buildings shall burn in succession: ");
+		System.out.println("Fire! Areas with buildings shall burn in succession, "
+				+ "spreading to adjacent areas, as long as they have buildings...");
 		Die die = Die.getDie();
 		int areaOnFire = die.roll();
 		int previousAreaOnFire = areaOnFire;
@@ -61,6 +62,8 @@ public enum RandomEventCard implements Card {
 			previousAreaOnFire = areaOnFire;
 			areaOnFire = die.roll();
 		}
+		
+		System.out.println("The fire has finished its work of evil...");
 	}),
 	
 	FOG((game, player) -> {

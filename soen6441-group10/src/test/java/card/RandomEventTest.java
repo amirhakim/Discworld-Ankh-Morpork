@@ -85,4 +85,25 @@ public class RandomEventTest {
 		assertTrue(gameBoard.get(DRAGONS_LANDING_CODE).getMinionCount() == 1);
 		assertTrue(gameBoard.get(NAP_HILL_CODE).getMinionCount() == 1);
 	}
+
+	@Test
+	public void testFire() {
+		// Add buildings to the whole board
+		// to make sure the fire spread is tested at some point ;-)
+		player1.increaseMoney(50);
+		player2.increaseMoney(50);
+		player3.increaseMoney(50);
+		Player[] players = { player1, player2, player3 };
+		int i = 0; 
+		for (BoardArea a : gameBoard.values()) {
+			game.addBuilding(players[i % 3], a);
+			i++;
+		}
+		
+		// Hit the board with fire
+		// Since we let the spread depend on the die for the test
+		// only check that at least one building was burnt
+		RandomEventCard.FIRE.getGameAction().accept(game, player1);
+		assertTrue(game.getBoard().stream().anyMatch(a -> a.getBuildingOwner() == Color.UNDEFINED));
+	}
 }
